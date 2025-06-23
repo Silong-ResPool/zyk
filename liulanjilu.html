@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>巳泷资源库-浏览记录</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+--primary-color: rgba(138, 43, 226, 0.8);
+--hover-color: rgba(148, 0, 211, 0.9);
+--text-color: #f8f8ff;
+--text-light: rgba(245, 245, 255, 0.8);
+--bg-color: rgba(25, 25, 60, 0.5);
+--card-bg: rgba(72, 61, 139, 0.4);
+--card-hover: rgba(75, 0, 130, 0.6);
+--shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+--shadow-hover: 0 8px 30px rgba(148, 0, 211, 0.5);
+--neon-glow: 0 0 10px rgba(218, 112, 214, 0.8);
+    }
+    
+    * {
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background: 
+        linear-gradient(rgba(25, 25, 60, 0.10), rgba(25, 25, 60, 0.10)),
+        url('../bjtp/bjt.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 60px;
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    header {
+      margin-bottom: 15px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .main-title {
+      color: white;
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+      text-shadow: 0 0 10px rgba(218, 112, 214, 0.8);
+    }
+    
+    .main-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, 
+        rgba(138, 43, 226, 0), 
+        rgba(218, 112, 214, 0.8), 
+        rgba(138, 43, 226, 0));
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+    
+    /* 记录列表布局 */
+    .record-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .record-item {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 15px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+    
+    .record-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-color);
+    }
+    
+    /* 图片预览区域 */
+    .preview-container {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+    
+    .preview-container.has-preview {
+      cursor: pointer;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+    
+    .preview-placeholder {
+      color: var(--text-light);
+      text-align: center;
+    }
+    
+    .preview-placeholder i {
+      font-size: 2em;
+      opacity: 0.5;
+      margin-bottom: 5px;
+    }
+    
+    .add-preview-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .record-item:hover .add-preview-btn {
+      opacity: 1;
+    }
+    
+    .add-preview-btn:hover {
+      background: var(--hover-color);
+      transform: scale(1.1);
+    }
+    
+    .record-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .record-icon {
+      font-size: 1.2em;
+      margin-right: 10px;
+      color: var(--primary-color);
+    }
+    
+    .record-title {
+      font-weight: 500;
+      font-size: 1.1em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .record-url {
+      font-size: 0.85em;
+      color: var(--text-light);
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+    
+    .record-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .record-time {
+      font-size: 0.75em;
+      color: var(--text-light);
+    }
+    
+    .record-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .record-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--text-light);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.75em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .record-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    /* 图片编辑模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .modal-title {
+      margin-bottom: 15px;
+      color: white;
+      text-align: center;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .modal-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .change-btn {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .delete-btn {
+      background: rgba(255, 99, 71, 0.7);
+      color: white;
+    }
+    
+    .cancel-btn {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-light);
+    }
+    
+    /* 底部导航栏 */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(90deg, 
+        rgba(138, 43, 226, 0.7), 
+        rgba(147, 112, 219, 0.7));
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+      z-index: 100;
+      box-shadow: 0 -2px 15px rgba(138, 43, 226, 0.3);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .nav-links a {
+      color: white;
+      font-size: 0.9em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 25px;
+    }
+    
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,0.2);
+      text-shadow: 0 0 10px white;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .nav-links a.active {
+      background: var(--primary-color);
+      box-shadow: var(--neon-glow);
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .record-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .main-title {
+        font-size: 1.8em;
+      }
+      
+      .nav-links {
+        gap: 10px;
+      }
+      
+      .nav-links a {
+        font-size: 0.8em;
+        padding: 5px 10px;
+      }
+    }
+    
+    /* 隐藏的文件输入 */
+    .file-input {
+      display: none;
+    }
+    
+    /* 新增图片选择弹窗样式 */
+    .image-picker-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .image-picker-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow);
+    }
+    
+    .image-picker-title {
+      margin-bottom: 15px;
+      color: white;
+      text-align: center;
+      font-size: 1.2em;
+    }
+    
+    .image-picker-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .picker-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .gallery-btn {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .gallery-btn:hover {
+      background: var(--hover-color);
+    }
+    
+    .camera-btn {
+      background: rgba(70, 130, 180, 0.7);
+      color: white;
+    }
+    
+    .camera-btn:hover {
+      background: rgba(70, 130, 180, 0.9);
+    }
+    
+    .cancel-picker-btn {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-light);
+    }
+    
+    .cancel-picker-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .upload-success {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: #4CAF50;
+      font-size: 0.8em;
+      z-index: 10;
+      animation: fadeInOut 3s ease forwards;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 主内容区 -->
+  <div class="main-content">
+    <header>
+      <h1 class="main-title">浏览记录</h1>
+      <p class="subtitle">您最近访问过的网站记录</p>
+    </header>
+    
+    <div class="record-list" id="history-list">
+      <!-- 记录将在这里动态生成 -->
+    </div>
+  </div>
+ 
+  <!-- 图片编辑模态框 -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h3 class="modal-title">编辑预览图片</h3>
+      <div class="modal-buttons">
+        <button class="modal-btn change-btn" id="changeBtn">
+          <i class="fas fa-image"></i> 更换图片 
+        </button>
+        <button class="modal-btn delete-btn" id="deleteBtn">
+          <i class="fas fa-trash"></i> 删除图片 
+        </button>
+        <button class="modal-btn cancel-btn" id="cancelEditBtn">
+          <i class="fas fa-times"></i> 取消 
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 图片选择弹窗 -->
+  <div class="image-picker-modal" id="imagePickerModal">
+    <div class="image-picker-content">
+      <h3 class="image-picker-title">选择图片来源</h3>
+      <div class="image-picker-buttons">
+        <button class="picker-btn gallery-btn" id="galleryBtn">
+          <i class="fas fa-images"></i> 从相册选择 
+        </button>
+        <button class="picker-btn camera-btn" id="cameraBtn">
+          <i class="fas fa-camera"></i> 拍照上传 
+        </button>
+        <button class="picker-btn cancel-picker-btn" id="cancelPickerBtn">
+          <i class="fas fa-times"></i> 取消 
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 文件输入元素 -->
+  <input type="file" id="fileInput" class="file-input" accept="image/*">
+  <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="camera">
+ 
+  <!-- 底部导航栏 -->
+  <div class="bottom-nav">
+    <div class="nav-links">
+      <a href="../zyku.html"><i class="fas fa-home"></i> 首页</a>
+      <a href="../zdy/zdy.html"><i class="fas fa-plus-circle"></i> 自定义</a>
+      <a href="../mrgx/mrgx.html"><i class="fas fa-sync-alt"></i> 每日更新</a>
+      <a href="../records.html" class="active"><i class="fas fa-history"></i> 浏览记录</a>
+    </div>
+  </div>
+ 
+  <script>
+    // 存储预览图片的数据 (Base64格式)
+    let previewImages = JSON.parse(localStorage.getItem('previewImages')) || {};
+    let currentEditingUrl = null;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const history = JSON.parse(localStorage.getItem('browseHistory')) || [];
+      const listEl = document.getElementById('history-list');
+      const editModal = document.getElementById('editModal');
+      const changeBtn = document.getElementById('changeBtn');
+      const deleteBtn = document.getElementById('deleteBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const fileInput = document.getElementById('fileInput');
+      const cameraInput = document.getElementById('cameraInput');
+      const imagePickerModal = document.getElementById('imagePickerModal');
+      const galleryBtn = document.getElementById('galleryBtn');
+      const cameraBtn = document.getElementById('cameraBtn');
+      const cancelPickerBtn = document.getElementById('cancelPickerBtn');
+      
+      if (history.length === 0) {
+        listEl.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px;">
+            <i class="fas fa-inbox" style="font-size: 3em; color: rgba(255,255,255,0.3); margin-bottom: 15px;"></i>
+            <p style="color: var(--text-light);">暂无浏览记录</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // 渲染记录列表 
+      renderHistoryList(history);
+      
+      // 为添加图片按钮添加事件 
+      document.querySelectorAll('.add-preview-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+          const url = this.closest('.record-item').dataset.url;
+          currentEditingUrl = url;
+          showImagePicker();
+        });
+      });
+      
+      // 图片编辑按钮事件 
+      changeBtn.addEventListener('click', function() {
+        editModal.style.display = 'none';
+        showImagePicker();
+      });
+      
+      deleteBtn.addEventListener('click', function() {
+        if (confirm('确定要删除这张预览图片吗？')) {
+          delete previewImages[currentEditingUrl];
+          localStorage.setItem('previewImages', JSON.stringify(previewImages));
+          renderHistoryList(history);
+          editModal.style.display = 'none';
+        }
+      });
+      
+      cancelEditBtn.addEventListener('click', function() {
+        editModal.style.display = 'none';
+      });
+      
+      // 图片选择弹窗按钮事件 
+      galleryBtn.addEventListener('click', function() {
+        imagePickerModal.style.display = 'none';
+        fileInput.click();
+      });
+      
+      cameraBtn.addEventListener('click', function() {
+        imagePickerModal.style.display = 'none';
+        cameraInput.click();
+      });
+      
+      cancelPickerBtn.addEventListener('click', function() {
+        imagePickerModal.style.display = 'none';
+      });
+      
+      // 点击模态框外部关闭 
+      editModal.addEventListener('click', function(e) {
+        if (e.target === editModal) {
+          editModal.style.display = 'none';
+        }
+      });
+      
+      imagePickerModal.addEventListener('click', function(e) {
+        if (e.target === imagePickerModal) {
+          imagePickerModal.style.display = 'none';
+        }
+      });
+      
+      // 文件选择处理 
+      fileInput.addEventListener('change', function(e) {
+        handleImageSelect(e);
+      });
+      
+      cameraInput.addEventListener('change', function(e) {
+        handleImageSelect(e);
+      });
+    });
+    
+    function showImagePicker() {
+      document.getElementById('imagePickerModal').style.display = 'flex';
+    }
+    
+    function handleImageSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImages[currentEditingUrl] = e.target.result;
+        localStorage.setItem('previewImages', JSON.stringify(previewImages));
+        
+        // 显示上传成功提示 
+        const previewContainer = document.querySelector(`.record-item[data-url="${currentEditingUrl}"] .preview-container`);
+        if (previewContainer) {
+          const existingMsg = previewContainer.querySelector('.upload-success');
+          if (existingMsg) previewContainer.removeChild(existingMsg);
+          
+          const successMsg = document.createElement('div');
+          successMsg.className = 'upload-success';
+          successMsg.innerHTML = '<i class="fas fa-check-circle"></i> 上传成功';
+          previewContainer.appendChild(successMsg);
+          
+          // 3秒后自动消失 
+          setTimeout(() => {
+            successMsg.style.opacity = '0';
+            setTimeout(() => {
+              if (successMsg.parentNode) {
+                previewContainer.removeChild(successMsg);
+              }
+            }, 500);
+          }, 3000);
+        }
+        
+        renderHistoryList(JSON.parse(localStorage.getItem('browseHistory')) || []);
+      };
+      reader.readAsDataURL(file);
+      
+      event.target.value = '';
+    }
+    
+    function renderHistoryList(history) {
+      const listEl = document.getElementById('history-list');
+      
+      listEl.innerHTML = history.map(item => {
+        const hasPreview = previewImages[item.url];
+        
+        return `
+          <div class="record-item" data-url="${item.url}">
+            <div class="preview-container ${hasPreview ? 'has-preview' : ''}">
+              ${hasPreview ? 
+                `<img src="${previewImages[item.url]}" class="preview-image" style="display: block;">` : 
+                `<div class="preview-placeholder">
+                  <i class="fas fa-image"></i>
+                  <div>点击添加预览图</div>
+                </div>`
+              }
+              <button class="add-preview-btn" title="添加预览图片">
+                <i class="fas fa-camera"></i>
+              </button>
+            </div>
+            <div class="record-header">
+              <i class="${item.icon || 'fas fa-link'} record-icon"></i>
+              <div class="record-title" title="${item.title}">${item.title}</div>
+            </div>
+            <div class="record-url" title="${item.url}">${shortenUrl(item.url)}</div>
+            <div class="record-footer">
+              <div class="record-time">${formatTime(item.timestamp)}</div>
+              <div class="record-actions">
+                <button class="record-btn" onclick="editImage('${item.url}')">
+                  <i class="fas fa-edit"></i> 编辑 
+                </button>
+                <button class="record-btn" onclick="openLink('${item.url}')">
+                  <i class="fas fa-external-link-alt"></i> 打开 
+                </button>
+                <button class="record-btn" onclick="removeRecord('${item.url}')">
+                  <i class="fas fa-trash"></i> 删除 
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // 重新绑定事件 
+      document.querySelectorAll('.record-item').forEach(item => {
+        const previewContainer = item.querySelector('.preview-container');
+        const url = item.dataset.url;
+        
+        // 只有有预览图的容器才添加点击事件 
+        if (previewImages[url]) {
+          previewContainer.addEventListener('click', function() {
+            openLink(url);
+          });
+        }
+        
+        // 阻止整个卡片点击事件冒泡 
+        item.addEventListener('click', function(e) {
+          if (e.target.closest('.record-btn') || e.target.closest('.add-preview-btn')) {
+            e.stopPropagation();
+          }
+        });
+      });
+      
+      document.querySelectorAll('.add-preview-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const url = this.closest('.record-item').dataset.url;
+          currentEditingUrl = url;
+          showImagePicker();
+        });
+      });
+    }
+    
+    function editImage(url) {
+      currentEditingUrl = url;
+      document.getElementById('editModal').style.display = 'flex';
+    }
+    
+    function shortenUrl(url) {
+      return url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+    }
+    
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) {
+        return '今天 ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      } else if (diffDays === 1) {
+        return '昨天 ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      } else {
+        return date.toLocaleDateString();
+      }
+    }
+    
+    function openLink(url) {
+      window.open(url, '_blank');
+      // 更新访问时间 
+      const history = JSON.parse(localStorage.getItem('browseHistory')) || [];
+      const index = history.findIndex(item => item.url === url);
+      if (index !== -1) {
+        history[index].timestamp = new Date().getTime();
+        localStorage.setItem('browseHistory', JSON.stringify(history));
+      }
+    }
+    
+    function removeRecord(url) {
+      if (confirm('确定要删除这条记录吗？')) {
+        const history = JSON.parse(localStorage.getItem('browseHistory')) || [];
+        const newHistory = history.filter(item => item.url !== url);
+        localStorage.setItem('browseHistory', JSON.stringify(newHistory));
+        location.reload();
+      }
+    }
+    // ==================== 屏幕方向壁纸切换 ==================== 
+const ORIENTATION_WALLPAPERS = {
+  portrait: 'url(https://s21.ax1x.com/2025/06/23/pVZxM8A.jpg)',  // 9:16竖屏壁纸路径 
+  landscape: 'url(https://s21.ax1x.com/2025/06/23/pVZx3KP.jpg)'  // 16:9横屏壁纸路径 
+};
+ 
+function updateWallpaperByOrientation() {
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const newBg = isPortrait ? ORIENTATION_WALLPAPERS.portrait : ORIENTATION_WALLPAPERS.landscape;
+  
+  // 保留原有的渐变叠加效果 
+  document.body.style.backgroundImage = 
+    `linear-gradient(135deg, rgba(40, 20, 80, 0.2), rgba(25, 25, 60, 0.3)), ${newBg}`;
+}
+ 
+// 初始化检测 
+updateWallpaperByOrientation();
+window.addEventListener('resize', updateWallpaperByOrientation);
+// ==================== 整合结束 ====================
+  </script>
+</body>
+</html>

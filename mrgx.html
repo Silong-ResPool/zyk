@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>巳泷网站库 - 每日更新</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: rgba(138, 43, 226, 0.8);
+      --hover-color: rgba(148, 0, 211, 0.9);
+      --text-color: #f8f8ff;
+      --text-light: rgba(245, 245, 255, 0.8);
+      --bg-color: rgba(25, 25, 60, 0.5);
+      --card-bg: rgba(72, 61, 139, 0.4);
+      --card-hover: rgba(75, 0, 130, 0.6);
+      --shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+      --shadow-hover: 0 8px 30px rgba(148, 0, 211, 0.5);
+      --neon-glow: 0 0 10px rgba(218, 112, 214, 0.8);
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    body { 
+      background: 
+        linear-gradient(rgba(25, 25, 60, 0.10), rgba(25, 25, 60, 0.10)),
+        url('../bjtp/bjt.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color); 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      padding-bottom: 60px;
+      overflow-y: auto;
+    }
+    
+    .main-content { 
+      flex: 1; 
+      padding: 20px; 
+      max-width: 600px; 
+      margin: 0 auto; 
+      width: 100%;
+      height: calc(100vh - 80px);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header { 
+      margin-bottom: 20px; 
+      text-align: center; 
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .main-title { 
+      color: white; 
+      font-size: 1.8em; 
+      margin-bottom: 10px; 
+      font-weight: 600; 
+      position: relative;
+      display: inline-block;
+      text-shadow: 0 0 10px rgba(218, 112, 214, 0.8);
+    }
+    
+    .main-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        rgba(138, 43, 226, 0), 
+        rgba(218, 112, 214, 0.8), 
+        rgba(138, 43, 226, 0));
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .subtitle { 
+      color: var(--text-light); 
+      font-size: 0.9em; 
+      font-weight: normal; 
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+      margin-bottom: 20px;
+    }
+    
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      margin-bottom: 25px;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+    }
+    
+    .carousel {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
+    
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+    }
+    
+    .carousel-nav {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 0;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .carousel-dot.active {
+      background: var(--primary-color);
+      transform: scale(1.2);
+    }
+    
+    .content-container {
+      flex: 1;
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      overflow-y: auto;
+    }
+    
+    .update-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(72, 61, 139, 0.3);
+      border-left: 4px solid var(--primary-color);
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .update-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(138, 43, 226, 0.2), 
+        transparent);
+      transition: all 0.6s;
+    }
+    
+    .update-item:hover {
+      background: rgba(75, 0, 130, 0.4);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .update-item:hover::before {
+      left: 100%;
+    }
+    
+    .update-title {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+    
+    .update-date {
+      font-size: 0.75em;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(138, 43, 226, 0.2);
+      border-radius: 10px;
+    }
+    
+    .update-desc {
+      font-size: 0.9em;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+    
+    .link-icon {
+      font-size: 0.9em;
+      margin-right: 10px;
+      color: var(--primary-color);
+      transition: all 0.3s;
+    }
+    
+    .update-item:hover .link-icon {
+      color: #fff;
+      transform: rotate(45deg);
+    }
+    
+    .click-hint {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      font-size: 0.7em;
+      color: rgba(255,255,255,0.6);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(90deg, 
+        rgba(138, 43, 226, 0.9), 
+        rgba(147, 112, 219, 0.9));
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+      z-index: 100;
+      box-shadow: 0 -2px 15px rgba(138, 43, 226, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .nav-links a {
+      color: white;
+      font-size: 0.85em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,0.2);
+      text-shadow: 0 0 10px white;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .nav-links a.active {
+      background: rgba(255,255,255,0.2);
+      box-shadow: var(--neon-glow);
+    }
+    
+    @media (max-width: 480px) {
+      .main-content {
+        padding: 10px;
+        height: calc(100vh - 50px);
+      }
+      
+      .main-title {
+        font-size: 1.5em;
+      }
+      
+      .subtitle {
+        font-size: 0.8em;
+        margin-bottom: 15px;
+      }
+      
+      .carousel-container {
+        height: 160px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+      
+      .update-item {
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+      
+      .update-title {
+        font-size: 1em;
+      }
+      
+      .nav-links {
+        gap: 10px;
+      }
+      
+      .nav-links a {
+        font-size: 0.8em;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-content">
+    <header>
+      <h1 class="main-title">每日更新</h1>
+      <p class="subtitle">最新资源每日更新，精彩内容不容错过</p>
+    </header>
+    
+    <div class="carousel-container">
+      <div class="carousel" id="carousel">
+        <div class="carousel-slide" 
+             style="background-image: url('../bjtp/lonbt1.jpg')"
+             data-link="../bjtp/lonbt1.jpg"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt2.jpg')"
+             data-link="../mrgx/pages/page2.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt3.jpg')"
+             data-link="../mrgx/pages/page3.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt4.jpg')"
+             data-link="../mrgx/pages/page4.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt5.jpg')"
+             data-link="../mrgx/pages/page5.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt6.jpg')"
+             data-link="../mrgx/pages/page6.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt7.jpg')"
+             data-link="../mrgx/pages/page7.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt8.jpg')"
+             data-link="../mrgx/pages/page8.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt9.jpg')"
+             data-link="../mrgx/pages/page9.html"></div>
+        <div class="carousel-slide" 
+             style="background-image: url('../mrgx/lonbt/lonbt10.jpg')"
+             data-link="/mrgx/lonnbt/lonbt10.jpg"></div>
+      </div>
+      <div class="carousel-nav" id="carouselNav"></div>
+    </div>
+    
+    <div class="content-container">
+      <div class="update-item" data-link="https://kdocs.cn/l/cqIaeFhJ86ne">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 蓝凑云资源合集</h3>
+        <div class="update-date">2025-6-1</div>
+        <p class="update-desc">整合了多人蓝凑云资源，上千款软件与资源等你来拿</p>
+      </div>
+      
+      <div class="update-item" data-link="https://kdocs.cn/l/cg9kTuwN7hUq">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 微软件合集</h3>
+        <div class="update-date">2025-6-1</div>
+        <p class="update-desc">便携式在线微软件，等你来体验!</p>
+      </div>
+      
+      <div class="update-item" data-link="https://kdocs.cn/l/csOszCHS1Eoo">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 图集整合</h3>
+        <div class="update-date">2025-6-1</div>
+        <p class="update-desc">图集网站整合，热门角色以及精品帅哥等你来看!</p>
+      </div>
+      
+      <div class="update-item" data-link="https://kdocs.cn/l/cpdFYRsmedu1">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 抖音帅哥</h3>
+        <div class="update-date">2025-6-1</div>
+        <p class="update-desc">抖音精品帅哥大合集</p>
+      </div>
+      
+      <div class="update-item" data-link="https://www.weiyun.com/document?fileId=RlddTUdaaGdRVA%3D%3D_06b4294a6ee5ca21277d53546429f4a0_6afbd5ba-3a43-4f52-8037-56745b5e5234&officeType=pdf&tdsourcetag=s_weiyun_file&qq_aio_chat_type=3&s_trans=6633073262_&s_channel=4">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 帅哥预览图</h3>
+        <div class="update-date">2025-6-2</div>
+        <p class="update-desc">800多张性感帅哥等你来看!</p>
+      </div>
+      
+      <div class="update-item" data-link="https://kdocs.cn/l/cquHcnPjFakY">
+        <span class="click-hint">点击查看 <i class="fas fa-chevron-right"></i></span>
+        <h3 class="update-title"><i class="fas fa-link link-icon"></i> 每日随机</h3>
+        <div class="update-date">2025-6-6</div>
+        <p class="update-desc">随机链接资源</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <div class="nav-links">
+      <a href="index.html" class="home-link"><i class="fas fa-home"></i> 首页</a>
+      <a href="zdy.html"><i class="fas fa-plus-circle"></i> 自定义</a>
+      <a href="mrgx.html" class="active"><i class="fas fa-sync-alt"></i> 每日更新</a>
+      <a href="liulanjilu.html"><i class="fas fa-history"></i> 浏览记录</a>
+    </div>
+  </div>
+  
+  <script>
+    // 轮播图功能实现 
+    document.addEventListener('DOMContentLoaded', function() {
+      const carousel = document.getElementById('carousel');
+      const carouselNav = document.getElementById('carouselNav');
+      const slides = document.querySelectorAll('.carousel-slide');
+      let currentIndex = 0;
+      let intervalId;
+      
+      // 创建导航点 
+      slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('carousel-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          goToSlide(index);
+        });
+        carouselNav.appendChild(dot);
+      });
+      
+      const dots = document.querySelectorAll('.carousel-dot');
+      
+      // 跳转到指定幻灯片 
+      function goToSlide(index) {
+        currentIndex = index;
+        updateCarousel();
+        resetInterval();
+      }
+      
+      // 更新轮播图显示 
+      function updateCarousel() {
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+      }
+      
+      // 下一张幻灯片 
+      function nextSlide() {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+      }
+      
+      // 重置自动轮播计时器 
+      function resetInterval() {
+        clearInterval(intervalId);
+        startInterval();
+      }
+      
+      // 开始自动轮播 
+      function startInterval() {
+        intervalId = setInterval(nextSlide, 3000); 
+      }
+      
+      // 轮播图点击跳转功能 
+      slides.forEach(slide => {
+        slide.addEventListener('click', function() {
+          const link = this.getAttribute('data-link');
+          if(link) {
+            window.location.href = link;
+          }
+        });
+      });
+      
+      // 内容区域链接跳转处理
+      document.querySelectorAll('.update-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const link = this.getAttribute('data-link');
+          if(link && link !== '#') {
+            window.location.href = link;
+          }
+        });
+      });
+      
+      // 触摸事件处理 - 支持手动滑动 
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        clearInterval(intervalId);
+      }, {passive: true});
+      
+      carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        startInterval();
+      }, {passive: true});
+      
+      // 处理滑动方向 
+      function handleSwipe() {
+        const diff = touchStartX - touchEndX;
+        if (diff > 50) {
+          nextSlide();
+        } else if (diff < -50) {
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+          updateCarousel();
+        }
+      }
+      
+      // 开始自动轮播 
+      startInterval();
+    });
+    // ==================== 屏幕方向壁纸切换 ==================== 
+const ORIENTATION_WALLPAPERS = {
+  portrait: 'url(https://s21.ax1x.com/2025/06/23/pVZxM8A.jpg)',  // 9:16竖屏壁纸路径 
+  landscape: 'url(https://s21.ax1x.com/2025/06/23/pVZx3KP.jpg)'  // 16:9横屏壁纸路径 
+};
+ 
+function updateWallpaperByOrientation() {
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const newBg = isPortrait ? ORIENTATION_WALLPAPERS.portrait : ORIENTATION_WALLPAPERS.landscape;
+  
+  // 保留原有的渐变叠加效果 
+  document.body.style.backgroundImage = 
+    `linear-gradient(135deg, rgba(40, 20, 80, 0.2), rgba(25, 25, 60, 0.3)), ${newBg}`;
+}
+ 
+// 初始化检测 
+updateWallpaperByOrientation();
+window.addEventListener('resize', updateWallpaperByOrientation);
+// ==================== 整合结束 ====================
+  </script>
+</body>
+</html>
