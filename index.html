@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巳泷资源库 - 账号认证</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --neon-primary: #a945c7;
+            --neon-secondary: #2a86ba;
+            --neon-accent: #00c9ff;
+            --neon-danger: #ff2d75;
+            --neon-success: #39ff14;
+            --neon-text: #ffffff;
+            --neon-border: rgba(169, 69, 199, 0.5);
+            --neon-glow-primary: 0 0 10px rgba(169, 69, 199, 0.8), 0 0 20px rgba(169, 69, 199, 0.6), 0 0 30px rgba(169, 69, 199, 0.4);
+            --neon-glow-accent: 0 0 10px rgba(0, 201, 255, 0.8), 0 0 20px rgba(0, 201, 255, 0.6), 0 0 30px rgba(0, 201, 255, 0.4);
+            --neon-glow-danger: 0 0 10px rgba(255, 45, 117, 0.8), 0 0 20px rgba(255, 45, 117, 0.6), 0 0 30px rgba(255, 45, 117, 0.4);
+            --neon-glow-success: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 20px rgba(57, 255, 20, 0.6), 0 0 30px rgba(57, 255, 20, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: var(--neon-bg);
+            color: var(--neon-text);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--neon-primary), var(--neon-accent));
+            box-shadow: var(--neon-glow-primary);
+            animation: float 15s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .auth-container {
+            background: rgba(19, 15, 64, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-border);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--neon-glow-primary);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                box-shadow: var(--neon-glow-primary);
+            }
+            25% {
+                box-shadow: 0 0 20px rgba(169, 69, 199, 0.8), 0 0 40px rgba(169, 69, 199, 0.6), 0 0 60px rgba(169, 69, 199, 0.4), 0 0 0 0 rgba(0, 201, 255, 0);
+            }
+            50% {
+                box-shadow: var(--neon-glow-primary);
+            }
+            75% {
+                box-shadow: 0 0 20px rgba(169, 69, 199, 0.8), 0 0 40px rgba(169, 69, 199, 0.6), 0 0 60px rgba(169, 69, 199, 0.4), 0 0 0 4px rgba(0, 201, 255, 0.3);
+            }
+            100% {
+                box-shadow: var(--neon-glow-primary);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--neon-primary);
+            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--neon-accent);
+            box-shadow: var(--neon-glow-accent);
+            animation: pulse 3s infinite;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-accent);
+            font-size: 18px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(10, 8, 36, 0.7);
+            border: 1px solid var(--neon-border);
+            border-radius: 8px;
+            color: var(--neon-text);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-accent);
+            box-shadow: var(--neon-glow-accent);
+        }
+
+        input.error, select.error {
+            border-color: var(--neon-danger);
+            box-shadow: var(--neon-glow-danger);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .checkbox-container input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+            color: white;
+            box-shadow: var(--neon-glow-primary);
+        }
+
+        .btn-secondary {
+            background: rgba(10, 8, 36, 0.7);
+            border: 1px solid var(--neon-border);
+            color: var(--neon-accent);
+        }
+        
+        .btn-logout {
+            background: rgba(255, 45, 117, 0.2);
+            border: 1px solid var(--neon-danger);
+            color: var(--neon-danger);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), var(--neon-glow-primary);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #c04be8, #3ba5d8);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(25, 20, 70, 0.7);
+            box-shadow: var(--neon-glow-accent);
+        }
+        
+        .btn-logout:hover {
+            background: rgba(255, 45, 117, 0.3);
+            box-shadow: var(--neon-glow-danger);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-message {
+            background: rgba(255, 45, 117, 0.15);
+            border: 1px solid var(--neon-danger);
+            color: #ff8cb4;
+            box-shadow: var(--neon-glow-danger);
+        }
+
+        .success-message {
+            background: rgba(57, 255, 20, 0.15);
+            border: 1px solid var(--neon-success);
+            color: #b3ff9e;
+            box-shadow: var(--neon-glow-success);
+        }
+
+        .warning-message {
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid #ffc107;
+            color: #ffe69c;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--neon-accent);
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ban-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .ban-icon {
+            font-size: 80px;
+            color: var(--neon-danger);
+            margin-bottom: 20px;
+            /* 移除晃动动画 */
+            text-shadow: var(--neon-glow-danger);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer a {
+            color: var(--neon-accent);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 帮助模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: rgba(19, 15, 64, 0.95);
+            border: 1px solid var(--neon-accent);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: var(--neon-glow-accent);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--neon-accent);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+            color: var(--neon-danger);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--neon-border);
+        }
+        
+        .modal-header h2 {
+            font-size: 24px;
+            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .help-section {
+            margin-bottom: 25px;
+        }
+        
+        .help-section h3 {
+            color: var(--neon-accent);
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .help-section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .help-section ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .help-section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .contact-info {
+            background: rgba(10, 8, 36, 0.5);
+            border-left: 3px solid var(--neon-accent);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        /* 代号选择模态框 */
+        .code-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .code-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(10, 8, 36, 0.7);
+            border: 2px solid var(--neon-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .code-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--neon-glow-primary);
+            border-color: var(--neon-accent);
+        }
+
+        .code-option.active {
+            background: linear-gradient(135deg, var(--neon-primary), var(--neon-secondary));
+            box-shadow: var(--neon-glow-primary);
+            border-color: var(--neon-accent);
+        }
+
+        .code-option i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        /* 视频容器 */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 解封模态框 */
+        .unban-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .unban-modal-content {
+            background: rgba(19, 15, 64, 0.95);
+            border: 1px solid var(--neon-danger);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--neon-glow-danger);
+            position: relative;
+            text-align: center;
+        }
+        
+        /* 欢迎页面 */
+        .welcome-container {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .welcome-icon {
+            font-size: 80px;
+            color: var(--neon-accent);
+            margin-bottom: 20px;
+            text-shadow: var(--neon-glow-accent);
+        }
+        
+        .welcome-message {
+            margin-bottom: 25px;
+        }
+        
+        .user-info {
+            background: rgba(10, 8, 36, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .user-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(169, 69, 199, 0.2);
+        }
+        
+        .user-info-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .auth-container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .auth-container {
+                padding: 15px;
+            }
+            
+            input, select, .btn {
+                padding: 12px 12px 12px 40px;
+            }
+            
+            .input-with-icon i {
+                font-size: 16px;
+                left: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子背景容器 -->
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- 封禁视频容器 -->
+    <div class="video-container" id="videoContainer">
+        <video id="banVideo" autoplay muted>
+            <!-- 请将视频路径替换为实际路径 -->
+            <source src="./byj/byj.mp4" type="video/mp4">
+            您的浏览器不支持视频播放。
+        </video>
+    </div>
+    
+    <!-- 主认证容器 -->
+    <div class="auth-container" id="authContainer">
+        <div class="header">
+            <div class="logo">
+                <!-- 请替换为您的实际头像路径 -->
+                <img src="./siltx/siltx.jpg" alt="巳泷资源库头像" id="avatarImg">
+            </div>
+            <h1>巳泷资源库</h1>
+            <p>账号认证系统</p>
+        </div>
+        
+        <!-- 状态消息 -->
+        <div class="status-message" id="statusMessage"></div>
+        
+        <!-- 认证表单 -->
+        <form id="authForm">
+            <div class="form-group">
+                <label for="qqNumber"><i class="fas fa-user"></i> QQ号码</label>
+                <div class="input-with-icon">
+                    <i class="fab fa-qq"></i>
+                    <input type="text" id="qqNumber" placeholder="请输入您的QQ号码" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="userName"><i class="fas fa-signature"></i> 用户昵称</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-circle"></i>
+                    <input type="text" id="userName" placeholder="请输入您的昵称" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="userCode"><i class="fas fa-key"></i> 认证代号</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-secret"></i>
+                    <input type="text" id="userCode" placeholder="点击选择认证代号" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group" id="passwordGroup" style="display: none;">
+                <label for="password"><i class="fas fa-lock"></i> 专用密码</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="请输入专属密码">
+                </div>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">24小时内免登录</label>
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="fas fa-sign-in-alt"></i> 账号认证
+                </button>
+                <button type="button" class="btn btn-secondary" id="fillBtn">
+                    <i class="fas fa-bolt"></i> 一键填写
+                </button>
+            </div>
+        </form>
+        
+        <div class="footer">
+            <p>遇到问题？<a href="#" id="helpLink"><i class="fas fa-question-circle"></i> 查看帮助</a></p>
+            <p>&copy; 2023 巳泷资源库 | 认证系统 v3.0</p>
+        </div>
+    </div>
+    
+    <!-- 封禁提示容器 -->
+    <div class="auth-container ban-container" id="banContainer">
+        <div class="ban-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>账号已被封禁</h2>
+        <p>您的账号因违规操作已被系统永久封禁</p>
+        <div class="ban-icon" id="unbanIcon" style="margin: 25px 0; font-size: 40px; color: var(--neon-accent); cursor: pointer;">
+            <i class="fas fa-Silong"></i>
+        </div>
+        <div id="unbanMessage" class="status-message" style="display: none;"></div>
+    </div>
+    
+    <!-- 欢迎页面 -->
+    <div class="auth-container" id="welcomeContainer" style="display: none;">
+        <div class="welcome-container">
+            <div class="welcome-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="welcome-message">
+                <h2>认证成功!</h2>
+                <p>欢迎访问巳泷资源库</p>
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <!-- 用户信息将动态填充 -->
+            </div>
+            
+            <div class="btn-group">
+                <a href="https://link3.cc/silong6969" class="btn btn-primary">
+                    <i class="fas fa-database"></i> 进入资源库
+                </a>
+                <button class="btn btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> 退出登录
+                </button>
+            </div>
+            
+            <div class="footer">
+                <p>认证状态：<span id="loginStatus">已登录</span></p>
+                <p>剩余时间：<span id="timeRemaining">24小时</span></p>
+                <p>&copy; 2023 巳泷资源库 | 认证系统 v3.0</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 帮助模态框 -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="modal-header">
+                <h2><i class="fas fa-life-ring"></i> 巳泷资源库帮助中心</h2>
+                <p>账号认证系统使用指南</p>
+            </div>
+            
+            <div class="help-section">
+                <h3><i class="fas fa-user-check"></i> 认证流程说明</h3>
+                <p>请按照以下步骤完成认证：</p>
+                <ul>
+                    <li>微信关注巳泷宝库公众号</li>
+                    <li>发送自己的QQ号+昵称+代号到公众号中</li>
+                    <li>勾选"24小时内免登录"可保存登录状态</li>
+                    <li>点击"账号认证"按钮完成认证</li>
+                </ul>
+            </div>
+            
+            <div class="help-section">
+                <h3><i class="fas fa-key"></i> 认证代号说明</h3>
+                <p>认证代号是系统分配给群成员的唯一标识：</p>
+                <ul>
+                    <li><strong>泷</strong> - 抖音粉丝的成员</li>
+                    <li><strong>夜</strong> - 群主邀请的成员</li>
+                    <li><strong>介</strong> - 好友推荐的成员</li>
+                    <li><strong>川</strong> - 其他渠道的成员</li>
+                </ul>
+            </div>
+            
+            <div class="help-section">
+                <h3><i class="fas fa-exclamation-triangle"></i> 常见问题解决</h3>
+                <ul>
+                    <li><strong>忘记认证代号：</strong> 请联系管理员查询您的认证代号</li>
+                    <li><strong>专属密码错误：</strong> 错误的用户请联系管理员巳泷</li>
+                    <li><strong>账号被封禁：</strong> 多次认证失败会导致账号封禁</li>
+                    <li><strong>认证成功后无法跳转：</strong> 请检查网络连接或尝试刷新页面</li>
+                    <li><strong>账号未注册：</strong> 请按照帮助中心的注册方法完成注册</li>
+                </ul>
+            </div>
+            
+            <div class="help-section">
+                <h3><i class="fas fa-user-plus"></i> 账号注册方法</h3>
+                <p>如果您尚未注册账号：</p>
+                <ol>
+                    <li>关注巳泷宝库公众号</li>
+                    <li>发送"注册"获取注册表单</li>
+                    <li>填写您的QQ号和昵称</li>
+                    <li>管理员将在24小时内审核并分配代号</li>
+                    <li>注册成功后即可登录资源库</li>
+                </ol>
+            </div>
+            
+            <div class="contact-info">
+                <h3><i class="fas fa-headset"></i> 技术支持</h3>
+                <p>无法解决的问题请联系管理员</p>
+                <p><i class="fab fa-qq"></i> QQ: 3213824126</p>
+                <p><i class="fas fa-envelope"></i> 邮箱: xz35238345yun@163.com</p>
+                <p><i class="fas fa-clock"></i> 服务时间: 12:00-04:00 (周一至周日)</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 代号选择模态框 -->
+    <div class="modal" id="codeModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeCodeModal">&times;</span>
+            <div class="modal-header">
+                <h2><i class="fas fa-user-tag"></i> 选择认证代号</h2>
+                <p>请选择您的专属认证代号</p>
+            </div>
+            
+            <div class="code-options">
+                <div class="code-option" data-code="泷">
+                    <i class="fas fa-dragon"></i>
+                    <span>泷</span>
+                </div>
+                <div class="code-option" data-code="夜">
+                    <i class="fas fa-moon"></i>
+                    <span>夜</span>
+                </div>
+                <div class="code-option" data-code="介">
+                    <i class="fas fa-user-friends"></i>
+                    <span>介</span>
+                </div>
+                <div class="code-option" data-code="川">
+                    <i class="fas fa-water"></i>
+                    <span>川</span>
+                </div>
+            </div>
+            
+            <div class="btn-group" style="margin-top: 30px;">
+                <button class="btn btn-primary" id="confirmCodeBtn">
+                    <i class="fas fa-check"></i> 确认选择
+                </button>
+                <button class="btn btn-secondary" id="cancelCodeBtn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 解封模态框 -->
+    <div class="unban-modal" id="unbanModal">
+        <div class="unban-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-unlock"></i> 账号解封</h2>
+                <p>请输入解封密码以解锁账号</p>
+            </div>
+            
+            <div class="form-group" style="margin: 25px 0;">
+                <div class="input-with-icon">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="unbanPassword" placeholder="请输入解封密码">
+                </div>
+            </div>
+            
+            <div class="status-message" id="unbanStatus"></div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" id="submitUnbanBtn">
+                    <i class="fas fa-check"></i> 提交解封
+                </button>
+                <button class="btn btn-secondary" id="cancelUnbanBtn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 授权用户数据
+        const authorizedUsers = [
+              { qq: "1323978434", code: "泷", password: "8062" },
+            { qq: "2908946684", code: "夜", password: "4312" },
+            { qq: "291516641", code: "夜", password: "5678" },
+            { qq: "3025233785", code: "夜", password: "9012" },
+            { qq: "1041547578", code: "夜", password: "3456" },
+            { qq: "863891398", code: "泷", password: "7890" },
+            { qq: "3175046319", code: "夜", password: "1357" },
+            { qq: "1875316335", code: "泷", password: "2468" },
+            { qq: "3804604918", code: "泷", password: "0246" },
+            { qq: "2431704839", code: "夜", password: "1593" },
+            { qq: "3960384997", code: "夜", password: "7531" },
+            { qq: "3146846491", code: "泷", password: "8642" },
+            { qq: "3466977552", code: "泷", password: "9753" },
+            { qq: "3059392643", code: "泷", password: "0987" },
+            { qq: "3543058039", code: "川", password: "6543" },
+            { qq: "2021281325", code: "泷", password: "2109" },
+            { qq: "3272233139", code: "夜", password: "4321" },
+            { qq: "3300212539", code: "泷", password: "6789" },
+            { qq: "3396485194", code: "夜", password: "0135" },
+            { qq: "2700254884", code: "川", password: "2460" },
+            { qq: "2402755482", code: "泷", password: "8912" },
+            { qq: "3531824556", code: "夜", password: "3692" },
+            { qq: "2827532223", code: "泷", password: "5714" },
+            { qq: "2247936051", code: "夜", password: "8025" },
+            { qq: "2990782375", code: "夜", password: "1637" },
+            { qq: "2351757572", code: "泷", password: "9468" },
+            { qq: "1811153229", code: "夜", password: "0357" },
+            { qq: "2707758280", code: "夜", password: "2489" },
+            { qq: "3872658317", code: "夜", password: "1523" },
+            { qq: "2664967743", code: "泷", password: "6701" },
+            { qq: "754467738", code: "泷", password: "9852" },
+            { qq: "875567869", code: "泷", password: "3470" },
+            { qq: "3133577613", code: "夜", password: "5612" },
+            { qq: "3024646369", code: "夜", password: "8934" },
+            { qq: "3313893858", code: "夜", password: "0156" },
+            { qq: "3930717703", code: "泷", password: "2749" },
+            { qq: "1022566255", code: "泷", password: "3850" },
+            { qq: "3538704969", code: "泷", password: "1962" },
+            { qq: "3372741545", code: "夜", password: "4781" },
+            { qq: "617098680", code: "泷", password: "5023" },
+            { qq: "3931353915", code: "泷", password: "6147" },
+            { qq: "3279310252", code: "夜", password: "8259" },
+            { qq: "3343869367", code: "泷", password: "0368" },
+            { qq: "2471099910", code: "泷", password: "1472" },
+            { qq: "401843969", code: "泷", password: "5803" },
+            { qq: "55869631", code: "泷", password: "6914" },
+            { qq: "1404220299", code: "泷", password: "7025" },
+            { qq: "3769268295", code: "夜", password: "8346" },
+            { qq: "2732814452", code: "泷", password: "9457" },
+            { qq: "3083175269", code: "泷", password: "0568" },
+            { qq: "2578952761", code: "泷", password: "1679" },
+            { qq: "3953325298", code: "泷", password: "2780" },
+            { qq: "1062462386", code: "泷", password: "3891" },
+            { qq: "3058023824", code: "泷", password: "4902" },
+            { qq: "3159573908", code: "泷", password: "5013" },
+            { qq: "850401958", code: "夜", password: "6124" },
+            { qq: "551473278", code: "泷", password: "7235" },
+            { qq: "2765755169", code: "泷", password: "8346" },
+            { qq: "2331275312", code: "夜", password: "9457" },
+            { qq: "775589423", code: "泷", password: "0568" },
+            { qq: "2759907742", code: "泷", password: "1679" },
+            { qq: "1599493613", code: "夜", password: "2780" },
+            { qq: "2155770166", code: "泷", password: "3891" },
+            { qq: "3544654386", code: "夜", password: "4902" },
+            { qq: "2922761735", code: "泷", password: "5013" },
+            { qq: "2210245642", code: "夜", password: "6124" },
+            { qq: "3319676442", code: "夜", password: "7235" },
+            { qq: "2115448500", code: "泷", password: "8347" },
+            { qq: "1678836167", code: "泷", password: "9458" },
+            { qq: "177271324", code: "泷", password: "0569" },
+            { qq: "2806520241", code: "泷", password: "1601" },
+            { qq: "3811732118", code: "泷", password: "2712" },
+            { qq: "3597931971", code: "夜", password: "3823" },
+            { qq: "348634201", code: "泷", password: "4934" },
+            { qq: "1432169967", code: "泷", password: "5045" },
+            { qq: "2406339133", code: "夜", password: "6156" },
+            { qq: "1559802785", code: "泷", password: "7267" },
+            { qq: "1295312386", code: "泷", password: "8378" },
+            { qq: "2680253169", code: "泷", password: "9489" },
+            { qq: "994144624", code: "泷", password: "0590" },
+            { qq: "24764160552", code: "泷", password: "1601" },
+            { qq: "1512855385", code: "介", password: "2712" },
+            { qq: "1703181193", code: "泷", password: "3823" },
+            { qq: "304674300", code: "泷", password: "4934" },
+            { qq: "383544307", code: "泷", password: "5045" },
+            { qq: "1018446228", code: "夜", password: "6156" },
+            { qq: "2419328104", code: "泷", password: "7267" },
+            { qq: "1139193721", code: "泷", password: "8378" },
+            { qq: "259405251", code: "夜", password: "9489" },
+            { qq: "1670649207", code: "夜", password: "0591" },
+            { qq: "2070326603", code: "夜", password: "1602" },
+            { qq: "3295365979", code: "泷", password: "2713" },
+            { qq: "3767481301", code: "夜", password: "3824" },
+            { qq: "327901578", code: "夜", password: "4935" },
+            { qq: "3804330175", code: "夜", password: "5046" },
+            { qq: "1253798692", code: "泷", password: "6157" },
+            { qq: "2990019657", code: "泷", password: "7268" },
+            { qq: "346956633", code: "泷", password: "8379" },
+            { qq: "231559871", code: "泷", password: "9490" },
+            { qq: "3243028291", code: "夜", password: "0501" },
+            { qq: "376299499", code: "泷", password: "1612" },
+            { qq: "625160882", code: "泷", password: "2723" },
+            { qq: "379564966", code: "泷", password: "3834" },
+            { qq: "399536315", code: "夜", password: "4945" },
+            { qq: "127705833", code: "泷", password: "5056" },
+            { qq: "3536764173", code: "泷", password: "6167" },
+            { qq: "2434574108", code: "夜", password: "7278" },
+            { qq: "3581340439", code: "夜", password: "8389" },
+            { qq: "1516300253", code: "夜", password: "9490" },
+            { qq: "2694855645", code: "夜", password: "0501" },
+            { qq: "1876732647", code: "泷", password: "1612" },
+            { qq: "3386614224", code: "夜", password: "2723" },
+            { qq: "3238569031", code: "夜", password: "3834" },
+            { qq: "1510500463", code: "夜", password: "4945" },
+            { qq: "2132542681", code: "泷", password: "5056" },
+            { qq: "3531915327", code: "夜", password: "6167" },
+            { qq: "2776952537", code: "夜", password: "7278" },
+            { qq: "2072197990", code: "夜", password: "8389" },
+            { qq: "3072351580", code: "夜", password: "9491" },
+            { qq: "963385975", code: "夜", password: "0502" },
+            { qq: "2903065902", code: "泷", password: "1613" },
+            { qq: "3859490310", code: "泷", password: "2724" },
+            { qq: "195671158", code: "夜", password: "3835" },
+            { qq: "1295081853", code: "夜", password: "4946" },
+            { qq: "3765875133", code: "泷", password: "5057" },
+            { qq: "3319074122", code: "夜", password: "6168" },
+            { qq: "2192336290", code: "夜", password: "7279" },
+            { qq: "2529674508", code: "泷", password: "8390" },
+            { qq: "3266334914", code: "夜", password: "9401" },
+            { qq: "3508263501", code: "夜", password: "0512" },
+            { qq: "3766409574", code: "泷", password: "1623" },
+            { qq: "1654646369", code: "夜", password: "2734" },
+            { qq: "3109713612", code: "泷", password: "3845" },
+            { qq: "3390576154", code: "泷", password: "4956" },
+            { qq: "1097675149", code: "夜", password: "5067" },
+            { qq: "1647802618", code: "夜", password: "6178" },
+            { qq: "2216551698", code: "泷", password: "7289" },
+            { qq: "3243986695", code: "泷", password: "8390" },
+            { qq: "2360918083", code: "泷", password: "9401" },
+            { qq: "2606283193", code: "泷", password: "0512" },
+            { qq: "2068298272", code: "夜", password: "1623" },
+            { qq: "3813779902", code: "泷", password: "2734" },
+            { qq: "2020115344", code: "泷", password: "3845" },
+            { qq: "652160882", code: "泷", password: "4956" },
+            { qq: "3795649068", code: "泷", password: "5067" },
+            { qq: "3995363155", code: "夜", password: "6178" },
+            { qq: "1927705833", code: "泷", password: "7289" },
+            { qq: "1543140283", code: "夜", password: "8391" },
+            { qq: "1691379220", code: "泷", password: "9402" },
+            { qq: "364990462", code: "夜", password: "0513" },
+            { qq: "2802644374", code: "泷", password: "1624" },
+            { qq: "3488616469", code: "夜", password: "2735" },
+            { qq: "865331813", code: "夜", password: "3846" },
+            { qq: "2725904226", code: "泷", password: "4957" },
+            { qq: "2367412632", code: "泷", password: "5068" },
+            { qq: "943041223", code: "夜", password: "6179" },
+            { qq: "2147437173", code: "夜", password: "7290" },
+            { qq: "1148777207", code: "泷", password: "8301" },
+            { qq: "3083405187", code: "泷", password: "9412" },
+            { qq: "3054890468", code: "泷", password: "0523" },
+            { qq: "3673443717", code: "夜", password: "1634" },
+            { qq: "32356634", code: "泷", password: "2745" },
+            { qq: "3317332879", code: "泷", password: "3856" },
+            { qq: "1780211205", code: "夜", password: "4967" },
+            { qq: "2482621309", code: "泷", password: "5078" },
+            { qq: "2698248069", code: "泷", password: "6189" },
+            { qq: "3203894875", code: "夜", password: "7290" },
+            { qq: "17731242765", code: "泷", password: "8301" },
+            { qq: "53090228", code: "夜", password: "9412" },
+            { qq: "2140632623", code: "泷", password: "0523" },
+            { qq: "3311759596", code: "夜", password: "1634" },
+            { qq: "3384798809", code: "夜", password: "2745" },
+            { qq: "2359104725", code: "泷", password: "3856" },
+            { qq: "2475462703", code: "夜", password: "4967" },
+            { qq: "1279740751", code: "泷", password: "5078" },
+            { qq: "2728381463", code: "泷", password: "6189" },
+            { qq: "3213824126", code: "夜", password: "258481" },
+            { qq: "1463563408", code: "夜", password: "7291" },
+            { qq: "984788773", code: "泷", password: "8302" },
+            { qq: "3468566263", code: "泷", password: "9413" },
+            { qq: "1875235763", code: "川", password: "0524" },
+            { qq: "2168183242", code: "介", password: "1635" },
+            { qq: "3280294327", code: "川", password: "2746" },
+            { qq: "2480409958", code: "泷", password: "3857" },
+            { qq: "3752219755", code: "夜", password: "7850" },
+            { qq: "1114278593", code: "夜", password: "7860" },
+            { qq: "3860233522", code: "夜", password: "7855" },
+            { qq: "551473278", code: "夜", password: "8765" },
+            { qq: "2501313450", code: "川", password: "8775" },
+        ];
+        
+        // 解封密码
+        const UNBAN_PASSWORD = "258481";
+        
+        // DOM元素
+        const particlesContainer = document.getElementById('particles');
+        const authContainer = document.getElementById('authContainer');
+        const banContainer = document.getElementById('banContainer');
+        const videoContainer = document.getElementById('videoContainer');
+        const banVideo = document.getElementById('banVideo');
+        const welcomeContainer = document.getElementById('welcomeContainer');
+        const authForm = document.getElementById('authForm');
+        const userCodeInput = document.getElementById('userCode');
+        const passwordGroup = document.getElementById('passwordGroup');
+        const passwordInput = document.getElementById('password');
+        const qqInput = document.getElementById('qqNumber');
+        const userNameInput = document.getElementById('userName');
+        const statusMessage = document.getElementById('statusMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const fillBtn = document.getElementById('fillBtn');
+        const unbanIcon = document.getElementById('unbanIcon');
+        const unbanMessage = document.getElementById('unbanMessage');
+        const helpLink = document.getElementById('helpLink');
+        const helpModal = document.getElementById('helpModal');
+        const closeModal = document.getElementById('closeModal');
+        const codeModal = document.getElementById('codeModal');
+        const closeCodeModal = document.getElementById('closeCodeModal');
+        const codeOptions = document.querySelectorAll('.code-option');
+        const confirmCodeBtn = document.getElementById('confirmCodeBtn');
+        const cancelCodeBtn = document.getElementById('cancelCodeBtn');
+        const unbanModal = document.getElementById('unbanModal');
+        const unbanPasswordInput = document.getElementById('unbanPassword');
+        const submitUnbanBtn = document.getElementById('submitUnbanBtn');
+        const cancelUnbanBtn = document.getElementById('cancelUnbanBtn');
+        const unbanStatus = document.getElementById('unbanStatus');
+        const avatarImg = document.getElementById('avatarImg');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInfo = document.getElementById('userInfo');
+        const timeRemaining = document.getElementById('timeRemaining');
+        const loginStatus = document.getElementById('loginStatus');
+        
+        // 状态变量
+        let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
+        let isBanned = localStorage.getItem('isBanned') === 'true';
+        let lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
+        let selectedCode = "";
+        let deviceId = localStorage.getItem('deviceId');
+        let deviceBoundQQ = localStorage.getItem('deviceBoundQQ');
+        let loginExpireTime = 0;
+        let countdownInterval = null;
+        let clickCount = 0; // 用于记录点击次数的全局变量
+        
+        // 初始化页面
+        function init() {
+            // 生成设备ID（如果不存在）
+            if (!deviceId) {
+                deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            
+            // 设置头像（请替换为实际路径）
+            avatarImg.src = "./siltx/siltx.jpg";
+            
+            createParticles();
+            checkBannedStatus();
+            checkSessionStatus();
+            setupEventListeners();
+        }
+        
+        // 创建背景粒子
+        function createParticles() {
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('bg-particle');
+                
+                // 随机大小 (5px 到 30px)
+                const size = Math.random() * 25 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // 随机位置
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // 随机动画延迟和持续时间
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 15;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // 检查账号是否被封禁
+        function checkBannedStatus() {
+            if (isBanned) {
+                // 播放封禁视频
+                playBanVideo();
+            } else {
+                authContainer.style.display = 'block';
+                banContainer.style.display = 'none';
+            }
+        }
+        
+        // 检查会话状态
+        function checkSessionStatus() {
+            // 如果被封禁，不检查会话状态
+            if (isBanned) return;
+            
+            // 检查sessionStorage中是否有活跃会话
+            const sessionActive = sessionStorage.getItem('sessionActive') === 'true';
+            const sessionExpire = parseInt(sessionStorage.getItem('sessionExpire'));
+            
+            if (sessionActive && sessionExpire) {
+                const currentTime = new Date().getTime();
+                if (currentTime < sessionExpire) {
+                    // 会话有效，显示欢迎页面
+                    showWelcomePage();
+                    return;
+                }
+            }
+            
+            // 检查localStorage中的免登录
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
+            const lastLoginTime = parseInt(localStorage.getItem('lastLoginTime'));
+            
+            if (rememberMe && lastLogin && lastLoginTime) {
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                const currentTime = new Date().getTime();
+                
+                if (currentTime - lastLoginTime < twentyFourHours) {
+                    // 设置sessionStorage标志，然后显示欢迎页面
+                    sessionStorage.setItem('sessionActive', 'true');
+                    sessionStorage.setItem('sessionExpire', (lastLoginTime + twentyFourHours).toString());
+                    showWelcomePage();
+                } else {
+                    // 超过24小时，清除localStorage中的登录信息
+                    localStorage.removeItem('rememberMe');
+                    localStorage.removeItem('lastLogin');
+                    localStorage.removeItem('lastLoginTime');
+                }
+            }
+        }
+        
+        // 显示欢迎页面
+        function showWelcomePage() {
+            authContainer.style.display = 'none';
+            welcomeContainer.style.display = 'block';
+            
+            const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || {};
+            const loginTime = parseInt(localStorage.getItem('lastLoginTime'));
+            const expireTime = loginTime + (24 * 60 * 60 * 1000);
+            
+            // 更新用户信息
+            userInfo.innerHTML = `
+                <div class="user-info-item">
+                    <span>QQ号码:</span>
+                    <span>${lastLogin.qq || '未知'}</span>
+                </div>
+                <div class="user-info-item">
+                    <span>用户昵称:</span>
+                    <span>${lastLogin.name || '未知'}</span>
+                </div>
+                <div class="user-info-item">
+                    <span>认证代号:</span>
+                    <span>${lastLogin.code || '未知'}</span>
+                </div>
+                <div class="user-info-item">
+                    <span>登录设备:</span>
+                    <span>${deviceId || '未知'}</span>
+                </div>
+            `;
+            
+            // 启动倒计时
+            startCountdown(expireTime);
+        }
+        
+        // 启动倒计时
+        function startCountdown(expireTime) {
+            loginExpireTime = expireTime;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                const currentTime = new Date().getTime();
+                const timeLeft = expireTime - currentTime;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    timeRemaining.textContent = "已过期";
+                    loginStatus.textContent = "登录已过期";
+                    logout();
+                    return;
+                }
+                
+                // 计算剩余时间
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                timeRemaining.textContent = `${hours}小时${minutes}分${seconds}秒`;
+            }, 1000);
+        }
+        
+        // 播放封禁视频
+        function playBanVideo() {
+            videoContainer.style.display = 'flex';
+            
+            // 尝试播放视频（带声音）
+            banVideo.muted = false;
+            banVideo.play().catch(e => {
+                console.error("播放失败:", e);
+                // 如果播放失败，尝试静音播放
+                banVideo.muted = true;
+                banVideo.play();
+            });
+            
+            // 重置点击计数器
+            clickCount = 0;
+            unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
+            
+            // 视频点击事件
+            banVideo.addEventListener('click', function() {
+                stopBanVideo();
+            });
+            
+            // 视频结束事件
+            banVideo.addEventListener('ended', function() {
+                stopBanVideo();
+            });
+        }
+        
+        // 停止播放封禁视频
+        function stopBanVideo() {
+            videoContainer.style.display = 'none';
+            banVideo.pause();
+            banVideo.currentTime = 0;
+            
+            // 显示封禁页面
+            authContainer.style.display = 'none';
+            banContainer.style.display = 'block';
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 认证代号输入框点击事件
+            userCodeInput.addEventListener('click', function() {
+                codeModal.style.display = 'flex';
+            });
+            
+            // 代号选择事件
+            codeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有激活状态
+                    codeOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // 激活当前选项
+                    this.classList.add('active');
+                    selectedCode = this.dataset.code;
+                });
+            });
+            
+            // 确认代号选择
+            confirmCodeBtn.addEventListener('click', function() {
+                if (selectedCode) {
+                    userCodeInput.value = selectedCode;
+                    codeModal.style.display = 'none';
+                    
+                    // 仅当选择特定代号时显示密码框
+                    if (selectedCode === "泷" || selectedCode === "夜"|| selectedCode === "介"|| selectedCode === "川") {
+                        passwordGroup.style.display = 'block';
+                        passwordInput.required = true;
+                    } else {
+                        passwordGroup.style.display = 'none';
+                        passwordInput.required = false;
+                    }
+                } else {
+                    showStatusMessage("请选择一个认证代号", "error");
+                }
+            });
+            
+            // 取消代号选择
+            cancelCodeBtn.addEventListener('click', function() {
+                codeModal.style.display = 'none';
+            });
+            
+            // 关闭代号模态框
+            closeCodeModal.addEventListener('click', function() {
+                codeModal.style.display = 'none';
+            });
+            
+            // 表单提交事件
+            authForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                authenticateUser();
+            });
+            
+            // 一键填写按钮
+            fillBtn.addEventListener('click', function() {
+                if (lastLogin) {
+                    qqInput.value = lastLogin.qq;
+                    userNameInput.value = lastLogin.name || "";
+                    userCodeInput.value = lastLogin.code;
+                    selectedCode = lastLogin.code;
+                    
+                    if (lastLogin.code === "泷" || lastLogin.code === "夜"|| lastLogin.code === "介"|| lastLogin.code === "川") {
+                        passwordGroup.style.display = 'block';
+                        passwordInput.value = lastLogin.password || "";
+                    }
+                    
+                    showStatusMessage("已自动填充上次登录信息", "warning");
+                } else {
+                    showStatusMessage("没有找到上次登录信息", "error");
+                }
+            });
+            
+            // 解封图标点击事件
+            unbanIcon.addEventListener('click', function() {
+                clickCount++;
+                
+                if (clickCount < 7) {
+                    this.innerHTML = `<i class="fas fa-Silong"></i> ${7 - clickCount}`;
+                    this.style.transform = "scale(1.1)";
+                    setTimeout(() => {
+                        this.style.transform = "scale(1)";
+                    }, 200);
+                } else {
+                    // 显示解封模态框
+                    unbanModal.style.display = 'flex';
+                }
+            });
+            
+            // 提交解封请求
+            submitUnbanBtn.addEventListener('click', function() {
+                const password = unbanPasswordInput.value.trim();
+                
+                if (password === UNBAN_PASSWORD) {
+                    unbanAccount();
+                } else {
+                    unbanStatus.textContent = "解封密码错误，请重试";
+                    unbanStatus.className = "status-message error-message";
+                    unbanStatus.style.display = 'block';
+                }
+            });
+            
+            // 取消解封
+            cancelUnbanBtn.addEventListener('click', function() {
+                unbanModal.style.display = 'none';
+                unbanPasswordInput.value = "";
+                unbanStatus.style.display = 'none';
+            });
+            
+            // 帮助链接
+            helpLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                helpModal.style.display = 'flex';
+            });
+            
+            // 关闭模态框
+            closeModal.addEventListener('click', function() {
+                helpModal.style.display = 'none';
+            });
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', function(e) {
+                if (e.target === helpModal) {
+                    helpModal.style.display = 'none';
+                }
+                if (e.target === codeModal) {
+                    codeModal.style.display = 'none';
+                }
+                if (e.target === unbanModal) {
+                    unbanModal.style.display = 'none';
+                }
+            });
+            
+            // 退出登录按钮
+            logoutBtn.addEventListener('click', function() {
+                logout();
+            });
+        }
+        
+        // 用户认证
+        function authenticateUser() {
+            const qq = qqInput.value.trim();
+            const name = userNameInput.value.trim();
+            const code = selectedCode;
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            // 验证输入
+            if (!qq || !name || !code) {
+                showStatusMessage("请填写所有必填项", "error");
+                return;
+            }
+            
+            // 检查设备是否已绑定其他账号
+            if (deviceBoundQQ && deviceBoundQQ !== qq) {
+                showStatusMessage("该设备已绑定其他账号，禁止登录", "error");
+                banAccount(qq);
+                return;
+            }
+            
+            // 显示加载状态
+            submitBtn.innerHTML = '<span class="loading"></span> 认证中...';
+            submitBtn.disabled = true;
+            
+            // 模拟网络请求延迟
+            setTimeout(() => {
+                const user = authorizedUsers.find(u => u.qq === qq);
+                
+                if (!user) {
+                    handleFailedAttempt("该账号未注册，请查看帮助中心的注册方法", qq);
+                    return;
+                }
+                
+                if (user.code !== code) {
+                    handleFailedAttempt("认证代号不正确", qq);
+                    return;
+                }
+                
+                // 检查密码
+                if (user.password && user.password !== password) {
+                    handleFailedAttempt("专用密码错误", qq);
+                    return;
+                }
+                
+                // 认证成功
+                handleSuccess(user, name, rememberMe);
+            }, 1500);
+        }
+        
+        // 处理认证成功
+        function handleSuccess(user, name, rememberMe) {
+            // 重置失败次数
+            failedAttempts = 0;
+            localStorage.setItem('failedAttempts', failedAttempts);
+            
+            // 保存登录信息
+            lastLogin = {
+                qq: user.qq,
+                name: name,
+                code: user.code,
+                password: user.password
+            };
+            
+            const currentTime = new Date().getTime();
+            const expireTime = currentTime + (24 * 60 * 60 * 1000);
+            
+            if (rememberMe) {
+                localStorage.setItem('rememberMe', 'true');
+                localStorage.setItem('lastLogin', JSON.stringify(lastLogin));
+                localStorage.setItem('lastLoginTime', currentTime.toString());
+            }
+            
+            // 设置会话信息
+            sessionStorage.setItem('sessionActive', 'true');
+            sessionStorage.setItem('sessionExpire', expireTime.toString());
+            
+            // 绑定设备到当前账号
+            localStorage.setItem('deviceBoundQQ', user.qq);
+            
+            // 显示成功消息
+            showStatusMessage(`认证成功！欢迎回来 ${name}`, "success");
+            
+            // 更新按钮状态为认证成功
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> 认证成功';
+            
+            // 2秒后显示欢迎页面
+            setTimeout(() => {
+                showWelcomePage();
+            }, 2000);
+        }
+        
+        // 处理认证失败
+        function handleFailedAttempt(message, qq) {
+            failedAttempts++;
+            localStorage.setItem('failedAttempts', failedAttempts);
+            
+            // 显示错误消息
+            showStatusMessage(`${message}，失败次数: ${failedAttempts}/3`, "error");
+            
+            // 重置按钮状态
+            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+            submitBtn.disabled = false;
+            
+            // 检查是否达到封禁条件
+            if (failedAttempts >= 3) {
+                banAccount(qq);
+            }
+        }
+        
+        // 封禁账号
+        function banAccount(qq) {
+            isBanned = true;
+            localStorage.setItem('isBanned', 'true');
+            localStorage.setItem('bannedQQ', qq);
+            // 显示封禁页面
+            authContainer.style.display = 'none';
+            playBanVideo();
+        }
+        
+        // 解封账号
+        function unbanAccount() {
+            unbanMessage.style.display = '66666';
+            unbanMessage.textContent = "正在解封账号...";
+            unbanMessage.className = "status-message warning-message";
+            
+            setTimeout(() => {
+                // 重置状态
+                isBanned = false;
+                failedAttempts = 0;
+                localStorage.setItem('isBanned', 'false');
+                localStorage.setItem('failedAttempts', '0');
+                localStorage.removeItem('deviceBoundQQ');
+                
+                // 返回认证页面
+                authContainer.style.display = 'block';
+                banContainer.style.display = 'none';
+                unbanModal.style.display = 'none';
+                
+                // 重置解封图标
+                unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
+                
+                // 显示解封成功消息
+                showStatusMessage("账号已成功解封，请重新认证", "success");
+            }, 1500);
+        }
+        
+        // 退出登录
+        function logout() {
+            // 清除会话信息
+            sessionStorage.removeItem('sessionActive');
+            sessionStorage.removeItem('sessionExpire');
+            
+            // 清除倒计时
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // 显示认证页面
+            welcomeContainer.style.display = 'none';
+            authContainer.style.display = 'block';
+            
+            // 显示退出消息
+            showStatusMessage("您已成功退出登录", "success");
+        }
+        
+        // 显示状态消息
+        function showStatusMessage(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}-message`;
+            statusMessage.style.display = 'block';
+            
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
