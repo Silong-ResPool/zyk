@@ -1,68 +1,68 @@
-<！doctype！doctype！doctype！doctype html超文本标记语言html超文本标记语言>
-<超文本标记语言 朗="zh-CN">
-<头>
-    <元 字符集="UTF-8">
-    <元 姓名="视口" 内容="宽度=设备宽度，初始比例=1.0">
-    <标题>巳泷资源库 - 账号认证</标题>
-<链接rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><链接 rel="样式表" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style><style>
-:根 {根 {
---neon-bg：线性梯度(135度，#0f0c29，#302b63，#24243e)；--neon-bg: linear-gradient(135deg，#0f0c29，#302B63，#24243e);
-            --霓虹-初级：#a945c7；
-            --霓虹二级：#2a86ba；
-            --霓虹-重音：#00c9ff；
-            --霓虹灯危险：#ff2d75；
-            --霓虹灯成功：#39FF14；
-            --非文本：#FFFFFF；
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巳泷资源库 - 账号认证</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --neon-primary: #a945c7;
+            --neon-secondary: #2a86ba;
+            --neon-accent: #00c9ff;
+            --neon-danger: #ff2d75;
+            --neon-success: #39ff14;
+            --neon-text: #ffffff;
             --neon-border: rgba(169, 69, 199, 0.5);
             --neon-glow-primary: 0 0 10px rgba(169, 69, 199, 0.8), 0 0 20px rgba(169, 69, 199, 0.6), 0 0 30px rgba(169, 69, 199, 0.4);
             --neon-glow-accent: 0 0 10px rgba(0, 201, 255, 0.8), 0 0 20px rgba(0, 201, 255, 0.6), 0 0 30px rgba(0, 201, 255, 0.4);
             --neon-glow-danger: 0 0 10px rgba(255, 45, 117, 0.8), 0 0 20px rgba(255, 45, 117, 0.6), 0 0 30px rgba(255, 45, 117, 0.4);
-            --霓虹-成功: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 20px rgba(57, 255, 20, 0.6), 0 0 30px rgba(57, 255, 20, 0.4);
+            --neon-glow-success: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 20px rgba(57, 255, 20, 0.6), 0 0 30px rgba(57, 255, 20, 0.4);
         }
 
         * {
             margin: 0;
             padding: 0;
-            箱体尺寸: 边框框;
-            字体系列: 'Segoe UI', '微软亚黑', 无衬线;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
 
-        身体 {
+        body {
             background: var(--neon-bg);
-            color: var(--非文本);
-            最小高度: 100VH;
-            溢出: 隐藏的;
-            position: 相对的;
-            display: 弯曲;
-            justify-content: 中心;
-            align-items: 中心;
+            color: var(--neon-text);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
-        .颗粒容器 {
-            position: 确定的;
+        .particles-container {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            Z指数: -1;
-溢出：隐藏的；溢出: 隐藏的;
+            z-index: -1;
+            overflow: hidden;
         }
 
-.bg-粒子{bg-粒子 {
-位置：绝对；位置: 绝对的;
+        .bg-particle {
+            position: absolute;
             border-radius: 50%;
             background: linear-gradient(145deg, var(--neon-primary), var(--neon-accent));
             box-shadow: var(--neon-glow-primary);
-            动画: 漂浮 15s 无限的 线性的;
+            animation: float 15s infinite linear;
             opacity: 0.6;
         }
 
-@keyframes 漂浮{@keyframes 漂浮 {
-0% {0% {
-transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
-不透明度：0；不透明度: 0;
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
             }
             10% {
                 opacity: 0.6;
@@ -76,22 +76,22 @@ transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
             }
         }
 
-        .身份验证容器 {
+        .auth-container {
             background: rgba(19, 15, 64, 0.7);
-            背景滤光镜: 模糊(10px);
-            border: 1px 固体 var(--neon-border);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-border);
             border-radius: 15px;
             padding: 30px;
             width: 100%;
-            最大宽度: 450px;
+            max-width: 450px;
             box-shadow: var(--neon-glow-primary);
-            position: 相对的;
-            overflow: 隐藏的;
+            position: relative;
+            overflow: hidden;
             z-index: 10;
-            animation: 闪耀 6s 无限的;
+            animation: shine 6s infinite;
         }
 
-        @keyframes 闪耀 {
+        @keyframes shine {
             0% {
                 box-shadow: var(--neon-glow-primary);
             }
@@ -109,13 +109,13 @@ transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
             }
         }
 
-        .页眉 {
-            text-align: 中心;
+        .header {
+            text-align: center;
             margin-bottom: 30px;
-            position: 相对的;
+            position: relative;
         }
 
-        .header H1 {
+        .header h1 {
             font-size: 28px;
             margin-bottom: 10px;
             text-shadow: 0 0 10px var(--neon-primary);
@@ -625,7 +625,7 @@ transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
     <div class="video-container" id="videoContainer">
         <video id="banVideo" autoplay muted>
             <!-- 请将视频路径替换为实际路径 -->
-            <source src="./byj.mp4" type="video/mp4">
+            <source src="byj.mp4" type="video/mp4">
             您的浏览器不支持视频播放。
         </video>
     </div>
@@ -635,7 +635,7 @@ transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
         <div class="header">
             <div class="logo">
                 <!-- 请替换为您的实际头像路径 -->
-                <img src="./siltx.jpg" alt="巳泷资源库头像" id="avatarImg">
+                <img src="siltx.jpg" alt="巳泷资源库头像" id="avatarImg">
             </div>
             <h1>巳泷资源库</h1>
             <p>账号认证系统</p>
@@ -728,7 +728,7 @@ transform:translateY(100VH)规模(0.5)；变换: translateY(100VH) 规模(0.5);
             </div>
             
             <div class="btn-group">
-                <a href="https://link3.cc/silong6969" class="btn btn-primary">
+                <a href="silzm.html" class="btn btn-primary">
                     <i class="fas fa-database"></i> 进入资源库
                 </a>
                 <button class="btn btn-logout" id="logoutBtn">
