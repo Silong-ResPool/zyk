@@ -331,14 +331,7 @@
             font-size: 80px;
             color: var(--neon-danger);
             margin-bottom: 20px;
-            /* 移除晃动动画 */
             text-shadow: var(--neon-glow-danger);
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
         }
 
         .footer {
@@ -572,6 +565,79 @@
         .user-info-item:last-child {
             border-bottom: none;
         }
+        
+        /* 密码查询按钮 */
+        .password-query {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--neon-accent);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .password-query:hover {
+            color: var(--neon-primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        /* 密码查询模态框 */
+        .query-modal-content {
+            background: rgba(19, 15, 64, 0.95);
+            border: 1px solid var(--neon-primary);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--neon-glow-primary);
+            position: relative;
+            text-align: center;
+        }
+        
+        .query-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--neon-border);
+        }
+        
+        .query-modal-header h2 {
+            font-size: 22px;
+            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .query-modal-body {
+            margin: 20px 0;
+        }
+        
+        .query-result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(10, 8, 36, 0.5);
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-accent);
+            text-align: left;
+            display: none;
+        }
+        
+        .query-result p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .query-result .password {
+            font-weight: bold;
+            color: var(--neon-success);
+            font-size: 18px;
+            text-shadow: var(--neon-glow-success);
+        }
 
         /* 响应式设计 */
         @media (max-width: 600px) {
@@ -614,6 +680,11 @@
                 font-size: 16px;
                 left: 12px;
             }
+            
+            .password-query {
+                right: 10px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -621,21 +692,11 @@
     <!-- 粒子背景容器 -->
     <div class="particles-container" id="particles"></div>
     
-    <!-- 封禁视频容器 -->
-    <div class="video-container" id="videoContainer">
-        <video id="banVideo" autoplay muted>
-            <!-- 请将视频路径替换为实际路径 -->
-            <source src="byj.mp4" type="video/mp4">
-            您的浏览器不支持视频播放。
-        </video>
-    </div>
-    
     <!-- 主认证容器 -->
     <div class="auth-container" id="authContainer">
         <div class="header">
             <div class="logo">
-                <!-- 请替换为您的实际头像路径 -->
-                <img src="https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg" alt="" id="avatarImg">
+                <img src="https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg" alt="巳泷资源库" id="avatarImg">
             </div>
             <h1>巳泷资源库</h1>
             <p>账号认证系统</p>
@@ -671,10 +732,13 @@
             </div>
             
             <div class="form-group" id="passwordGroup" style="display: none;">
-                <label for="password"><i class="fas fa-lock"></i> 专用密码</label>
+                <label for="password"><i class="fas fa-lock"></i> 账号密码</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password" placeholder="请输入专属密码">
+                    <input type="password" id="password" placeholder="请输入密码">
+                    <button type="button" class="password-query" id="passwordQueryBtn" title="查询密码">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
             
@@ -728,7 +792,7 @@
             </div>
             
             <div class="btn-group">
-                <a href="https://link3.cc/silong6969" class="btn btn-primary">
+                <a href="zyku.html" class="btn btn-primary">
                     <i class="fas fa-database"></i> 进入资源库
                 </a>
                 <button class="btn btn-logout" id="logoutBtn">
@@ -869,6 +933,44 @@
                     <i class="fas fa-check"></i> 提交解封
                 </button>
                 <button class="btn btn-secondary" id="cancelUnbanBtn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 密码查询模态框 -->
+    <div class="modal" id="queryModal">
+        <div class="query-modal-content">
+            <span class="close-modal" id="closeQueryModal">&times;</span>
+            <div class="query-modal-header">
+                <h2><i class="fas fa-key"></i> 专属密码查询</h2>
+                <p>请输入查询密码以获取您的专属密码</p>
+            </div>
+            
+            <div class="query-modal-body">
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="queryPassword" placeholder="请输入查询密码（258481）">
+                </div>
+                
+                <div class="status-message" id="queryStatus" style="margin-top: 15px;"></div>
+                
+                <div class="query-result" id="queryResult">
+                    <p>QQ号码: <span id="resultQQ"></span></p>
+                    <p>认证代号: <span id="resultCode"></span></p>
+                    <p>专属密码: <span class="password" id="resultPassword"></span></p>
+                    <p class="warning-message" style="padding: 8px; border-radius: 5px; margin-top: 10px;">
+                        <i class="fas fa-exclamation-circle"></i> 请妥善保管您的密码
+                    </p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" id="submitQueryBtn">
+                    <i class="fas fa-search"></i> 查询密码
+                </button>
+                <button class="btn btn-secondary" id="cancelQueryBtn">
                     <i class="fas fa-times"></i> 取消
                 </button>
             </div>
@@ -1075,23 +1177,23 @@
                  { qq: "3497806997", code: "夜", password: "8775" },
             { qq: "1066396295", code: "泷", password: "8775" },
             { qq: "1210864486", code: "川", password: "8775" },
-            { qq: "2070326060", code: "夜", password: "8775" },
               ];      
                        
-        // 解封密码
+       // 解封密码
         const UNBAN_PASSWORD = "3396";
+        // 查询密码
+        const QUERY_PASSWORD = "258481";
         
         // DOM元素
         const particlesContainer = document.getElementById('particles');
         const authContainer = document.getElementById('authContainer');
         const banContainer = document.getElementById('banContainer');
-        const videoContainer = document.getElementById('videoContainer');
-        const banVideo = document.getElementById('banVideo');
         const welcomeContainer = document.getElementById('welcomeContainer');
         const authForm = document.getElementById('authForm');
         const userCodeInput = document.getElementById('userCode');
         const passwordGroup = document.getElementById('passwordGroup');
         const passwordInput = document.getElementById('password');
+        const passwordQueryBtn = document.getElementById('passwordQueryBtn');
         const qqInput = document.getElementById('qqNumber');
         const userNameInput = document.getElementById('userName');
         const statusMessage = document.getElementById('statusMessage');
@@ -1117,6 +1219,16 @@
         const userInfo = document.getElementById('userInfo');
         const timeRemaining = document.getElementById('timeRemaining');
         const loginStatus = document.getElementById('loginStatus');
+        const queryModal = document.getElementById('queryModal');
+        const closeQueryModal = document.getElementById('closeQueryModal');
+        const queryPasswordInput = document.getElementById('queryPassword');
+        const submitQueryBtn = document.getElementById('submitQueryBtn');
+        const cancelQueryBtn = document.getElementById('cancelQueryBtn');
+        const queryStatus = document.getElementById('queryStatus');
+        const queryResult = document.getElementById('queryResult');
+        const resultQQ = document.getElementById('resultQQ');
+        const resultCode = document.getElementById('resultCode');
+        const resultPassword = document.getElementById('resultPassword');
         
         // 状态变量
         let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
@@ -1127,17 +1239,17 @@
         let deviceBoundQQ = localStorage.getItem('deviceBoundQQ');
         let loginExpireTime = 0;
         let countdownInterval = null;
-        let clickCount = 0; // 用于记录点击次数的全局变量
+        let clickCount = 0;
         
         // 初始化页面
         function init() {
-            // 生成设备ID（如果不存在）
+            // 生成设备ID
             if (!deviceId) {
                 deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
                 localStorage.setItem('deviceId', deviceId);
             }
             
-            // 设置头像（请替换为实际路径）
+            // 设置头像
             avatarImg.src = "https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg";
             
             createParticles();
@@ -1154,15 +1266,12 @@
                 const particle = document.createElement('div');
                 particle.classList.add('bg-particle');
                 
-                // 随机大小 (5px 到 30px)
                 const size = Math.random() * 25 + 5;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
-                // 随机位置
                 particle.style.left = `${Math.random() * 100}%`;
                 
-                // 随机动画延迟和持续时间
                 const delay = Math.random() * 15;
                 const duration = Math.random() * 10 + 15;
                 particle.style.animationDelay = `${delay}s`;
@@ -1175,8 +1284,8 @@
         // 检查账号是否被封禁
         function checkBannedStatus() {
             if (isBanned) {
-                // 播放封禁视频
-                playBanVideo();
+                authContainer.style.display = 'none';
+                banContainer.style.display = 'block';
             } else {
                 authContainer.style.display = 'block';
                 banContainer.style.display = 'none';
@@ -1185,23 +1294,19 @@
         
         // 检查会话状态
         function checkSessionStatus() {
-            // 如果被封禁，不检查会话状态
             if (isBanned) return;
             
-            // 检查sessionStorage中是否有活跃会话
             const sessionActive = sessionStorage.getItem('sessionActive') === 'true';
             const sessionExpire = parseInt(sessionStorage.getItem('sessionExpire'));
             
             if (sessionActive && sessionExpire) {
                 const currentTime = new Date().getTime();
                 if (currentTime < sessionExpire) {
-                    // 会话有效，显示欢迎页面
                     showWelcomePage();
                     return;
                 }
             }
             
-            // 检查localStorage中的免登录
             const rememberMe = localStorage.getItem('rememberMe') === 'true';
             const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
             const lastLoginTime = parseInt(localStorage.getItem('lastLoginTime'));
@@ -1211,12 +1316,10 @@
                 const currentTime = new Date().getTime();
                 
                 if (currentTime - lastLoginTime < twentyFourHours) {
-                    // 设置sessionStorage标志，然后显示欢迎页面
                     sessionStorage.setItem('sessionActive', 'true');
                     sessionStorage.setItem('sessionExpire', (lastLoginTime + twentyFourHours).toString());
                     showWelcomePage();
                 } else {
-                    // 超过24小时，清除localStorage中的登录信息
                     localStorage.removeItem('rememberMe');
                     localStorage.removeItem('lastLogin');
                     localStorage.removeItem('lastLoginTime');
@@ -1233,7 +1336,6 @@
             const loginTime = parseInt(localStorage.getItem('lastLoginTime'));
             const expireTime = loginTime + (24 * 60 * 60 * 1000);
             
-            // 更新用户信息
             userInfo.innerHTML = `
                 <div class="user-info-item">
                     <span>QQ号码:</span>
@@ -1253,7 +1355,6 @@
                 </div>
             `;
             
-            // 启动倒计时
             startCountdown(expireTime);
         }
         
@@ -1277,52 +1378,12 @@
                     return;
                 }
                 
-                // 计算剩余时间
                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 
                 timeRemaining.textContent = `${hours}小时${minutes}分${seconds}秒`;
             }, 1000);
-        }
-        
-        // 播放封禁视频
-        function playBanVideo() {
-            videoContainer.style.display = 'flex';
-            
-            // 尝试播放视频（带声音）
-            banVideo.muted = false;
-            banVideo.play().catch(e => {
-                console.error("播放失败:", e);
-                // 如果播放失败，尝试静音播放
-                banVideo.muted = true;
-                banVideo.play();
-            });
-            
-            // 重置点击计数器
-            clickCount = 0;
-            unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
-            
-            // 视频点击事件
-            banVideo.addEventListener('click', function() {
-                stopBanVideo();
-            });
-            
-            // 视频结束事件
-            banVideo.addEventListener('ended', function() {
-                stopBanVideo();
-            });
-        }
-        
-        // 停止播放封禁视频
-        function stopBanVideo() {
-            videoContainer.style.display = 'none';
-            banVideo.pause();
-            banVideo.currentTime = 0;
-            
-            // 显示封禁页面
-            authContainer.style.display = 'none';
-            banContainer.style.display = 'block';
         }
         
         // 设置事件监听器
@@ -1335,10 +1396,7 @@
             // 代号选择事件
             codeOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    // 移除所有激活状态
                     codeOptions.forEach(opt => opt.classList.remove('active'));
-                    
-                    // 激活当前选项
                     this.classList.add('active');
                     selectedCode = this.dataset.code;
                 });
@@ -1350,8 +1408,7 @@
                     userCodeInput.value = selectedCode;
                     codeModal.style.display = 'none';
                     
-                    // 仅当选择特定代号时显示密码框
-                    if (selectedCode === "泷" || selectedCode === "夜"|| selectedCode === "介"|| selectedCode === "川") {
+                    if (selectedCode === "泷" || selectedCode === "夜" || selectedCode === "介" || selectedCode === "川") {
                         passwordGroup.style.display = 'block';
                         passwordInput.required = true;
                     } else {
@@ -1387,7 +1444,7 @@
                     userCodeInput.value = lastLogin.code;
                     selectedCode = lastLogin.code;
                     
-                    if (lastLogin.code === "泷" || lastLogin.code === "夜"|| lastLogin.code === "介"|| lastLogin.code === "川") {
+                    if (lastLogin.code === "泷" || lastLogin.code === "夜" || lastLogin.code === "介" || lastLogin.code === "川") {
                         passwordGroup.style.display = 'block';
                         passwordInput.value = lastLogin.password || "";
                     }
@@ -1409,7 +1466,6 @@
                         this.style.transform = "scale(1)";
                     }, 200);
                 } else {
-                    // 显示解封模态框
                     unbanModal.style.display = 'flex';
                 }
             });
@@ -1445,17 +1501,62 @@
                 helpModal.style.display = 'none';
             });
             
+            // 密码查询按钮
+            passwordQueryBtn.addEventListener('click', function() {
+                queryModal.style.display = 'flex';
+                queryPasswordInput.value = "";
+                queryStatus.style.display = 'none';
+                queryResult.style.display = 'none';
+            });
+            
+            // 提交查询请求
+            submitQueryBtn.addEventListener('click', function() {
+                const password = queryPasswordInput.value.trim();
+                const qq = qqInput.value.trim();
+                const code = selectedCode;
+                
+                if (password !== QUERY_PASSWORD) {
+                    queryStatus.textContent = "查询密码错误，请重试";
+                    queryStatus.className = "status-message error-message";
+                    queryStatus.style.display = 'block';
+                    return;
+                }
+                
+                // 验证QQ号和代号是否匹配
+                const user = authorizedUsers.find(u => u.qq === qq && u.code === code);
+                
+                if (!user) {
+                    queryStatus.textContent = "QQ号与认证代号不匹配";
+                    queryStatus.className = "status-message error-message";
+                    queryStatus.style.display = 'block';
+                    return;
+                }
+                
+                // 显示查询结果
+                resultQQ.textContent = qq;
+                resultCode.textContent = code;
+                resultPassword.textContent = user.password;
+                
+                queryStatus.style.display = 'none';
+                queryResult.style.display = 'block';
+            });
+            
+            // 取消查询
+            cancelQueryBtn.addEventListener('click', function() {
+                queryModal.style.display = 'none';
+            });
+            
+            // 关闭查询模态框
+            closeQueryModal.addEventListener('click', function() {
+                queryModal.style.display = 'none';
+            });
+            
             // 点击模态框外部关闭
             window.addEventListener('click', function(e) {
-                if (e.target === helpModal) {
-                    helpModal.style.display = 'none';
-                }
-                if (e.target === codeModal) {
-                    codeModal.style.display = 'none';
-                }
-                if (e.target === unbanModal) {
-                    unbanModal.style.display = 'none';
-                }
+                if (e.target === helpModal) helpModal.style.display = 'none';
+                if (e.target === codeModal) codeModal.style.display = 'none';
+                if (e.target === unbanModal) unbanModal.style.display = 'none';
+                if (e.target === queryModal) queryModal.style.display = 'none';
             });
             
             // 退出登录按钮
@@ -1472,24 +1573,20 @@
             const password = passwordInput.value;
             const rememberMe = document.getElementById('rememberMe').checked;
             
-            // 验证输入
             if (!qq || !name || !code) {
                 showStatusMessage("请填写所有必填项", "error");
                 return;
             }
             
-            // 检查设备是否已绑定其他账号
             if (deviceBoundQQ && deviceBoundQQ !== qq) {
                 showStatusMessage("该设备已绑定其他账号，禁止登录", "error");
                 banAccount(qq);
                 return;
             }
             
-            // 显示加载状态
             submitBtn.innerHTML = '<span class="loading"></span> 认证中...';
             submitBtn.disabled = true;
             
-            // 模拟网络请求延迟
             setTimeout(() => {
                 const user = authorizedUsers.find(u => u.qq === qq);
                 
@@ -1503,24 +1600,20 @@
                     return;
                 }
                 
-                // 检查密码
                 if (user.password && user.password !== password) {
                     handleFailedAttempt("专用密码错误", qq);
                     return;
                 }
                 
-                // 认证成功
                 handleSuccess(user, name, rememberMe);
             }, 1500);
         }
         
         // 处理认证成功
         function handleSuccess(user, name, rememberMe) {
-            // 重置失败次数
             failedAttempts = 0;
             localStorage.setItem('failedAttempts', failedAttempts);
             
-            // 保存登录信息
             lastLogin = {
                 qq: user.qq,
                 name: name,
@@ -1537,20 +1630,13 @@
                 localStorage.setItem('lastLoginTime', currentTime.toString());
             }
             
-            // 设置会话信息
             sessionStorage.setItem('sessionActive', 'true');
             sessionStorage.setItem('sessionExpire', expireTime.toString());
-            
-            // 绑定设备到当前账号
             localStorage.setItem('deviceBoundQQ', user.qq);
             
-            // 显示成功消息
             showStatusMessage(`认证成功！欢迎回来 ${name}`, "success");
-            
-            // 更新按钮状态为认证成功
             submitBtn.innerHTML = '<i class="fas fa-check"></i> 认证成功';
             
-            // 2秒后显示欢迎页面
             setTimeout(() => {
                 showWelcomePage();
             }, 2000);
@@ -1561,14 +1647,10 @@
             failedAttempts++;
             localStorage.setItem('failedAttempts', failedAttempts);
             
-            // 显示错误消息
             showStatusMessage(`${message}，失败次数: ${failedAttempts}/3`, "error");
-            
-            // 重置按钮状态
             submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
             submitBtn.disabled = false;
             
-            // 检查是否达到封禁条件
             if (failedAttempts >= 3) {
                 banAccount(qq);
             }
@@ -1579,54 +1661,43 @@
             isBanned = true;
             localStorage.setItem('isBanned', 'true');
             localStorage.setItem('bannedQQ', qq);
-            // 显示封禁页面
             authContainer.style.display = 'none';
-            playBanVideo();
+            banContainer.style.display = 'block';
         }
         
         // 解封账号
         function unbanAccount() {
-            unbanMessage.style.display = '66666';
+            unbanMessage.style.display = 'block';
             unbanMessage.textContent = "正在解封账号...";
             unbanMessage.className = "status-message warning-message";
             
             setTimeout(() => {
-                // 重置状态
                 isBanned = false;
                 failedAttempts = 0;
                 localStorage.setItem('isBanned', 'false');
                 localStorage.setItem('failedAttempts', '0');
                 localStorage.removeItem('deviceBoundQQ');
                 
-                // 返回认证页面
                 authContainer.style.display = 'block';
                 banContainer.style.display = 'none';
                 unbanModal.style.display = 'none';
-                
-                // 重置解封图标
                 unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
                 
-                // 显示解封成功消息
                 showStatusMessage("账号已成功解封，请重新认证", "success");
             }, 1500);
         }
         
         // 退出登录
         function logout() {
-            // 清除会话信息
             sessionStorage.removeItem('sessionActive');
             sessionStorage.removeItem('sessionExpire');
             
-            // 清除倒计时
             if (countdownInterval) {
                 clearInterval(countdownInterval);
             }
             
-            // 显示认证页面
             welcomeContainer.style.display = 'none';
             authContainer.style.display = 'block';
-            
-            // 显示退出消息
             showStatusMessage("您已成功退出登录", "success");
         }
         
@@ -1636,7 +1707,6 @@
             statusMessage.className = `status-message ${type}-message`;
             statusMessage.style.display = 'block';
             
-            // 5秒后自动隐藏
             setTimeout(() => {
                 statusMessage.style.display = 'none';
             }, 5000);
