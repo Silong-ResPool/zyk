@@ -28,7 +28,7 @@
     body {
       background: 
         linear-gradient(135deg, rgba(40, 20, 80, 0.2), rgba(25, 25, 60, 0.3)), 
-        url('./bjtp/bjt.jpg') no-repeat center center fixed;
+        url('bjt.jpg') no-repeat center center fixed;
       background-size: cover;
       color: var(--text);
       min-height: 100vh;
@@ -977,8 +977,8 @@ return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(nav
     window.dispatchEvent(new Event('resize'));
     // ==================== 屏幕方向壁纸切换 ==================== 
 const ORIENTATION_WALLPAPERS = {
-  portrait: 'url(./bjtp/bjt1.jpg)',  // 9:16竖屏壁纸路径 
-  landscape: 'url(./bjtp/bjt2.jpg)'  // 16:9横屏壁纸路径 
+  portrait: 'url(bjt1.jpg)',  // 9:16竖屏壁纸路径 
+  landscape: 'url(bjt2.jpg)'  // 16:9横屏壁纸路径 
 };
  
 function updateWallpaperByOrientation() {
