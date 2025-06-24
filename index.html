@@ -32,7 +32,7 @@
             background: var(--neon-bg);
             color: var(--neon-text);
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
             display: flex;
             justify-content: center;
@@ -362,6 +362,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
         
         .modal-content {
@@ -484,26 +485,6 @@
             margin-bottom: 5px;
         }
 
-        /* 视频容器 */
-        .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 9999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         /* 解封模态框 */
         .unban-modal {
             display: none;
@@ -566,77 +547,57 @@
             border-bottom: none;
         }
         
-        /* 密码查询按钮 */
-        .password-query {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: var(--neon-accent);
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .password-query:hover {
-            color: var(--neon-primary);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        /* 密码查询模态框 */
-        .query-modal-content {
+        /* 注册模态框 */
+        .register-modal-content {
             background: rgba(19, 15, 64, 0.95);
             border: 1px solid var(--neon-primary);
             border-radius: 15px;
             padding: 30px;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             box-shadow: var(--neon-glow-primary);
             position: relative;
-            text-align: center;
         }
         
-        .query-modal-header {
-            text-align: center;
+        .register-form-group {
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--neon-border);
         }
         
-        .query-modal-header h2 {
-            font-size: 22px;
-            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+        /* 激活码模态框 */
+        .activation-modal-content {
+            background: rgba(19, 15, 64, 0.95);
+            border: 1px solid var(--neon-success);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--neon-glow-success);
+            position: relative;
         }
         
-        .query-modal-body {
-            margin: 20px 0;
-        }
-        
-        .query-result {
-            margin-top: 20px;
-            padding: 15px;
+        .activation-instructions {
             background: rgba(10, 8, 36, 0.5);
+            padding: 15px;
             border-radius: 8px;
+            margin: 20px 0;
             border-left: 3px solid var(--neon-accent);
-            text-align: left;
-            display: none;
         }
         
-        .query-result p {
-            margin-bottom: 8px;
-            line-height: 1.5;
+        .activation-instructions p {
+            margin-bottom: 10px;
+            line-height: 1.6;
         }
         
-        .query-result .password {
+        .activation-code {
             font-weight: bold;
             color: var(--neon-success);
-            font-size: 18px;
             text-shadow: var(--neon-glow-success);
+            font-size: 18px;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(57, 255, 20, 0.1);
+            border-radius: 8px;
         }
 
         /* 响应式设计 */
@@ -665,6 +626,12 @@
             .modal-header h2 {
                 font-size: 20px;
             }
+            
+            .code-option {
+                width: 70px;
+                height: 70px;
+                font-size: 14px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -679,11 +646,6 @@
             .input-with-icon i {
                 font-size: 16px;
                 left: 12px;
-            }
-            
-            .password-query {
-                right: 10px;
-                font-size: 14px;
             }
         }
     </style>
@@ -711,7 +673,7 @@
                 <label for="qqNumber"><i class="fas fa-user"></i> QQ号码</label>
                 <div class="input-with-icon">
                     <i class="fab fa-qq"></i>
-                    <input type="text" id="qqNumber" placeholder="请输入您的QQ号码" required>
+                    <input type="text" id="qqNumber" placeholder="请输入您的QQ号码" required minlength="5" maxlength="10">
                 </div>
             </div>
             
@@ -735,10 +697,7 @@
                 <label for="password"><i class="fas fa-lock"></i> 账号密码</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password" placeholder="请输入密码">
-                    <button type="button" class="password-query" id="passwordQueryBtn" title="查询密码">
-                        <i class="fas fa-search"></i>
-                    </button>
+                    <input type="password" id="password" placeholder="注册码(0000)">
                 </div>
             </div>
             
@@ -759,7 +718,7 @@
         
         <div class="footer">
             <p>遇到问题？<a href="#" id="helpLink"><i class="fas fa-question-circle"></i> 查看帮助</a></p>
-            <p>&copy; 2023 巳泷资源库 | 认证系统 v3.0</p>
+            <p>&copy; 2023 巳泷资源库 | 认证系统 v4.0</p>
         </div>
     </div>
     
@@ -803,7 +762,7 @@
             <div class="footer">
                 <p>认证状态：<span id="loginStatus">已登录</span></p>
                 <p>剩余时间：<span id="timeRemaining">24小时</span></p>
-                <p>&copy; 2023 巳泷资源库 | 认证系统 v3.0</p>
+                <p>&copy; 2023 巳泷资源库 | 认证系统 v4.0</p>
             </div>
         </div>
     </div>
@@ -843,10 +802,10 @@
                 <h3><i class="fas fa-exclamation-triangle"></i> 常见问题解决</h3>
                 <ul>
                     <li><strong>忘记认证代号：</strong> 请联系管理员查询您的认证代号</li>
-                    <li><strong>专属密码错误：</strong> 错误的用户请联系管理员巳泷</li>
+                    <li><strong>专属密码错误：</strong> 请联系管理员巳泷</li>
                     <li><strong>账号被封禁：</strong> 多次认证失败会导致账号封禁</li>
                     <li><strong>认证成功后无法跳转：</strong> 请检查网络连接或尝试刷新页面</li>
-                    <li><strong>账号未注册：</strong> 请按照帮助中心的注册方法完成注册</li>
+                    <li><strong>账号未注册：</strong> 系统将引导您完成注册流程</li>
                 </ul>
             </div>
             
@@ -854,11 +813,11 @@
                 <h3><i class="fas fa-user-plus"></i> 账号注册方法</h3>
                 <p>如果您尚未注册账号：</p>
                 <ol>
-                    <li>关注巳泷宝库公众号</li>
-                    <li>发送"注册"获取注册表单</li>
-                    <li>填写您的QQ号和昵称</li>
-                    <li>管理员将在24小时内审核并分配代号</li>
-                    <li>注册成功后即可登录资源库</li>
+                    <li>在认证页面填写QQ号和昵称</li>
+                    <li>选择您的认证代号</li>
+                    <li>设置您的专属密码</li>
+                    <li>提交注册信息</li>
+                    <li>获取激活码后完成激活</li>
                 </ol>
             </div>
             
@@ -939,38 +898,83 @@
         </div>
     </div>
     
-    <!-- 密码查询模态框 -->
-    <div class="modal" id="queryModal">
-        <div class="query-modal-content">
-            <span class="close-modal" id="closeQueryModal">&times;</span>
-            <div class="query-modal-header">
-                <h2><i class="fas fa-key"></i> 专属密码查询</h2>
-                <p>请输入查询密码以获取您的专属密码</p>
+    <!-- 注册模态框 -->
+    <div class="modal" id="registerModal">
+        <div class="register-modal-content">
+            <span class="close-modal" id="closeRegisterModal">&times;</span>
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> 账号注册</h2>
+                <p>请填写以下信息完成注册</p>
             </div>
             
-            <div class="query-modal-body">
-                <div class="input-with-icon">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="queryPassword" placeholder="请输入查询密码">
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regQQ"><i class="fab fa-qq"></i> QQ号码</label>
+                    <input type="text" id="regQQ" readonly>
                 </div>
                 
-                <div class="status-message" id="queryStatus" style="margin-top: 15px;"></div>
-                
-                <div class="query-result" id="queryResult">
-                    <p>QQ号码: <span id="resultQQ"></span></p>
-                    <p>认证代号: <span id="resultCode"></span></p>
-                    <p>专属密码: <span class="password" id="resultPassword"></span></p>
-                    <p class="warning-message" style="padding: 8px; border-radius: 5px; margin-top: 10px;">
-                        <i class="fas fa-exclamation-circle"></i> 请妥善保管您的密码
-                    </p>
+                <div class="form-group">
+                    <label for="regName"><i class="fas fa-user"></i> 用户昵称</label>
+                    <input type="text" id="regName" readonly>
                 </div>
+                
+                <div class="form-group">
+                    <label for="regCode"><i class="fas fa-key"></i> 认证代号</label>
+                    <input type="text" id="regCode" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword"><i class="fas fa-lock"></i> 设置密码</label>
+                    <input type="password" id="regPassword" placeholder="请设置您的密码" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regConfirmPassword"><i class="fas fa-lock"></i> 确认密码</label>
+                    <input type="password" id="regConfirmPassword" placeholder="请再次输入密码" required>
+                </div>
+                
+                <div class="status-message" id="registerStatus"></div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> 提交注册
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelRegisterBtn">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 激活码模态框 -->
+    <div class="modal" id="activationModal">
+        <div class="activation-modal-content">
+            <span class="close-modal" id="closeActivationModal">&times;</span>
+            <div class="modal-header">
+                <h2><i class="fas fa-key"></i> 账号激活</h2>
+                <p>请输入激活码完成账号激活</p>
             </div>
+            
+            <div class="activation-instructions">
+                <p><strong>首次注册的账号需要激活码：</strong></p>
+                <p>请将以下注册信息发送到公众号获取激活码：</p>
+                <p class="activation-code">QQ: <span id="activationQQ"></span> | 昵称: <span id="activationName"></span> | 代号: <span id="activationCode"></span></p>
+                <p>发送格式: 首次注册<span id="activationQQCode"></span>巳泷【<span id="activationCodeType"></span>】</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="activationCodeInput"><i class="fas fa-key"></i> 激活码</label>
+                <input type="text" id="activationCodeInput" placeholder="请输入激活码" required>
+            </div>
+            
+            <div class="status-message" id="activationStatus"></div>
             
             <div class="btn-group">
-                <button class="btn btn-primary" id="submitQueryBtn">
-                    <i class="fas fa-search"></i> 查询密码
+                <button class="btn btn-primary" id="submitActivationBtn">
+                    <i class="fas fa-check"></i> 激活账号
                 </button>
-                <button class="btn btn-secondary" id="cancelQueryBtn">
+                <button class="btn btn-secondary" id="cancelActivationBtn">
                     <i class="fas fa-times"></i> 取消
                 </button>
             </div>
@@ -979,210 +983,215 @@
 
     <script>
         // 授权用户数据
-        const authorizedUsers = [
-           { qq: "1323978434", code: "泷", password: "8062" },
-            { qq: "2908946684", code: "夜", password: "4312" },
-            { qq: "291516641", code: "夜", password: "5678" },
-            { qq: "3025233785", code: "夜", password: "9012" },
-            { qq: "1041547578", code: "夜", password: "3456" },
-            { qq: "863891398", code: "泷", password: "7890" },
-            { qq: "3175046319", code: "夜", password: "1357" },
-            { qq: "1875316335", code: "泷", password: "2468" },
-            { qq: "3804604918", code: "泷", password: "0246" },
-            { qq: "2431704839", code: "夜", password: "1593" },
-            { qq: "3960384997", code: "夜", password: "7531" },
-            { qq: "3146846491", code: "泷", password: "8642" },
-            { qq: "3466977552", code: "泷", password: "9753" },
-            { qq: "3059392643", code: "泷", password: "0987" },
-            { qq: "3543058039", code: "川", password: "6543" },
-            { qq: "2021281325", code: "泷", password: "2109" },
-            { qq: "3272233139", code: "夜", password: "4321" },
-            { qq: "3300212539", code: "泷", password: "6789" },
-            { qq: "3396485194", code: "夜", password: "0135" },
-            { qq: "2700254884", code: "川", password: "2460" },
-            { qq: "2402755482", code: "泷", password: "8912" },
-            { qq: "3531824556", code: "夜", password: "3692" },
-            { qq: "2827532223", code: "泷", password: "5714" },
-            { qq: "2247936051", code: "夜", password: "8025" },
-            { qq: "2990782375", code: "夜", password: "1637" },
-            { qq: "2351757572", code: "泷", password: "9468" },
-            { qq: "1811153229", code: "夜", password: "0357" },
-            { qq: "2707758280", code: "夜", password: "2489" },
-            { qq: "3872658317", code: "夜", password: "1523" },
-            { qq: "2664967743", code: "泷", password: "6701" },
-            { qq: "754467738", code: "泷", password: "9852" },
-            { qq: "875567869", code: "泷", password: "3470" },
-            { qq: "3133577613", code: "夜", password: "5612" },
-            { qq: "3024646369", code: "夜", password: "8934" },
-            { qq: "3313893858", code: "夜", password: "0156" },
-            { qq: "3930717703", code: "泷", password: "2749" },
-            { qq: "1022566255", code: "泷", password: "3850" },
-            { qq: "3538704969", code: "泷", password: "1962" },
-            { qq: "3372741545", code: "夜", password: "4781" },
-            { qq: "617098680", code: "泷", password: "5023" },
-            { qq: "3931353915", code: "泷", password: "6147" },
-            { qq: "3279310252", code: "夜", password: "8259" },
-            { qq: "3343869367", code: "泷", password: "0368" },
-            { qq: "2471099910", code: "泷", password: "1472" },
-            { qq: "401843969", code: "泷", password: "5803" },
-            { qq: "55869631", code: "泷", password: "6914" },
-            { qq: "1404220299", code: "泷", password: "7025" },
-            { qq: "3769268295", code: "夜", password: "8346" },
-            { qq: "2732814452", code: "泷", password: "9457" },
-            { qq: "3083175269", code: "泷", password: "0568" },
-            { qq: "2578952761", code: "泷", password: "1679" },
-            { qq: "3953325298", code: "泷", password: "2780" },
-            { qq: "1062462386", code: "泷", password: "3891" },
-            { qq: "3058023824", code: "泷", password: "4902" },
-            { qq: "3159573908", code: "泷", password: "5013" },
-            { qq: "850401958", code: "夜", password: "6124" },
-            { qq: "551473278", code: "泷", password: "7235" },
-            { qq: "2765755169", code: "泷", password: "8346" },
-            { qq: "2331275312", code: "夜", password: "9457" },
-            { qq: "775589423", code: "泷", password: "0568" },
-            { qq: "2759907742", code: "泷", password: "1679" },
-            { qq: "1599493613", code: "夜", password: "2780" },
-            { qq: "2155770166", code: "泷", password: "3891" },
-            { qq: "3544654386", code: "夜", password: "4902" },
-            { qq: "2922761735", code: "泷", password: "5013" },
-            { qq: "2210245642", code: "夜", password: "6124" },
-            { qq: "3319676442", code: "夜", password: "7235" },
-            { qq: "2115448500", code: "泷", password: "8347" },
-            { qq: "1678836167", code: "泷", password: "9458" },
-            { qq: "177271324", code: "泷", password: "0569" },
-            { qq: "2806520241", code: "泷", password: "1601" },
-            { qq: "3811732118", code: "泷", password: "2712" },
-            { qq: "3597931971", code: "夜", password: "3823" },
-            { qq: "348634201", code: "泷", password: "4934" },
-            { qq: "1432169967", code: "泷", password: "5045" },
-            { qq: "2406339133", code: "夜", password: "6156" },
-            { qq: "1559802785", code: "泷", password: "7267" },
-            { qq: "1295312386", code: "泷", password: "8378" },
-            { qq: "2680253169", code: "泷", password: "9489" },
-            { qq: "994144624", code: "泷", password: "0590" },
-            { qq: "24764160552", code: "泷", password: "1601" },
-            { qq: "1512855385", code: "介", password: "2712" },
-            { qq: "1703181193", code: "泷", password: "3823" },
-            { qq: "304674300", code: "泷", password: "4934" },
-            { qq: "383544307", code: "泷", password: "5045" },
-            { qq: "1018446228", code: "夜", password: "6156" },
-            { qq: "2419328104", code: "泷", password: "7267" },
-            { qq: "1139193721", code: "泷", password: "8378" },
-            { qq: "259405251", code: "夜", password: "9489" },
-            { qq: "1670649207", code: "夜", password: "0591" },
-            { qq: "2070326603", code: "夜", password: "1602" },
-            { qq: "3295365979", code: "泷", password: "2713" },
-            { qq: "3767481301", code: "夜", password: "3824" },
-            { qq: "327901578", code: "夜", password: "4935" },
-            { qq: "3804330175", code: "夜", password: "5046" },
-            { qq: "1253798692", code: "泷", password: "6157" },
-            { qq: "2990019657", code: "泷", password: "7268" },
-            { qq: "346956633", code: "泷", password: "8379" },
-            { qq: "231559871", code: "泷", password: "9490" },
-            { qq: "3243028291", code: "夜", password: "0501" },
-            { qq: "376299499", code: "泷", password: "1612" },
-            { qq: "625160882", code: "泷", password: "2723" },
-            { qq: "379564966", code: "泷", password: "3834" },
-            { qq: "399536315", code: "夜", password: "4945" },
-            { qq: "127705833", code: "泷", password: "5056" },
-            { qq: "3536764173", code: "泷", password: "6167" },
-            { qq: "2434574108", code: "夜", password: "7278" },
-            { qq: "3581340439", code: "夜", password: "8389" },
-            { qq: "1516300253", code: "夜", password: "9490" },
-            { qq: "2694855645", code: "夜", password: "0501" },
-            { qq: "1876732647", code: "泷", password: "1612" },
-            { qq: "3386614224", code: "夜", password: "2723" },
-            { qq: "3238569031", code: "夜", password: "3834" },
-            { qq: "1510500463", code: "夜", password: "4945" },
-            { qq: "2132542681", code: "泷", password: "5056" },
-            { qq: "3531915327", code: "夜", password: "6167" },
-            { qq: "2776952537", code: "夜", password: "7278" },
-            { qq: "2072197990", code: "夜", password: "8389" },
-            { qq: "3072351580", code: "夜", password: "9491" },
-            { qq: "963385975", code: "夜", password: "0502" },
-            { qq: "2903065902", code: "泷", password: "1613" },
-            { qq: "3859490310", code: "泷", password: "2724" },
-            { qq: "195671158", code: "夜", password: "3835" },
-            { qq: "1295081853", code: "夜", password: "4946" },
-            { qq: "3765875133", code: "泷", password: "5057" },
-            { qq: "3319074122", code: "夜", password: "6168" },
-            { qq: "2192336290", code: "夜", password: "7279" },
-            { qq: "2529674508", code: "泷", password: "8390" },
-            { qq: "3266334914", code: "夜", password: "9401" },
-            { qq: "3508263501", code: "夜", password: "0512" },
-            { qq: "3766409574", code: "泷", password: "1623" },
-            { qq: "1654646369", code: "夜", password: "2734" },
-            { qq: "3109713612", code: "泷", password: "3845" },
-            { qq: "3390576154", code: "泷", password: "4956" },
-            { qq: "1097675149", code: "夜", password: "5067" },
-            { qq: "1647802618", code: "夜", password: "6178" },
-            { qq: "2216551698", code: "泷", password: "7289" },
-            { qq: "3243986695", code: "泷", password: "8390" },
-            { qq: "2360918083", code: "泷", password: "9401" },
-            { qq: "2606283193", code: "泷", password: "0512" },
-            { qq: "2068298272", code: "夜", password: "1623" },
-            { qq: "3813779902", code: "泷", password: "2734" },
-            { qq: "2020115344", code: "泷", password: "3845" },
-            { qq: "652160882", code: "泷", password: "4956" },
-            { qq: "3795649068", code: "泷", password: "5067" },
-            { qq: "3995363155", code: "夜", password: "6178" },
-            { qq: "1927705833", code: "泷", password: "7289" },
-            { qq: "1543140283", code: "夜", password: "8391" },
-            { qq: "1691379220", code: "泷", password: "9402" },
-            { qq: "364990462", code: "夜", password: "0513" },
-            { qq: "2802644374", code: "泷", password: "1624" },
-            { qq: "3488616469", code: "夜", password: "2735" },
-            { qq: "865331813", code: "夜", password: "3846" },
-            { qq: "2725904226", code: "泷", password: "4957" },
-            { qq: "2367412632", code: "泷", password: "5068" },
-            { qq: "943041223", code: "夜", password: "6179" },
-            { qq: "2147437173", code: "夜", password: "7290" },
-            { qq: "1148777207", code: "泷", password: "8301" },
-            { qq: "3083405187", code: "泷", password: "9412" },
-            { qq: "3054890468", code: "泷", password: "0523" },
-            { qq: "3673443717", code: "夜", password: "1634" },
-            { qq: "32356634", code: "泷", password: "2745" },
-            { qq: "3317332879", code: "泷", password: "3856" },
-            { qq: "1780211205", code: "夜", password: "4967" },
-            { qq: "2482621309", code: "泷", password: "5078" },
-            { qq: "2698248069", code: "泷", password: "6189" },
-            { qq: "3203894875", code: "夜", password: "7290" },
-            { qq: "17731242765", code: "泷", password: "8301" },
-            { qq: "53090228", code: "夜", password: "9412" },
-            { qq: "2140632623", code: "泷", password: "0523" },
-            { qq: "3311759596", code: "夜", password: "1634" },
-            { qq: "3384798809", code: "夜", password: "2745" },
-            { qq: "2359104725", code: "泷", password: "3856" },
-            { qq: "2475462703", code: "夜", password: "4967" },
-            { qq: "1279740751", code: "泷", password: "5078" },
-            { qq: "2728381463", code: "泷", password: "6189" },
-            { qq: "3213824126", code: "夜", password: "258481" },
-            { qq: "1463563408", code: "夜", password: "7291" },
-            { qq: "984788773", code: "泷", password: "8302" },
-            { qq: "3468566263", code: "泷", password: "9413" },
-            { qq: "1875235763", code: "川", password: "0524" },
-            { qq: "2168183242", code: "介", password: "1635" },
-            { qq: "3280294327", code: "川", password: "2746" },
-            { qq: "2480409958", code: "泷", password: "3857" },
-            { qq: "3752219755", code: "夜", password: "7850" },
-            { qq: "1114278593", code: "夜", password: "7860" },
-            { qq: "3860233522", code: "夜", password: "7855" },
-            { qq: "551473278", code: "夜", password: "8765" },
-             { qq: "2501313450", code: "川", password: "8775" },
-             { qq: "2723911959", code: "泷", password: "8675" },
-              { qq: "2072197990", code: "泷", password: "8765" },
-               { qq: "3182161791", code: "泷", password: "8775" },
-                { qq: "3873060748", code: "夜", password: "8775" },
-             { qq: "1649664203", code: "夜", password: "8775" },
-                 { qq: "3497806997", code: "夜", password: "8775" },
-            { qq: "1066396295", code: "泷", password: "8775" },
-            { qq: "1210864486", code: "川", password: "8775" },
-              ];      
-                       
-       // 解封密码
-        const UNBAN_PASSWORD = "3396";
-        // 查询密码
-        const QUERY_PASSWORD = "258481";
+        let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
+            { qq: "1323978434", code: "泷", password: "8062", activated: true },
+{ qq: "2908946684", code: "夜", password: "4312", activated: true },
+{ qq: "291516641", code: "夜", password: "5678", activated: true },
+{ qq: "3025233785", code: "夜", password: "9012", activated: true },
+{ qq: "1041547578", code: "夜", password: "3456", activated: true },
+{ qq: "863891398", code: "泷", password: "7890", activated: true },
+{ qq: "3175046319", code: "夜", password: "1357", activated: true },
+{ qq: "1875316335", code: "泷", password: "2468", activated: true },
+{ qq: "3804604918", code: "泷", password: "0246", activated: true },
+{ qq: "2431704839", code: "夜", password: "1593", activated: true },
+{ qq: "3960384997", code: "夜", password: "7531", activated: true },
+{ qq: "3146846491", code: "泷", password: "8642", activated: true },
+{ qq: "3466977552", code: "泷", password: "9753", activated: true },
+{ qq: "3059392643", code: "泷", password: "0987", activated: true },
+{ qq: "3543058039", code: "川", password: "6543", activated: true },
+{ qq: "2021281325", code: "泷", password: "2109", activated: true },
+{ qq: "3272233139", code: "夜", password: "4321", activated: true },
+{ qq: "3300212539", code: "泷", password: "6789", activated: true },
+{ qq: "3396485194", code: "夜", password: "0135", activated: true },
+{ qq: "2700254884", code: "川", password: "2460", activated: true },
+{ qq: "2402755482", code: "泷", password: "8912", activated: true },
+{ qq: "3531824556", code: "夜", password: "3692", activated: true },
+{ qq: "2827532223", code: "泷", password: "5714", activated: true },
+{ qq: "2247936051", code: "夜", password: "8025", activated: true },
+{ qq: "2990782375", code: "夜", password: "1637", activated: true },
+{ qq: "2351757572", code: "泷", password: "9468", activated: true },
+{ qq: "1811153229", code: "夜", password: "0357", activated: true },
+{ qq: "2707758280", code: "夜", password: "2489", activated: true },
+{ qq: "3872658317", code: "夜", password: "1523", activated: true },
+{ qq: "2664967743", code: "泷", password: "6701", activated: true },
+{ qq: "754467738", code: "泷", password: "9852", activated: true },
+{ qq: "875567869", code: "泷", password: "3470", activated: true },
+{ qq: "3133577613", code: "夜", password: "5612", activated: true },
+{ qq: "3024646369", code: "夜", password: "8934", activated: true },
+{ qq: "3313893858", code: "夜", password: "0156", activated: true },
+{ qq: "3930717703", code: "泷", password: "2749", activated: true },
+{ qq: "1022566255", code: "泷", password: "3850", activated: true },
+{ qq: "3538704969", code: "泷", password: "1962", activated: true },
+{ qq: "3372741545", code: "夜", password: "4781", activated: true },
+{ qq: "617098680", code: "泷", password: "5023", activated: true },
+{ qq: "3931353915", code: "泷", password: "6147", activated: true },
+{ qq: "3279310252", code: "夜", password: "8259", activated: true },
+{ qq: "3343869367", code: "泷", password: "0368", activated: true },
+{ qq: "2471099910", code: "泷", password: "1472", activated: true },
+{ qq: "401843969", code: "泷", password: "5803", activated: true },
+{ qq: "55869631", code: "泷", password: "6914", activated: true },
+{ qq: "1404220299", code: "泷", password: "7025", activated: true },
+{ qq: "3769268295", code: "夜", password: "8346", activated: true },
+{ qq: "2732814452", code: "泷", password: "9457", activated: true },
+{ qq: "3083175269", code: "泷", password: "0568", activated: true },
+{ qq: "2578952761", code: "泷", password: "1679", activated: true },
+{ qq: "3953325298", code: "泷", password: "2780", activated: true },
+{ qq: "1062462386", code: "泷", password: "3891", activated: true },
+{ qq: "3058023824", code: "泷", password: "4902", activated: true },
+{ qq: "3159573908", code: "泷", password: "5013", activated: true },
+{ qq: "850401958", code: "夜", password: "6124", activated: true },
+{ qq: "551473278", code: "泷", password: "7235", activated: true },
+{ qq: "2765755169", code: "泷", password: "8346", activated: true },
+{ qq: "2331275312", code: "夜", password: "9457", activated: true },
+{ qq: "775589423", code: "泷", password: "0568", activated: true },
+{ qq: "2759907742", code: "泷", password: "1679", activated: true },
+{ qq: "1599493613", code: "夜", password: "2780", activated: true },
+{ qq: "2155770166", code: "泷", password: "3891", activated: true },
+{ qq: "3544654386", code: "夜", password: "4902", activated: true },
+{ qq: "2922761735", code: "泷", password: "5013", activated: true },
+{ qq: "2210245642", code: "夜", password: "6124", activated: true },
+{ qq: "3319676442", code: "夜", password: "7235", activated: true },
+{ qq: "2115448500", code: "泷", password: "8347", activated: true },
+{ qq: "1678836167", code: "泷", password: "9458", activated: true },
+{ qq: "177271324", code: "泷", password: "0569", activated: true },
+{ qq: "2806520241", code: "泷", password: "1601", activated: true },
+{ qq: "3811732118", code: "泷", password: "2712", activated: true },
+{ qq: "3597931971", code: "夜", password: "3823", activated: true },
+{ qq: "348634201", code: "泷", password: "4934", activated: true },
+{ qq: "1432169967", code: "泷", password: "5045", activated: true },
+{ qq: "2406339133", code: "夜", password: "6156", activated: true },
+{ qq: "1559802785", code: "泷", password: "7267", activated: true },
+{ qq: "1295312386", code: "泷", password: "8378", activated: true },
+{ qq: "2680253169", code: "泷", password: "9489", activated: true },
+{ qq: "994144624", code: "泷", password: "0590", activated: true },
+{ qq: "24764160552", code: "泷", password: "1601", activated: true },
+{ qq: "1512855385", code: "介", password: "2712", activated: true },
+{ qq: "1703181193", code: "泷", password: "3823", activated: true },
+{ qq: "304674300", code: "泷", password: "4934", activated: true },
+{ qq: "383544307", code: "泷", password: "5045", activated: true },
+{ qq: "1018446228", code: "夜", password: "6156", activated: true },
+{ qq: "2419328104", code: "泷", password: "7267", activated: true },
+{ qq: "1139193721", code: "泷", password: "8378", activated: true },
+{ qq: "259405251", code: "夜", password: "9489", activated: true },
+{ qq: "1670649207", code: "夜", password: "0591", activated: true },
+{ qq: "2070326603", code: "夜", password: "1602", activated: true },
+{ qq: "3295365979", code: "泷", password: "2713", activated: true },
+{ qq: "3767481301", code: "夜", password: "3824", activated: true },
+{ qq: "327901578", code: "夜", password: "4935", activated: true },
+{ qq: "3804330175", code: "夜", password: "5046", activated: true },
+{ qq: "1253798692", code: "泷", password: "6157", activated: true },
+{ qq: "2990019657", code: "泷", password: "7268", activated: true },
+{ qq: "346956633", code: "泷", password: "8379", activated: true },
+{ qq: "231559871", code: "泷", password: "9490", activated: true },
+{ qq: "3243028291", code: "夜", password: "0501", activated: true },
+{ qq: "376299499", code: "泷", password: "1612", activated: true },
+{ qq: "625160882", code: "泷", password: "2723", activated: true },
+{ qq: "379564966", code: "泷", password: "3834", activated: true },
+{ qq: "399536315", code: "夜", password: "4945", activated: true },
+{ qq: "127705833", code: "泷", password: "5056", activated: true },
+{ qq: "3536764173", code: "泷", password: "6167", activated: true },
+{ qq: "2434574108", code: "夜", password: "7278", activated: true },
+{ qq: "3581340439", code: "夜", password: "8389", activated: true },
+{ qq: "1516300253", code: "夜", password: "9490", activated: true },
+{ qq: "2694855645", code: "夜", password: "0501", activated: true },
+{ qq: "1876732647", code: "泷", password: "1612", activated: true },
+{ qq: "3386614224", code: "夜", password: "2723", activated: true },
+{ qq: "3238569031", code: "夜", password: "3834", activated: true },
+{ qq: "1510500463", code: "夜", password: "4945", activated: true },
+{ qq: "2132542681", code: "泷", password: "5056", activated: true },
+{ qq: "3531915327", code: "夜", password: "6167", activated: true },
+{ qq: "2776952537", code: "夜", password: "7278", activated: true },
+{ qq: "2072197990", code: "夜", password: "8389", activated: true },
+{ qq: "3072351580", code: "夜", password: "9491", activated: true },
+{ qq: "963385975", code: "夜", password: "0502", activated: true },
+{ qq: "2903065902", code: "泷", password: "1613", activated: true },
+{ qq: "3859490310", code: "泷", password: "2724", activated: true },
+{ qq: "195671158", code: "夜", password: "3835", activated: true },
+{ qq: "1295081853", code: "夜", password: "4946", activated: true },
+{ qq: "3765875133", code: "泷", password: "5057", activated: true },
+{ qq: "3319074122", code: "夜", password: "6168", activated: true },
+{ qq: "2192336290", code: "夜", password: "7279", activated: true },
+{ qq: "2529674508", code: "泷", password: "8390", activated: true },
+{ qq: "3266334914", code: "夜", password: "9401", activated: true },
+{ qq: "3508263501", code: "夜", password: "0512", activated: true },
+{ qq: "3766409574", code: "泷", password: "1623", activated: true },
+{ qq: "1654646369", code: "夜", password: "2734", activated: true },
+{ qq: "3109713612", code: "泷", password: "3845", activated: true },
+{ qq: "3390576154", code: "泷", password: "4956", activated: true },
+{ qq: "1097675149", code: "夜", password: "5067", activated: true },
+{ qq: "1647802618", code: "夜", password: "6178", activated: true },
+{ qq: "2216551698", code: "泷", password: "7289", activated: true },
+{ qq: "3243986695", code: "泷", password: "8390", activated: true },
+{ qq: "2360918083", code: "泷", password: "9401", activated: true },
+{ qq: "2606283193", code: "泷", password: "0512", activated: true },
+{ qq: "2068298272", code: "夜", password: "1623", activated: true },
+{ qq: "3813779902", code: "泷", password: "2734", activated: true },
+{ qq: "2020115344", code: "泷", password: "3845", activated: true },
+{ qq: "652160882", code: "泷", password: "4956", activated: true },
+{ qq: "3795649068", code: "泷", password: "5067", activated: true },
+{ qq: "3995363155", code: "夜", password: "6178", activated: true },
+{ qq: "1927705833", code: "泷", password: "7289", activated: true },
+{ qq: "1543140283", code: "夜", password: "8391", activated: true },
+{ qq: "1691379220", code: "泷", password: "9402", activated: true },
+{ qq: "364990462", code: "夜", password: "0513", activated: true },
+{ qq: "2802644374", code: "泷", password: "1624", activated: true },
+{ qq: "3488616469", code: "夜", password: "2735", activated: true },
+{ qq: "865331813", code: "夜", password: "3846", activated: true },
+{ qq: "2725904226", code: "泷", password: "4957", activated: true },
+{ qq: "2367412632", code: "泷", password: "5068", activated: true },
+{ qq: "943041223", code: "夜", password: "6179", activated: true },
+{ qq: "2147437173", code: "夜", password: "7290", activated: true },
+{ qq: "1148777207", code: "泷", password: "8301", activated: true },
+{ qq: "3083405187", code: "泷", password: "9412", activated: true },
+{ qq: "3054890468", code: "泷", password: "0523", activated: true },
+{ qq: "3673443717", code: "夜", password: "1634", activated: true },
+{ qq: "32356634", code: "泷", password: "2745", activated: true },
+{ qq: "3317332879", code: "泷", password: "3856", activated: true },
+{ qq: "1780211205", code: "夜", password: "4967", activated: true },
+{ qq: "2482621309", code: "泷", password: "5078", activated: true },
+{ qq: "2698248069", code: "泷", password: "6189", activated: true },
+{ qq: "3203894875", code: "夜", password: "7290", activated: true },
+{ qq: "17731242765", code: "泷", password: "8301", activated: true },
+{ qq: "53090228", code: "夜", password: "9412", activated: true },
+{ qq: "2140632623", code: "泷", password: "0523", activated: true },
+{ qq: "3311759596", code: "夜", password: "1634", activated: true },
+{ qq: "3384798809", code: "夜", password: "2745", activated: true },
+{ qq: "2359104725", code: "泷", password: "3856", activated: true },
+{ qq: "2475462703", code: "夜", password: "4967", activated: true },
+{ qq: "1279740751", code: "泷", password: "5078", activated: true },
+{ qq: "2728381463", code: "泷", password: "6189", activated: true },
+{ qq: "3213824126", code: "夜", password: "258481", activated: true },
+{ qq: "1463563408", code: "夜", password: "7291", activated: true },
+{ qq: "984788773", code: "泷", password: "8302", activated: true },
+{ qq: "3468566263", code: "泷", password: "9413", activated: true },
+{ qq: "1875235763", code: "川", password: "0524", activated: true },
+{ qq: "2168183242", code: "介", password: "1635", activated: true },
+{ qq: "3280294327", code: "川", password: "2746", activated: true },
+{ qq: "2480409958", code: "泷", password: "3857", activated: true },
+{ qq: "3752219755", code: "夜", password: "7850", activated: true },
+{ qq: "1114278593", code: "夜", password: "7860", activated: true },
+{ qq: "3860233522", code: "夜", password: "7855", activated: true },
+{ qq: "551473278", code: "夜", password: "8765", activated: true },
+{ qq: "2501313450", code: "川", password: "8775", activated: true },
+{ qq: "2723911959", code: "泷", password: "8675", activated: true },
+{ qq: "2072197990", code: "泷", password: "8765", activated: true },
+{ qq: "3182161791", code: "泷", password: "8775", activated: true },
+{ qq: "3873060748", code: "夜", password: "8775", activated: true },
+{ qq: "1649664203", code: "夜", password: "8775", activated: true },
+{ qq: "3497806997", code: "夜", password: "8775", activated: true },
+{ qq: "1066396295", code: "泷", password: "8775", activated: true },
+{ qq: "1210864486", code: "川", password: "8775", activated: true },
+        ];
+        
+        // 黑名单
+        const blacklist = JSON.parse(localStorage.getItem('blacklist')) || [
+            "学姐0000", "学姐1000", "学姐2000", "学姐3000", "学姐4000"
+        ];
+        
+        // 解封密码
+        const UNBAN_PASSWORD = "3213";
+        // 激活码
+        const ACTIVATION_CODE = "SL2584";
         
         // DOM元素
         const particlesContainer = document.getElementById('particles');
@@ -1193,7 +1202,6 @@
         const userCodeInput = document.getElementById('userCode');
         const passwordGroup = document.getElementById('passwordGroup');
         const passwordInput = document.getElementById('password');
-        const passwordQueryBtn = document.getElementById('passwordQueryBtn');
         const qqInput = document.getElementById('qqNumber');
         const userNameInput = document.getElementById('userName');
         const statusMessage = document.getElementById('statusMessage');
@@ -1219,16 +1227,27 @@
         const userInfo = document.getElementById('userInfo');
         const timeRemaining = document.getElementById('timeRemaining');
         const loginStatus = document.getElementById('loginStatus');
-        const queryModal = document.getElementById('queryModal');
-        const closeQueryModal = document.getElementById('closeQueryModal');
-        const queryPasswordInput = document.getElementById('queryPassword');
-        const submitQueryBtn = document.getElementById('submitQueryBtn');
-        const cancelQueryBtn = document.getElementById('cancelQueryBtn');
-        const queryStatus = document.getElementById('queryStatus');
-        const queryResult = document.getElementById('queryResult');
-        const resultQQ = document.getElementById('resultQQ');
-        const resultCode = document.getElementById('resultCode');
-        const resultPassword = document.getElementById('resultPassword');
+        const registerModal = document.getElementById('registerModal');
+        const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const regQQ = document.getElementById('regQQ');
+        const regName = document.getElementById('regName');
+        const regCode = document.getElementById('regCode');
+        const regPassword = document.getElementById('regPassword');
+        const regConfirmPassword = document.getElementById('regConfirmPassword');
+        const registerForm = document.getElementById('registerForm');
+        const registerStatus = document.getElementById('registerStatus');
+        const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+        const activationModal = document.getElementById('activationModal');
+        const closeActivationModal = document.getElementById('closeActivationModal');
+        const activationQQ = document.getElementById('activationQQ');
+        const activationName = document.getElementById('activationName');
+        const activationCode = document.getElementById('activationCode');
+        const activationCodeInput = document.getElementById('activationCodeInput');
+        const submitActivationBtn = document.getElementById('submitActivationBtn');
+        const cancelActivationBtn = document.getElementById('cancelActivationBtn');
+        const activationStatus = document.getElementById('activationStatus');
+        const activationQQCode = document.getElementById('activationQQCode');
+        const activationCodeType = document.getElementById('activationCodeType');
         
         // 状态变量
         let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
@@ -1240,6 +1259,7 @@
         let loginExpireTime = 0;
         let countdownInterval = null;
         let clickCount = 0;
+        let currentRegisterData = null;
         
         // 初始化页面
         function init() {
@@ -1501,54 +1521,40 @@
                 helpModal.style.display = 'none';
             });
             
-            // 密码查询按钮
-            passwordQueryBtn.addEventListener('click', function() {
-                queryModal.style.display = 'flex';
-                queryPasswordInput.value = "";
-                queryStatus.style.display = 'none';
-                queryResult.style.display = 'none';
+            // 退出登录按钮
+            logoutBtn.addEventListener('click', function() {
+                logout();
             });
             
-            // 提交查询请求
-            submitQueryBtn.addEventListener('click', function() {
-                const password = queryPasswordInput.value.trim();
-                const qq = qqInput.value.trim();
-                const code = selectedCode;
-                
-                if (password !== QUERY_PASSWORD) {
-                    queryStatus.textContent = "查询密码错误，请重试";
-                    queryStatus.className = "status-message error-message";
-                    queryStatus.style.display = 'block';
-                    return;
-                }
-                
-                // 验证QQ号和代号是否匹配
-                const user = authorizedUsers.find(u => u.qq === qq && u.code === code);
-                
-                if (!user) {
-                    queryStatus.textContent = "QQ号与认证代号不匹配";
-                    queryStatus.className = "status-message error-message";
-                    queryStatus.style.display = 'block';
-                    return;
-                }
-                
-                // 显示查询结果
-                resultQQ.textContent = qq;
-                resultCode.textContent = code;
-                resultPassword.textContent = user.password;
-                
-                queryStatus.style.display = 'none';
-                queryResult.style.display = 'block';
+            // 取消注册
+            cancelRegisterBtn.addEventListener('click', function() {
+                registerModal.style.display = 'none';
             });
             
-            // 取消查询
-            cancelQueryBtn.addEventListener('click', function() {
-                queryModal.style.display = 'none';
+            // 注册表单提交
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                registerUser();
             });
             
-            // 关闭查询模态框
-            closeQueryModal.addEventListener('click', function() {
-                queryModal.style.display = 'none';
+            // 关闭注册模态框
+            closeRegisterModal.addEventListener('click', function() {
+                registerModal.style.display = 'none';
+            });
+            
+            // 提交激活码
+            submitActivationBtn.addEventListener('click', function() {
+                activateAccount();
+            });
+            
+            // 取消激活
+            cancelActivationBtn.addEventListener('click', function() {
+                activationModal.style.display = 'none';
+            });
+            
+            // 关闭激活模态框
+            closeActivationModal.addEventListener('click', function() {
+                activationModal.style.display = 'none';
             });
             
             // 点击模态框外部关闭
@@ -1556,12 +1562,8 @@
                 if (e.target === helpModal) helpModal.style.display = 'none';
                 if (e.target === codeModal) codeModal.style.display = 'none';
                 if (e.target === unbanModal) unbanModal.style.display = 'none';
-                if (e.target === queryModal) queryModal.style.display = 'none';
-            });
-            
-            // 退出登录按钮
-            logoutBtn.addEventListener('click', function() {
-                logout();
+                if (e.target === registerModal) registerModal.style.display = 'none';
+                if (e.target === activationModal) activationModal.style.display = 'none';
             });
         }
         
@@ -1573,8 +1575,25 @@
             const password = passwordInput.value;
             const rememberMe = document.getElementById('rememberMe').checked;
             
-            if (!qq || !name || !code) {
-                showStatusMessage("请填写所有必填项", "error");
+            // QQ号格式验证
+            if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
+                showStatusMessage("QQ号必须是5-10位数字", "error");
+                return;
+            }
+            
+            if (!name) {
+                showStatusMessage("请填写用户昵称", "error");
+                return;
+            }
+            
+            if (!code) {
+                showStatusMessage("请选择认证代号", "error");
+                return;
+            }
+            
+            // 检查是否在黑名单中
+            if (blacklist.includes(qq)) {
+                showStatusMessage("该账号已被拉入黑名单，无法登录", "error");
                 return;
             }
             
@@ -1588,10 +1607,23 @@
             submitBtn.disabled = true;
             
             setTimeout(() => {
-                const user = authorizedUsers.find(u => u.qq === qq);
+                // 在授权用户和本地存储用户中查找
+                let user = null;
+                
+                // 在授权用户中查找
+                user = authorizedUsers.find(u => u.qq === qq);
+                
+                // 在本地存储用户中查找
+                if (!user) {
+                    const localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+                    user = localUsers.find(u => u.qq === qq);
+                }
                 
                 if (!user) {
-                    handleFailedAttempt("该账号未注册，请查看帮助中心的注册方法", qq);
+                    // 未注册用户，弹出注册框
+                    showRegisterModal(qq, name, code);
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+                    submitBtn.disabled = false;
                     return;
                 }
                 
@@ -1605,8 +1637,139 @@
                     return;
                 }
                 
+                // 检查账号是否已激活
+                if (!user.activated) {
+                    showActivationModal(user.qq, user.name, user.code);
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
                 handleSuccess(user, name, rememberMe);
             }, 1500);
+        }
+        
+        // 显示注册模态框
+        function showRegisterModal(qq, name, code) {
+            regQQ.value = qq;
+            regName.value = name;
+            regCode.value = code;
+            registerStatus.style.display = 'none';
+            registerModal.style.display = 'flex';
+            
+            // 保存当前注册数据
+            currentRegisterData = { qq, name, code };
+        }
+        
+        // 注册用户
+        function registerUser() {
+            const password = regPassword.value;
+            const confirmPassword = regConfirmPassword.value;
+            
+            if (!password) {
+                registerStatus.textContent = "请设置密码";
+                registerStatus.className = "status-message error-message";
+                registerStatus.style.display = 'block';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                registerStatus.textContent = "两次输入的密码不一致";
+                registerStatus.className = "status-message error-message";
+                registerStatus.style.display = 'block';
+                return;
+            }
+            
+            // 检查是否在黑名单中
+            if (blacklist.includes(currentRegisterData.qq)) {
+                registerStatus.textContent = "该账号已被拉入黑名单，无法注册";
+                registerStatus.className = "status-message error-message";
+                registerStatus.style.display = 'block';
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                qq: currentRegisterData.qq,
+                name: currentRegisterData.name,
+                code: currentRegisterData.code,
+                password: password,
+                activated: false
+            };
+            
+            // 保存到本地存储
+            let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+            localUsers.push(newUser);
+            localStorage.setItem('localUsers', JSON.stringify(localUsers));
+            
+            // 添加到授权用户列表（临时）
+            authorizedUsers.push(newUser);
+            
+            registerStatus.textContent = "注册成功！请激活账号";
+            registerStatus.className = "status-message success-message";
+            registerStatus.style.display = 'block';
+            
+            setTimeout(() => {
+                registerModal.style.display = 'none';
+                showActivationModal(newUser.qq, newUser.name, newUser.code);
+            }, 1500);
+        }
+        
+        // 显示激活模态框
+        function showActivationModal(qq, name, code) {
+            activationQQ.textContent = qq;
+            activationName.textContent = name;
+            activationCode.textContent = code;
+            activationQQCode.textContent = qq;
+            activationCodeType.textContent = code;
+            activationStatus.style.display = 'none';
+            activationModal.style.display = 'flex';
+        }
+        
+        // 激活账号
+        function activateAccount() {
+            const code = activationCodeInput.value.trim();
+            
+            if (code !== ACTIVATION_CODE) {
+                activationStatus.textContent = "激活码错误，请重试";
+                activationStatus.className = "status-message error-message";
+                activationStatus.style.display = 'block';
+                return;
+            }
+            
+            // 更新账号激活状态
+            const qq = activationQQ.textContent;
+            let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+            
+            const userIndex = localUsers.findIndex(u => u.qq === qq);
+            if (userIndex !== -1) {
+                localUsers[userIndex].activated = true;
+                localStorage.setItem('localUsers', JSON.stringify(localUsers));
+                
+                // 更新授权用户列表
+                const authUserIndex = authorizedUsers.findIndex(u => u.qq === qq);
+                if (authUserIndex !== -1) {
+                    authorizedUsers[authUserIndex].activated = true;
+                }
+                
+                activationStatus.textContent = "账号激活成功！";
+                activationStatus.className = "status-message success-message";
+                activationStatus.style.display = 'block';
+                
+                // 自动登录
+                setTimeout(() => {
+                    activationModal.style.display = 'none';
+                    
+                    const user = authorizedUsers.find(u => u.qq === qq);
+                    if (user) {
+                        handleSuccess(user, user.name, true);
+                    }
+                }, 1500);
+            } else {
+                activationStatus.textContent = "账号不存在";
+                activationStatus.className = "status-message error-message";
+                activationStatus.style.display = 'block';
+            }
         }
         
         // 处理认证成功
