@@ -725,6 +725,60 @@
             text-align: center;
             font-size: 14px;
         }
+         /* 新增复制按钮样式 */
+        .copy-btn {
+            background: rgba(57, 255, 20, 0.2);
+            border: 1px solid var(--neon-success);
+            color: var(--neon-success);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(57, 255, 20, 0.3);
+            box-shadow: var(--neon-glow-success);
+        }
+        
+        .copy-btn i {
+            margin-right: 5px;
+        }
+        
+        /* 激活码文本样式调整 */
+        .activation-text {
+            background: rgba(57, 255, 20, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            color: var(--neon-success);
+            text-shadow: var(--neon-glow-success);
+            font-size: 16px;
+            word-break: break-all;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+        
+        .activation-text:hover {
+            background: rgba(57, 255, 20, 0.2);
+        }
+        
+        /* 激活说明样式调整 */
+        .activation-instructions {
+            background: rgba(10, 8, 36, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid var(--neon-accent);
+        }
+        
+        .activation-instructions p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -1042,17 +1096,17 @@
             
             <form id="registerForm">
                 <div class="form-group">
-                    <label for="regQQ"><i class="fab fa-qq"></i> QQ号码</label>
+                    <label for="regQQ"><i class="fab fa-qq"></i>QQ号码</label>
                     <input type="text" id="regQQ" readonly>
                 </div>
                 
                 <div class="form-group">
-                    <label for="regName"><i class="fas fa-user"></i> 用户昵称</label>
+                    <label for="regName"><i class="fas fa-user"></i>用户昵称</label>
                     <input type="text" id="regName" readonly>
                 </div>
                 
                 <div class="form-group">
-                    <label for="regCode"><i class="fas fa-key"></i> 认证代号</label>
+                    <label for="regCode"><i class="fas fa-key"></i>认证代号</label>
                     <input type="text" id="regCode" readonly>
                 </div>
                 
@@ -1080,7 +1134,7 @@
         </div>
     </div>
     
-    <!-- 激活码模态框 -->
+ <!-- 激活码模态框 -->
     <div class="modal" id="activationModal">
         <div class="activation-modal-content">
             <span class="close-modal" id="closeActivationModal">&times;</span>
@@ -1091,9 +1145,13 @@
             
             <div class="activation-instructions">
                 <p><strong>首次注册的账号需要激活码：</strong></p>
-                <p>请长按复制下方注册信息发送到公众号获取激活码：</p>
-                <p class="activation-code">首次注册<span id="activationQQ"></span>  <span id="activationName"></span> 【<span id="activationCode"></span>】</p>
-                <p>发送格式: 首次注册<span id="activationQQCode"></span> <span id="activationName"></span>【<span id="activationCodeType"></span>】</p>
+                <p>请复制下方注册信息发送到公众号获取激活码：</p>
+                <div class="activation-text" id="activationText">首次注册<span id="activationQQ"></span> <span id="activationName"></span> 【<span id="activationCode"></span>】
+                </div>
+                <button class="copy-btn" id="copyBtn">
+                    <i class="fas fa-copy"></i> 复制信息
+                </button>
+                <p style="font-size: 12px; color: rgba(255,255,255,0.6);">复制后请前往公众号发送此信息获取激活码</p>
             </div>
             
             <div class="form-group">
@@ -1316,773 +1374,801 @@
 { qq: "1210864486", code: "川", password: "8775", activated: true },
         ];
         
-        // 黑名单
-        const blacklist = JSON.parse(localStorage.getItem('blacklist')) || [
-            "学姐0000", "学姐1000", "学姐2000", "学姐3000", "学姐4000"
-        ];
+    // 黑名单 
+    const blacklist = JSON.parse(localStorage.getItem('blacklist')) || [
+        "学姐0000", "学姐1000", "学姐2000", "学姐3000", "学姐4000"
+    ];
+    
+    // 解封密码
+    const UNBAN_PASSWORD = "JFM2584";
+    // 激活码
+    const ACTIVATION_CODE = "JHM2584";
+    // 查询码
+    const QUERY_PASSWORD = "CXM2584";
+    
+    // DOM元素 
+    const particlesContainer = document.getElementById('particles');
+    const authContainer = document.getElementById('authContainer');
+    const banContainer = document.getElementById('banContainer');
+    const welcomeContainer = document.getElementById('welcomeContainer');
+    const authForm = document.getElementById('authForm');
+    const userCodeInput = document.getElementById('userCode');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const passwordInput = document.getElementById('password');
+    const passwordQueryBtn = document.getElementById('passwordQueryBtn');
+    const qqInput = document.getElementById('qqNumber');
+    const userNameInput = document.getElementById('userName');
+    const statusMessage = document.getElementById('statusMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const fillBtn = document.getElementById('fillBtn');
+    const unbanIcon = document.getElementById('unbanIcon');
+    const unbanMessage = document.getElementById('unbanMessage');
+    const helpLink = document.getElementById('helpLink');
+    const helpModal = document.getElementById('helpModal');
+    const closeModal = document.getElementById('closeModal');
+    const codeModal = document.getElementById('codeModal');
+    const closeCodeModal = document.getElementById('closeCodeModal');
+    const codeOptions = document.querySelectorAll('.code-option');
+    const confirmCodeBtn = document.getElementById('confirmCodeBtn');
+    const cancelCodeBtn = document.getElementById('cancelCodeBtn');
+    const unbanModal = document.getElementById('unbanModal');
+    const unbanPasswordInput = document.getElementById('unbanPassword');
+    const submitUnbanBtn = document.getElementById('submitUnbanBtn');
+    const cancelUnbanBtn = document.getElementById('cancelUnbanBtn');
+    const unbanStatus = document.getElementById('unbanStatus');
+    const avatarImg = document.getElementById('avatarImg');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userInfo = document.getElementById('userInfo');
+    const timeRemaining = document.getElementById('timeRemaining');
+    const loginStatus = document.getElementById('loginStatus');
+    const registerModal = document.getElementById('registerModal');
+    const closeRegisterModal = document.getElementById('closeRegisterModal');
+    const regQQ = document.getElementById('regQQ');
+    const regName = document.getElementById('regName');
+    const regCode = document.getElementById('regCode');
+    const regPassword = document.getElementById('regPassword');
+    const regConfirmPassword = document.getElementById('regConfirmPassword');
+    const registerForm = document.getElementById('registerForm');
+    const registerStatus = document.getElementById('registerStatus');
+    const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+    const activationModal = document.getElementById('activationModal');
+    const closeActivationModal = document.getElementById('closeActivationModal');
+    const activationQQ = document.getElementById('activationQQ');
+    const activationName = document.getElementById('activationName');
+    const activationCode = document.getElementById('activationCode');
+    const activationCodeInput = document.getElementById('activationCodeInput');
+    const submitActivationBtn = document.getElementById('submitActivationBtn');
+    const cancelActivationBtn = document.getElementById('cancelActivationBtn');
+    const activationStatus = document.getElementById('activationStatus');
+    const activationQQCode = document.getElementById('activationQQCode');
+    const activationCodeType = document.getElementById('activationCodeType');
+    const queryModal = document.getElementById('queryModal');
+    const closeQueryModal = document.getElementById('closeQueryModal');
+    const queryQQ = document.getElementById('queryQQ');
+    const queryCode = document.getElementById('queryCode');
+    const queryName = document.getElementById('queryName');
+    const queryPassword = document.getElementById('queryPassword');
+    const submitQueryBtn = document.getElementById('submitQueryBtn');
+    const cancelQueryBtn = document.getElementById('cancelQueryBtn');
+    const queryStatus = document.getElementById('queryStatus');
+    const queryResult = document.getElementById('queryResult');
+    const resultQQ = document.getElementById('resultQQ');
+    const resultCode = document.getElementById('resultCode');
+    const resultPassword = document.getElementById('resultPassword');
+    const copyBtn = document.getElementById('copyBtn');
+    const activationText = document.getElementById('activationText');
+ 
+    // 状态变量
+    let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
+    let isBanned = localStorage.getItem('isBanned') === 'true';
+    let lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
+    let selectedCode = "";
+    let deviceId = localStorage.getItem('deviceId');
+    let deviceBoundQQ = localStorage.getItem('deviceBoundQQ');
+    let loginExpireTime = 0;
+    let countdownInterval = null;
+    let clickCount = 0;
+    let currentRegisterData = null;
+ 
+    // 初始化页面 
+    function init() {
+        // 生成设备ID 
+        if (!deviceId) {
+            deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+            localStorage.setItem('deviceId', deviceId);
+        }
         
-        // 解封密码
-        const UNBAN_PASSWORD = "JFM2584";
-        // 激活码
-        const ACTIVATION_CODE = "JHM2584";
-        // 查询码
-        const QUERY_PASSWORD = "CXM2584";
+        // 设置头像 
+        avatarImg.src = "https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg";
         
-         // DOM元素 
-        const particlesContainer = document.getElementById('particles');
-        const authContainer = document.getElementById('authContainer');
-        const banContainer = document.getElementById('banContainer');
-        const welcomeContainer = document.getElementById('welcomeContainer');
-        const authForm = document.getElementById('authForm');
-        const userCodeInput = document.getElementById('userCode');
-        const passwordGroup = document.getElementById('passwordGroup');
-        const passwordInput = document.getElementById('password');
-        const passwordQueryBtn = document.getElementById('passwordQueryBtn');
-        const qqInput = document.getElementById('qqNumber');
-        const userNameInput = document.getElementById('userName');
-        const statusMessage = document.getElementById('statusMessage');
-        const submitBtn = document.getElementById('submitBtn');
-        const fillBtn = document.getElementById('fillBtn');
-        const unbanIcon = document.getElementById('unbanIcon');
-        const unbanMessage = document.getElementById('unbanMessage');
-        const helpLink = document.getElementById('helpLink');
-        const helpModal = document.getElementById('helpModal');
-        const closeModal = document.getElementById('closeModal');
-        const codeModal = document.getElementById('codeModal');
-        const closeCodeModal = document.getElementById('closeCodeModal');
-        const codeOptions = document.querySelectorAll('.code-option');
-        const confirmCodeBtn = document.getElementById('confirmCodeBtn');
-        const cancelCodeBtn = document.getElementById('cancelCodeBtn');
-        const unbanModal = document.getElementById('unbanModal');
-        const unbanPasswordInput = document.getElementById('unbanPassword');
-        const submitUnbanBtn = document.getElementById('submitUnbanBtn');
-        const cancelUnbanBtn = document.getElementById('cancelUnbanBtn');
-        const unbanStatus = document.getElementById('unbanStatus');
-        const avatarImg = document.getElementById('avatarImg');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const userInfo = document.getElementById('userInfo');
-        const timeRemaining = document.getElementById('timeRemaining');
-        const loginStatus = document.getElementById('loginStatus');
-        const registerModal = document.getElementById('registerModal');
-        const closeRegisterModal = document.getElementById('closeRegisterModal');
-        const regQQ = document.getElementById('regQQ');
-        const regName = document.getElementById('regName');
-        const regCode = document.getElementById('regCode');
-        const regPassword = document.getElementById('regPassword');
-        const regConfirmPassword = document.getElementById('regConfirmPassword');
-        const registerForm = document.getElementById('registerForm');
-        const registerStatus = document.getElementById('registerStatus');
-        const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
-        const activationModal = document.getElementById('activationModal');
-        const closeActivationModal = document.getElementById('closeActivationModal');
-        const activationQQ = document.getElementById('activationQQ');
-        const activationName = document.getElementById('activationName');
-        const activationCode = document.getElementById('activationCode');
-        const activationCodeInput = document.getElementById('activationCodeInput');
-        const submitActivationBtn = document.getElementById('submitActivationBtn');
-        const cancelActivationBtn = document.getElementById('cancelActivationBtn');
-        const activationStatus = document.getElementById('activationStatus');
-        const activationQQCode = document.getElementById('activationQQCode');
-        const activationCodeType = document.getElementById('activationCodeType');
-        const queryModal = document.getElementById('queryModal');
-        const closeQueryModal = document.getElementById('closeQueryModal');
-        const queryQQ = document.getElementById('queryQQ');
-        const queryCode = document.getElementById('queryCode');
-        const queryName = document.getElementById('queryName');
-        const queryPassword = document.getElementById('queryPassword');
-        const submitQueryBtn = document.getElementById('submitQueryBtn');
-        const cancelQueryBtn = document.getElementById('cancelQueryBtn');
-        const queryStatus = document.getElementById('queryStatus');
-        const queryResult = document.getElementById('queryResult');
-        const resultQQ = document.getElementById('resultQQ');
-        const resultCode = document.getElementById('resultCode');
-        const resultPassword = document.getElementById('resultPassword');
+        createParticles();
+        checkBannedStatus();
+        checkSessionStatus();
+        setupEventListeners();
+    }
  
-        // 状态变量
-        let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
-        let isBanned = localStorage.getItem('isBanned') === 'true';
-        let lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
-        let selectedCode = "";
-        let deviceId = localStorage.getItem('deviceId');
-        let deviceBoundQQ = localStorage.getItem('deviceBoundQQ');
-        let loginExpireTime = 0;
-        let countdownInterval = null;
-        let clickCount = 0;
-        let currentRegisterData = null;
- 
-        // 初始化页面
-        function init() {
-            // 生成设备ID
-            if (!deviceId) {
-                deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-                localStorage.setItem('deviceId', deviceId);
-            }
+    // 创建背景粒子 
+    function createParticles() {
+        const particleCount = 20;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('bg-particle');
             
-            // 设置头像
-            avatarImg.src = "https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg";
+            const size = Math.random() * 25 + 5;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
             
-            createParticles();
-            checkBannedStatus();
-            checkSessionStatus();
-            setupEventListeners();
+            particle.style.left = `${Math.random() * 100}%`;
+            
+            const delay = Math.random() * 15;
+            const duration = Math.random() * 10 + 15;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+            
+            particlesContainer.appendChild(particle);
         }
+    }
  
-        // 创建背景粒子 
-        function createParticles() {
-            const particleCount = 20;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('bg-particle');
-                
-                const size = Math.random() * 25 + 5;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}%`;
-                
-                const delay = Math.random() * 15;
-                const duration = Math.random() * 10 + 15;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
- 
-        // 检查账号是否被封禁
-        function checkBannedStatus() {
-            if (isBanned) {
-                authContainer.style.display = 'none';
-                banContainer.style.display = 'block';
-            } else {
-                authContainer.style.display = 'block';
-                banContainer.style.display = 'none';
-            }
-        }
- 
-        // 检查会话状态 
-        function checkSessionStatus() {
-            if (isBanned) return;
-            
-            const sessionActive = sessionStorage.getItem('sessionActive') === 'true';
-            const sessionExpire = parseInt(sessionStorage.getItem('sessionExpire'));
-            
-            if (sessionActive && sessionExpire) {
-                const currentTime = new Date().getTime();
-                if (currentTime < sessionExpire) {
-                    showWelcomePage();
-                    return;
-                }
-            }
-            
-            const rememberMe = localStorage.getItem('rememberMe') === 'true';
-            const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
-            const lastLoginTime = parseInt(localStorage.getItem('lastLoginTime'));
-            
-            if (rememberMe && lastLogin && lastLoginTime) {
-                const twentyFourHours = 24 * 60 * 60 * 1000;
-                const currentTime = new Date().getTime();
-                
-                if (currentTime - lastLoginTime < twentyFourHours) {
-                    sessionStorage.setItem('sessionActive', 'true');
-                    sessionStorage.setItem('sessionExpire', (lastLoginTime + twentyFourHours).toString());
-                    showWelcomePage();
-                } else {
-                    localStorage.removeItem('rememberMe');
-                    localStorage.removeItem('lastLogin');
-                    localStorage.removeItem('lastLoginTime');
-                }
-            }
-        }
- 
-        // 显示欢迎页面 
-        function showWelcomePage() {
-            authContainer.style.display = 'none';
-            welcomeContainer.style.display = 'block';
-            
-            const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || {};
-            const loginTime = parseInt(localStorage.getItem('lastLoginTime'));
-            const expireTime = loginTime + (24 * 60 * 60 * 1000);
-            
-            userInfo.innerHTML = `
-                <div class="user-info-item">
-                    <span>QQ号码:</span>
-                    <span>${lastLogin.qq || '未知'}</span>
-                </div>
-                <div class="user-info-item">
-                    <span>用户昵称:</span>
-                    <span>${lastLogin.name || '未知'}</span>
-                </div>
-                <div class="user-info-item">
-                    <span>认证代号:</span>
-                    <span>${lastLogin.code || '未知'}</span>
-                </div>
-                <div class="user-info-item">
-                    <span>登录设备:</span>
-                    <span>${deviceId || '未知'}</span>
-                </div>
-            `;
-            
-            startCountdown(expireTime);
-        }
- 
-        // 启动倒计时
-        function startCountdown(expireTime) {
-            loginExpireTime = expireTime;
-            
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-            
-            countdownInterval = setInterval(() => {
-                const currentTime = new Date().getTime();
-                const timeLeft = expireTime - currentTime;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    timeRemaining.textContent = "已过期";
-                    loginStatus.textContent = "登录已过期";
-                    logout();
-                    return;
-                }
-                
-                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                
-                timeRemaining.textContent = `${hours}小时${minutes}分${seconds}秒`;
-            }, 1000);
-        }
- 
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 认证代号输入框点击事件
-            userCodeInput.addEventListener('click', function() {
-                codeModal.style.display = 'flex';
-            });
-            
-            // 代号选择事件
-            codeOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    codeOptions.forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                    selectedCode = this.dataset.code;
-                });
-            });
-            
-            // 确认代号选择
-            confirmCodeBtn.addEventListener('click', function() {
-                if (selectedCode) {
-                    userCodeInput.value = selectedCode;
-                    codeModal.style.display = 'none';
-                    
-                    if (selectedCode === "泷" || selectedCode === "夜" || selectedCode === "介" || selectedCode === "川") {
-                        passwordGroup.style.display = 'block';
-                        passwordInput.required = true;
-                    } else {
-                        passwordGroup.style.display = 'none';
-                        passwordInput.required = false;
-                    }
-                } else {
-                    showStatusMessage("请选择一个认证代号", "error");
-                }
-            });
-            
-            // 取消代号选择
-            cancelCodeBtn.addEventListener('click', function() {
-                codeModal.style.display = 'none';
-            });
-            
-            // 关闭代号模态框 
-            closeCodeModal.addEventListener('click', function() {
-                codeModal.style.display = 'none';
-            });
-            
-            // 表单提交事件 
-            authForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                authenticateUser();
-            });
-            
-            // 一键填写按钮
-            fillBtn.addEventListener('click', function() {
-                if (lastLogin) {
-                    qqInput.value = lastLogin.qq;
-                    userNameInput.value = lastLogin.name || "";
-                    userCodeInput.value = lastLogin.code;
-                    selectedCode = lastLogin.code;
-                    
-                    if (lastLogin.code === "泷" || lastLogin.code === "夜" || lastLogin.code === "介" || lastLogin.code === "川") {
-                        passwordGroup.style.display = 'block';
-                        passwordInput.value = lastLogin.password || "";
-                    }
-                    
-                    showStatusMessage("已自动填充上次登录信息", "warning");
-                } else {
-                    showStatusMessage("没有找到上次登录信息", "error");
-                }
-            });
-            
-            // 解封图标点击事件 
-            unbanIcon.addEventListener('click', function() {
-                clickCount++;
-                
-                if (clickCount < 7) {
-                    this.innerHTML = `<i class="fas fa-Silong"></i> ${7 - clickCount}`;
-                    this.style.transform = "scale(1.1)";
-                    setTimeout(() => {
-                        this.style.transform = "scale(1)";
-                    }, 200);
-                } else {
-                    unbanModal.style.display = 'flex';
-                }
-            });
-            
-            // 提交解封请求 
-            submitUnbanBtn.addEventListener('click', function() {
-                const password = unbanPasswordInput.value.trim();
-                
-                if (password === UNBAN_PASSWORD) {
-                    unbanAccount();
-                } else {
-                    unbanStatus.textContent = "解封密码错误，请重试";
-                    unbanStatus.className = "status-message error-message";
-                    unbanStatus.style.display = 'block';
-                }
-            });
-            
-            // 取消解封
-            cancelUnbanBtn.addEventListener('click', function() {
-                unbanModal.style.display = 'none';
-                unbanPasswordInput.value = "";
-                unbanStatus.style.display = 'none';
-            });
-            
-            // 帮助链接 
-            helpLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                helpModal.style.display = 'flex';
-            });
-            
-            // 关闭模态框 
-            closeModal.addEventListener('click', function() {
-                helpModal.style.display = 'none';
-            });
-            
-            // 退出登录按钮
-            logoutBtn.addEventListener('click', function() {
-                logout();
-            });
-            
-            // 取消注册
-            cancelRegisterBtn.addEventListener('click', function() {
-                registerModal.style.display = 'none';
-            });
-            
-            // 注册表单提交
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                registerUser();
-            });
-            
-            // 关闭注册模态框
-            closeRegisterModal.addEventListener('click', function() {
-                registerModal.style.display = 'none';
-            });
-            
-            // 提交激活码
-            submitActivationBtn.addEventListener('click', function() {
-                activateAccount();
-            });
-            
-            // 取消激活 
-            cancelActivationBtn.addEventListener('click', function() {
-                activationModal.style.display = 'none';
-            });
-            
-            // 关闭激活模态框 
-            closeActivationModal.addEventListener('click', function() {
-                activationModal.style.display = 'none';
-            });
-            
-            // 密码查询按钮
-            passwordQueryBtn.addEventListener('click', function() {
-                queryModal.style.display = 'flex';
-                queryStatus.style.display = 'none';
-                queryResult.style.display = 'none';
-            });
-            
-            // 关闭查询模态框 
-            closeQueryModal.addEventListener('click', function() {
-                queryModal.style.display = 'none';
-            });
-            
-            // 取消查询
-            cancelQueryBtn.addEventListener('click', function() {
-                queryModal.style.display = 'none';
-            });
-            
-            // 提交查询请求
-            submitQueryBtn.addEventListener('click', function() {
-                const qq = queryQQ.value.trim();
-                const code = queryCode.value.trim();
-                const name = queryName.value.trim();
-                const password = queryPassword.value.trim();
-                
-                if (!qq || !code || !password) {
-                    queryStatus.textContent = "请填写所有必填项";
-                    queryStatus.className = "status-message error-message";
-                    queryStatus.style.display = 'block';
-                    return;
-                }
-                
-                if (password !== QUERY_PASSWORD) {
-                    queryStatus.textContent = "查询密码错误，请重试";
-                    queryStatus.className = "status-message error-message";
-                    queryStatus.style.display = 'block';
-                    return;
-                }
-                
-                const user = authorizedUsers.find(u => u.qq === qq && u.code === code);
-                
-                if (!user) {
-                    queryStatus.textContent = "未找到匹配的账号信息";
-                    queryStatus.className = "status-message error-message";
-                    queryStatus.style.display = 'block';
-                    return;
-                }
-                
-                // 显示查询结果 
-                resultQQ.textContent = qq;
-                resultCode.textContent = code;
-                resultPassword.textContent = user.password;
-                
-                queryStatus.style.display = 'none';
-                queryResult.style.display = 'block';
-            });
-            
-            // 点击模态框外部关闭
-            window.addEventListener('click', function(e) {
-                if (e.target === helpModal) helpModal.style.display = 'none';
-                if (e.target === codeModal) codeModal.style.display = 'none';
-                if (e.target === unbanModal) unbanModal.style.display = 'none';
-                if (e.target === registerModal) registerModal.style.display = 'none';
-                if (e.target === activationModal) activationModal.style.display = 'none';
-                if (e.target === queryModal) queryModal.style.display = 'none';
-            });
-        }
- 
-        // 用户认证
-        function authenticateUser() {
-            const qq = qqInput.value.trim();
-            const name = userNameInput.value.trim();
-            const code = selectedCode;
-            const password = passwordInput.value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
-            // QQ号格式验证
-            if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
-                showStatusMessage("QQ号必须是5-10位数字", "error");
-                return;
-            }
-            
-            if (!name) {
-                showStatusMessage("请填写用户昵称", "error");
-                return;
-            }
-            
-            if (!code) {
-                showStatusMessage("请选择认证代号", "error");
-                return;
-            }
-            
-            // 检查是否在黑名单中
-            if (blacklist.includes(qq)) {
-                showStatusMessage("该账号已被拉入黑名单，无法登录", "error");
-                return;
-            }
-            
-            if (deviceBoundQQ && deviceBoundQQ !== qq) {
-                showStatusMessage("该设备已绑定其他账号，禁止登录", "error");
-                banAccount(qq);
-                return;
-            }
-            
-            submitBtn.innerHTML = '<span class="loading"></span> 认证中...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                // 在授权用户和本地存储用户中查找 
-                let user = null;
-                
-                // 在授权用户中查找 
-                user = authorizedUsers.find(u => u.qq === qq);
-                
-                // 在本地存储用户中查找 
-                if (!user) {
-                    const localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
-                    user = localUsers.find(u => u.qq === qq);
-                }
-                
-                if (!user) {
-                    // 未注册用户，弹出注册框 
-                    showRegisterModal(qq, name, code);
-                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
-                    submitBtn.disabled = false;
-                    return;
-                }
-                
-                if (user.code !== code) {
-                    handleFailedAttempt("认证代号不正确", qq);
-                    return;
-                }
-                
-                if (user.password && user.password !== password) {
-                    handleFailedAttempt("专用密码错误", qq);
-                    return;
-                }
-                
-                // 检查账号是否已激活 
-                if (!user.activated) {
-                    showActivationModal(user.qq, user.name, user.code);
-                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
-                    submitBtn.disabled = false;
-                    return;
-                }
-                
-                handleSuccess(user, name, rememberMe);
-            }, 1500);
-        }
- 
-        // 显示注册模态框 
-        function showRegisterModal(qq, name, code) {
-            regQQ.value = qq;
-            regName.value = name;
-            regCode.value = code;
-            registerStatus.style.display = 'none';
-            registerModal.style.display = 'flex';
-            
-            // 保存当前注册数据 
-            currentRegisterData = { qq, name, code };
-        }
- 
-        // 注册用户
-        function registerUser() {
-            const password = regPassword.value;
-            const confirmPassword = regConfirmPassword.value;
-            
-            if (!password) {
-                registerStatus.textContent = "请设置密码";
-                registerStatus.className = "status-message error-message";
-                registerStatus.style.display = 'block';
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                registerStatus.textContent = "两次输入的密码不一致";
-                registerStatus.className = "status-message error-message";
-                registerStatus.style.display = 'block';
-                return;
-            }
-            
-            // 检查是否在黑名单中
-            if (blacklist.includes(currentRegisterData.qq)) {
-                registerStatus.textContent = "该账号已被拉入黑名单，无法注册";
-                registerStatus.className = "status-message error-message";
-                registerStatus.style.display = 'block';
-                return;
-            }
-            
-            // 创建新用户 
-            const newUser = {
-                qq: currentRegisterData.qq,
-                name: currentRegisterData.name,
-                code: currentRegisterData.code,
-                password: password,
-                activated: false 
-            };
-            
-            // 保存到本地存储
-            let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
-            localUsers.push(newUser);
-            localStorage.setItem('localUsers', JSON.stringify(localUsers));
-            
-            // 添加到授权用户列表（临时）
-            authorizedUsers.push(newUser);
-            
-            registerStatus.textContent = "注册成功！请激活账号";
-            registerStatus.className = "status-message success-message";
-            registerStatus.style.display = 'block';
-            
-            setTimeout(() => {
-                registerModal.style.display = 'none';
-                showActivationModal(newUser.qq, newUser.name, newUser.code);
-            }, 1500);
-        }
- 
-        // 显示激活模态框 
-        function showActivationModal(qq, name, code) {
-            activationQQ.textContent = qq;
-            activationName.textContent = name;
-            activationCode.textContent = code;
-            activationQQCode.textContent = qq;
-            activationCodeType.textContent = code;
-            activationStatus.style.display = 'none';
-            activationModal.style.display = 'flex';
-        }
- 
-        // 激活账号
-        function activateAccount() {
-            const code = activationCodeInput.value.trim();
-            
-            if (code !== ACTIVATION_CODE) {
-                activationStatus.textContent = "激活码错误，请重试";
-                activationStatus.className = "status-message error-message";
-                activationStatus.style.display = 'block';
-                return;
-            }
-            
-            // 更新账号激活状态 
-            const qq = activationQQ.textContent;
-            let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
-            
-            const userIndex = localUsers.findIndex(u => u.qq === qq);
-            if (userIndex !== -1) {
-                localUsers[userIndex].activated = true;
-                localStorage.setItem('localUsers', JSON.stringify(localUsers));
-                
-                // 更新授权用户列表 
-                const authUserIndex = authorizedUsers.findIndex(u => u.qq === qq);
-                if (authUserIndex !== -1) {
-                    authorizedUsers[authUserIndex].activated = true;
-                }
-                
-                activationStatus.textContent = "账号激活成功！";
-                activationStatus.className = "status-message success-message";
-                activationStatus.style.display = 'block';
-                
-                // 自动登录 
-                setTimeout(() => {
-                    activationModal.style.display = 'none';
-                    
-                    const user = authorizedUsers.find(u => u.qq === qq);
-                    if (user) {
-                        handleSuccess(user, user.name, true);
-                    }
-                }, 1500);
-            } else {
-                activationStatus.textContent = "账号不存在";
-                activationStatus.className = "status-message error-message";
-                activationStatus.style.display = 'block';
-            }
-        }
- 
-        // 处理认证成功
-        function handleSuccess(user, name, rememberMe) {
-            failedAttempts = 0;
-            localStorage.setItem('failedAttempts', failedAttempts);
-            
-            lastLogin = {
-                qq: user.qq,
-                name: name,
-                code: user.code,
-                password: user.password
-            };
-            
-            const currentTime = new Date().getTime();
-            const expireTime = currentTime + (24 * 60 * 60 * 1000);
-            
-            if (rememberMe) {
-                localStorage.setItem('rememberMe', 'true');
-                localStorage.setItem('lastLogin', JSON.stringify(lastLogin));
-                localStorage.setItem('lastLoginTime', currentTime.toString());
-            }
-            
-            sessionStorage.setItem('sessionActive', 'true');
-            sessionStorage.setItem('sessionExpire', expireTime.toString());
-            localStorage.setItem('deviceBoundQQ', user.qq);
-            
-            showStatusMessage(`认证成功！欢迎回来 ${name}`, "success");
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> 认证成功';
-            
-            setTimeout(() => {
-                showWelcomePage();
-            }, 2000);
-        }
- 
-        // 处理认证失败 
-        function handleFailedAttempt(message, qq) {
-            failedAttempts++;
-            localStorage.setItem('failedAttempts', failedAttempts);
-            
-            showStatusMessage(`${message}，失败次数: ${failedAttempts}/3`, "error");
-            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
-            submitBtn.disabled = false;
-            
-            if (failedAttempts >= 3) {
-                banAccount(qq);
-            }
-        }
- 
-        // 封禁账号
-        function banAccount(qq) {
-            isBanned = true;
-            localStorage.setItem('isBanned', 'true');
-            localStorage.setItem('bannedQQ', qq);
+    // 检查账号是否被封禁
+    function checkBannedStatus() {
+        if (isBanned) {
             authContainer.style.display = 'none';
             banContainer.style.display = 'block';
+        } else {
+            authContainer.style.display = 'block';
+            banContainer.style.display = 'none';
         }
+    }
  
-        // 解封账号 
-        function unbanAccount() {
-            unbanMessage.style.display = 'block';
-            unbanMessage.textContent = "正在解封账号...";
-            unbanMessage.className = "status-message warning-message";
-            
-            setTimeout(() => {
-                isBanned = false;
-                failedAttempts = 0;
-                localStorage.setItem('isBanned', 'false');
-                localStorage.setItem('failedAttempts', '0');
-                localStorage.removeItem('deviceBoundQQ');
-                
-                authContainer.style.display = 'block';
-                banContainer.style.display = 'none';
-                unbanModal.style.display = 'none';
-                unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
-                
-                showStatusMessage("账号已成功解封，请重新认证", "success");
-            }, 1500);
+    // 检查会话状态 
+    function checkSessionStatus() {
+        if (isBanned) return;
+        
+        const sessionActive = sessionStorage.getItem('sessionActive') === 'true';
+        const sessionExpire = parseInt(sessionStorage.getItem('sessionExpire'));
+        
+        if (sessionActive && sessionExpire) {
+            const currentTime = new Date().getTime();
+            if (currentTime < sessionExpire) {
+                showWelcomePage();
+                return;
+            }
         }
- 
-        // 退出登录
-        function logout() {
-            sessionStorage.removeItem('sessionActive');
-            sessionStorage.removeItem('sessionExpire');
+        
+        const rememberMe = localStorage.getItem('rememberMe') === 'true';
+        const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
+        const lastLoginTime = parseInt(localStorage.getItem('lastLoginTime'));
+        
+        if (rememberMe && lastLogin && lastLoginTime) {
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            const currentTime = new Date().getTime();
             
-            if (countdownInterval) {
+            if (currentTime - lastLoginTime < twentyFourHours) {
+                sessionStorage.setItem('sessionActive', 'true');
+                sessionStorage.setItem('sessionExpire', (lastLoginTime + twentyFourHours).toString());
+                showWelcomePage();
+            } else {
+                localStorage.removeItem('rememberMe');
+                localStorage.removeItem('lastLogin');
+                localStorage.removeItem('lastLoginTime');
+            }
+        }
+    }
+ 
+    // 显示欢迎页面 
+    function showWelcomePage() {
+        authContainer.style.display = 'none';
+        welcomeContainer.style.display = 'block';
+        
+        const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || {};
+        const loginTime = parseInt(localStorage.getItem('lastLoginTime'));
+        const expireTime = loginTime + (24 * 60 * 60 * 1000);
+        
+        userInfo.innerHTML = `
+            <div class="user-info-item">
+                <span>QQ号码:</span>
+                <span>${lastLogin.qq || '未知'}</span>
+            </div>
+            <div class="user-info-item">
+                <span>用户昵称:</span>
+                <span>${lastLogin.name || '未知'}</span>
+            </div>
+            <div class="user-info-item">
+                <span>认证代号:</span>
+                <span>${lastLogin.code || '未知'}</span>
+            </div>
+            <div class="user-info-item">
+                <span>登录设备:</span>
+                <span>${deviceId || '未知'}</span>
+            </div>
+        `;
+        
+        startCountdown(expireTime);
+    }
+ 
+    // 启动倒计时
+    function startCountdown(expireTime) {
+        loginExpireTime = expireTime;
+        
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        
+        countdownInterval = setInterval(() => {
+            const currentTime = new Date().getTime();
+            const timeLeft = expireTime - currentTime;
+            
+            if (timeLeft <= 0) {
                 clearInterval(countdownInterval);
+                timeRemaining.textContent = "已过期";
+                loginStatus.textContent = "登录已过期";
+                logout();
+                return;
             }
             
-            welcomeContainer.style.display = 'none';
-            authContainer.style.display = 'block';
-            showStatusMessage("您已成功退出登录", "success");
-        }
- 
-        // 显示状态消息 
-        function showStatusMessage(message, type) {
-            statusMessage.textContent = message;
-            statusMessage.className = `status-message ${type}-message`;
-            statusMessage.style.display = 'block';
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
             
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
-        }
+            timeRemaining.textContent = `${hours}小时${minutes}分${seconds}秒`;
+        }, 1000);
+    }
  
-        // 初始化页面 
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
+    // 设置事件监听器
+    function setupEventListeners() {
+        // 认证代号输入框点击事件
+        userCodeInput.addEventListener('click', function() {
+            codeModal.style.display = 'flex';
+        });
+        
+        // 代号选择事件
+        codeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                codeOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                selectedCode = this.dataset.code;
+            });
+        });
+        
+        // 确认代号选择
+        confirmCodeBtn.addEventListener('click', function() {
+            if (selectedCode) {
+                userCodeInput.value = selectedCode;
+                codeModal.style.display = 'none';
+                
+
+if (selectedCode === "泷" || selectedCode === "夜" || selectedCode === "介" || selectedCode === "川") {
+                    passwordGroup.style.display = 'block';
+                    passwordInput.required = true;
+                } else {
+                    passwordGroup.style.display = 'none';
+                    passwordInput.required = false;
+                }
+            } else {
+                showStatusMessage("请选择一个认证代号", "error");
+            }
+        });
+        
+        // 取消代号选择 
+        cancelCodeBtn.addEventListener('click', function() {
+            codeModal.style.display = 'none';
+        });
+        
+        // 关闭代号模态框 
+        closeCodeModal.addEventListener('click', function() {
+            codeModal.style.display = 'none';
+        });
+        
+        // 表单提交事件 
+        authForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            authenticateUser();
+        });
+        
+        // 一键填写按钮 
+        fillBtn.addEventListener('click', function() {
+            if (lastLogin) {
+                qqInput.value = lastLogin.qq;
+                userNameInput.value = lastLogin.name || "";
+                userCodeInput.value = lastLogin.code;
+                selectedCode = lastLogin.code;
+                
+
+if (lastLogin.code === "泷" || lastLogin.code === "夜" || lastLogin.code === "介" || lastLogin.code === "川") {
+                    passwordGroup.style.display = 'block';
+                    passwordInput.value = lastLogin.password || "";
+                }
+                
+                showStatusMessage("已自动填充上次登录信息", "warning");
+            } else {
+                showStatusMessage("没有找到上次登录信息", "error");
+            }
+        });
+        
+        // 解封图标点击事件 
+        unbanIcon.addEventListener('click', function() {
+            clickCount++;
+            
+            if (clickCount < 7) {
+                this.innerHTML = `<i class="fas fa-Silong"></i> ${7 - clickCount}`;
+                this.style.transform = "scale(1.1)";
+                setTimeout(() => {
+                    this.style.transform = "scale(1)";
+                }, 200);
+            } else {
+                unbanModal.style.display = 'flex';
+            }
+        });
+        
+        // 提交解封请求 
+        submitUnbanBtn.addEventListener('click', function() {
+            const password = unbanPasswordInput.value.trim();
+            
+            if (password === UNBAN_PASSWORD) {
+                unbanAccount();
+            } else {
+                unbanStatus.textContent = "解封密码错误，请重试";
+                unbanStatus.className = "status-message error-message";
+                unbanStatus.style.display = 'block';
+            }
+        });
+        
+        // 取消解封
+        cancelUnbanBtn.addEventListener('click', function() {
+            unbanModal.style.display = 'none';
+            unbanPasswordInput.value = "";
+            unbanStatus.style.display = 'none';
+        });
+        
+        // 帮助链接 
+        helpLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            helpModal.style.display = 'flex';
+        });
+        
+        // 关闭模态框 
+        closeModal.addEventListener('click', function() {
+            helpModal.style.display = 'none';
+        });
+        
+        // 退出登录按钮 
+        logoutBtn.addEventListener('click', function() {
+            logout();
+        });
+        
+        // 取消注册 
+        cancelRegisterBtn.addEventListener('click', function() {
+            registerModal.style.display = 'none';
+        });
+        
+        // 注册表单提交 
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            registerUser();
+        });
+        
+        // 关闭注册模态框 
+        closeRegisterModal.addEventListener('click', function() {
+            registerModal.style.display = 'none';
+        });
+        
+        // 提交激活码 
+        submitActivationBtn.addEventListener('click', function() {
+            activateAccount();
+        });
+        
+        // 取消激活 
+        cancelActivationBtn.addEventListener('click', function() {
+            activationModal.style.display = 'none';
+        });
+        
+        // 关闭激活模态框 
+        closeActivationModal.addEventListener('click', function() {
+            activationModal.style.display = 'none';
+        });
+        
+        // 密码查询按钮 
+        passwordQueryBtn.addEventListener('click', function() {
+            queryModal.style.display = 'flex';
+            queryStatus.style.display = 'none';
+            queryResult.style.display = 'none';
+        });
+        
+        // 关闭查询模态框 
+        closeQueryModal.addEventListener('click', function() {
+            queryModal.style.display = 'none';
+        });
+        
+        // 取消查询
+        cancelQueryBtn.addEventListener('click', function() {
+            queryModal.style.display = 'none';
+        });
+        
+        // 提交查询请求
+        submitQueryBtn.addEventListener('click', function() {
+            const qq = queryQQ.value.trim();
+            const code = queryCode.value.trim();
+            const name = queryName.value.trim();
+            const password = queryPassword.value.trim();
+            
+
+if (!qq || !code || !password) {
+                queryStatus.textContent = "请填写所有必填项";
+                queryStatus.className = "status-message error-message";
+                queryStatus.style.display = 'block';
+                return;
+            }
+            
+            if (password !== QUERY_PASSWORD) {
+                queryStatus.textContent = "查询密码错误，请重试";
+                queryStatus.className = "status-message error-message";
+                queryStatus.style.display = 'block';
+                return;
+            }
+            
+            const user = authorizedUsers.find(u => u.qq === qq && u.code === code);
+            
+            if (!user) {
+                queryStatus.textContent = "未找到匹配的账号信息";
+                queryStatus.className = "status-message error-message";
+                queryStatus.style.display = 'block';
+                return;
+            }
+            
+            // 显示查询结果 
+            resultQQ.textContent = qq;
+            resultCode.textContent = code;
+            resultPassword.textContent = user.password;
+            
+            queryStatus.style.display = 'none';
+            queryResult.style.display = 'block';
+        });
+        
+        // 复制按钮功能 
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                const textToCopy = activationText.textContent;
+                
+                // 创建一个临时textarea元素来复制文本 
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                // 显示复制成功的提示
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                
+                // 2秒后恢复原状 
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                }, 2000);
+            });
+        }
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(e) {
+            if (e.target === helpModal) helpModal.style.display = 'none';
+            if (e.target === codeModal) codeModal.style.display = 'none';
+            if (e.target === unbanModal) unbanModal.style.display = 'none';
+            if (e.target === registerModal) registerModal.style.display = 'none';
+            if (e.target === activationModal) activationModal.style.display = 'none';
+            if (e.target === queryModal) queryModal.style.display = 'none';
+        });
+    }
+ 
+    // 用户认证
+    function authenticateUser() {
+        const qq = qqInput.value.trim();
+        const name = userNameInput.value.trim();
+        const code = selectedCode;
+        const password = passwordInput.value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+        
+        // QQ号格式验证
+
+if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
+            showStatusMessage("QQ号必须是5-10位数字", "error");
+            return;
+        }
+        
+        if (!name) {
+            showStatusMessage("请填写用户昵称", "error");
+            return;
+        }
+        
+        if (!code) {
+            showStatusMessage("请选择认证代号", "error");
+            return;
+        }
+        
+        // 检查是否在黑名单中 
+        if (blacklist.includes(qq)) {
+            showStatusMessage("该账号已被拉入黑名单，无法登录", "error");
+            return;
+        }
+        
+        if (deviceBoundQQ && deviceBoundQQ !== qq) {
+            showStatusMessage("该设备已绑定其他账号，禁止登录", "error");
+            banAccount(qq);
+            return;
+        }
+        
+        submitBtn.innerHTML = '<span class="loading"></span> 认证中...';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            // 在授权用户和本地存储用户中查找 
+            let user = null;
+            
+            // 在授权用户中查找 
+            user = authorizedUsers.find(u => u.qq === qq);
+            
+            // 在本地存储用户中查找 
+            if (!user) {
+                const localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+                user = localUsers.find(u => u.qq === qq);
+            }
+            
+            if (!user) {
+                // 未注册用户，弹出注册框 
+                showRegisterModal(qq, name, code);
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            if (user.code !== code) {
+                handleFailedAttempt("认证代号不正确", qq);
+                return;
+            }
+            
+            if (user.password && user.password !== password) {
+                handleFailedAttempt("专用密码错误", qq);
+                return;
+            }
+            
+            // 检查账号是否已激活 
+            if (!user.activated) {
+                showActivationModal(user.qq, user.name, user.code);
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            handleSuccess(user, name, rememberMe);
+        }, 1500);
+    }
+ 
+    // 显示注册模态框 
+    function showRegisterModal(qq, name, code) {
+        regQQ.value = qq;
+        regName.value = name;
+        regCode.value = code;
+        registerStatus.style.display = 'none';
+        registerModal.style.display = 'flex';
+        
+        // 保存当前注册数据 
+        currentRegisterData = { qq, name, code };
+    }
+ 
+    // 注册用户
+    function registerUser() {
+        const password = regPassword.value;
+        const confirmPassword = regConfirmPassword.value;
+        
+        if (!password) {
+            registerStatus.textContent = "请设置密码";
+            registerStatus.className = "status-message error-message";
+            registerStatus.style.display = 'block';
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            registerStatus.textContent = "两次输入的密码不一致";
+            registerStatus.className = "status-message error-message";
+            registerStatus.style.display = 'block';
+            return;
+        }
+        
+        // 检查是否在黑名单中 
+        if (blacklist.includes(currentRegisterData.qq)) {
+            registerStatus.textContent = "该账号已被拉入黑名单，无法注册";
+            registerStatus.className = "status-message error-message";
+            registerStatus.style.display = 'block';
+            return;
+        }
+        
+        // 创建新用户 
+        const newUser = {
+            qq: currentRegisterData.qq,
+            name: currentRegisterData.name,
+            code: currentRegisterData.code,
+            password: password,
+            activated: false 
+        };
+        
+        // 保存到本地存储 
+        let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+        localUsers.push(newUser);
+        localStorage.setItem('localUsers', JSON.stringify(localUsers));
+        
+        // 添加到授权用户列表（临时）
+        authorizedUsers.push(newUser);
+        
+        registerStatus.textContent = "注册成功！请激活账号";
+        registerStatus.className = "status-message success-message";
+        registerStatus.style.display = 'block';
+        
+        setTimeout(() => {
+            registerModal.style.display = 'none';
+            showActivationModal(newUser.qq, newUser.name, newUser.code);
+        }, 1500);
+    }
+ 
+    // 显示激活模态框 
+    function showActivationModal(qq, name, code) {
+        activationQQ.textContent = qq;
+        activationName.textContent = name;
+        activationCode.textContent = code;
+        activationStatus.style.display = 'none';
+        activationModal.style.display = 'flex';
+    }
+ 
+    // 激活账号
+    function activateAccount() {
+        const code = activationCodeInput.value.trim();
+        
+        if (code !== ACTIVATION_CODE) {
+            activationStatus.textContent = "激活码错误，请重试";
+            activationStatus.className = "status-message error-message";
+            activationStatus.style.display = 'block';
+            return;
+        }
+        
+        // 更新账号激活状态 
+        const qq = activationQQ.textContent;
+        let localUsers = JSON.parse(localStorage.getItem('localUsers')) || [];
+        
+        const userIndex = localUsers.findIndex(u => u.qq === qq);
+        if (userIndex !== -1) {
+            localUsers[userIndex].activated = true;
+            localStorage.setItem('localUsers', JSON.stringify(localUsers));
+            
+            // 更新授权用户列表 
+            const authUserIndex = authorizedUsers.findIndex(u => u.qq === qq);
+            if (authUserIndex !== -1) {
+                authorizedUsers[authUserIndex].activated = true;
+            }
+            
+            activationStatus.textContent = "账号激活成功！";
+            activationStatus.className = "status-message success-message";
+            activationStatus.style.display = 'block';
+            
+            // 自动登录 
+            setTimeout(() => {
+                activationModal.style.display = 'none';
+                
+                const user = authorizedUsers.find(u => u.qq === qq);
+                if (user) {
+                    handleSuccess(user, user.name, true);
+                }
+            }, 1500);
+        } else {
+            activationStatus.textContent = "账号不存在";
+            activationStatus.className = "status-message error-message";
+            activationStatus.style.display = 'block';
+        }
+    }
+ 
+    // 处理认证成功 
+    function handleSuccess(user, name, rememberMe) {
+        failedAttempts = 0;
+        localStorage.setItem('failedAttempts', failedAttempts);
+        
+        lastLogin = {
+            qq: user.qq,
+            name: name,
+            code: user.code,
+            password: user.password 
+        };
+        
+        const currentTime = new Date().getTime();
+        const expireTime = currentTime + (24 * 60 * 60 * 1000);
+        
+        if (rememberMe) {
+            localStorage.setItem('rememberMe', 'true');
+            localStorage.setItem('lastLogin', JSON.stringify(lastLogin));
+            localStorage.setItem('lastLoginTime', currentTime.toString());
+        }
+        
+        sessionStorage.setItem('sessionActive', 'true');
+        sessionStorage.setItem('sessionExpire', expireTime.toString());
+        localStorage.setItem('deviceBoundQQ', user.qq);
+        
+        showStatusMessage(`认证成功！欢迎回来 ${name}`, "success");
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> 认证成功';
+        
+        setTimeout(() => {
+            showWelcomePage();
+        }, 2000);
+    }
+ 
+    // 处理认证失败 
+    function handleFailedAttempt(message, qq) {
+        failedAttempts++;
+        localStorage.setItem('failedAttempts', failedAttempts);
+        
+        showStatusMessage(`${message}，失败次数: ${failedAttempts}/3`, "error");
+        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
+        submitBtn.disabled = false;
+        
+        if (failedAttempts >= 3) {
+            banAccount(qq);
+        }
+    }
+ 
+    // 封禁账号
+    function banAccount(qq) {
+        isBanned = true;
+        localStorage.setItem('isBanned', 'true');
+        localStorage.setItem('bannedQQ', qq);
+        authContainer.style.display = 'none';
+        banContainer.style.display = 'block';
+    }
+ 
+    // 解封账号 
+    function unbanAccount() {
+        unbanMessage.style.display = 'block';
+        unbanMessage.textContent = "正在解封账号...";
+        unbanMessage.className = "status-message warning-message";
+        
+        setTimeout(() => {
+            isBanned = false;
+            failedAttempts = 0;
+            localStorage.setItem('isBanned', 'false');
+            localStorage.setItem('failedAttempts', '0');
+            localStorage.removeItem('deviceBoundQQ');
+            
+            authContainer.style.display = 'block';
+            banContainer.style.display = 'none';
+            unbanModal.style.display = 'none';
+            unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
+            
+            showStatusMessage("账号已成功解封，请重新认证", "success");
+        }, 1500);
+    }
+ 
+    // 退出登录
+    function logout() {
+        sessionStorage.removeItem('sessionActive');
+        sessionStorage.removeItem('sessionExpire');
+        
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        
+        welcomeContainer.style.display = 'none';
+        authContainer.style.display = 'block';
+        showStatusMessage("您已成功退出登录", "success");
+    }
+ 
+    // 显示状态消息 
+    function showStatusMessage(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = `status-message ${type}-message`;
+        statusMessage.style.display = 'block';
+        
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+ 
+    // 初始化页面 
+    window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
