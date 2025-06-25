@@ -2101,11 +2101,11 @@ if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
         failedAttempts++;
         localStorage.setItem('failedAttempts', failedAttempts);
         
-        showStatusMessage(`${message}，失败次数: ${failedAttempts}/3`, "error");
+        showStatusMessage(`${message}，失败次数: ${failedAttempts}/5`, "error");
         submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 账号认证';
         submitBtn.disabled = false;
         
-        if (failedAttempts >= 3) {
+        if (failedAttempts >= 5) {
             banAccount(qq);
         }
     }
@@ -2122,7 +2122,7 @@ if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
     // 解封账号 
     function unbanAccount() {
         unbanMessage.style.display = 'block';
-        unbanMessage.textContent = "正在解封账号...";
+        unbanMessage.textContent = "宝子你继续🤗";
         unbanMessage.className = "status-message warning-message";
         
         setTimeout(() => {
