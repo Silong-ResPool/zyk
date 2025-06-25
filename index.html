@@ -908,7 +908,7 @@
             <div class="footer">
                 <p>认证状态：<span id="loginStatus">已登录</span></p>
                 <p>剩余时间：<span id="timeRemaining">24小时</span></p>
-                <p>&copy; 2023 巳泷资源库 | 认证系统 v4.0</p>
+                <p>&copy; 2025 巳泷资源库 | 认证系统 v2.0</p>
             </div>
         </div>
     </div>
@@ -924,23 +924,21 @@
             
             <div class="help-section">
                 <h3><i class="fas fa-user-check"></i> 认证流程说明</h3>
-                <p>请按照以下步骤完成认证：</p>
                 <ul>
-                    <li>微信关注巳泷宝库公众号</li>
-                    <li>发送自己的QQ号+昵称+代号到公众号中</li>
-                    <li>勾选"24小时内免登录"可保存登录状态</li>
-                    <li>点击"账号认证"按钮完成认证</li>
+                    <li>输入自己的账号昵称以及代号之后可点击放大镜按钮搜索自己的密码</li>
+                    <li>然后需要输入查询码查询自己的账号密码该密码只在公众号和QQ展示</li>
+                    <li>如果未找到账号信息的话可自行注册账号输入密码0000即可注册</li>
+                    <li>把注册好的账号信息发送到微信公众号即可获取激活码</li>
                 </ul>
             </div>
             
             <div class="help-section">
                 <h3><i class="fas fa-key"></i> 认证代号说明</h3>
-                <p>认证代号是系统分配给群成员的唯一标识：</p>
-                <ul>
-                    <li><strong>泷</strong> - 抖音粉丝的成员</li>
-                    <li><strong>夜</strong> - 群主邀请的成员</li>
-                    <li><strong>介</strong> - 好友推荐的成员</li>
-                    <li><strong>川</strong> - 其他渠道的成员</li>
+                <li>代号是群成员的唯一标识</li>
+                    <li><strong>泷</strong> - 抖音粉丝群的成员</li>
+                    <li><strong>夜</strong> - 受群主邀请的成员</li>
+                    <li><strong>介</strong> - 好友推荐来的成员</li>
+                    <li><strong>川</strong> - 其他渠道来的成员</li>
                 </ul>
             </div>
             
@@ -950,29 +948,18 @@
                     <li><strong>忘记认证代号：</strong> 请联系管理员查询您的认证代号</li>
                     <li><strong>专属密码错误：</strong> 请联系管理员巳泷</li>
                     <li><strong>账号被封禁：</strong> 多次认证失败会导致账号封禁</li>
-                    <li><strong>认证成功后无法跳转：</strong> 请检查网络连接或尝试刷新页面</li>
-                    <li><strong>账号未注册：</strong> 系统将引导您完成注册流程</li>
+                    <li><strong>认证成功后无法跳转：</strong> 尝试刷新页面，或者换其他浏览器尝试，推荐用迅雷浏览器</li>
                 </ul>
             </div>
             
-            <div class="help-section">
-                <h3><i class="fas fa-user-plus"></i> 账号注册方法</h3>
-                <p>如果您尚未注册账号：</p>
-                <ol>
-                    <li>在认证页面填写QQ号和昵称</li>
-                    <li>选择您的认证代号</li>
-                    <li>设置您的专属密码</li>
-                    <li>提交注册信息</li>
-                    <li>获取激活码后完成激活</li>
-                </ol>
-            </div>
-            
             <div class="contact-info">
+            <ul>
                 <h3><i class="fas fa-headset"></i> 技术支持</h3>
-                <p>无法解决的问题请联系管理员</p>
-                <p><i class="fab fa-qq"></i> QQ: 3213824126</p>
-                <p><i class="fas fa-envelope"></i> 邮箱: xz35238345yun@163.com</p>
-                <p><i class="fas fa-clock"></i> 服务时间: 12:00-04:00 (周一至周日)</p>
+                <p><i class="fab fa-qq"></i> QQ 3213824126</p>
+                <p><i class="fas fa-envelope"></i> 邮箱 xz35238345yun@163.com</p>
+                <p><i class="fas fa-clock"></i> 服务时间 12:00-04:00</p>
+                <p><i class="fas fa-box"></i>软件包 <a href="rjgx.html" style="color: purple; text-decoration: none;">
+  巳泷资源库apk</a>
             </div>
         </div>
     </div>
@@ -1106,7 +1093,7 @@
                 <p><strong>首次注册的账号需要激活码：</strong></p>
                 <p>请长按复制下方注册信息发送到公众号获取激活码：</p>
                 <p class="activation-code">首次注册<span id="activationQQ"></span>  <span id="activationName"></span> 【<span id="activationCode"></span>】</p>
-                <p>发送格式: 首次注册<span id="activationQQCode"></span>【<span id="activationCodeType"></span>】</p>
+                <p>发送格式: 首次注册<span id="activationQQCode"></span> <span id="activationName"></span>【<span id="activationCodeType"></span>】</p>
             </div>
             
             <div class="form-group">
@@ -1338,7 +1325,7 @@
         const UNBAN_PASSWORD = "JFM2584";
         // 激活码
         const ACTIVATION_CODE = "JHM2584";
-        // 查询密码
+        // 查询码
         const QUERY_PASSWORD = "CXM2584";
         
          // DOM元素 
