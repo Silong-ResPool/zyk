@@ -887,8 +887,8 @@
         <div class="modal-content">
             <span class="close-modal" id="closeQueryModal">&times;</span>
             <div class="modal-header">
-                <h2><i class="fas fa-key"></i> 专属密码查询</h2>
-                <p>仅限于注册过的账号查询</p>
+                <h2><i class="fas fa-key"></i> 找回密码</h2>
+                <p>查询码:1000</p>
             </div>
             
          <div class="form-group">
@@ -916,10 +916,10 @@
 </div>
       
             <div class="form-group">
-                <label for="queryPassword"><i class="fas fa-lock"></i> 查询密码</label>
+                <label for="queryPassword"><i class="fas fa-lock"></i> 查询码</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="queryPassword" placeholder="请输入查询密码" required>
+                    <input type="password" id="queryPassword" placeholder="请输入查询码" required>
                 </div>
             </div>
             
@@ -938,7 +938,7 @@
                 <h3><i class="fas fa-key"></i> 查询结果</h3>
                 <p>QQ号码: <span id="resultQQ"></span></p>
                 <p>代号: <span id="resultCode"></span></p>
-                <p>专属密码: <span class="password" id="resultPassword"></span></p>
+                <p>账号密码: <span class="password" id="resultPassword"></span></p>
                 <div class="note-box">
                     <i class="fas fa-exclamation-circle"></i> 请妥善保管您的密码，不要泄露给他人
                 </div>
@@ -1005,10 +1005,12 @@
             <div class="help-section">
                 <h3><i class="fas fa-user-check"></i> 注册流程说明</h3>
                 <ul>
-                    <li>输入自己的账号昵称以及代号之后可点击放大镜按钮搜索自己的密码</li>
-                    <li>然后需要输入查询码查询自己的账号密码该密码只在公众号和QQ展示</li>
-                    <li>如果未找到账号信息的话可自行注册账号输入密码0000即可注册</li>
-                    <li>把注册好的账号信息发送到微信公众号即可获取激活码</li>
+                    <li>先输入自己的QQ账号名字代号信息</li>
+                    <li>然后再输入注册码0000后点击注册</li>
+                    <li>确保设置密码准确无误后点击提交</li>
+                    <li>然后点击复制按钮复制注册的信息</li>
+                    <li>再把它发送到微信巳泷宝库公众号</li>
+                    <li>之后返回输入激活码即可登录账号</li>
                 </ul>
             </div>
             
@@ -1025,10 +1027,10 @@
             <div class="help-section">
                 <h3><i class="fas fa-exclamation-triangle"></i> 常见问题解决</h3>
                 <ul>
-                    <li><strong>忘记注册代号：</strong> 请联系管理员查询您的注册代号</li>
-                    <li><strong>专属密码错误：</strong> 请联系管理员巳泷</li>
-                    <li><strong>账号被封禁：</strong> 多次登录失败会导致账号封禁</li>
-                    <li><strong>注册成功后无法跳转：</strong> 尝试刷新页面，或者换其他浏览器尝试，推荐用迅雷浏览器</li>
+                    <li><strong>数据丢失：</strong> 由于用户注册的信息为临时数据，因此无法恢复，只能再次注册账号，若想永久保存数据可私信巳泷注册永久数据</li>
+                    <li><strong>找回密码：</strong> 可点击密码输入框右侧的放大镜查询，仅限被激活的账号</li>
+                    <li><strong>账号封禁：</strong> 多次登录失败会导致账号封禁，可联系巳泷解封仅解封群内成员，其他的不给予解封</li>
+                    <li><strong>无法加载：</strong> 尝试刷新页面，或者换其他浏览器尝试，推荐用迅雷浏览器</li>
                 </ul>
             </div>
             
@@ -1244,7 +1246,7 @@
         // 激活码
         const ACTIVATION_CODE = "JHM2584";
         // 查询码
-        const QUERY_PASSWORD = "CXM2584";
+        const QUERY_PASSWORD = "1000";
         
         // DOM元素 
         const particlesContainer = document.getElementById('particles');
