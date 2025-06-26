@@ -882,39 +882,38 @@
         </div>
     </div>
     
-    <!-- 查询密码模态框 -->
+ <!-- 查询密码模态框 -->
     <div class="modal" id="queryModal">
-        <div class="modal-content query-modal-content">
+        <div class="modal-content">
             <span class="close-modal" id="closeQueryModal">&times;</span>
-            <div class="query-modal-header">
+            <div class="modal-header">
                 <h2><i class="fas fa-key"></i> 专属密码查询</h2>
                 <p>系统已自动填充您的账号信息</p>
             </div>
             
-        <div class="form-group">
-                <label for="queryQQ" class="auto-filled-label"><i class="fab fa-qq"></i> QQ号码</label>
-                <div class="input-with-icon">
-                    <i class="fab fa-qq"></i>
-                    <input type="text" id="queryQQ" placeholder="请输入您的QQ号码" required class="auto-filled" readonly>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="queryName" class="auto-filled-label"><i class="fas fa-user"></i> 用户昵称</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" id="queryName" placeholder="请输入您的昵称" class="auto-filled" readonly>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="queryCode" class="auto-filled-label"><i class="fas fa-key"></i> 代号</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-user-secret"></i>
-                    <input type="text" id="queryCode" placeholder="请输入您的代号" required class="auto-filled" readonly>
-                </div>
-            </div>
+         <div class="form-group">
+    <label for="queryQQ"><i class="fab fa-qq"></i> QQ号码</label>
+    <div class="input-with-icon">
+        <i class="fab fa-qq"></i>
+        <input type="text" id="queryQQ" placeholder="请输入您的QQ号码" required>
+    </div>
+</div>
 
+<div class="form-group">
+    <label for="queryCode"><i class="fas fa-key"></i> 代号</label>
+    <div class="input-with-icon">
+        <i class="fas fa-user-secret"></i>
+        <input type="text" id="queryCode" placeholder="请输入您的代号" required>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="queryName"><i class="fas fa-user"></i> 用户昵称</label>
+    <div class="input-with-icon">
+        <i class="fas fa-user-circle"></i>
+        <input type="text" id="queryName" placeholder="请输入您的昵称">
+    </div>
+</div>
 
             
             <div class="form-group">
@@ -947,6 +946,8 @@
             </div>
         </div>
     </div>
+
+
     
     <!-- 封禁提示容器 -->
     <div class="auth-container ban-container" id="banContainer">
