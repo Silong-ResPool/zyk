@@ -7,7 +7,6 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         body, html {
             width: 100%;
@@ -21,7 +20,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1;
+            z-index: 0;
+            /* 彻底隐藏控件 */
+            pointer-events: none;
         }
         .click-area {
             position: fixed;
@@ -35,24 +36,27 @@
     </style>
 </head>
 <body>
+    <!-- 纯背景视频，无任何控件，强制静音自动播放 -->
     <video class="video-bg" autoplay loop playsinline muted>
         <source src="sxym.mp4" type="video/mp4">
-        您的浏览器不支持视频背景
     </video>
     <div class="click-area"></div>
 
     <script>
-        // 存储刷新标记到本地存储
-        if (localStorage.getItem('isRefreshed') === 'true') {
-            // 如果是刷新后加载，直接跳转
+        // 页面加载时若检测到刷新标记，直接跳转
+        if (localStorage.getItem('isRefresh')) {
             window.location.replace('https://silong-baoku.github.io/zyk/slzm.html');
-            localStorage.removeItem('isRefreshed'); // 清除标记
+            localStorage.removeItem('isRefresh');
         }
 
-        // 点击触发刷新，并标记
+        // 点击页面任意位置直接跳转
         document.querySelector('.click-area').addEventListener('click', function() {
-            localStorage.setItem('isRefreshed', 'true'); // 标记即将刷新
-            location.reload(); // 执行刷新
+            window.location.replace('https://silong-baoku.github.io/zyk/slzm.html');
+        });
+
+        // 监听手动刷新，标记并跳转
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('isRefresh', '1');
         });
     </script>
 </body>
