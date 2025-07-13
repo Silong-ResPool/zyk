@@ -1,0 +1,198 @@
+<html lang="zh-CN">
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>网站合集（带填写提示）</title> 
+  <style>
+        * {box-sizing: border-box; font-family: "PingFang SC", sans-serif;}
+        body {background: #fff; padding: 20px; color: #333;}
+        .container {max-width: 1200px; margin: 0 auto;}
+        .header {text-align: center; margin-bottom: 40px;}
+        .main-title {color: #7f52af; font-size: 2.5em; margin-bottom: 10px;}
+        .category {
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .category-title {
+            grid-column: 1 / span 2;
+            color: #59299c;
+            font-size: 1.8em;
+            padding-left: 12px;
+            border-left: 4px solid #7f52af;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .link-box {
+            background: #f8f6ff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .link-url {
+            color: #59299c; 
+            font-size: 1.1em; 
+            text-decoration: none; 
+            display: block; 
+            margin-bottom: 8px;
+        }
+        .link-desc {color: #666; font-size: 0.9em;}
+    </style> 
+  <script src="js/jq.js"></script> 
+ </head> 
+ <body id="v1"> 
+  <div id="v2" class="container"> 
+   <div id="v3" class="header"> 
+    <h1 id="v4" class="main-title">网站合集</h1> 
+    <p id="v5" style="color: #666;">共收录 <span id="link-count">0</span> 个网站</p> 
+   </div> 
+   <!-- 分类区块：小说网站 --> 
+   <div id="v6" class="category"> 
+    <h2 id="v7" class="category-title">小说平台</h2> 
+    <!-- 左列 --> 
+    <div id="v8" class="link-card"> 
+     <div id="v9" class="link-box"> 
+      <a id="v10" href="https://www.4wens.org" class="link-url">丝文网</a> 
+      <p id="v11" class="link-desc">小说阅读平台</p> 
+     </div> 
+     <div id="v12" class="link-box"> 
+      <a id="v13" href="https://www.9tiefu.com" class="link-url">贴夫网</a> 
+      <p id="v14" class="link-desc">全本小说下载</p> 
+     </div> 
+    </div> 
+    <!-- 右列 --> 
+    <div id="v15" class="link-card"> 
+     <div id="v16" class="link-box"> 
+      <a id="v17" href="https://www.cxc90.com" class="link-url">海棠花</a> 
+      <p id="v18" class="link-desc">原创文学社区</p> 
+     </div> 
+     <div id="v19" class="link-box"> 
+      <a id="v20" href="https://www.finalbooks.work/category/1/" class="link-url">耽美小说</a> 
+      <p id="v21" class="link-desc">言情小说专区</p> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- 分类区块：漫画网站 --> 
+   <div id="v22" class="category"> 
+    <h2 id="v23" class="category-title">漫画平台</h2> 
+    <div id="v24" class="link-card"> 
+     <div id="v25" class="link-box"> 
+      <a id="v26" href="请填写网站链接" class="link-url">请填写网站名称</a> 
+      <p id="v27" class="link-desc">动漫资源网</p> 
+     </div> 
+     <div id="v28" class="link-box"> 
+      <a id="v29" href="请填写网站链接" class="link-url">请填写网站名称</a> 
+      <p id="v30" class="link-desc">全彩漫画社区</p> 
+     </div> 
+    </div> 
+    <div id="v31" class="link-card"> 
+     <div id="v32" class="link-box"> 
+      <a id="v33" href="请填写网站链接" class="link-url">请填写网站名称</a> 
+      <p id="v34" class="link-desc">二次元漫画平台</p> 
+     </div> 
+     <div id="v35" class="link-box"> 
+      <a id="v36" href="请填写网站链接" class="link-url">请填写网站名称</a> 
+      <p id="v37" class="link-desc">漫画在线阅读</p> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- 分类区块：综合资源网站 --> 
+   <div id="v38" class="category"> 
+    <h2 id="v39" class="category-title">综合平台</h2> 
+    <div id="v40" class="link-card"> 
+     <div id="v41" class="link-box"> 
+      <a id="v42" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v43" class="link-desc">综合资源平台</p> 
+     </div> 
+     <div id="v44" class="link-box"> 
+      <a id="v45" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v46" class="link-desc">内容分享社区</p> 
+     </div> 
+    </div> 
+    <div id="v47" class="link-card"> 
+     <div id="v48" class="link-box"> 
+      <a id="v49" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v50" class="link-desc">多功能服务平台</p> 
+     </div> 
+     <div id="v51" class="link-box"> 
+      <a id="v52" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v53" class="link-desc">综合资讯门户</p> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- 分类区块：gay片网站 --> 
+   <div id="v54" class="category"> 
+    <h2 id="v55" class="category-title">工具平台</h2> 
+    <div id="v56" class="link-card"> 
+     <div id="v57" class="link-box"> 
+      <a id="v58" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v59" class="link-desc">效率办公工具</p> 
+     </div> 
+     <div id="v60" class="link-box"> 
+      <a id="v61" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v62" class="link-desc">在线协作工具</p> 
+     </div> 
+    </div> 
+    <div id="v63" class="link-card"> 
+     <div id="v64" class="link-box"> 
+      <a id="v65" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v66" class="link-desc">设计辅助工具</p> 
+     </div> 
+     <div id="v67" class="link-box"> 
+      <a id="v68" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v69" class="link-desc">数据处理工具</p> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- 分类区块：动漫网站 --> 
+   <div id="v70" class="category"> 
+    <h2 id="v71" class="category-title">资讯平台</h2> 
+    <div id="v72" class="link-card"> 
+     <div id="v73" class="link-box"> 
+      <a id="v74" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v75" class="link-desc">互联网资讯</p> 
+     </div> 
+     <div id="v76" class="link-box"> 
+      <a id="v77" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v78" class="link-desc">国际新闻资讯</p> 
+     </div> 
+    </div> 
+    <div id="v79" class="link-card"> 
+     <div id="v80" class="link-box"> 
+      <a id="v81" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v82" class="link-desc">科技资讯平台</p> 
+     </div> 
+     <div id="v83" class="link-box"> 
+      <a id="v84" href="填写网站链接" class="link-url">填写网站名称</a> 
+      <p id="v85" class="link-desc">财经新闻门户</p> 
+     </div> 
+    </div> 
+   </div> 
+   <script>
+   body {
+    /* 这里使用url函数指定背景图片的链接，将引号内的内容替换为实际的图片链接 */
+    background-image: url(https://cy-pic.kuaizhan.com/g3/25/57/4d59-e950-467e-beda-706b5edea47a77?cysign=3ac305a8fa2712a0acd0e9ad5de72e96&cyt=1747607864);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const links = document.querySelectorAll('a[href^="请填写网站链接"]');
+                let validCount = 0;
+                
+                links.forEach(link => {
+                    const href = link.href.replace('请填写网站链接', '').trim();
+                    if (href.startsWith('http')) {
+                        validCount++;
+                    }
+                });
+                
+                document.getElementById('link-count').textContent = validCount;
+            });
+        </script> 
+  </div>  
+ </body>
+</html>
