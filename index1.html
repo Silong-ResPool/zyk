@@ -1,0 +1,59 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>刷新页面进入资源库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .click-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <video class="video-bg" autoplay loop playsinline muted>
+        <source src="sxym.mp4" type="video/mp4">
+        您的浏览器不支持视频背景
+    </video>
+    <div class="click-area"></div>
+
+    <script>
+        // 存储刷新标记到本地存储
+        if (localStorage.getItem('isRefreshed') === 'true') {
+            // 如果是刷新后加载，直接跳转
+            window.location.replace('https://silong-baoku.github.io/zyk/slzm.html');
+            localStorage.removeItem('isRefreshed'); // 清除标记
+        }
+
+        // 点击触发刷新，并标记
+        document.querySelector('.click-area').addEventListener('click', function() {
+            localStorage.setItem('isRefreshed', 'true'); // 标记即将刷新
+            location.reload(); // 执行刷新
+        });
+    </script>
+</body>
+</html>
