@@ -694,7 +694,7 @@
     <div class="auth-container" id="authContainer">
         <div class="header">
             <div class="logo">
-                <img src="https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg" alt="巳泷资源库" id="avatarImg">
+                <img src="tx.jpg" alt="巳泷资源库" id="avatarImg">
             </div>
             <h1>巳泷资源库</h1>
             <p>账号注册系统</p>
@@ -1221,7 +1221,7 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             }
             
             // 设置头像 
-            avatarImg.src = "https://s21.ax1x.com/2025/06/23/pVZxP3R.jpg";
+            avatarImg.src = "tx.jpg";
             
             createParticles();
             checkBannedStatus();
@@ -1345,16 +1345,24 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
  
         // 设置事件监听器
         function setupEventListeners() {
+            // 为所有输入框添加点击音效
+            const allInputs = document.querySelectorAll('input, select');
+            allInputs.forEach(input => {
+                input.addEventListener('click', function() {
+                    playSound('srkyx.mp3');
+                });
+            });
+            
             // 注册代号输入框点击事件
             userCodeInput.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('srkyx.mp3');
                 codeModal.style.display = 'flex';
             });
             
             // 代号选择事件
             codeOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    playSound('click.mp3');
+                    playSound('anyx.mp3');
                     codeOptions.forEach(opt => opt.classList.remove('active'));
                     this.classList.add('active');
                     selectedCode = this.dataset.code;
@@ -1363,7 +1371,7 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             
             // 确认代号选择
             confirmCodeBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 if (selectedCode) {
                     userCodeInput.value = selectedCode;
                     codeModal.style.display = 'none';
@@ -1374,26 +1382,26 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             
             // 取消代号选择 
             cancelCodeBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 codeModal.style.display = 'none';
             });
             
             // 关闭代号模态框 
             closeCodeModal.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 codeModal.style.display = 'none';
             });
             
             // 表单提交事件 
             authForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 authenticateUser();
             });
             
             // 解封图标点击事件 
             unbanIcon.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 clickCount++;
                 
                 if (clickCount < 7) {
@@ -1409,7 +1417,7 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             
             // 提交解封请求 
             submitUnbanBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 const password = unbanPasswordInput.value.trim();
                 
                 if (password === UNBAN_PASSWORD) {
@@ -1423,7 +1431,7 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             
             // 取消解封
             cancelUnbanBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 unbanModal.style.display = 'none';
                 unbanPasswordInput.value = "";
                 unbanStatus.style.display = 'none';
@@ -1432,19 +1440,19 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             // 帮助链接 
             helpLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 helpModal.style.display = 'flex';
             });
             
             // 关闭模态框 
             closeModal.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 helpModal.style.display = 'none';
             });
             
             // 账号状态检测动作按钮
             statusActionBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 statusModal.style.display = 'none';
                 
                 const statusType = statusIcon.getAttribute('data-status');
@@ -1456,33 +1464,33 @@ let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
             
             // 注册按钮
             registerBtn.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 statusModal.style.display = 'none';
                 window.location.href = "zcym.html";
             });
             
             // 关闭状态检测模态框
             closeStatusModal.addEventListener('click', function() {
-                playSound('click.mp3');
+                playSound('anyx.mp3');
                 statusModal.style.display = 'none';
             });
             
             // 点击模态框外部关闭
             window.addEventListener('click', function(e) {
                 if (e.target === helpModal) {
-                    playSound('click.mp3');
+                    playSound('anyx.mp3');
                     helpModal.style.display = 'none';
                 }
                 if (e.target === codeModal) {
-                    playSound('click.mp3');
+                    playSound('anyx.mp3');
                     codeModal.style.display = 'none';
                 }
                 if (e.target === unbanModal) {
-                    playSound('click.mp3');
+                    playSound('anyx.mp3');
                     unbanModal.style.display = 'none';
                 }
                 if (e.target === statusModal) {
-                    playSound('click.mp3');
+                    playSound('anyx.mp3');
                     statusModal.style.display = 'none';
                 }
             });
