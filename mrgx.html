@@ -338,32 +338,35 @@
     <div class="carousel-container">
       <div class="carousel" id="carousel">
         <div class="carousel-slide" 
-                 style="background-image: url('../mrgx/lonbt/lonbt2.jpg')"
-             data-link="../mrgx/pages/page2.html"></div>
+             style="background-image: url('lonbt1.jpg')"
+             data-link="https://kdocs.cn/l/cnnlCnIWPMj4"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt3.jpg')"
-             data-link="../mrgx/pages/page3.html"></div>
+             style="background-image: url('lonbt2.jpg')"
+             data-link="https://kdocs.cn/l/sidSYnCYcJRX"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt4.jpg')"
-             data-link="../mrgx/pages/page4.html"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8iT4e.jpg')"
+             data-link="https://kdocs.cn/l/cpZ3mYx8sgTB"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt5.jpg')"
-             data-link="../mrgx/pages/page5.html"></div>
+             style="background-image: url('lonbt4.jpg')"
+             data-link="https://kdocs.cn/l/ckE6JKKALGF7"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt6.jpg')"
-             data-link="../mrgx/pages/page6.html"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8ib3d.jpg')"
+             data-link="https://kdocs.cn/l/cn58trvnRRSA"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt7.jpg')"
-             data-link="../mrgx/pages/page7.html"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8iqgA.jpg')"
+             data-link="https://kdocs.cn/l/cn9pa3l8RVls"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt8.jpg')"
-             data-link="../mrgx/pages/page8.html"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8i4HK.jpg')"
+             data-link="https://kdocs.cn/l/ccekpS2vsdh7"></div>
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt9.jpg')"
-             data-link="../mrgx/pages/page9.html"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8ioND.jpg')"
+             data-link="https://kdocs.cn/l/cifN4m142ZdF"></div>
+      <div class="carousel-slide" 
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8iIAO.jpg')"
+             data-link="https://kdocs.cn/l/cd0hTy4POB0a"></div>   
         <div class="carousel-slide" 
-             style="background-image: url('../mrgx/lonbt/lonbt10.jpg')"
-             data-link="/mrgx/lonnbt/lonbt10.jpg"></div>
+             style="background-image: url('https://s21.ax1x.com/2025/07/20/pV8iH9H.jpg')"
+             data-link="https://kdocs.cn/l/ch87Db5MSMsh"></div>
       </div>
       <div class="carousel-nav" id="carouselNav"></div>
     </div>
@@ -525,10 +528,10 @@
       // 开始自动轮播 
       startInterval();
     });
-    // ==================== 屏幕方向壁纸切换 ==================== 
+      // ==================== 屏幕方向壁纸切换 ==================== 
 const ORIENTATION_WALLPAPERS = {
-  portrait: 'url(https://s21.ax1x.com/2025/06/23/pVZxM8A.jpg)',  // 9:16竖屏壁纸路径 
-  landscape: 'url(https://s21.ax1x.com/2025/06/23/pVZx3KP.jpg)'  // 16:9横屏壁纸路径 
+  portrait: 'url(bjt1.jpg)',  // 9:16竖屏壁纸路径 
+  landscape: 'url(bjt2.jpg)'  // 16:9横屏壁纸路径 
 };
  
 function updateWallpaperByOrientation() {
@@ -544,37 +547,6 @@ function updateWallpaperByOrientation() {
 updateWallpaperByOrientation();
 window.addEventListener('resize', updateWallpaperByOrientation);
 // ==================== 整合结束 ====================
-    // ==============================================
-// 自动跳转功能：24小时后强制跳转，刷新页面不重置计时
-// ==============================================
-(function() {
-    // 检查是否是从其他页面跳转而来（非刷新）
-    const isNewVisit = !performance.navigation || performance.navigation.type === 0;
-    
-    if (isNewVisit) {
-        // 首次访问或从其他页面跳转，记录开始时间（毫秒）
-        const startTime = new Date().getTime();
-        // 24小时对应的毫秒数：24*60*60*1000 = 86400000
-        const targetTime = 86400000;
-        
-        // 定时检查是否达到24小时
-        const checkTimer = setInterval(() => {
-            const currentTime = new Date().getTime();
-            if (currentTime - startTime >= targetTime) {
-                clearInterval(checkTimer);
-                // 强制跳转到目标链接
-                window.location.replace('https://silong-baoku.github.io/zyk/');
-            }
-        }, 60000); // 每分钟检查一次，减少性能消耗
-    } else {
-        // 页面刷新时，直接跳转（因为刷新不会重置状态）
-        window.location.replace('https://silong-baoku.github.io/zyk/');
-    }
-})();
-// ==============================================
-// 自动跳转功能结束
-// ==============================================
-
   </script>
 </body>
 </html>
