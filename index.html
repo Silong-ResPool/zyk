@@ -1,1732 +1,515 @@
-<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>巳泷资源库 - 注册系统</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --neon-bg: linear-gradient(135deg, #1a0638, #4a1b8c, #2d0a5e);
-            --neon-primary: #bb6bd9;
-            --neon-secondary: #7d3fd4;
-            --neon-accent: #c77dff;
-            --neon-danger: #ff6b9d;
-            --neon-success: #9d4edd;
-            --neon-warning: #ffc107;
-            --neon-text: #ffffff;
-            --neon-border: rgba(187, 107, 217, 0.5);
-            --neon-glow-primary: 0 0 10px rgba(187, 107, 217, 0.8), 0 0 20px rgba(187, 107, 217, 0.6), 0 0 30px rgba(187, 107, 217, 0.4);
-            --neon-glow-accent: 0 0 10px rgba(199, 125, 255, 0.8), 0 0 20px rgba(199, 125, 255, 0.6), 0 0 30px rgba(199, 125, 255, 0.4);
-            --neon-glow-danger: 0 0 10px rgba(255, 107, 157, 0.8), 0 0 20px rgba(255, 107, 157, 0.6), 0 0 30px rgba(255, 107, 157, 0.4);
-            --neon-glow-success: 0 0 10px rgba(157, 78, 221, 0.8), 0 0 20px rgba(157, 78, 221, 0.6), 0 0 30px rgba(157, 78, 221, 0.4);
-            --neon-glow-warning: 0 0 10px rgba(255, 193, 7, 0.8), 0 0 20px rgba(255, 193, 7, 0.6);
-        }
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>选择入口</title> 
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&amp;display=swap" rel="stylesheet"> 
+  <style>
+    :root {
+--neon-purple: #8a2be2;
+--neon-cyan: #d8bfd8;
+--cosmic-bg: linear-gradient(135deg, #1a0637 0%, #2d0b4d 100%);
+--card-bg: rgba(50, 15, 80, 0.6);
+--text-glow: 0 0 8px currentColor;
+}
+ 
+body {
+    font-family: 'Orbitron', sans-serif;
+    background: var(--cosmic-bg);
+    color: #e6e6fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+ 
+.datetime {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: var(--neon-cyan);
+    text-shadow: var(--text-glow);
+    letter-spacing: 1px;
+}
+ 
+.portal-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    background: rgba(42, 10, 75, 0.3);
+    border-radius: 20px;
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.3), 
+                inset 0 0 15px rgba(138, 43, 226, 0.2);
+    position: relative;
+}
+ 
+.portal-container::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 22px;
+    background: linear-gradient(45deg, #9932cc, var(--neon-purple), #ba55d3);
+    background-size: 200% 200%;
+    z-index: -1;
+    animation: portalGlow 4s ease infinite;
+    opacity: 0.7;
+}
+ 
+@keyframes portalGlow {
+    0% { background-position: 0% 50%; filter: blur(8px); }
+    50% { background-position: 100% 50%; filter: blur(5px); }
+    100% { background-position: 0% 50%; filter: blur(8px); }
+}
+ 
+h1.portal-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 500;
+    background: linear-gradient(to right, #e6e6fa, var(--neon-cyan));
+-webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 10px rgba(230, 230, 250, 0.3);
+}
+ 
+.portal-options {
+    display: grid;
+    gap: 18px;
+}
+ 
+.portal-card {
+    padding: 22px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+ 
+.portal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(138, 43, 226, 0.3);
+    border-color: var(--neon-purple);
+}
+ 
+.portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+    transition: 0.5s;
+}
+ 
+.portal-card:hover::before {
+    left: 100%;
+}
+ 
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+ 
+.card-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 12px;
+    filter: drop-shadow(0 0 4px var(--neon-purple));
+}
+ 
+.card-title {
+    font-size: 18px;
+    font-weight: 500;
+    background: linear-gradient(to right, #e6e6fa, #9370db);
+-webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+ 
+.card-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #d8bfd8;
+    padding-left: 40px;
+}
+ 
+@media (max-width: 600px) {
+    .portal-container {
+        padding: 30px 20px;
+    }
+    h1.portal-title {
+        font-size: 24px;
+    }
+    .card-title {
+        font-size: 16px;
+    }
+}
+ 
+/* 修改后的遮罩层 */
+.mask-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(8px);
+    background-color: rgba(26, 6, 53, 0.7);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
+/* 优化后的弹窗样式 */
+.auth-modal {
+    width: 90%;
+    max-width: 250px; /* 缩小宽度 */
+    padding: 25px; /* 减小内边距 */
+    background: linear-gradient(145deg, #2d0b4d, #1a0637);
+    border-radius: 16px;
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.5), 
+                inset 0 0 20px rgba(138, 43, 226, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1000;
+    animation: modalGlow 3s ease infinite;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+ 
+.auth-modal::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 18px;
+    background: linear-gradient(45deg, #9932cc, var(--neon-purple), #ba55d3, #9932cc);
+    background-size: 300% 300%;
+    z-index: -1;
+    opacity: 0.8;
+    animation: portalGlow 6s ease infinite;
+}
+ 
+@keyframes modalGlow {
+    0%, 100% { box-shadow: 0 0 40px rgba(138, 43, 226, 0.5), inset 0 0 20px rgba(138, 43, 226, 0.3); }
+    50% { box-shadow: 0 0 60px rgba(157, 77, 255, 0.7), inset 0 0 25px rgba(138, 43, 226, 0.4); }
+}
+ 
+.modal-title {
+    text-align: center;
+    margin-bottom: 20px; /* 减小间距 */
+    font-size: 22px;
+    font-weight: 500;
+    background: linear-gradient(to right, #e6e6fa, #d8bfd8);
+-webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 8px rgba(230, 230, 250, 0.5);
+}
+ 
+.modal-desc {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #d8bfd8;
+    line-height: 1.6;
+}
+ 
+.auth-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    background: rgba(50, 15, 80, 0.7);
+    border: 1px solid var(--neon-purple);
+    border-radius: 8px;
+    color: #e6e6fa;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+ 
+.auth-input:focus {
+    border-color: #ba55d3;
+    box-shadow: 0 0 10px rgba(186, 85, 211, 0.5);
+}
+ 
+ /* 统一按钮样式 */
+ .auth-btn, .qun-btn {
+     width: 100%;
+     padding: 12px;
+     background: linear-gradient(to right, #8a2be2, #9932cc);
+     border: none;
+     border-radius: 10px;
+     color: white;
+     font-family: inherit;
+     font-size: 15px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+     text-align: center;
+     display: block;
+     margin-bottom: 10px;
+     box-sizing: border-box; /* 确保padding不影响宽度 */
+ }
+  
+ .auth-btn:hover, .qun-btn:hover {
+     background: linear-gradient(to right, #9932cc, #8a2be2);
+     box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+     transform: translateY(-1px);
+ }
+  
+ .qun-btn {
+     margin-top: 0; /* 移除特殊的上边距 */
+ }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
+ 
+.error-message {
+    color: #ff6b6b;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 5px;
+    height: 18px;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+}
 
-        body {
-            background: var(--neon-bg);
-            color: var(--neon-text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .particles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-particle {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(145deg, var(--neon-primary), var(--neon-accent));
-            box-shadow: var(--neon-glow-primary);
-            animation: float 15s infinite linear;
-            opacity: 0.6;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0.5);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-20vh) scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        .auth-container {
-            background: rgba(30, 10, 60, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--neon-border);
-            border-radius: 15px;
-            padding: 30px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: var(--neon-glow-primary);
-            position: relative;
-            overflow: hidden;
-            z-index: 10;
-            animation: shine 6s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                box-shadow: var(--neon-glow-primary);
-            }
-            25% {
-                box-shadow: 0 0 20px rgba(187, 107, 217, 0.8), 0 0 40px rgba(187, 107, 217, 0.6), 0 0 60px rgba(187, 107, 217, 0.4), 0 0 0 0 rgba(199, 125, 255, 0);
-            }
-            50% {
-                box-shadow: var(--neon-glow-primary);
-            }
-            75% {
-                box-shadow: 0 0 20px rgba(187, 107, 217, 0.8), 0 0 40px rgba(187, 107, 217, 0.6), 0 0 60px rgba(187, 107, 217, 0.4), 0 0 0 4px rgba(199, 125, 255, 0.3);
-            }
-            100% {
-                box-shadow: var(--neon-glow-primary);
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px var(--neon-primary);
-            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 5px;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid var(--neon-accent);
-            box-shadow: var(--neon-glow-accent);
-            animation: pulse 3s infinite;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--neon-accent);
-            font-size: 18px;
-            z-index: 2;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 14px 14px 45px;
-            background: rgba(25, 5, 50, 0.7);
-            border: 1px solid var(--neon-border);
-            border-radius: 8px;
-            color: var(--neon-text);
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--neon-accent);
-            box-shadow: var(--neon-glow-accent);
-        }
-
-        input.error, select.error {
-            border-color: var(--neon-danger);
-            box-shadow: var(--neon-glow-danger);
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-        }
-
-        .checkbox-container input {
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
-            color: white;
-            box-shadow: var(--neon-glow-primary);
-        }
-
-        .btn-secondary {
-            background: rgba(25, 5, 50, 0.7);
-            border: 1px solid var(--neon-border);
-            color: var(--neon-accent);
-        }
-        
-        .btn-logout {
-            background: rgba(255, 107, 157, 0.2);
-            border: 1px solid var(--neon-danger);
-            color: var(--neon-danger);
-        }
-        
-        .btn-warning {
-            background: rgba(255, 193, 7, 0.2);
-            border: 1px solid var(--neon-warning);
-            color: var(--neon-warning);
-            box-shadow: var(--neon-glow-warning);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), var(--neon-glow-primary);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #c77dff, #8a4de0);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(35, 10, 70, 0.7);
-            box-shadow: var(--neon-glow-accent);
-        }
-        
-        .btn-logout:hover {
-            background: rgba(255, 107, 157, 0.3);
-            box-shadow: var(--neon-glow-danger);
-        }
-        
-        .btn-warning:hover {
-            background: rgba(255, 193, 7, 0.3);
-            box-shadow: var(--neon-glow-warning);
-        }
-
-        .status-message {
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
-            text-align: center;
-            font-size: 14px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .error-message {
-            background: rgba(255, 107, 157, 0.15);
-            border: 1px solid var(--neon-danger);
-            color: #ffb6c9;
-            box-shadow: var(--neon-glow-danger);
-        }
-
-        .success-message {
-            background: rgba(157, 78, 221, 0.15);
-            border: 1px solid var(--neon-success);
-            color: #d0a0ff;
-            box-shadow: var(--neon-glow-success);
-        }
-
-        .warning-message {
-            background: rgba(255, 193, 7, 0.15);
-            border: 1px solid #ffc107;
-            color: #ffe69c;
-            box-shadow: var(--neon-glow-warning);
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid var(--neon-accent);
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .ban-container {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .ban-icon {
-            font-size: 80px;
-            color: var(--neon-danger);
-            margin-bottom: 20px;
-            text-shadow: var(--neon-glow-danger);
-        }
-
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .footer a {
-            color: var(--neon-accent);
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        
-        /* 帮助模态框样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background: rgba(30, 10, 60, 0.95);
-            border: 1px solid var(--neon-accent);
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: var(--neon-glow-accent);
-            position: relative;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            color: var(--neon-accent);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .close-modal:hover {
-            transform: rotate(90deg);
-            color: var(--neon-danger);
-        }
-        
-        .modal-header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--neon-border);
-        }
-        
-        .modal-header h2 {
-            font-size: 24px;
-            background: linear-gradient(90deg, var(--neon-accent), var(--neon-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .help-section {
-            margin-bottom: 25px;
-        }
-        
-        .help-section h3 {
-            color: var(--neon-accent);
-            margin-bottom: 10px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .help-section p {
-            margin-bottom: 10px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .help-section ul {
-            padding-left: 20px;
-            margin: 10px 0;
-        }
-        
-        .help-section li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .contact-info {
-            background: rgba(25, 5, 50, 0.5);
-            border-left: 3px solid var(--neon-accent);
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-top: 20px;
-        }
-
-        /* 代号选择模态框 */
-        .code-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .code-option {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(25, 5, 50, 0.7);
-            border: 2px solid var(--neon-border);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .code-option:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--neon-glow-primary);
-            border-color: var(--neon-accent);
-        }
-
-        .code-option.active {
-            background: linear-gradient(135deg, var(--neon-primary), var(--neon-secondary));
-            box-shadow: var(--neon-glow-primary);
-            border-color: var(--neon-accent);
-        }
-
-        .code-option i {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        /* 解封模态框 */
-        .unban-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .unban-modal-content {
-            background: rgba(30, 10, 60, 0.95);
-            border: 1px solid var(--neon-danger);
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--neon-glow-danger);
-            position: relative;
-            text-align: center;
-        }
-        
-        /* 欢迎页面 */
-        .welcome-container {
-            text-align: center;
-            padding: 30px;
-        }
-        
-        .welcome-icon {
-            font-size: 80px;
-            color: var(--neon-accent);
-            margin-bottom: 20px;
-            text-shadow: var(--neon-glow-accent);
-        }
-        
-        .welcome-message {
-            margin-bottom: 25px;
-        }
-        
-        .user-info {
-            background: rgba(25, 5, 50, 0.5);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        
-        .user-info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(187, 107, 217, 0.2);
-        }
-        
-        .user-info-item:last-child {
-            border-bottom: none;
-        }
-        
-        /* 账号状态检测模态框 */
-        .status-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .status-modal-content {
-            background: rgba(30, 10, 60, 0.95);
-            border: 1px solid var(--neon-accent);
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--neon-glow-accent);
-            position: relative;
-            text-align: center;
-        }
-        
-        .status-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-        
-        .status-success {
-            color: var(--neon-success);
-            text-shadow: var(--neon-glow-success);
-        }
-        
-        .status-error {
-            color: var(--neon-danger);
-            text-shadow: var(--neon-glow-danger);
-        }
-        
-        .status-warning {
-            color: var(--neon-warning);
-            text-shadow: var(--neon-glow-warning);
-        }
-        
-        .status-message-content {
-            margin: 20px 0;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        
-        /* 安全警告 */
-        .security-warning {
-            background: rgba(255, 107, 157, 0.15);
-            border: 1px solid var(--neon-danger);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-            display: none;
-        }
-        
-        .security-warning h4 {
-            color: var(--neon-danger);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 600px) {
-            .auth-container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 22px;
-            }
-            
-            .btn-group {
-                flex-direction: column;
-            }
-            
-            .logo {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-            
-            .modal-header h2 {
-                font-size: 20px;
-            }
-            
-            .code-option {
-                width: 70px;
-                height: 70px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .auth-container {
-                padding: 15px;
-            }
-            
-            input, select, .btn {
-                padding: 12px 12px 12px 40px;
-            }
-            
-            .input-with-icon i {
-                font-size: 16px;
-                left: 12px;
-            }
-        }
-    </style>
+   </style>
 </head>
 <body>
-
-    <!-- 粒子背景容器 -->
-    <div class="particles-container" id="particles"></div>
-    
-    <!-- 主注册容器 -->
-    <div class="auth-container" id="authContainer">
-        <div class="header">
-            <div class="logo">
-                <img src="tx.jpg" alt="巳泷资源库" id="avatarImg">
-            </div>
-            <h1>巳泷资源库</h1>
-            <p>账号注册系统</p>
-        </div>
-        
-        <!-- 安全警告 -->
-        <div class="security-warning" id="securityWarning">
-            <h4><i class="fas fa-shield-alt"></i> 安全警告</h4>
-            <p>检测到异常登录行为，系统已记录您的设备信息</p>
-        </div>
-        
-        <!-- 状态消息 -->
-        <div class="status-message" id="statusMessage"></div>
-        
-        <!-- 注册表单 -->
-        <form id="authForm">
-            <div class="form-group">
-                <label for="qqNumber"><i class="fas fa-user"></i> QQ号码</label>
-                <div class="input-with-icon">
-                    <i class="fab fa-qq"></i>
-                    <input type="text" id="qqNumber" placeholder="请输入您的QQ号码" required minlength="5" maxlength="10">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="userName"><i class="fas fa-signature"></i> 用户昵称</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" id="userName" placeholder="请输入您的昵称" required>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="userCode"><i class="fas fa-key"></i> 注册代号</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-user-secret"></i>
-                    <input type="text" id="userCode" placeholder="点击选择注册代号" readonly>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="password"><i class="fas fa-lock"></i> 登录密码</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-key"></i>
-                    <input type="password" id="password" placeholder="请输入您的登录密码" required>
-                </div>
-            </div>
-            
-            <div class="checkbox-container">
-                <input type="checkbox" id="rememberMe">
-                <label for="rememberMe">24小时内免登录</label>
-            </div>
-            
-            <div class="btn-group">
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <i class="fas fa-sign-in-alt"></i> 登陆账号
-                </button>
-            </div>
-        </form>
-        
-        <div class="footer">
-            <p>遇到问题？<a href="#" id="helpLink"><i class="fas fa-question-circle"></i> 查看帮助</a></p>
-            <p>&copy; 2025 巳泷资源库 | 注册系统 v2.0</p>
-        </div>
-    </div>
-    
-    <!-- 封禁提示容器 -->
-    <div class="auth-container ban-container" id="banContainer">
-        <div class="ban-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <h2>账号已被封禁</h2>
-        <p>您的账号因违规操作已被系统永久封禁</p>
-        <div class="ban-icon" id="unbanIcon" style="margin: 25px 0; font-size: 40px; color: var(--neon-accent); cursor: pointer;">
-            <i class="fas fa-Silong"></i>
-        </div>
-        <div id="unbanMessage" class="status-message" style="display: none;"></div>
-    </div>
-    
-    <!-- 帮助模态框 -->
-    <div class="modal" id="helpModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <div class="modal-header">
-                <h2><i class="fas fa-life-ring"></i> 巳泷资源库帮助中心</h2>
-                <p>账号注册系统使用指南</p>
-            </div>
-            
-            <div class="help-section">
-                <h3><i class="fas fa-user-check"></i> 注册流程说明</h3>
-                <ul>
-                    <li><strong>填写信息:</strong> 输入QQ账号、昵称、代号信息</li>
-                    <li><strong>设置密码:</strong> 输入登录密码</li>
-                    <li><strong>确认信息:</strong> 确保信息准确无误后点击提交</li>
-                    <li><strong>发送信息:</strong> 将注册信息发送到微信巳泷宝库公众号</li>
-                    <li><strong>返回登录:</strong> 使用QQ号和密码登录账号</li>
-                </ul>
-            </div>
-            
-            <div class="help-section">
-                <h3><i class="fas fa-key"></i> 注册代号说明</h3>
-                <ul>
-                    <li>代号是群成员的唯一标识</li>
-                    <li><strong>泷</strong> - 抖音粉丝群的成员</li>
-                    <li><strong>夜</strong> - 受群主邀请的成员</li>
-                    <li><strong>介</strong> - 好友推荐来的成员</li>
-                    <li><strong>川</strong> - 其他渠道来的成员</li>
-                </ul>
-            </div>
-            
-            <div class="help-section">
-                <h3><i class="fas fa-exclamation-triangle"></i> 安全政策</h3>
-                <ul>
-                    <li><strong>账号安全:</strong> 系统将严格检测账号信息</li>
-                    <li><strong>信息匹配:</strong> 如果QQ号、代号和密码不匹配，系统将封禁账号</li>
-                    <li><strong>违规处罚:</strong> 多次尝试登录失败将导致账号永久封禁</li>
-                    <li><strong>设备记录:</strong> 异常登录行为将被记录设备信息</li>
-                </ul>
-            </div>
-            
-            <div class="contact-info">
-                <h3><i class="fas fa-headset"></i> 技术支持</h3>
-                <p><i class="fab fa-qq"></i> QQ: <span style="color:#c77dff">3213824126</span></p>
-                <p><i class="fas fa-clock"></i> 服务时间: <span style="color:#c77dff">12:00-04:00</span></p>
-                <p><i class="fas fa-box"></i> 软件包: <a href="#" style="color: #c77dff; text-decoration: none;">>>点击下载资源库<<</a></p>
-                <p><i class="fas fa-globe"></i> 网页版: <a href="#" style="color: #c77dff; text-decoration: none;" target="_blank">>>点击跳转资源库<<</a></p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 代号选择模态框 -->
-    <div class="modal" id="codeModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeCodeModal">&times;</span>
-            <div class="modal-header">
-                <h2><i class="fas fa-user-tag"></i> 选择注册代号</h2>
-                <p>请选择您的专属注册代号</p>
-            </div>
-            
-            <div class="code-options">
-                <div class="code-option" data-code="泷">
-                    <i class="fas fa-dragon"></i>
-                    <span>泷</span>
-                </div>
-                <div class="code-option" data-code="夜">
-                    <i class="fas fa-moon"></i>
-                    <span>夜</span>
-                </div>
-                <div class="code-option" data-code="介">
-                    <i class="fas fa-user-friends"></i>
-                    <span>介</span>
-                </div>
-                <div class="code-option" data-code="川">
-                    <i class="fas fa-water"></i>
-                    <span>川</span>
-                </div>
-            </div>
-            
-            <div class="btn-group" style="margin-top: 30px;">
-                <button class="btn btn-primary" id="confirmCodeBtn">
-                    <i class="fas fa-check"></i> 确认选择
-                </button>
-                <button class="btn btn-secondary" id="cancelCodeBtn">
-                    <i class="fas fa-times"></i> 取消
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 解封模态框 -->
-    <div class="unban-modal" id="unbanModal">
-        <div class="unban-modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-unlock"></i> 账号解封</h2>
-                <p>请输入解封密码以解锁账号</p>
-            </div>
-            
-            <div class="form-group" style="margin: 25px 0;">
-                <div class="input-with-icon">
-                    <i class="fas fa-key"></i>
-                    <input type="password" id="unbanPassword" placeholder="请输入解封密码">
-                </div>
-            </div>
-            
-            <div class="status-message" id="unbanStatus"></div>
-            
-            <div class="btn-group">
-                <button class="btn btn-primary" id="submitUnbanBtn">
-                    <i class="fas fa-check"></i> 提交解封
-                </button>
-                <button class="btn btn-secondary" id="cancelUnbanBtn">
-                    <i class="fas fa-times"></i> 取消
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 账号状态检测模态框 -->
-    <div class="modal" id="statusModal">
-        <div class="status-modal-content">
-            <span class="close-modal" id="closeStatusModal">&times;</span>
-            <div class="modal-header">
-                <h2><i class="fas fa-user-check"></i> 账号状态检测</h2>
-                <p>系统正在验证您的账号信息</p>
-            </div>
-            
-            <div class="status-icon" id="statusIcon">
-                <i class="fas fa-spinner fa-spin"></i>
-            </div>
-            
-            <div class="status-message-content" id="statusMessageContent">
-                正在验证您的账号信息，请稍候...
-            </div>
-            
-            <div class="btn-group" id="statusActionButtons" style="display: none;">
-                <button class="btn btn-primary" id="statusActionBtn">
-                    <i class="fas fa-check"></i> 确定
-                </button>
-                <button class="btn btn-warning" id="registerBtn" style="display: none;">
-                    <i class="fas fa-user-plus"></i> 注册账号
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-// 就读学生
-let authorizedUsers = JSON.parse(localStorage.getItem('authorizedUsers')) || [
-{ qq: "3213824126", code: "夜", password: "258481", activated: true },
-{ qq: "1323978434", code: "泷", password: "8062", activated: true },
-{ qq: "2908946684", code: "夜", password: "4312", activated: true },
-{ qq: "291516641", code: "夜", password: "5678", activated: true },
-{ qq: "3025233785", code: "夜", password: "9012", activated: true },
-{ qq: "1041547578", code: "夜", password: "3456", activated: true },
-{ qq: "863891398", code: "泷", password: "7890", activated: true },
-{ qq: "3175046319", code: "夜", password: "1357", activated: true },
-{ qq: "1875316335", code: "泷", password: "2468", activated: true },
-{ qq: "3804604918", code: "泷", password: "0246", activated: true },
-{ qq: "2431704839", code: "夜", password: "1593", activated: true },
-{ qq: "3960384997", code: "夜", password: "7531", activated: true },
-{ qq: "3146846491", code: "泷", password: "8642", activated: true },
-{ qq: "3466977552", code: "泷", password: "9753", activated: true },
-{ qq: "3059392643", code: "泷", password: "0987", activated: true },
-{ qq: "3543058039", code: "川", password: "6543", activated: true },
-{ qq: "2021281325", code: "泷", password: "2109", activated: true },
-{ qq: "3272233139", code: "夜", password: "4321", activated: true },
-{ qq: "3300212539", code: "泷", password: "6789", activated: true },
-{ qq: "3396485194", code: "夜", password: "0135", activated: true },
-{ qq: "2700254884", code: "川", password: "2460", activated: true },
-{ qq: "2402755482", code: "泷", password: "8912", activated: true },
-{ qq: "3531824556", code: "夜", password: "3692", activated: true },
-{ qq: "2827532223", code: "泷", password: "5714", activated: true },
-{ qq: "2247936051", code: "夜", password: "8025", activated: true },
-{ qq: "2990782375", code: "夜", password: "1637", activated: true },
-{ qq: "2351757572", code: "泷", password: "9468", activated: true },
-{ qq: "1811153229", code: "夜", password: "0357", activated: true },
-{ qq: "2707758280", code: "夜", password: "2489", activated: true },
-{ qq: "3872658317", code: "夜", password: "1523", activated: true },
-{ qq: "2664967743", code: "泷", password: "6701", activated: true },
-{ qq: "754467738", code: "泷", password: "9852", activated: true },
-{ qq: "875567869", code: "泷", password: "3470", activated: true },
-{ qq: "3133577613", code: "夜", password: "5612", activated: true },
-{ qq: "3024646369", code: "夜", password: "8934", activated: true },
-{ qq: "3313893858", code: "夜", password: "0156", activated: true },
-{ qq: "3930717703", code: "泷", password: "2749", activated: true },
-{ qq: "1022566255", code: "泷", password: "3850", activated: true },
-{ qq: "3538704969", code: "泷", password: "1962", activated: true },
-{ qq: "3372741545", code: "夜", password: "4781", activated: true },
-{ qq: "617098680", code: "泷", password: "5023", activated: true },
-{ qq: "3931353915", code: "泷", password: "6147", activated: true },
-{ qq: "3279310252", code: "夜", password: "8259", activated: true },
-{ qq: "3343869367", code: "泷", password: "0368", activated: true },
-{ qq: "2471099910", code: "泷", password: "1472", activated: true },
-{ qq: "401843969", code: "泷", password: "5803", activated: true },
-{ qq: "55869631", code: "泷", password: "6914", activated: true },
-{ qq: "1404220299", code: "泷", password: "7025", activated: true },
-{ qq: "3769268295", code: "夜", password: "8346", activated: true },
-{ qq: "2732814452", code: "泷", password: "9457", activated: true },
-{ qq: "3083175269", code: "泷", password: "0568", activated: true },
-{ qq: "2578952761", code: "泷", password: "1679", activated: true },
-{ qq: "3953325298", code: "泷", password: "2780", activated: true },
-{ qq: "1062462386", code: "泷", password: "3891", activated: true },
-{ qq: "3058023824", code: "泷", password: "4902", activated: true },
-{ qq: "3159573908", code: "泷", password: "5013", activated: true },
-{ qq: "850401958", code: "夜", password: "6124", activated: true },
-{ qq: "551473278", code: "泷", password: "7235", activated: true },
-{ qq: "2765755169", code: "泷", password: "8346", activated: true },
-{ qq: "2331275312", code: "夜", password: "9457", activated: true },
-{ qq: "775589423", code: "泷", password: "0568", activated: true },
-{ qq: "2759907742", code: "泷", password: "1679", activated: true },
-{ qq: "1599493613", code: "夜", password: "2780", activated: true },
-{ qq: "2155770166", code: "泷", password: "3891", activated: true },
-{ qq: "3544654386", code: "夜", password: "4902", activated: true },
-{ qq: "2922761735", code: "泷", password: "5013", activated: true },
-{ qq: "2210245642", code: "夜", password: "6124", activated: true },
-{ qq: "3319676442", code: "夜", password: "7235", activated: true },
-{ qq: "2115448500", code: "泷", password: "8347", activated: true },
-{ qq: "1678836167", code: "泷", password: "9458", activated: true },
-{ qq: "177271324", code: "泷", password: "0569", activated: true },
-{ qq: "2806520241", code: "泷", password: "1601", activated: true },
-{ qq: "3811732118", code: "泷", password: "2712", activated: true },
-{ qq: "3597931971", code: "夜", password: "3823", activated: true },
-{ qq: "348634201", code: "泷", password: "4934", activated: true },
-{ qq: "1432169967", code: "泷", password: "5045", activated: true },
-{ qq: "2406339133", code: "夜", password: "6156", activated: true },
-{ qq: "1559802785", code: "泷", password: "7267", activated: true },
-{ qq: "1295312386", code: "泷", password: "8378", activated: true },
-{ qq: "2680253169", code: "泷", password: "9489", activated: true },
-{ qq: "994144624", code: "泷", password: "0590", activated: true },
-{ qq: "24764160552", code: "泷", password: "1601", activated: true },
-{ qq: "1512855385", code: "介", password: "2712", activated: true },
-{ qq: "1703181193", code: "泷", password: "3823", activated: true },
-{ qq: "304674300", code: "泷", password: "4934", activated: true },
-{ qq: "383544307", code: "泷", password: "5045", activated: true },
-{ qq: "1018446228", code: "夜", password: "6156", activated: true },
-{ qq: "2419328104", code: "泷", password: "7267", activated: true },
-{ qq: "1139193721", code: "泷", password: "8378", activated: true },
-{ qq: "259405251", code: "夜", password: "9489", activated: true },
-{ qq: "1670649207", code: "夜", password: "0591", activated: true },
-{ qq: "2070326603", code: "夜", password: "1602", activated: true },
-{ qq: "3295365979", code: "泷", password: "2713", activated: true },
-{ qq: "3767481301", code: "夜", password: "3824", activated: true },
-{ qq: "327901578", code: "夜", password: "4935", activated: true },
-{ qq: "3804330175", code: "夜", password: "5046", activated: true },
-{ qq: "1253798692", code: "泷", password: "6157", activated: true },
-{ qq: "2990019657", code: "泷", password: "7268", activated: true },
-{ qq: "346956633", code: "泷", password: "8379", activated: true },
-{ qq: "231559871", code: "泷", password: "9490", activated: true },
-{ qq: "3243028291", code: "夜", password: "0501", activated: true },
-{ qq: "376299499", code: "泷", password: "1612", activated: true },
-{ qq: "625160882", code: "泷", password: "2723", activated: true },
-{ qq: "379564966", code: "泷", password: "3834", activated: true },
-{ qq: "399536315", code: "夜", password: "4945", activated: true },
-{ qq: "127705833", code: "泷", password: "5056", activated: true },
-{ qq: "3536764173", code: "泷", password: "6167", activated: true },
-{ qq: "2434574108", code: "夜", password: "7278", activated: true },
-{ qq: "3581340439", code: "夜", password: "8389", activated: true },
-{ qq: "1516300253", code: "夜", password: "9490", activated: true },
-{ qq: "2694855645", code: "夜", password: "0501", activated: true },
-{ qq: "1876732647", code: "泷", password: "1612", activated: true },
-{ qq: "3386614224", code: "夜", password: "2723", activated: true },
-{ qq: "3238569031", code: "夜", password: "3834", activated: true },
-{ qq: "1510500463", code: "夜", password: "4945", activated: true },
-{ qq: "2132542681", code: "泷", password: "5056", activated: true },
-{ qq: "3531915327", code: "夜", password: "6167", activated: true },
-{ qq: "2776952537", code: "夜", password: "7278", activated: true },
-{ qq: "2072197990", code: "夜", password: "8389", activated: true },
-{ qq: "3072351580", code: "夜", password: "9491", activated: true },
-{ qq: "963385975", code: "夜", password: "0502", activated: true },
-{ qq: "2903065902", code: "泷", password: "1613", activated: true },
-{ qq: "3859490310", code: "泷", password: "2724", activated: true },
-{ qq: "195671158", code: "夜", password: "3835", activated: true },
-{ qq: "1295081853", code: "夜", password: "4946", activated: true },
-{ qq: "3765875133", code: "泷", password: "5057", activated: true },
-{ qq: "3319074122", code: "夜", password: "6168", activated: true },
-{ qq: "2192336290", code: "夜", password: "7279", activated: true },
-{ qq: "2529674508", code: "泷", password: "8390", activated: true },
-{ qq: "3266334914", code: "夜", password: "9401", activated: true },
-{ qq: "3508263501", code: "夜", password: "0512", activated: true },
-{ qq: "3766409574", code: "泷", password: "1623", activated: true },
-{ qq: "1654646369", code: "夜", password: "2734", activated: true },
-{ qq: "3109713612", code: "泷", password: "3845", activated: true },
-{ qq: "3390576154", code: "泷", password: "4956", activated: true },
-{ qq: "1097675149", code: "夜", password: "5067", activated: true },
-{ qq: "1647802618", code: "夜", password: "6178", activated: true },
-{ qq: "2216551698", code: "泷", password: "7289", activated: true },
-{ qq: "3243986695", code: "泷", password: "8390", activated: true },
-{ qq: "2360918083", code: "泷", password: "9401", activated: true },
-{ qq: "2606283193", code: "泷", password: "0512", activated: true },
-{ qq: "2068298272", code: "夜", password: "1623", activated: true },
-{ qq: "3813779902", code: "泷", password: "2734", activated: true },
-{ qq: "2020115344", code: "泷", password: "3845", activated: true },
-{ qq: "652160882", code: "泷", password: "4956", activated: true },
-{ qq: "3795649068", code: "泷", password: "5067", activated: true },
-{ qq: "3995363155", code: "夜", password: "6178", activated: true },
-{ qq: "1927705833", code: "泷", password: "7289", activated: true },
-{ qq: "1543140283", code: "夜", password: "8391", activated: true },
-{ qq: "1691379220", code: "泷", password: "9402", activated: true },
-{ qq: "364990462", code: "夜", password: "0513", activated: true },
-{ qq: "2802644374", code: "泷", password: "1624", activated: true },
-{ qq: "3488616469", code: "夜", password: "2735", activated: true },
-{ qq: "865331813", code: "夜", password: "3846", activated: true },
-{ qq: "2725904226", code: "泷", password: "4957", activated: true },
-{ qq: "2367412632", code: "泷", password: "5068", activated: true },
-{ qq: "943041223", code: "夜", password: "6179", activated: true },
-{ qq: "2147437173", code: "夜", password: "7290", activated: true },
-{ qq: "1148777207", code: "泷", password: "8301", activated: true },
-{ qq: "3083405187", code: "泷", password: "9412", activated: true },
-{ qq: "3054890468", code: "泷", password: "0523", activated: true },
-{ qq: "3673443717", code: "夜", password: "1634", activated: true },
-{ qq: "32356634", code: "泷", password: "2745", activated: true },
-{ qq: "3317332879", code: "泷", password: "3856", activated: true },
-{ qq: "1780211205", code: "夜", password: "4967", activated: true },
-{ qq: "2482621309", code: "泷", password: "5078", activated: true },
-{ qq: "2698248069", code: "泷", password: "6189", activated: true },
-{ qq: "3203894875", code: "夜", password: "7290", activated: true },
-{ qq: "17731242765", code: "泷", password: "8301", activated: true },
-{ qq: "53090228", code: "夜", password: "9412", activated: true },
-{ qq: "2140632623", code: "泷", password: "0523", activated: true },
-{ qq: "3311759596", code: "夜", password: "1634", activated: true },
-{ qq: "3384798809", code: "夜", password: "2745", activated: true },
-{ qq: "2359104725", code: "泷", password: "3856", activated: true },
-{ qq: "2475462703", code: "夜", password: "4967", activated: true },
-{ qq: "1279740751", code: "泷", password: "5078", activated: true },
-{ qq: "2728381463", code: "泷", password: "6189", activated: true },
-{ qq: "1463563408", code: "夜", password: "7291", activated: true },
-{ qq: "984788773", code: "泷", password: "8302", activated: true },
-{ qq: "3468566263", code: "泷", password: "9413", activated: true },
-{ qq: "1875235763", code: "川", password: "0524", activated: true },
-{ qq: "2168183242", code: "介", password: "1635", activated: true },
-{ qq: "3280294327", code: "川", password: "2746", activated: true },
-{ qq: "2480409958", code: "泷", password: "3857", activated: true },
-{ qq: "3752219755", code: "夜", password: "7850", activated: true },
-{ qq: "1114278593", code: "夜", password: "7860", activated: true },
-{ qq: "3860233522", code: "夜", password: "7855", activated: true },
-{ qq: "2501313450", code: "川", password: "8775", activated: true },
-{ qq: "2723911959", code: "泷", password: "8675", activated: true },
-{ qq: "3182161791", code: "泷", password: "8775", activated: true },
-{ qq: "3873060748", code: "夜", password: "8775", activated: true },
-{ qq: "1649664203", code: "夜", password: "8775", activated: true },
-{ qq: "3497806997", code: "夜", password: "8775", activated: true },
-{ qq: "1066396295", code: "泷", password: "8775", activated: true },
-{ qq: "1210864486", code: "川", password: "8775", activated: true },
-{ qq: "2070326060", code: "夜", password: "8775", activated: true },
-{ qq: "468498176", code: "泷", password: "369874", activated: true },
-{ qq: "3054890468", code: "泷", password: "1234qwER", activated: true },
-{ qq: "3381423925", code: "泷", password: "080520", activated: true },
-{ qq: "1329936997", code: "泷", password: "157524", activated: true },
-{ qq: "2922761735", code: "泷", password: "678555", activated: true },
-{ qq: "943041223", code: "泷", password: "41223", activated: true },
-{ qq: "1270373820", code: "泷", password: "001128", activated: true },
-{ qq: "1678836167", code: "泷", password: "050505", activated: true },
-{ qq: "2730498449", code: "泷", password: "lin090922", activated: true },
-{ qq: "1527360895", code: "川", password: "114514", activated: true },
-{ qq: "2147437153", code: "泷", password: "QAZQAZ159159", activated: true },
-{ qq: "2419328104", code: "川", password: "138497", activated: true },
-{ qq: "3236387361", code: "泷", password: "66669999", activated: true },
-{ qq: "2115448500", code: "泷", password: "Ab211544", activated: true },
-{ qq: "2698248069", code: "泷", password: "2008", activated: true },
-{ qq: "2425036823", code: "泷", password: "pdx20090615", activated: true },
-{ qq: "3765875133", code: "泷", password: "20081108", activated: true },
-{ qq: "2578952761", code: "泷", password: "lhj1998524", activated: true },
-{ qq: "2606283193", code: "泷", password: "Htl063104", activated: true },
-{ qq: "2997227017", code: "泷", password: "2997227017", activated: true },
-{ qq: "2529674508", code: "泷", password: "736586", activated: true },
-{ qq: "1809348060", code: "夜", password: "SDC20050714", activated: true },
-{ qq: "1647802618", code: "夜", password: "13755090124mm", activated: true },
-{ qq: "401788719", code: "泷", password: "580230", activated: true },
-{ qq: "3883442072", code: "泷", password: "0000", activated: true },
-{ qq: "1649664203", code: "夜", password: "10121615", activated: true },
-{ qq: "3280225721", code: "泷", password: "100603", activated: true },
-{ qq: "2311539817", code: "泷", password: "0000", activated: true },
-{ qq: "3263245429", code: "泷", password: "587129955", activated: true },
-{ qq: "3894446393", code: "川", password: "aaa132158", activated: true },
-{ qq: "1463563408", code: "夜", password: "54188", activated: true },
-{ qq: "1811153229", code: "夜", password: "800700zwr", activated: true },
-{ qq: "2061169206", code: "泷", password: "Wgl206116", activated: true},
-{ qq: "1000000000", code: "夜", password: "0000", activated: true},
-];
-        
-        // 毕业名单
-        const blacklist = JSON.parse(localStorage.getItem('blacklist')) || [
-            "843657583", "2939502663", "3860233522", "3059392643", 
-            "3979981522","3081853578","2651238849","3952768853",
-            "3864938356","2745376147","3474323439","2972303372",
-            "3961175055","6666666","8888888888","66666666",
-            "3414453671",
-        ];
-        
-        // 🐷
-        const UNBAN_PASSWORD = "宝子你继续";
-        
-        // DOM元素 
-        const particlesContainer = document.getElementById('particles');
-        const authContainer = document.getElementById('authContainer');
-        const banContainer = document.getElementById('banContainer');
-        const authForm = document.getElementById('authForm');
-        const userCodeInput = document.getElementById('userCode');
-        const qqInput = document.getElementById('qqNumber');
-        const userNameInput = document.getElementById('userName');
-        const passwordInput = document.getElementById('password');
-        const statusMessage = document.getElementById('statusMessage');
-        const securityWarning = document.getElementById('securityWarning');
-        const submitBtn = document.getElementById('submitBtn');
-        const unbanIcon = document.getElementById('unbanIcon');
-        const unbanMessage = document.getElementById('unbanMessage');
-        const helpLink = document.getElementById('helpLink');
-        const helpModal = document.getElementById('helpModal');
-        const closeModal = document.getElementById('closeModal');
-        const codeModal = document.getElementById('codeModal');
-        const closeCodeModal = document.getElementById('closeCodeModal');
-        const codeOptions = document.querySelectorAll('.code-option');
-        const confirmCodeBtn = document.getElementById('confirmCodeBtn');
-        const cancelCodeBtn = document.getElementById('cancelCodeBtn');
-        const unbanModal = document.getElementById('unbanModal');
-        const unbanPasswordInput = document.getElementById('unbanPassword');
-        const submitUnbanBtn = document.getElementById('submitUnbanBtn');
-        const cancelUnbanBtn = document.getElementById('cancelUnbanBtn');
-        const unbanStatus = document.getElementById('unbanStatus');
-        const avatarImg = document.getElementById('avatarImg');
-        const statusModal = document.getElementById('statusModal');
-        const statusIcon = document.getElementById('statusIcon');
-        const statusMessageContent = document.getElementById('statusMessageContent');
-        const statusActionButtons = document.getElementById('statusActionButtons');
-        const statusActionBtn = document.getElementById('statusActionBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        const closeStatusModal = document.getElementById('closeStatusModal');
- 
-        // 状态变量
-        let failedAttempts = parseInt(localStorage.getItem('failedAttempts')) || 0;
-        let isBanned = localStorage.getItem('isBanned') === 'true';
-        let lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
-        let selectedCode = "";
-        let deviceId = localStorage.getItem('deviceId');
-        let deviceBoundQQ = localStorage.getItem('deviceBoundQQ');
-        let clickCount = 0;
- 
-        // 初始化页面 
-        function init() {
-            // 生成设备ID 
-            if (!deviceId) {
-                deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-                localStorage.setItem('deviceId', deviceId);
-            }
-            
-            // 设置头像 
-            avatarImg.src = "tx.jpg";
-            
-            createParticles();
-            checkBannedStatus();
-            checkSessionStatus();
-            setupEventListeners();
-            
-            // 二次登录安全检测
-            if (lastLogin) {
-                performSecurityCheck();
-            }
-            
-            // 显示安全警告（如果有）
-            if (localStorage.getItem('securityWarning')) {
-                securityWarning.style.display = 'block';
-            }
-        }
-        
-        // 执行二次登录安全检测
-        function performSecurityCheck() {
-            const qq = lastLogin.qq;
-            const code = lastLogin.code;
-            const storedPassword = lastLogin.password;
-            
-            // 1. 检查是否在黑名单中
-            if (blacklist.includes(qq)) {
-                showStatusMessage("安全检测失败：账号已被加入黑名单", "error");
-                banAccount(qq);
-                return;
-            }
-            
-            // 2. 检查是否为授权用户
-            const user = authorizedUsers.find(u => u.qq === qq && u.code === code && u.password === storedPassword);
-            
-            if (!user) {
-                showStatusMessage("安全检测失败：账号信息无效", "error");
-                banAccount(qq);
-                return;
-            }
-            
-            // 3. 检查账号是否被激活
-            if (!user.activated) {
-                showStatusMessage("安全检测失败：账号未激活", "error");
-                banAccount(qq);
-            }
-        }
-
-        // 创建背景粒子 
-        function createParticles() {
-            const particleCount = 20;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('bg-particle');
-                
-                const size = Math.random() * 25 + 5;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}%`;
-                
-                const delay = Math.random() * 15;
-                const duration = Math.random() * 10 + 15;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
- 
-        // 检查账号是否被封禁
-        function checkBannedStatus() {
-            if (isBanned) {
-                authContainer.style.display = 'none';
-                banContainer.style.display = 'block';
-            } else {
-                authContainer.style.display = 'block';
-                banContainer.style.display = 'none';
-            }
-        }
- 
-        // 检查会话状态 
-        function checkSessionStatus() {
-            if (isBanned) return;
-            
-            const sessionActive = sessionStorage.getItem('sessionActive') === 'true';
-            const sessionExpire = parseInt(sessionStorage.getItem('sessionExpire'));
-            
-            if (sessionActive && sessionExpire) {
-                const currentTime = new Date().getTime();
-                if (currentTime < sessionExpire) {
-                    // 直接跳转到资源库页面
-                    setTimeout(() => {
-                        window.location.href = "zyku.html";
-                    }, 500);
-                    return;
-                }
-            }
-            
-            const rememberMe = localStorage.getItem('rememberMe') === 'true';
-            const lastLogin = JSON.parse(localStorage.getItem('lastLogin')) || null;
-            const lastLoginTime = parseInt(localStorage.getItem('lastLoginTime'));
-            
-            if (rememberMe && lastLogin && lastLoginTime) {
-                const twentyFourHours = 24 * 60 * 60 * 1000;
-                const currentTime = new Date().getTime();
-                
-                if (currentTime - lastLoginTime < twentyFourHours) {
-                    sessionStorage.setItem('sessionActive', 'true');
-                    sessionStorage.setItem('sessionExpire', (lastLoginTime + twentyFourHours).toString());
-                    // 直接跳转到资源库页面
-                    setTimeout(() => {
-                        window.location.href = "zyku.html";
-                    }, 500);
-                } else {
-                    localStorage.removeItem('rememberMe');
-                    localStorage.removeItem('lastLogin');
-                    localStorage.removeItem('lastLoginTime');
-                }
-            }
-        }
- 
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 为所有输入框添加点击音效
-            const allInputs = document.querySelectorAll('input, select');
-            allInputs.forEach(input => {
-                input.addEventListener('click', function() {
-                    playSound('srkyx.mp3');
-                });
-            });
-            
-            // 注册代号输入框点击事件
-            userCodeInput.addEventListener('click', function() {
-                playSound('srkyx.mp3');
-                codeModal.style.display = 'flex';
-            });
-            
-            // 代号选择事件
-            codeOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    playSound('anyx.mp3');
-                    codeOptions.forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                    selectedCode = this.dataset.code;
-                });
-            });
-            
-            // 确认代号选择
-            confirmCodeBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                if (selectedCode) {
-                    userCodeInput.value = selectedCode;
-                    codeModal.style.display = 'none';
-                } else {
-                    showStatusMessage("请选择一个注册代号", "error");
-                }
-            });
-            
-            // 取消代号选择 
-            cancelCodeBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                codeModal.style.display = 'none';
-            });
-            
-            // 关闭代号模态框 
-            closeCodeModal.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                codeModal.style.display = 'none';
-            });
-            
-            // 表单提交事件 
-            authForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                playSound('anyx.mp3');
-                authenticateUser();
-            });
-            
-            // 解封图标点击事件 
-            unbanIcon.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                clickCount++;
-                
-                if (clickCount < 7) {
-                    this.innerHTML = `<i class="fas fa-Silong"></i> ${7 - clickCount}`;
-                    this.style.transform = "scale(1.1)";
-                    setTimeout(() => {
-                        this.style.transform = "scale(1)";
-                    }, 200);
-                } else {
-                    unbanModal.style.display = 'flex';
-                }
-            });
-            
-            // 提交解封请求 
-            submitUnbanBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                const password = unbanPasswordInput.value.trim();
-                
-                if (password === UNBAN_PASSWORD) {
-                    unbanAccount();
-                } else {
-                    unbanStatus.textContent = "解封密码错误，请重试";
-                    unbanStatus.className = "status-message error-message";
-                    unbanStatus.style.display = 'block';
-                }
-            });
-            
-            // 取消解封
-            cancelUnbanBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                unbanModal.style.display = 'none';
-                unbanPasswordInput.value = "";
-                unbanStatus.style.display = 'none';
-            });
-            
-            // 帮助链接 
-            helpLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                playSound('anyx.mp3');
-                helpModal.style.display = 'flex';
-            });
-            
-            // 关闭模态框 
-            closeModal.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                helpModal.style.display = 'none';
-            });
-            
-            // 账号状态检测动作按钮
-            statusActionBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                statusModal.style.display = 'none';
-                
-                const statusType = statusIcon.getAttribute('data-status');
-                if (statusType === 'error') {
-                    // 清除输入
-                    passwordInput.value = "";
-                }
-            });
-            
-            // 注册按钮
-            registerBtn.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                statusModal.style.display = 'none';
-                window.location.href = "zcym.html";
-            });
-            
-            // 关闭状态检测模态框
-            closeStatusModal.addEventListener('click', function() {
-                playSound('anyx.mp3');
-                statusModal.style.display = 'none';
-            });
-            
-            // 点击模态框外部关闭
-            window.addEventListener('click', function(e) {
-                if (e.target === helpModal) {
-                    playSound('anyx.mp3');
-                    helpModal.style.display = 'none';
-                }
-                if (e.target === codeModal) {
-                    playSound('anyx.mp3');
-                    codeModal.style.display = 'none';
-                }
-                if (e.target === unbanModal) {
-                    playSound('anyx.mp3');
-                    unbanModal.style.display = 'none';
-                }
-                if (e.target === statusModal) {
-                    playSound('anyx.mp3');
-                    statusModal.style.display = 'none';
-                }
-            });
-        }
-        
-        // 播放音效
-        function playSound(soundFile) {
-            try {
-                const audio = new Audio(soundFile);
-                audio.play().catch(e => console.log("播放音效失败:", e));
-            } catch (e) {
-                console.log("音效播放错误:", e);
-            }
-        }
-
-        // 用户认证
-        function authenticateUser() {
-            const qq = qqInput.value.trim();
-            const name = userNameInput.value.trim();
-            const code = selectedCode;
-            const password = passwordInput.value.trim();
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
-            // QQ号格式验证
-            if (!qq || qq.length < 5 || qq.length > 10 || isNaN(qq)) {
-                showStatusMessage("QQ号必须是5-10位数字", "error");
-                return;
-            }
-            
-            if (!name) {
-                showStatusMessage("请填写用户昵称", "error");
-                return;
-            }
-            
-            if (!code) {
-                showStatusMessage("请选择注册代号", "error");
-                return;
-            }
-            
-            if (!password) {
-                showStatusMessage("密码不能为空", "error");
-                return;
-            }
-            
-            // 显示状态检测模态框
-            showStatusModal();
-            
-            // 模拟检测过程
-            setTimeout(() => {
-                // 1. 检查是否在黑名单中
-                if (blacklist.includes(qq)) {
-                    showStatusResult("ban", "该账号已被拉入黑名单，无法登录");
-                    banAccount(qq);
-                    return;
-                }
-                
-                // 2. 检查是否为授权用户
-                const user = authorizedUsers.find(u => u.qq === qq && u.code === code);
-                
-                if (user) {
-                    // 3. 检查密码是否正确
-                    if (user.password === password) {
-                        // 4. 检查账号是否被激活
-                        if (user.activated) {
-                            // 成功登录
-                            handleSuccess(user, name, rememberMe);
-                            showStatusResult("success", "账号验证通过！正在跳转资源库...");
-                            
-                            // 延迟跳转
-                            setTimeout(() => {
-                                window.location.href = "zyku.html";
-                            }, 1500);
-                        } else {
-                            // 账号未激活
-                            showStatusResult("ban", "账号未激活，请联系管理员");
-                            banAccount(qq);
-                        }
-                    } else {
-                        // 密码错误
-                        failedAttempts++;
-                        localStorage.setItem('failedAttempts', failedAttempts);
-                        
-                        if (failedAttempts >= 3) {
-                            showStatusResult("ban", "密码错误次数过多，账号已被封禁");
-                            banAccount(qq);
-                        } else {
-                            showStatusResult("error", `密码错误，您还有${3 - failedAttempts}次尝试机会`);
-                        }
-                    }
-                } else {
-                    // 非授权用户：信息不匹配，引导注册
-                    showStatusResult("unregistered", "未找到匹配的账号信息，请注册账号");
-                }
-            }, 1500);
-        }
- 
-        // 显示状态检测模态框
-        function showStatusModal() {
-            statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            statusIcon.removeAttribute('data-status');
-            statusMessageContent.textContent = "正在验证您的账号信息，请稍候...";
-            statusActionButtons.style.display = 'none';
-            registerBtn.style.display = 'none';
-            statusModal.style.display = 'flex';
-        }
- 
-        // 显示状态检测结果
-        function showStatusResult(type, message) {
-            statusIcon.innerHTML = '';
-            statusIcon.setAttribute('data-status', type);
-            
-            if (type === 'success') {
-                statusIcon.innerHTML = '<i class="fas fa-check-circle status-success"></i>';
-                statusIcon.classList.add('status-success');
-            } else if (type === 'ban') {
-                statusIcon.innerHTML = '<i class="fas fa-ban status-error"></i>';
-                statusIcon.classList.add('status-error');
-            } else if (type === 'error') {
-                statusIcon.innerHTML = '<i class="fas fa-exclamation-circle status-error"></i>';
-                statusIcon.classList.add('status-error');
-            } else if (type === 'unregistered') {
-                statusIcon.innerHTML = '<i class="fas fa-user-plus status-warning"></i>';
-                statusIcon.classList.add('status-warning');
-            }
-            
-            statusMessageContent.textContent = message;
-            
-            if (type === 'error') {
-                statusActionBtn.innerHTML = '<i class="fas fa-redo"></i> 重新输入';
-                statusActionBtn.style.display = 'block';
-                statusActionButtons.style.display = 'flex';
-                registerBtn.style.display = 'none';
-            } else if (type === 'unregistered') {
-                statusActionBtn.innerHTML = '<i class="fas fa-times"></i> 取消';
-                statusActionBtn.style.display = 'block';
-                registerBtn.style.display = 'block';
-                statusActionButtons.style.display = 'flex';
-            } else {
-                statusActionButtons.style.display = 'none';
-            }
-        }
- 
-        // 处理认证成功 
-        function handleSuccess(user, name, rememberMe) {
-            failedAttempts = 0;
-            localStorage.setItem('failedAttempts', failedAttempts);
-            
-            lastLogin = {
-                qq: user.qq,
-                name: name,
-                code: user.code,
-                password: user.password
-            };
-            
-            const currentTime = new Date().getTime();
-            const expireTime = currentTime + (24 * 60 * 60 * 1000);
-            
-            if (rememberMe) {
-                localStorage.setItem('rememberMe', 'true');
-                localStorage.setItem('lastLogin', JSON.stringify(lastLogin));
-                localStorage.setItem('lastLoginTime', currentTime.toString());
-            }
-            
-            sessionStorage.setItem('sessionActive', 'true');
-            sessionStorage.setItem('sessionExpire', expireTime.toString());
-            localStorage.setItem('deviceBoundQQ', user.qq);
-            
-            // 清除安全警告
-            localStorage.removeItem('securityWarning');
-            securityWarning.style.display = 'none';
-        }
- 
-        // 封禁账号
-        function banAccount(qq) {
-            isBanned = true;
-            localStorage.setItem('isBanned', 'true');
-            localStorage.setItem('bannedQQ', qq);
-            authContainer.style.display = 'none';
-            banContainer.style.display = 'block';
-            
-            // 加入黑名单
-            if (!blacklist.includes(qq)) {
-                blacklist.push(qq);
-                localStorage.setItem('blacklist', JSON.stringify(blacklist));
-            }
-        }
- 
-        // 解封账号 
-        function unbanAccount() {
-            unbanMessage.style.display = 'block';
-            unbanMessage.textContent = "宝子你继续🤗";
-            unbanMessage.className = "status-message warning-message";
-            
-            setTimeout(() => {
-                isBanned = false;
-                failedAttempts = 0;
-                localStorage.setItem('isBanned', 'false');
-                localStorage.setItem('failedAttempts', '0');
-                localStorage.removeItem('deviceBoundQQ');
-                localStorage.removeItem('lastLogin');
-                localStorage.removeItem('lastLoginTime');
-                localStorage.removeItem('securityWarning');
-                
-                // 从黑名单中移除
-                const bannedQQ = localStorage.getItem('bannedQQ');
-                if (bannedQQ && blacklist.includes(bannedQQ)) {
-                    const index = blacklist.indexOf(bannedQQ);
-                    if (index > -1) {
-                        blacklist.splice(index, 1);
-                    }
-                    localStorage.setItem('blacklist', JSON.stringify(blacklist));
-                }
-                
-                authContainer.style.display = 'block';
-                banContainer.style.display = 'none';
-                unbanModal.style.display = 'none';
-                unbanIcon.innerHTML = '<i class="fas fa-Silong"></i>';
-                clickCount = 0;
-                
-                showStatusMessage("账号已成功解封，请重新登录", "success");
-            }, 1500);
-        }
- 
-        // 显示状态消息 
-        function showStatusMessage(message, type) {
-            statusMessage.textContent = message;
-            statusMessage.className = `status-message ${type}-message`;
-            statusMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
-        }
-        
-        // 初始化页面 
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
+  <script src="js/jq.js"></script> 
+ </head> 
+ <body id="v1"> 
+  <div id="v2" class="mask-overlay"> 
+   <div id="v3" class="auth-modal"> 
+    <h2 id="v4" class="modal-title">✦ 卡密验证 ✦</h2> 
+    <p id="v5" class="modal-desc">请前往群内@Q群管家获取卡密<br id="v6">输入卡密后即可进入资源库</p> 
+    <input type="text" class="auth-input" id="authCode" placeholder="请输入卡密..." autocomplete="off"> 
+    <div class="error-message" id="errorMsg"></div> 
+    <button class="auth-btn" id="webtools-static-onfirmBtn">确认</button> 
+     <a id="v7" href="https://qun.qq.com/universal-share/share?ac=1&amp;authKey=xBqzR7wDQLCJgxFJqxm0WvukXXOmZOY4xco63jfIBniGsghfq8OqhNeKFbmiZY/c&amp;busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiJmTDZSU3JZektoYy9aSVo0WVhSRFRlcEU2cTBsWk9kckp6Z3VPWU5kYWRBcUdDc1I2YVpLTXYzekMvWm5hTUVoIiwidWluIjoiMzIxMzgyNDEyNiJ9&amp;data=UYPv4hPLayntIdKraDiirrECSI85vGjYc7K-M2W_fBbr7bS-bX9s0WpGbTcOPYuqREBaCFrvPL_EjFQaZl_q7w&amp;svctype=4&amp;tempid=h" class="qun-btn" target="_blank" style="text-decoration: none;">获取卡密</a>
+  </div>
+  </div> 
+  <div id="v8" class="datetime">
+    免费资源会持续更新，后续有新内容会第一时间补充上来～ 
+  </div> 
+  <div id="v9" class="portal-container"> 
+   <h1 id="v10" class="portal-title">✦ 巳泷资源库入口 ✦</h1> 
+   <div id="v11" class="portal-options"> 
+    <div id="v12" class="portal-card" onclick="location.href='https://www.123912.com/s/QFshvd-5XNkv'"> 
+     <div id="v13" class="card-header"> 
+      <svg id="v14" class="card-icon" viewbox="0 0 24 24"> 
+       <path id="v15" fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path> 
+      </svg> 
+      <div id="v16" class="card-title">
+        资源库软件包 
+      </div> 
+     </div> 
+     <p id="v17" class="card-desc">安卓端软件包（目前仅安卓可用）</p> 
+    </div> 
+    <div id="v18" class="portal-options"> 
+     <div id="v19" class="portal-card" onclick="location.href='zyku.html'"> 
+      <div id="v20" class="card-header"> 
+       <svg id="v21" class="card-icon" viewbox="0 0 24 24"> 
+        <path id="v22" fill="currentColor" d="M10,9L12,11L16,7L12,3L10,5L13.17,8H3V10H13.17L10,13V9M19,19H5V5H12V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path> 
+       </svg> 
+       <div id="v23" class="card-title">
+         软件内部入口 
+       </div> 
+      </div> 
+      <p id="v24" class="card-desc">如果在安装包内打开的这个页面，点击这里即可进入资源库</p> 
+     </div> 
+    </div> 
+    <div id="v25" class="portal-card" onclick="window.open('https://silong-baoku.github.io/zyk/zyku.html','_blank')"> 
+     <div id="v26" class="card-header"> 
+      <svg id="v27" class="card-icon" viewbox="0 0 24 24"> 
+       <path id="v28" fill="currentColor" d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path> 
+      </svg> 
+      <div id="v29" class="card-title">
+        资源库网页版 
+      </div> 
+     </div> 
+     <p id="v30" class="card-desc">跨平台访问（推荐Edge最新版）</p> 
+    </div> 
+    <div id="v31" class="portal-card" onclick="location.href='https://link3.cc/silong6969'"> 
+     <div id="v32" class="card-header"> 
+      <svg id="v33" class="card-icon" viewbox="0 0 24 24"> 
+       <path id="v34" fill="currentColor" d="M22,16V4A2,2 0 0,0 20,2H4A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H6V20H4V22H6A2,2 0 0,0 8,20H16A2,2 0 0,0 18,22H20V20H18V18H20A2,2 0 0,0 22,16M4,4H20V16H4V4M12,7L8,11H11V14H13V11H16L12,7Z"></path> 
+      </svg> 
+      <div id="v35" class="card-title">
+        资源中转站 
+      </div> 
+     </div> 
+     <p id="v36" class="card-desc">联系方式 ｜ 资源跳转 </p> 
+    </div> 
+   </div> 
+  </div> 
+  <script>
+ document.addEventListener('DOMContentLoaded', function() {
+     // 星空背景效果 
+     const canvas = document.createElement('canvas');
+     canvas.style.position = 'fixed';
+     canvas.style.top = '0';
+     canvas.style.left = '0';
+     canvas.style.zIndex = '-1';
+     canvas.style.width = '100vw';
+     canvas.style.height = '100vh';
+     document.body.appendChild(canvas);
+     
+     const ctx = canvas.getContext('2d');
+     canvas.width = window.innerWidth;
+     canvas.height = window.innerHeight;
+     
+     const particles = [];
+     const colors = ['rgba(157, 77, 255, 0.5)', 'rgba(0, 247, 255, 0.3)', 'rgba(226, 212, 255, 0.2)'];
+     
+     class Particle {
+         constructor() {
+             this.x = Math.random() * canvas.width;
+             this.y = Math.random() * canvas.height;
+             this.size = Math.random() * 3 + 1;
+             this.speedX = Math.random() * 2 - 1;
+             this.speedY = Math.random() * 2 - 1;
+             this.color = colors[Math.floor(Math.random() * colors.length)];
+         }
+         
+         update() {
+             this.x += this.speedX;
+             this.y += this.speedY;
+             
+             if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+             if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+         }
+         
+         draw() {
+             ctx.fillStyle = this.color;
+             ctx.beginPath();
+             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+             ctx.fill();
+         }
+     }
+     
+     function initParticles() {
+         for (let i = 0; i < 50; i++) {
+             particles.push(new Particle());
+         }
+     }
+     
+     function animateParticles() {
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+         
+         for (let i = 0; i < particles.length; i++) {
+             particles[i].update();
+             particles[i].draw();
+             
+             for (let j = i; j < particles.length; j++) {
+                 const dx = particles[i].x - particles[j].x;
+                 const dy = particles[i].y - particles[j].y;
+                 const distance = Math.sqrt(dx * dx + dy * dy);
+                 
+                 if (distance < 100) {
+                     ctx.beginPath();
+                     ctx.strokeStyle = `rgba(157, 77, 255, ${1 - distance/100})`;
+                     ctx.lineWidth = 0.5;
+                     ctx.moveTo(particles[i].x, particles[i].y);
+                     ctx.lineTo(particles[j].x, particles[j].y);
+                     ctx.stroke();
+                 }
+             }
+         }
+         
+         requestAnimationFrame(animateParticles);
+     }
+     
+     // 初始化星空背景 
+     initParticles();
+     animateParticles();
+     
+     window.addEventListener('resize', function() {
+         canvas.width = window.innerWidth;
+         canvas.height = window.innerHeight;
+     });
+  
+     // 卡密验证功能 
+     const authModal = document.querySelector('.mask-overlay');
+     const authInput = document.getElementById('authCode');
+     const confirmBtn = document.getElementById('webtools-static-onfirmBtn');
+     const errorMsg = document.getElementById('errorMsg');
+     
+     // 有效卡密列表（请替换为实际有效的卡密）
+     const validAuthCodes = ['Silong-Baoku069'];
+     
+     // 检查本地是否已保存验证状态 
+     const savedAuthCode = localStorage.getItem('authCode');
+     if(savedAuthCode) {
+         authInput.value = savedAuthCode;
+     }
+     
+     // 自动验证已保存的卡密 
+     if(localStorage.getItem('authVerified') === 'true') {
+         if(validAuthCodes.includes(savedAuthCode)) {
+             authModal.style.display = 'none';
+         } else {
+             // 清除无效的验证状态 
+             localStorage.removeItem('authVerified');
+             localStorage.removeItem('authCode');
+         }
+     }
+     
+     // 验证函数 
+     function validateAuthCode() {
+         const inputCode = authInput.value.trim();
+         
+         if(!inputCode) {
+             errorMsg.textContent = '请输入卡密！';
+             return false;
+         }
+         
+         // 验证卡密（不区分大小写）
+         const normalizedInput = inputCode.toUpperCase();
+         const isValid = validAuthCodes.some(code => code.toUpperCase() === normalizedInput);
+         
+         if(isValid) {
+             errorMsg.textContent = '';
+             localStorage.setItem('authVerified', 'true');
+             localStorage.setItem('authCode', inputCode);
+             authModal.style.display = 'none';
+             return true;
+         } else {
+             errorMsg.textContent = '卡密错误，请重新输入或获取新卡密！';
+             authInput.value = '';
+             setTimeout(() => {
+                 errorMsg.textContent = '';
+             }, 2000);
+             return false;
+         }
+     }
+     
+     // 按钮点击事件 
+     confirmBtn.addEventListener('click', validateAuthCode);
+     
+     // 回车键支持 
+     authInput.addEventListener('keyup', function(e) {
+         if(e.key === 'Enter') {
+             validateAuthCode();
+         }
+     });
+ });
+ </script>
+ </body>
 </html>
