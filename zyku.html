@@ -6,16 +6,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
   <style>
     :root {
---primary-color: rgba(138, 43, 226, 0.8);
---hover-color: rgba(148, 0, 211, 0.9);
---text-color: #f8f8ff;
---text-light: rgba(245, 245, 255, 0.8);
---bg-color: rgba(25, 25, 60, 0.5);
---card-bg: rgba(72, 61, 139, 0.4);
---card-hover: rgba(75, 0, 130, 0.6);
---shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
---shadow-hover: 0 8px 30px rgba(148, 0, 211, 0.5);
---neon-glow: 0 0 10px rgba(218, 112, 214, 0.8);
+        --primary-color: rgba(138, 43, 226, 0.8);
+      --hover-color: rgba(148, 0, 211, 0.9);
+      --text-color: #f8f8ff;
+      --text-light: rgba(245, 245, 255, 0.8);
+      --bg-color: rgba(25, 25, 60, 0.5);
+      --card-bg: rgba(72, 61, 139, 0.4);
+      --card-hover: rgba(75, 0, 130, 0.6);
+      --shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+      --shadow-hover: 0 8px 30px rgba(148, 0, 211, 0.5);
+      --neon-glow: 0 0 10px rgba(218, 112, 214, 0.8);
+      --violet-dark: #4b0082;
+      --violet-medium: #8a2be2;
+      --violet-light: #9370db;
+      --violet-pale: #d8bfd8;
+      --neon-violet: #9d00ff;
     }
     
     * { 
@@ -28,13 +33,68 @@
     body { 
       background: 
         linear-gradient(rgba(25, 25, 60, 0.10), rgba(25, 25, 60, 0.10)),
-        url('./bjtp/bjt.jpg') no-repeat center center fixed;
+        url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
       background-size: cover;
       color: var(--text-color); 
       min-height: 100vh; 
       display: flex; 
       flex-direction: column; 
       padding-bottom: 60px;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* 加载动画 */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(25, 25, 60, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loader.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .spinner {
+      width: 80px;
+      height: 80px;
+      border: 5px solid rgba(138, 43, 226, 0.3);
+      border-top: 5px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .loader-text {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      text-align: center;
+      max-width: 80%;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
     }
     
     /* 主内容区 */
@@ -44,12 +104,15 @@
       max-width: 1200px; 
       margin: 0 auto; 
       width: 100%; 
+      position: relative;
+      z-index: 1;
     }
     
     header { 
-      margin-bottom: 15px; 
+      margin-bottom: 10px; 
       text-align: center; 
       position: relative;
+      padding-top: 15px;
     }
     
     .main-title { 
@@ -59,7 +122,14 @@
       font-weight: 600; 
       position: relative;
       display: inline-block;
-      text-shadow: 0 0 10px rgba(218, 112, 214, 0.8);
+      text-shadow: var(--neon-glow);
+      animation: breathe 3s infinite ease-in-out;
+    }
+    
+    @keyframes breathe {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
     }
     
     .main-title::after {
@@ -83,12 +153,14 @@
       font-size: 1em; 
       font-weight: normal; 
       text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+      max-width: 800px;
+      margin: 0 auto 15px;
     }
     
     /* 新版导航栏 - 位于标题下方 */
     .nav-section {
       position: relative;
-      margin: 20px 0 30px;
+      margin: 10px 0 25px;
     }
     
     /* 上下分隔线 */
@@ -114,43 +186,31 @@
       bottom: -10px;
     }
     
-    /* 导航容器 - 无背景 */
+    /* 导航容器 */
     .nav-container {
-      width: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
--webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
       padding: 10px 0;
-      background: transparent; /* 确保无背景 */
-    }
-    
-    .nav-container::-webkit-scrollbar {
-      display: none;
+      background: transparent;
     }
     
     /* 导航按钮 */
-    .nav-buttons {
-      display: inline-flex;
-      gap: 12px;
-      padding: 0 20px;
-    }
-    
     .nav-button {
-      scroll-snap-align: center;
-      flex-shrink: 0;
       padding: 10px 20px;
       border-radius: 8px;
       background: rgba(72, 61, 139, 0.3);
       color: var(--text-light);
       font-size: 0.95em;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       border: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       gap: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--neon-border);
     }
     
     .nav-button i {
@@ -165,10 +225,77 @@
       transform: translateY(-2px);
     }
     
+    .nav-button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3),
+        transparent);
+      transform: rotate(45deg);
+      z-index: 0;
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+    
+    .nav-button:hover::before {
+      opacity: 1;
+      animation: shine 1.5s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: rotate(45deg) translateX(-100%); }
+      100% { transform: rotate(45deg) translateX(100%); }
+    }
+    
+    /* 搜索框 */
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 25px;
+      position: relative;
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 30px;
+      background: rgba(72, 61, 139, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-color);
+      font-size: 1em;
+      transition: var(--transition);
+      box-shadow: var(--neon-border);
+      backdrop-filter: blur(4px);
+    }
+    
+    .search-box:focus {
+      outline: none;
+      box-shadow: var(--neon-glow);
+      background: rgba(72, 61, 139, 0.5);
+      border-color: var(--primary-color);
+    }
+    
+    .search-box::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 1.2em;
+    }
+    
     /* 网站分类容器 - 两列布局 */
     .website-categories {
       display: grid;
-      gap: 20px;
+      gap: 25px;
       grid-template-columns: repeat(2, 1fr);
     }
     
@@ -177,16 +304,18 @@
       background: var(--card-bg);
       border-radius: 12px;
       box-shadow: var(--shadow);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: var(--transition);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(4px);
       overflow: hidden;
+      box-shadow: var(--neon-border);
     }
     
     .website-category:hover {
       transform: translateY(-5px);
       box-shadow: var(--shadow-hover);
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: var(--primary-color);
+      box-shadow: var(--neon-glow);
     }
     
     .category-header {
@@ -224,16 +353,19 @@
       background: rgba(72, 61, 139, 0.3);
       border-radius: 8px;
       padding: 12px;
-      margin-bottom: 8px;
-      transition: all 0.3s ease;
+      margin-bottom: 10px;
+      transition: var(--transition);
       border-left: 3px solid transparent;
       backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--neon-border);
     }
     
     .website-item:hover {
       background: var(--card-hover);
       border-left-color: var(--primary-color);
       box-shadow: var(--neon-glow);
+      transform: translateX(5px);
     }
     
     .website-link {
@@ -244,6 +376,7 @@
       display: flex;
       align-items: center;
       margin-bottom: 6px;
+      transition: var(--transition);
     }
     
     .website-link:hover {
@@ -267,11 +400,129 @@
       display: inline-block;
       background: rgba(0, 0, 0, 0.4);
       color: white;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 8px;
       font-size: 0.65em;
       margin-right: 5px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 3px rgba(138, 43, 226, 0.5);
+    }
+    
+    /* 模态框 */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(25, 25, 60, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background: rgba(72, 61, 139, 0.8);
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 90%;
+      width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
+      border: 1px solid rgba(218, 112, 214, 0.5);
+      position: relative;
+    }
+    
+    .modal-header {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .modal-header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(218, 112, 214, 0.8), 
+        transparent);
+      border-radius: 3px;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .modal-title {
+      font-size: 1.8rem;
+      color: white;
+      text-shadow: var(--neon-glow);
+    }
+    
+    .modal-categories {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .modal-category {
+      padding: 15px;
+      background: rgba(72, 61, 139, 0.4);
+      border-radius: 10px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--neon-border);
+      cursor: pointer;
+    }
+    
+    .modal-category:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: var(--neon-glow);
+    }
+    
+    .modal-category i {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    .close-modal:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: var(--neon-border);
     }
     
     /* 底部导航栏 */
@@ -301,12 +552,14 @@
       color: white;
       font-size: 0.9em;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 6px 15px;
       border-radius: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: var(--neon-border);
     }
     
     .nav-links a:hover {
@@ -333,10 +586,11 @@
       cursor: pointer;
       opacity: 0;
       transform: translateY(20px);
-      transition: all 0.3s ease;
+      transition: var(--transition);
       z-index: 99;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px);
+      box-shadow: var(--neon-border);
     }
     
     .back-to-top.visible {
@@ -356,9 +610,8 @@
         grid-template-columns: 1fr;
       }
       
-      .nav-buttons {
-        gap: 8px;
-        padding: 0 15px;
+      .nav-container {
+        gap: 10px;
       }
       
       .nav-button {
@@ -378,451 +631,767 @@
       .main-title {
         font-size: 1.8em;
       }
+      
+      .modal-categories {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-container {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .nav-button {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+        justify-content: center;
+      }
     }
   </style> 
   <script src="js/jq.js"></script> 
  </head> 
- <body id="v1"> 
-  <!-- 主内容区 --> 
-  <div id="v2" class="main-content"> 
-   <header id="v3"> 
-    <h1 id="v4" class="main-title">巳泷网站合集</h1> 
-    <p id="v5" class="subtitle">本软件仅收录第三方资源网站，一切内容与本软件无关，如遇链接失效、无法打开等问题，可前往公众号留言反馈</p> 
-   </header> 
-   <!-- 新版导航栏 --> 
-   <div id="v6" class="nav-section"> 
-    <div id="v7" class="nav-container"> 
-     <div id="v8" class="nav-buttons"> 
-      <a id="v9" href="#search-engines" class="nav-button"><i id="v10" class="fas fa-search"></i>搜索</a> 
-      <a id="v11" href="#learning" class="nav-button"><i id="v12" class="fas fa-folder"></i>综合</a> 
-      <a id="v13" href="#tools" class="nav-button"><i id="v14" class="fas fas fa-palette"></i>漫画</a> 
-      <a id="v15" href="#design" class="nav-button"><i id="v16" class="fas fa-book"></i>小说</a> 
-      <a id="v17" href="#development" class="nav-button"><i id="v18" class="fas fa-gamepad"></i>游戏</a> 
-      <a id="v19" href="#video" class="nav-button"><i id="v20" class="fas fa-film"></i>影视</a> 
-      <a id="v21" href="#music" class="nav-button"><i id="v22" class="fas fa-cloud-download"></i>网盘</a> 
-     </div> 
-    </div> 
+ <body id="v1" style="background-image: linear-gradient(135deg, rgba(40, 20, 80, 0.2), rgba(25, 25, 60, 0.3)), url(&quot;bjt1.jpg&quot;);"> 
+  <!-- 加载动画 --> 
+  <div id="v238" class="loader"> 
+   <div id="v239" class="spinner"></div> 
+   <div id="v240" class="loader-text">
+     正在加载中... 
    </div> 
-   <!-- 网站分类内容 --> 
-   <div id="v23" class="website-categories"> 
-    <!-- 磁力搜索分类 --> 
-    <div class="website-category" id="search-engines"> 
-     <div id="v24" class="category-header"> 
-      <i id="v25" class="fas fa-search category-icon"></i> 
-      <h2 id="v26" class="category-title">磁力搜索</h2> 
-     </div> 
-     <div id="v27" class="website-list"> 
-      <div id="v28" class="website-item"> 
-       <a id="v29" href="https://skrbtvc.top/" class="website-link" target="_blank"> <i id="v30" class="fas fa-link link-icon"></i> SkrBT </a> 
-       <div id="v31" class="website-desc"> 
-        <span id="v32" class="website-tag">本子</span> 
-        <span id="v33" class="website-tag">搜索</span> 磁力搜索网站 
-       </div> 
-      </div> 
-      <div id="v34" class="website-item"> 
-       <a id="v35" href="https://laowangvc.top/" class="website-link" target="_blank"> <i id="v36" class="fas fa-link link-icon"></i> 老王磁力 </a> 
-       <div id="v37" class="website-desc"> 
-        <span id="v38" class="website-tag">影视</span> 
-        <span id="v39" class="website-tag">搜索</span> 影视磁力搜索网站 
-       </div> 
-      </div> 
-      <div id="v40" class="website-item"> 
-       <a id="v41" href="https://cili.xyz/" class="website-link" target="_blank"> <i id="v42" class="fas fa-link link-icon"></i> 磁力导航</a> 
-       <div id="v43" class="website-desc"> 
-        <span id="v44" class="website-tag">磁力</span> 
-        <span id="v45" class="website-tag">导航</span> 综合导航磁力网站 
-       </div> 
-      </div> 
-     </div> 
-    </div> 
-    <!-- 综合资源分类 --> 
-    <div class="website-category" id="learning"> 
-     <div id="v46" class="category-header"> 
-      <i id="v47" class="fas fa-folder category-icon"></i> 
-      <h2 id="v48" class="category-title">综合网站</h2> 
-     </div> 
-     <div id="v49" class="website-list"> 
-      <div id="v50" class="website-item"> 
-       <a id="v51" href="https://www.bgrdh.com/#term-9369" class="website-link" target="_blank"> <i id="v52" class="fas fa-link link-icon"></i> 办公导航 </a> 
-       <div id="v53" class="website-desc"> 
-        <span id="v54" class="website-tag">综合</span> 
-        <span id="v55" class="website-tag">搜索</span> 综合资源网站 
-       </div> 
-      </div> 
-      <div id="v56" class="website-item"> 
-       <a id="v57" href="https://www.zkcee.com/" class="website-link" target="_blank"> <i id="v58" class="fas fa-link link-icon"></i> 知客驿站 </a> 
-       <div id="v59" class="website-desc"> 
-        <span id="v60" class="website-tag">综合</span> 
-        <span id="v61" class="website-tag">链接</span> 日常综合链接资源 
-       </div> 
-      </div> 
-      <div id="v62" class="website-item"> 
-       <a id="v63" href="https://search.chongbuluo.com" class="website-link" target="_blank"> <i id="v64" class="fas fa-link link-icon"></i> 虫部落 </a> 
-       <div id="v65" class="website-desc"> 
-        <span id="v66" class="website-tag">综合</span> 
-        <span id="v67" class="website-tag">搜索</span> 综合资源搜索网站 
-       </div> 
-      </div> 
-      <div id="v85" class="website-item"> 
-       <a id="v86" href="https://www.penhuol.com/" class="website-link" target="_blank"> <i id="v64" class="fas fa-link link-icon"></i> 喷火龙 </a> 
-       <div id="v87" class="website-desc"> 
-        <span id="v88" class="website-tag">综合</span> 
-        <span id="v89" class="website-tag">下载</span> 综合资源网站 
-       </div> 
-      </div> 
-      <div id="v68" class="website-item"> 
-       <a id="v69" href="https://link3.cc/silong6969" class="website-link" target="_blank"> <i id="v70" class="fas fa-link link-icon"></i> 巳泷Link </a> 
-       <div id="v71" class="website-desc"> 
-        <span id="v72" class="website-tag">综合</span> 
-        <span id="v73" class="website-tag">链接</span> 巳泷综合资源网站 
-       </div> 
-      </div> 
-      <div id="v74" class="website-item"> 
-       <a id="v75" href="http://taiquantv.com/" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> 泰圈</a> 
-       <div id="v76" class="website-desc"> 
-        <span id="v77" class="website-tag">综合</span> 
-        <span id="v78" class="website-tag">男同</span> 腐剧 漫画 动漫 广播剧 电影 
-       </div> 
-      </div> 
-     </div> 
-    </div> 
-    <!-- 漫画分类 --> 
-    <div class="website-category" id="tools"> 
-     <div id="v74" class="category-header"> 
-      <i id="v75" class="fas fa-palette category-icon"></i> 
-      <h2 id="v76" class="category-title">漫画网站</h2> 
-     </div> 
-     <div id="v77" class="website-list"> 
-      <div id="v78" class="website-item"> 
-       <a id="v79" href="https://bobolove.work/" class="website-link" target="_blank"> <i id="v80" class="fas fa-link link-icon"></i> 香香腐宅 </a> 
-       <div id="v81" class="website-desc"> 
-        <span id="v82" class="website-tag">耽美</span> 
-        <span id="v83" class="website-tag">漫画</span> 日韩耽美漫画网站 
-       </div> 
-      </div> 
-      <div id="v84" class="website-item"> 
-       <a id="v85" href="https://manwatg.cc/booklist?tag=&end=&gender=0&has_full=-1&area=&sort=-1&level=-1" class="website-link" target="_blank"> <i id="v86" class="fas fa-link link-icon"></i> 漫蛙 </a> 
-       <div id="v87" class="website-desc"> 
-        <span id="v88" class="website-tag">耽美</span> 
-        <span id="v89" class="website-tag">本子</span> 耽美漫画本子 
-       </div> 
-      </div> 
-      <div id="v90" class="website-item"> 
-       <a id="v91" href="https://picawang.com/pdownload/?notos=yes" class="website-link" target="_blank"> <i id="v92" class="fas fa-link link-icon"></i> 哔咔 </a> 
-       <div id="v93" class="website-desc"> 
-        <span id="v94" class="website-tag">软件</span> 
-        <span id="v95" class="website-tag">综合</span> 综合漫画本子 
-       </div> 
-      </div> 
-     </div> 
-    </div> 
-    <!-- 小说资源分类 --> 
-    <div class="website-category" id="design"> 
-     <div id="v96" class="category-header"> 
-      <i id="v97" class="fas fa-book category-icon"></i> 
-      <h2 id="v98" class="category-title">小说网站</h2> 
-     </div> 
-     <div id="v99" class="website-list"> 
-      <div id="v100" class="website-item"> 
-       <a id="v101" href="http://quanbl1.com" class="website-link" target="_blank"> <i id="v102" class="fas fa-link link-icon"></i> BL小说网 </a> 
-       <div id="v103" class="website-desc"> 
-        <span id="v104" class="website-tag">BL</span> 
-        <span id="v105" class="website-tag">完本</span> BL耽美小说网站 
-       </div> 
-      </div> 
-      <div id="v106" class="website-item"> 
-       <a id="v107" href="https://furrynovel.ink/pixiv/tags" class="website-link" target="_blank"> <i id="v108" class="fas fa-link link-icon"></i> LINPX </a> 
-       <div id="v109" class="website-desc"> 
-        <span id="v110" class="website-tag">furry</span> 
-        <span id="v111" class="website-tag">分类</span> 全站标签小说网 
-       </div> 
-      </div> 
-      <div id="v112" class="website-item"> 
-       <a id="v113" href="https://www.cxc90.com" class="website-link" target="_blank"> <i id="v114" class="fas fa-link link-icon"></i> 海棠花 </a> 
-       <div id="v115" class="website-desc"> 
-        <span id="v116" class="website-tag">耽美</span> 
-        <span id="v117" class="website-tag">分类</span> 耽美小说网站 
-       </div> 
-      </div> 
-      <div id="v118" class="website-item"> 
-       <a id="v119" href="https://www.finalbooks.work/category/1/" class="website-link" target="_blank"> <i id="v120" class="fas fa-link link-icon"></i> 完本耽美小说 </a> 
-       <div id="v121" class="website-desc"> 
-        <span id="v122" class="website-tag">完本</span> 
-        <span id="v123" class="website-tag">分类</span> 完本耽美小说网站 
-       </div> 
-      </div> 
-     </div> 
-    </div> 
-    <!-- 游戏网站分类 --> 
-    <div class="website-category" id="development"> 
-     <div id="v124" class="category-header"> 
-      <i id="v125" class="fas fa-gamepad category-icon"></i> 
-      <h2 id="v126" class="category-title">游戏网站</h2> 
-     </div> 
-     <div id="v127" class="website-list"> 
-      <div id="v128" class="website-item"> 
-       <a id="v129" href="http://m.downcc.com/k/blyouxi" class="website-link" target="_blank"> <i id="v130" class="fas fa-link link-icon"></i> BL游戏1 </a> 
-       <div id="v131" class="website-desc"> 
-        <span id="v132" class="website-tag">BL</span> 
-        <span id="v133" class="website-tag">游戏</span> BL游戏网站 
-       </div> 
-      </div> 
-          <div id="v134" class="website-item"> 
-       <a id="v135" href="http://m.downyi.com/key/blyx" class="website-link" target="_blank"> <i id="v136" class="fas fa-link link-icon"></i> BL游戏2 </a> 
-       <div id="v137" class="website-desc"> 
-        <span id="v138" class="website-tag">BL</span> 
-        <span id="v139" class="website-tag">游戏</span> BL游戏网站 
-       </div> 
-      </div> 
-      <div id="v134" class="website-item"> 
-       <a id="v135" href="https://srk.games/" class="website-link" target="_blank"> <i id="v136" class="fas fa-link link-icon"></i> 兽人游戏库 </a> 
-       <div id="v137" class="website-desc"> 
-        <span id="v138" class="website-tag">furry</span> 
-        <span id="v139" class="website-tag">游戏</span> 兽人游戏网站 
-       </div> 
-      </div> 
-      <div id="v140" class="website-item"> 
-       <a id="v141" href="https://poki.com/zh#utm_source=china" class="website-link" target="_blank"> <i id="v142" class="fas fa-link link-icon"></i> 在线小游戏 </a> 
-       <div id="v143" class="website-desc"> 
-        <span id="v144" class="website-tag">在线</span> 
-        <span id="v145" class="website-tag">游戏</span> 在线小游戏网站 
-       </div> 
-      </div> 
-     </div> 
-    </div> 
-    <!-- 影视资源分类 --> 
-    <div class="website-category" id="video"> 
-     <div id="v146" class="category-header"> 
-      <i id="v147" class="fas fa-film category-icon"></i> 
-      <h2 id="v148" class="category-title">影视网站</h2> 
-     </div> 
-     <div id="v149" class="website-list"> 
-      <div id="v150" class="website-item"> 
-       <a id="v151" href="https://www.gaymaletube.com/zh/cat/hentai" class="website-link" target="_blank"> <i id="v152" class="fas fa-link link-icon"></i> BL动漫【VPN】 </a> 
-       <div id="v153" class="website-desc"> 
-        <span id="v154" class="website-tag">18禁</span> 
-        <span id="v155" class="website-tag">VPN</span> 18禁动漫网站需要使用加速【VPN】 
-       </div> 
-      </div> 
-      <div id="v156" class="website-item"> 
-       <a id="v157" href="https://www.ssm.fun/" class="website-link" target="_blank"> <i id="v158" class="fas fa-link link-icon"></i> 咸豆浆【VPN】 </a> 
-       <div id="v159" class="website-desc"> 
-        <span id="v160" class="website-tag">男同</span> 
-        <span id="v161" class="website-tag">搜索</span> 男同视频资源搜索网需要开加速器才可以访问【VPN】 
-       </div> 
-      </div> 
-      <div id="v162" class="website-item"> 
-       <a id="v163" href="https://www.gaymaletube.com/zh/cat/chinese" class="website-link" target="_blank"> <i id="v164" class="fas fa-link link-icon"></i> 国产Gay片【VPN】 </a> 
-       <div id="v165" class="website-desc"> 
-        <span id="v166" class="website-tag">国产</span> 
-        <span id="v167" class="website-tag">VPN</span> 国产Gay片网站需要使用加速器【VPN】 
-       </div> 
-      </div> 
-      <div id="v168" class="website-item"> 
-       <a id="v169" href="https://www.gaymaletube.com/zh/cat/japanese" class="website-link" target="_blank"> <i id="v170" class="fas fa-link link-icon"></i> 日本Gay片【VPN】 </a> 
-       <div id="v171" class="website-desc"> 
-        <span id="v172" class="website-tag">日本</span> 
-        <span id="v173" class="website-tag">VPN</span> 日本Gay片网站需要使用加速器【VPN】 
-       </div> 
-      </div> 
-      <div id="v174" class="website-item"> 
-       <a id="v175" href="https://www.gaymaletube.com/zh/" class="website-link" target="_blank"> <i id="v176" class="fas fa-link link-icon"></i> Gay片大合集【VPN】 </a> 
-       <div id="v177" class="website-desc"> 
-        <span id="v178" class="website-tag">合集</span> 
-        <span id="v179" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】 
-       </div> 
-      </div> 
-       <div id="v174" class="website-item"> 
-       <a id="v175" href="https://cn.xgroovy.com/gay/" class="website-link" target="_blank"> <i id="v176" class="fas fa-link link-icon"></i> XGROOVY【VPN】 </a> 
-       <div id="v177" class="website-desc"> 
-        <span id="v178" class="website-tag">合集</span> 
-        <span id="v179" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】 
-       </div> 
-      </div> 
-      <div id="v198" class="website-item"> 
-       <a id="v199" href="https://www.boyfriendtv3.com/search/?q=Yaoi" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> BOYFRIENDTV【VPN】 </a> 
-       <div id="v201" class="website-desc"> 
-        <span id="v202" class="website-tag">综合</span> 
-        <span id="v203" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】  
-       </div> 
-      </div> 
-      <div id="v180" class="website-item"> 
-       <a id="v181" href="https://www.gaypornvideos.tv/" class="website-link" target="_blank"> <i id="v182" class="fas fa-link link-icon"></i> GayPornVideos </a> 
-       <div id="v183" class="website-desc"> 
-        <span id="v184" class="website-tag">综合</span> 
-        <span id="v185" class="website-tag">男同</span> 综合Gay片网站1无需加速器可访问但广告较多 
-       </div> 
-      </div> 
-      <div id="v186" class="website-item"> 
-       <a id="v187" href="http://www.hotbearporn.com/zh/hardcore/" class="website-link" target="_blank"> <i id="v188" class="fas fa-link link-icon"></i> HOTBEAR PORN </a> 
-       <div id="v189" class="website-desc"> 
-        <span id="v190" class="website-tag">综合</span> 
-        <span id="v191" class="website-tag">男同</span> 综合Gay片网站2无需加速器可访问但广告较多 
-       </div> 
-      </div> 
-      <div id="v192" class="website-item"> 
-       <a id="v193" href="https://gayvideohub.click/" class="website-link" target="_blank"> <i id="v194" class="fas fa-link link-icon"></i> GAYVIDEOHUB </a> 
-       <div id="v195" class="website-desc"> 
-        <span id="v196" class="website-tag">综合</span> 
-        <span id="v197" class="website-tag">男同</span> 综合Gay片网站3无需加速器可访问但广告较多 
-       </div> 
-      </div> 
-      <div id="v198" class="website-item"> 
-       <a id="v199" href="https://gaylime.com//" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> GAY LIME </a> 
-       <div id="v201" class="website-desc"> 
-        <span id="v202" class="website-tag">综合</span> 
-        <span id="v203" class="website-tag">男同</span> 综合Gay片网站4无需加速器可访问但广告较多 
-       </div> 
+  </div> 
+<!-- 模态框 -->
+<div class="modal">
+  <div class="modal-content">
+    <!-- 关闭按钮 -->
+    <button class="close-modal">
+      <i class="fas fa-times"></i>
+    </button>
+    <!-- 模态框头部 -->
+    <div class="modal-header">
+      <h2 class="modal-title">资源分类</h2>
+    </div>
+    <!-- 分类列表 -->
+    <div class="modal-categories">
+      <div class="modal-category" data-target="#search-engines">
+        <i class="fas fa-search"></i>
+        <span>搜索</span>
       </div>
-     </div> 
-    </div> 
-    <!-- 网盘资源分类 --> 
-    <div class="website-category" id="music"> 
-     <div id="v204" class="category-header"> 
-      <i id="v205" class="fas fa-cloud-download category-icon"></i> 
-      <h2 id="v206" class="category-title">网盘资源</h2> 
-     </div> 
-     <div id="v207" class="website-list"> 
-      <div id="v208" class="website-item"> 
-       <a id="v209" href="https://www.321flac.com/m/list.php?tid=5" class="website-link" target="_blank"> <i id="v210" class="fas fa-link link-icon"></i> 321无损广播剧</a> 
-       <div id="v211" class="website-desc"> 
-        <span id="v212" class="website-tag">耽美</span> 
-        <span id="v213" class="website-tag">广播剧</span> 广播剧网盘资源  
-       </div> 
-      </div> 
-      <div id="v214" class="website-item"> 
-       <a id="v215" href="http://www.quanbuzy.top/guangbo.html" class="website-link" target="_blank"> <i id="v216" class="fas fa-link link-icon"></i> 未知星球广播剧 </a> 
-       <div id="v217" class="website-desc"> 
-        <span id="v218" class="website-tag">耽美</span> 
-        <span id="v219" class="website-tag">广播剧</span> 综合广播剧网盘资源
-       </div> 
-      </div> 
-      <div id="v220" class="website-item"> 
-       <a id="v221" href="http://www.quanbuzy.top/fuju.html" class="website-link" target="_blank"> <i id="v222" class="fas fa-link link-icon"></i> 未知星球腐剧合集</a> 
-       <div id="v223" class="website-desc"> 
-        <span id="v224" class="website-tag">耽美</span> 
-        <span id="v225" class="website-tag">腐剧</span> 腐剧分类网站 
-       </div> 
-      </div> 
-       <div id="v220" class="website-item"> 
-       <a id="v221" href="https://kdocs.cn/l/ce93kgpKt0mY" class="website-link" target="_blank"> <i id="v222" class="fas fa-link link-icon"></i> 巳泷网盘资源</a> 
-       <div id="v223" class="website-desc"> 
-        <span id="v224" class="website-tag">综合</span> 
-        <span id="v225" class="website-tag">网盘</span> 必须下载小飞机网盘APP再获取资源，否则会出现高峰期或者会员 
-       </div> 
-      </div> 
-      <div id="v220" class="website-item"> 
-       <a id="v221" href="https://kdocs.cn/l/ckfKgdsLm5n6" class="website-link" target="_blank"> <i id="v222" class="fas fa-link link-icon"></i> 羽梦星河网盘资源</a> 
-       <div id="v223" class="website-desc"> 
-        <span id="v224" class="website-tag">综合</span> 
-        <span id="v225" class="website-tag">网盘</span> 必须下载小飞机网盘APP再获取资源，否则会出现高峰期或者会员 
-       </div> 
-      </div> 
-    </div> 
-   </div> 
-  </div> 
-  <!-- 返回顶部按钮 --> 
-  <div id="v237" class="back-to-top visible"> 
-   <i id="v238" class="fas fa-arrow-up"></i> 
-  </div> 
-  <!-- 底部导航栏 --> 
-  <div id="v239" class="bottom-nav"> 
-   <div id="v240" class="nav-links"> 
-    <a id="v241" href="slzm.html" class="home-link"><i id="v242" class="fas fa-home"></i> 桌面</a> 
-    <a id="v243" href="zdy.html"><i id="v244" class="fas fa-plus-circle"></i> 自定义</a> 
-    <a id="v245" href="mrgx.html"><i id="v246" class="fas fa-sync-alt"></i> 更新内容</a> 
-    <a id="v247" href="liulanjilu.html"><i id="v248" class="fas fa-history"></i> 浏览记录</a> 
-   </div> 
-  </div> 
-  <script>
-    // 记录滚动位置 
-    let lastScrollPosition = 0;
+      <div class="modal-category" data-target="#learning">
+        <i class="fas fa-folder"></i>
+        <span>综合</span>
+      </div>
+      <div class="modal-category" data-target="#tools">
+        <i class="fas fa-palette"></i>
+        <span>漫画</span>
+      </div>
+      <div class="modal-category" data-target="#design">
+        <i class="fas fa-book"></i>
+        <span>小说</span>
+      </div>
+      <div class="modal-category" data-target="#development">
+        <i class="fas fa-gamepad"></i>
+        <span>游戏</span>
+      </div>
+      <div class="modal-category" data-target="#video">
+        <i class="fas fa-film"></i>
+        <span>影视</span>
+      </div>
+      <div class="modal-category" data-target="#music">
+        <i class="fas fa-cloud-download"></i>
+        <span>网盘</span>
+      </div>
+      <div class="modal-category" data-target="#tool-category">
+        <i class="fas fa-wrench"></i>
+        <span>工具</span>
+      </div>
+      <div class="modal-category" data-target="#life-category">
+        <i class="fas fa-home"></i>
+        <span>生活</span>
+      </div>
+      <div class="modal-category" data-target="#study-category">
+        <i class="fas fa-graduation-cap"></i>
+        <span>学习</span>
+      </div>
+    </div>
+  </div>
+</div>
+            <!-- 主内容区 -->
+             <div id="v278" class="main-content"> 
+              <header id="v279"> 
+               <h1 id="v280" class="main-title">巳泷网站合集</h1> 
+               <p id="v281" class="subtitle">本软件仅收录第三方资源网站，一切内容与本软件无关，如遇链接失效、无法打开等问题，可前往公众号留言反馈</p> 
+              </header> 
+              <!-- 新版导航栏 --> 
+              <div id="v282" class="nav-section"> 
+               <div id="v283" class="nav-container"> 
+                <a id="v284" href="#search-engines" class="nav-button"><i id="v285" class="fas fa-search"></i> 搜索</a> 
+                <a id="v286" href="#learning" class="nav-button"><i id="v287" class="fas fa-folder"></i> 综合</a> 
+                <a href="#" id="more-button" class="nav-button"><i id="v288" class="fas fa-ellipsis-h"></i> 更多</a> 
+               </div> 
+              </div> 
+              <!-- 搜索框 --> 
+              <div id="v289" class="search-container"> 
+               <input id="v290" type="text" class="search-box" placeholder="搜索资源、网站或标签..."> 
+               <i id="v291" class="fas fa-search search-icon"></i> 
+              </div> 
+              <!-- 网站分类内容 --> 
+              <div id="v23" class="website-categories"> 
+               <!-- 磁力搜索分类 --> 
+               <div class="website-category" id="search-engines"> 
+                <div id="v24" class="category-header"> 
+                 <i id="v25" class="fas fa-search category-icon"></i> 
+                 <h2 id="v26" class="category-title">磁力搜索</h2> 
+                </div> 
+                <div id="v27" class="website-list"> 
+                 <div id="v28" class="website-item"> 
+                  <a id="v29" href="https://skrbtvc.top/" class="website-link" target="_blank"> <i id="v30" class="fas fa-link link-icon"></i> SkrBT </a> 
+                  <div id="v31" class="website-desc"> 
+                   <span id="v32" class="website-tag">本子</span> 
+                   <span id="v33" class="website-tag">搜索</span> 磁力搜索网站 
+                  </div> 
+                 </div> 
+                 <div id="v34" class="website-item"> 
+                  <a id="v35" href="https://laowangvc.top/" class="website-link" target="_blank"> <i id="v36" class="fas fa-link link-icon"></i> 老王磁力 </a> 
+                  <div id="v37" class="website-desc"> 
+                   <span id="v38" class="website-tag">影视</span> 
+                   <span id="v39" class="website-tag">搜索</span> 影视磁力搜索网站 
+                  </div> 
+                 </div> 
+                 <div id="v40" class="website-item"> 
+                  <a id="v41" href="https://cili.xyz/" class="website-link" target="_blank"> <i id="v42" class="fas fa-link link-icon"></i> 磁力导航</a> 
+                  <div id="v43" class="website-desc"> 
+                   <span id="v44" class="website-tag">磁力</span> 
+                   <span id="v45" class="website-tag">导航</span> 综合导航磁力网站 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 综合资源分类 --> 
+               <div class="website-category" id="learning"> 
+                <div id="v46" class="category-header"> 
+                 <i id="v47" class="fas fa-folder category-icon"></i> 
+                 <h2 id="v48" class="category-title">综合网站</h2> 
+                </div> 
+                <div id="v49" class="website-list"> 
+                 <div id="v50" class="website-item"> 
+                  <a id="v51" href="https://www.bgrdh.com/#term-9369" class="website-link" target="_blank"> <i id="v52" class="fas fa-link link-icon"></i> 办公导航 </a> 
+                  <div id="v53" class="website-desc"> 
+                   <span id="v54" class="website-tag">综合</span> 
+                   <span id="v55" class="website-tag">搜索</span> 综合资源网站 
+                  </div> 
+                 </div> 
+                 <div id="v56" class="website-item"> 
+                  <a id="v57" href="https://www.zkcee.com/" class="website-link" target="_blank"> <i id="v58" class="fas fa-link link-icon"></i> 知客驿站 </a> 
+                  <div id="v59" class="website-desc"> 
+                   <span id="v60" class="website-tag">综合</span> 
+                   <span id="v61" class="website-tag">链接</span> 日常综合链接资源 
+                  </div> 
+                 </div> 
+                 <div id="v62" class="website-item"> 
+                  <a id="v63" href="https://search.chongbuluo.com" class="website-link" target="_blank"> <i id="v64" class="fas fa-link link-icon"></i> 虫部落 </a> 
+                  <div id="v65" class="website-desc"> 
+                   <span id="v66" class="website-tag">综合</span> 
+                   <span id="v67" class="website-tag">搜索</span> 综合资源搜索网站 
+                  </div> 
+                 </div> 
+                 <div id="v85" class="website-item"> 
+                  <a id="v86" href="https://www.penhuol.com/" class="website-link" target="_blank"> <i id="v64" class="fas fa-link link-icon"></i> 喷火龙 </a> 
+                  <div id="v87" class="website-desc"> 
+                   <span id="v88" class="website-tag">综合</span> 
+                   <span id="v89" class="website-tag">下载</span> 综合资源网站 
+                  </div> 
+                 </div> 
+                 <div id="v68" class="website-item"> 
+                  <a id="v69" href="https://link3.cc/silong6969" class="website-link" target="_blank"> <i id="v70" class="fas fa-link link-icon"></i> 巳泷Link </a> 
+                  <div id="v71" class="website-desc"> 
+                   <span id="v72" class="website-tag">综合</span> 
+                   <span id="v73" class="website-tag">链接</span> 巳泷综合资源网站 
+                  </div> 
+                 </div> 
+                 <div id="v74" class="website-item"> 
+                  <a id="v75" href="http://taiquantv.com/" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> 泰圈</a> 
+                  <div id="v76" class="website-desc"> 
+                   <span id="v77" class="website-tag">综合</span> 
+                   <span id="v78" class="website-tag">男同</span> 腐剧 漫画 动漫 广播剧 电影 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 漫画分类 --> 
+               <div class="website-category" id="tools"> 
+                <div id="v74" class="category-header"> 
+                 <i id="v75" class="fas fa-palette category-icon"></i> 
+                 <h2 id="v76" class="category-title">漫画网站</h2> 
+                </div> 
+                <div id="v77" class="website-list"> 
+                 <div id="v78" class="website-item"> 
+                  <a id="v79" href="https://trello.com/b/V9TEaHIa" class="website-link" target="_blank"> <i id="v80" class="fas fa-link link-icon"></i> 香香腐宅 </a> 
+                  <div id="v81" class="website-desc"> 
+                   <span id="v82" class="website-tag">耽美</span> 
+                   <span id="v83" class="website-tag">漫画</span> 日韩耽美漫画网站 
+                  </div> 
+                 </div> 
+                 <div id="v84" class="website-item"> 
+                  <a id="v85" href="https://fuwx.cc/mw666" class="website-link" target="_blank"> <i id="v86" class="fas fa-link link-icon"></i> 漫蛙 </a> 
+                  <div id="v87" class="website-desc"> 
+                   <span id="v88" class="website-tag">耽美</span> 
+                   <span id="v89" class="website-tag">本子</span> 耽美漫画本子 
+                  </div> 
+                 </div> 
+                 <div id="v90" class="website-item"> 
+                  <a id="v91" href="https://picawang.com/pdownload/?notos=yes" class="website-link" target="_blank"> <i id="v92" class="fas fa-link link-icon"></i> 哔咔 </a> 
+                  <div id="v93" class="website-desc"> 
+                   <span id="v94" class="website-tag">软件</span> 
+                   <span id="v95" class="website-tag">综合</span> 综合漫画本子 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 小说资源分类 --> 
+               <div class="website-category" id="design"> 
+                <div id="v96" class="category-header"> 
+                 <i id="v97" class="fas fa-book category-icon"></i> 
+                 <h2 id="v98" class="category-title">小说网站</h2> 
+                </div> 
+                <div id="v99" class="website-list"> 
+                 <div id="v100" class="website-item"> 
+                  <a id="v101" href="http://quanbl1.com" class="website-link" target="_blank"> <i id="v102" class="fas fa-link link-icon"></i> BL小说网 </a> 
+                  <div id="v103" class="website-desc"> 
+                   <span id="v104" class="website-tag">BL</span> 
+                   <span id="v105" class="website-tag">完本</span> BL耽美小说网站 
+                  </div> 
+                 </div> 
+                 <div id="v106" class="website-item"> 
+                  <a id="v107" href="https://furrynovel.ink/pixiv/tags" class="website-link" target="_blank"> <i id="v108" class="fas fa-link link-icon"></i> LINPX </a> 
+                  <div id="v109" class="website-desc"> 
+                   <span id="v110" class="website-tag">furry</span> 
+                   <span id="v111" class="website-tag">分类</span> 全站标签小说网 
+                  </div> 
+                 </div> 
+                 <div id="v112" class="website-item"> 
+                  <a id="v113" href="https://www.cxc90.com" class="website-link" target="_blank"> <i id="v114" class="fas fa-link link-icon"></i> 海棠花 </a> 
+                  <div id="v115" class="website-desc"> 
+                   <span id="v116" class="website-tag">耽美</span> 
+                   <span id="v117" class="website-tag">分类</span> 耽美小说网站 
+                  </div> 
+                 </div> 
+                 <div id="v118" class="website-item"> 
+                  <a id="v119" href="https://www.finalbooks.work/category/1/" class="website-link" target="_blank"> <i id="v120" class="fas fa-link link-icon"></i> 完本耽美小说 </a> 
+                  <div id="v121" class="website-desc"> 
+                   <span id="v122" class="website-tag">完本</span> 
+                   <span id="v123" class="website-tag">分类</span> 完本耽美小说网站 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 游戏网站分类 --> 
+               <div class="website-category" id="development"> 
+                <div id="v124" class="category-header"> 
+                 <i id="v125" class="fas fa-gamepad category-icon"></i> 
+                 <h2 id="v126" class="category-title">游戏网站</h2> 
+                </div> 
+                <div id="v127" class="website-list"> 
+                 <div id="v128" class="website-item"> 
+                  <a id="v129" href="http://m.downcc.com/k/blyouxi" class="website-link" target="_blank"> <i id="v130" class="fas fa-link link-icon"></i> BL游戏1 </a> 
+                  <div id="v131" class="website-desc"> 
+                   <span id="v132" class="website-tag">BL</span> 
+                   <span id="v133" class="website-tag">游戏</span> BL游戏网站 
+                  </div> 
+                 </div> 
+                 <div id="v134" class="website-item"> 
+                  <a id="v135" href="http://m.downyi.com/key/blyx" class="website-link" target="_blank"> <i id="v136" class="fas fa-link link-icon"></i> BL游戏2 </a> 
+                  <div id="v137" class="website-desc"> 
+                   <span id="v138" class="website-tag">BL</span> 
+                   <span id="v139" class="website-tag">游戏</span> BL游戏网站 
+                  </div> 
+                 </div> 
+                 <div id="v134" class="website-item"> 
+                  <a id="v135" href="https://srk.games/" class="website-link" target="_blank"> <i id="v136" class="fas fa-link link-icon"></i> 兽人游戏库 </a> 
+                  <div id="v137" class="website-desc"> 
+                   <span id="v138" class="website-tag">furry</span> 
+                   <span id="v139" class="website-tag">游戏</span> 兽人游戏网站 
+                  </div> 
+                 </div> 
+                 <div id="v140" class="website-item"> 
+                  <a id="v141" href="https://poki.com/zh#utm_source=china" class="website-link" target="_blank"> <i id="v142" class="fas fa-link link-icon"></i> 在线小游戏 </a> 
+                  <div id="v143" class="website-desc"> 
+                   <span id="v144" class="website-tag">在线</span> 
+                   <span id="v145" class="website-tag">游戏</span> 在线小游戏网站 
+                  </div> 
+                 </div> 
+                 <div id="v140" class="website-item"> 
+                  <a id="v141" href="https://www.emu666.com/" class="website-link" target="_blank"> <i id="v142" class="fas fa-link link-icon"></i> Emu666 </a> 
+                  <div id="v143" class="website-desc"> 
+                   <span id="v144" class="website-tag">在线</span> 
+                   <span id="v145" class="website-tag">游戏</span> 这是一个收录了500多款在线小游戏的网站 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 影视资源分类 --> 
+               <div class="website-category" id="video"> 
+                <div id="v146" class="category-header"> 
+                 <i id="v147" class="fas fa-film category-icon"></i> 
+                 <h2 id="v148" class="category-title">影视网站</h2> 
+                </div> 
+                <div id="v149" class="website-list"> 
+                 <div id="v150" class="website-item"> 
+                  <a id="v151" href="https://www.gaymaletube.com/zh/cat/hentai" class="website-link" target="_blank"> <i id="v152" class="fas fa-link link-icon"></i> BL动漫【VPN】 </a> 
+                  <div id="v153" class="website-desc"> 
+                   <span id="v154" class="website-tag">18禁</span> 
+                   <span id="v155" class="website-tag">VPN</span> 18禁动漫网站需要使用加速【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v156" class="website-item"> 
+                  <a id="v157" href="https://www.ssm.fun/" class="website-link" target="_blank"> <i id="v158" class="fas fa-link link-icon"></i> 咸豆浆【VPN】 </a> 
+                  <div id="v159" class="website-desc"> 
+                   <span id="v160" class="website-tag">男同</span> 
+                   <span id="v161" class="website-tag">搜索</span> 男同视频资源搜索网需要开加速器才可以访问【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v162" class="website-item"> 
+                  <a id="v163" href="https://www.gaymaletube.com/zh/cat/chinese" class="website-link" target="_blank"> <i id="v164" class="fas fa-link link-icon"></i> 国产Gay片【VPN】 </a> 
+                  <div id="v165" class="website-desc"> 
+                   <span id="v166" class="website-tag">国产</span> 
+                   <span id="v167" class="website-tag">VPN</span> 国产Gay片网站需要使用加速器【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v168" class="website-item"> 
+                  <a id="v169" href="https://www.gaymaletube.com/zh/cat/japanese" class="website-link" target="_blank"> <i id="v170" class="fas fa-link link-icon"></i> 日本Gay片【VPN】 </a> 
+                  <div id="v171" class="website-desc"> 
+                   <span id="v172" class="website-tag">日本</span> 
+                   <span id="v173" class="website-tag">VPN</span> 日本Gay片网站需要使用加速器【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v174" class="website-item"> 
+                  <a id="v175" href="https://www.gaymaletube.com/zh/" class="website-link" target="_blank"> <i id="v176" class="fas fa-link link-icon"></i> Gay片大合集【VPN】 </a> 
+                  <div id="v177" class="website-desc"> 
+                   <span id="v178" class="website-tag">合集</span> 
+                   <span id="v179" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v174" class="website-item"> 
+                  <a id="v175" href="https://cn.xgroovy.com/gay/" class="website-link" target="_blank"> <i id="v176" class="fas fa-link link-icon"></i> XGROOVY【VPN】 </a> 
+                  <div id="v177" class="website-desc"> 
+                   <span id="v178" class="website-tag">合集</span> 
+                   <span id="v179" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v198" class="website-item"> 
+                  <a id="v199" href="https://www.boyfriendtv3.com/search/?q=Yaoi" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> BOYFRIENDTV【VPN】 </a> 
+                  <div id="v201" class="website-desc"> 
+                   <span id="v202" class="website-tag">综合</span> 
+                   <span id="v203" class="website-tag">VPN</span> Gay片综合分类网站需要使用加速器【VPN】 
+                  </div> 
+                 </div> 
+                 <div id="v180" class="website-item"> 
+                  <a id="v181" href="https://www.gaypornvideos.tv/" class="website-link" target="_blank"> <i id="v182" class="fas fa-link link-icon"></i> GayPornVideos【免VPN】 </a> 
+                  <div id="v183" class="website-desc"> 
+                   <span id="v184" class="website-tag">综合</span> 
+                   <span id="v185" class="website-tag">男同</span> 综合Gay片网站1无需加速器可访问但广告较多 
+                  </div> 
+                 </div> 
+                 <div id="v186" class="website-item"> 
+                  <a id="v187" href="http://www.hotbearporn.com/zh/hardcore/" class="website-link" target="_blank"> <i id="v188" class="fas fa-link link-icon"></i> HOTBEAR PORN【免VPN】 </a> 
+                  <div id="v189" class="website-desc"> 
+                   <span id="v190" class="website-tag">综合</span> 
+                   <span id="v191" class="website-tag">男同</span> 综合Gay片网站2无需加速器可访问但广告较多 
+                  </div> 
+                 </div> 
+                 <div id="v192" class="website-item"> 
+                  <a id="v193" href="https://gayvideohub.click/" class="website-link" target="_blank"> <i id="v194" class="fas fa-link link-icon"></i> GAYVIDEOHUB【免VPN】 </a> 
+                  <div id="v195" class="website-desc"> 
+                   <span id="v196" class="website-tag">综合</span> 
+                   <span id="v197" class="website-tag">男同</span> 综合Gay片网站3无需加速器可访问但广告较多 
+                  </div> 
+                 </div> 
+                 <div id="v198" class="website-item"> 
+                  <a id="v199" href="https://gaylime.com//" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> GAY LIME【免VPN】 </a> 
+                  <div id="v201" class="website-desc"> 
+                   <span id="v202" class="website-tag">综合</span> 
+                   <span id="v203" class="website-tag">男同</span> 综合Gay片网站4无需加速器可访问但广告较多 
+                  </div> 
+                 </div> 
+                 <div id="v74" class="website-item"> 
+                  <a id="v75" href="http://taiquantv.com/" class="website-link" target="_blank"> <i id="v200" class="fas fa-link link-icon"></i> 泰圈【日常】</a> 
+                  <div id="v76" class="website-desc"> 
+                   <span id="v77" class="website-tag">综合</span> 
+                   <span id="v78" class="website-tag">男同</span> 腐剧 漫画 动漫 广播剧 电影 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 网盘资源分类（补充闭合标签，确保结构完整） --> 
+               <div class="website-category" id="music"> 
+                <div id="v204" class="category-header"> 
+                 <i id="v205" class="fas fa-cloud-download category-icon"></i> 
+                 <h2 id="v206" class="category-title">网盘资源</h2> 
+                </div> 
+                <div id="v207" class="website-list"> 
+                 <div id="v208" class="website-item"> 
+                  <a id="v209" href="https://www.321flac.com/m/list.php?tid=5" class="website-link" target="_blank"> <i id="v210" class="fas fa-link link-icon"></i> 321无损广播剧 </a> 
+                  <div id="v211" class="website-desc"> 
+                   <span id="v212" class="website-tag">耽美</span> 
+                   <span id="v213" class="website-tag">网盘</span> 广播剧网盘资源 
+                  </div> 
+                 </div> 
+                 <div id="v214" class="website-item"> 
+                  <a id="v215" href="http://www.quanbuzy.top/guangbo.html" class="website-link" target="_blank"> <i id="v216" class="fas fa-link link-icon"></i> 未知星球广播剧 </a> 
+                  <div id="v217" class="website-desc"> 
+                   <span id="v218" class="website-tag">耽美</span> 
+                   <span id="v219" class="website-tag">网盘</span> 综合广播剧网盘资源 
+                  </div> 
+                 </div> 
+                 <div id="v220" class="website-item"> 
+                  <a id="v221" href="http://www.quanbuzy.top/fuju.html" class="website-link" target="_blank"> <i id="v222" class="fas fa-link link-icon"></i> 未知星球腐剧合集 </a> 
+                  <div id="v223" class="website-desc"> 
+                   <span id="v224" class="website-tag">耽美</span> 
+                   <span id="v225" class="website-tag">腐剧</span> 腐剧分类网站 
+                  </div> 
+                 </div> 
+                 <div id="v226" class="website-item"> 
+                  <!-- 修正重复ID问题 --> 
+                  <a id="v227" href="https://kdocs.cn/l/ce93kgpKt0mY" class="website-link" target="_blank"> <i id="v228" class="fas fa-link link-icon"></i> 巳泷网盘资源 </a> 
+                  <div id="v229" class="website-desc"> 
+                   <span id="v230" class="website-tag">综合</span> 
+                   <span id="v231" class="website-tag">网盘</span> 必须下载小飞机网盘APP再获取资源 
+                  </div> 
+                 </div> 
+                 <div id="v232" class="website-item"> 
+                  <!-- 修正重复ID问题 --> 
+                  <a id="v233" href="https://kdocs.cn/l/ckfKgdsLm5n6" class="website-link" target="_blank"> <i id="v234" class="fas fa-link link-icon"></i> 羽梦星河网盘资源 </a> 
+                  <div id="v235" class="website-desc"> 
+                   <span id="v236" class="website-tag">综合</span> 
+                   <span id="v237" class="website-tag">网盘</span> 必须下载小飞机网盘APP再获取资源 
+                  </div> 
+                 </div> 
+                            <div id="v232" class="website-item"> 
+                  <!-- 修正重复ID问题 --> 
+                  <a id="v233" href="https://pan.soku.one/" class="website-link" target="_blank"> <i id="v234" class="fas fa-link link-icon"></i> 聚合网盘资源【暂不可用】 </a> 
+                  <div id="v235" class="website-desc"> 
+                   <span id="v236" class="website-tag">综合</span> 
+                   <span id="v237" class="website-tag">网盘</span> 一站式搜索各类资源在线观看 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 工具分类（与其他分类保持统一间隔） --> 
+               <div class="website-category" id="tool-category"> 
+                <div id="tool-header" class="category-header"> 
+                 <i id="tool-icon" class="fas fa-wrench category-icon"></i> 
+                 <h2 id="tool-title" class="category-title">实用工具</h2> 
+                </div> 
+                <div id="tool-list" class="website-list"> 
+                 <div id="tool-item-1" class="website-item"> 
+                  <a id="tool-link-1" href="https://www.aiachuan.com/" class="website-link" target="_blank"> <i id="tool-link-icon-1" class="fas fa-link link-icon"></i> 阿川工具库 </a> 
+                  <div id="tool-desc-1" class="website-desc"> 
+                   <span id="tool-tag-1-1" class="website-tag">工具</span> 
+                   <span id="tool-tag-1-2" class="website-tag">实用</span> 这是一个能够解决你所有工具问题的网站 
+                  </div> 
+                 </div> 
+                 <div id="tool-item-2" class="website-item"> 
+                  <a id="tool-link-2" href="https://converterpro.net" class="website-link" target="_blank"> <i id="tool-link-icon-2" class="fas fa-link link-icon"></i> 格式转换站 </a> 
+                  <div id="tool-desc-2" class="website-desc"> 
+                   <span id="tool-tag-2-1" class="website-tag">转换</span> 
+                   <span id="tool-tag-2-2" class="website-tag">效率</span> 多格式在线转换工具 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 生活分类（与其他分类保持统一间隔） --> 
+               <div class="website-category" id="life-category"> 
+                <div id="life-header" class="category-header"> 
+                 <i id="life-icon" class="fas fa-home category-icon"></i> 
+                 <h2 id="life-title" class="category-title">生活服务</h2> 
+                </div> 
+                <div id="life-list" class="website-list"> 
+                 <div id="life-item-1" class="website-item"> 
+                  <a id="life-link-1" href="https://cook.yunyoujun.cn/" class="website-link" target="_blank"> <i id="life-link-icon-1" class="fas fa-link link-icon"></i> 食用手册 </a> 
+                  <div id="life-desc-1" class="website-desc"> 
+                   <span id="life-tag-1-1" class="website-tag">生活</span> 
+                   <span id="life-tag-1-2" class="website-tag">食谱</span> 根据食材一键生成菜谱的网站 
+                  </div> 
+                 </div> 
+                 <div id="life-item-2" class="website-item"> 
+                  <a id="life-link-2" href="https://www.taobao.com/wangwang/ytao/index.html" class="website-link" target="_blank"> <i id="life-link-icon-2" class="fas fa-link link-icon"></i> 一淘 </a> 
+                  <div id="life-desc-2" class="website-desc"> 
+                   <span id="life-tag-2-1" class="website-tag">优惠</span> 
+                   <span id="life-tag-2-2" class="website-tag">返利</span> 淘宝官方优惠券及返利平台 
+                  </div> 
+                 </div> 
+                 <div id="life-item-3" class="website-item"> 
+                  <a id="life-link-3" href="https://www.meituan.com/" class="website-link" target="_blank"> <i id="life-link-icon-3" class="fas fa-link link-icon"></i> 美团 </a> 
+                  <div id="life-desc-3" class="website-desc"> 
+                   <span id="life-tag-3-1" class="website-tag">服务</span> 
+                   <span id="life-tag-3-2" class="website-tag">优惠</span> 外卖、到店消费等优惠平台 
+                  </div> 
+                 </div> 
+                 <div id="life-item-4" class="website-item"> 
+                  <a id="life-link-4" href="https://www.pinduoduo.com/" class="website-link" target="_blank"> <i id="life-link-icon-4" class="fas fa-link link-icon"></i> 拼多多 </a> 
+                  <div id="life-desc-4" class="website-desc"> 
+                   <span id="life-tag-4-1" class="website-tag">购物</span> 
+                   <span id="life-tag-4-2" class="website-tag">补贴</span> 拼团优惠及低价商品平台 
+                  </div> 
+                 </div> 
+                 <div id="life-item-5" class="website-item"> 
+                  <a id="life-link-5" href="https://www.vip.com/" class="website-link" target="_blank"> <i id="life-link-icon-5" class="fas fa-link link-icon"></i> 唯品会 </a> 
+                  <div id="life-desc-5" class="website-desc"> 
+                   <span id="life-tag-5-1" class="website-tag">品牌</span> 
+                   <span id="life-tag-5-2" class="website-tag">折扣</span> 品牌特卖及限时优惠平台 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 学习分类（与其他分类保持统一间隔） --> 
+               <div class="website-category" id="study-category"> 
+                <div id="study-header" class="category-header"> 
+                 <i id="study-icon" class="fas fa-graduation-cap category-icon"></i> 
+                 <h2 id="study-title" class="category-title">学习资源</h2> 
+                </div> 
+                <div id="study-list" class="website-list"> 
+                 <div id="study-item-1" class="website-item"> 
+                  <a id="study-link-1" href="https://www.khanacademy.org/" class="website-link" target="_blank"> <i id="study-link-icon-1" class="fas fa-link link-icon"></i> 可汗学院 </a> 
+                  <div id="study-desc-1" class="website-desc"> 
+                   <span id="study-tag-1-1" class="website-tag">全科</span> 
+                   <span id="study-tag-1-2" class="website-tag">免费</span> 提供数学、科学、计算机编程等多学科课程 
+                  </div> 
+                 </div> 
+                 <div id="study-item-2" class="website-item"> 
+                  <a id="study-link-2" href="https://www.ixuexi.cn/" class="website-link" target="_blank"> <i id="study-link-icon-2" class="fas fa-link link-icon"></i> 学习强国 </a> 
+                  <div id="study-desc-2" class="website-desc"> 
+                   <span id="study-tag-2-1" class="website-tag">综合</span> 
+                   <span id="study-tag-2-2" class="website-tag">资讯</span> 涵盖政治、经济、文化等多领域知识学习平台 
+                  </div> 
+                 </div> 
+                 <div id="study-item-3" class="website-item"> 
+                  <a id="study-link-3" href="https://www.zhihu.com/" class="website-link" target="_blank"> <i id="study-link-icon-3" class="fas fa-link link-icon"></i> 知乎 </a> 
+                  <div id="study-desc-3" class="website-desc"> 
+                   <span id="study-tag-3-1" class="website-tag">综合</span> 
+                   <span id="study-tag-3-2" class="website-tag">问答</span> 各类知识问答、经验分享平台 
+                  </div> 
+                 </div> 
+                 <div id="study-item-4" class="website-item"> 
+                  <a id="study-link-4" href="https://www.duolingo.com/" class="website-link" target="_blank"> <i id="study-link-icon-4" class="fas fa-link link-icon"></i> 多邻国 </a> 
+                  <div id="study-desc-4" class="website-desc"> 
+                   <span id="study-tag-4-1" class="website-tag">语言</span> 
+                   <span id="study-tag-4-2" class="website-tag">闯关</span> 轻松学习英语、日语等多种语言 
+                  </div> 
+                 </div> 
+                 <div id="study-item-5" class="website-item"> 
+                  <a id="study-link-5" href="https://www.bilibili.com/" class="website-link" target="_blank"> <i id="study-link-icon-5" class="fas fa-link link-icon"></i> B站学习区 </a> 
+                  <div id="study-desc-5" class="website-desc"> 
+                   <span id="study-tag-5-1" class="website-tag">综合</span> 
+                   <span id="study-tag-5-2" class="website-tag">视频</span> 海量学习类UP主分享各类知识视频 
+                  </div> 
+                 </div> 
+                 <div id="study-item-6" class="website-item"> 
+                  <a id="study-link-6" href="https://www.edx.org/" class="website-link" target="_blank"> <i id="study-link-icon-6" class="fas fa-link link-icon"></i> edX </a> 
+                  <div id="study-desc-6" class="website-desc"> 
+                   <span id="study-tag-6-1" class="website-tag">综合</span> 
+                   <span id="study-tag-6-2" class="website-tag">名校</span> 由哈佛、MIT等名校提供的在线课程平台 
+                  </div> 
+                 </div> 
+                 <div id="study-item-7" class="website-item"> 
+                  <a id="study-link-7" href="https://www.csdn.net/" class="website-link" target="_blank"> <i id="study-link-icon-7" class="fas fa-link link-icon"></i> CSDN </a> 
+                  <div id="study-desc-7" class="website-desc"> 
+                   <span id="study-tag-7-1" class="website-tag">编程</span> 
+                   <span id="study-tag-7-2" class="website-tag">技术</span> 专业的IT技术社区，提供编程学习资源 
+                  </div> 
+                 </div> 
+                 <div id="study-item-8" class="website-item"> 
+                  <a id="study-link-8" href="https://www.imooc.com/" class="website-link" target="_blank"> <i id="study-link-icon-8" class="fas fa-link link-icon"></i> 慕课网 </a> 
+                  <div id="study-desc-8" class="website-desc"> 
+                   <span id="study-tag-8-1" class="website-tag">编程</span> 
+                   <span id="study-tag-8-2" class="website-tag">职业</span> 专注于IT职业技能培训的在线学习平台 
+                  </div> 
+                 </div> 
+                 <div id="study-item-9" class="website-item"> 
+                  <a id="study-link-9" href="https://www.icourse163.org/" class="website-link" target="_blank"> <i id="study-link-icon-9" class="fas fa-link link-icon"></i> 中国大学MOOC </a> 
+                  <div id="study-desc-9" class="website-desc"> 
+                   <span id="study-tag-9-1" class="website-tag">综合</span> 
+                   <span id="study-tag-9-2" class="website-tag">高校</span> 提供国内顶尖高校的优质课程 
+                  </div> 
+                 </div> 
+                 <div id="study-item-10" class="website-item"> 
+                  <a id="study-link-10" href="https://www.lingq.com/" class="website-link" target="_blank"> <i id="study-link-icon-10" class="fas fa-link link-icon"></i> LingQ </a> 
+                  <div id="study-desc-10" class="website-desc"> 
+                   <span id="study-tag-10-1" class="website-tag">语言</span> 
+                   <span id="study-tag-10-2" class="website-tag">语种</span> 通过阅读文章学习多种语言 
+                  </div> 
+                 </div> 
+                </div> 
+               </div> 
+               <!-- 返回顶部按钮 --> 
+               <div id="v292" class="back-to-top"> 
+                <i id="v293" class="fas fa-arrow-up"></i> 
+               </div> 
+               <!-- 底部导航栏 --> 
+               <div id="v294" class="bottom-nav"> 
+                <div id="v295" class="nav-links"> 
+                 <a id="v296" href="slzm.html" class="home-link"><i id="v297" class="fas fa-home"></i> 桌面</a> 
+                 <a id="v298" href="zdy.html"><i id="v299" class="fas fa-plus-circle"></i> 添加</a> 
+                 <a id="v300" href="mrgx.html"><i id="v301" class="fas fa-sync-alt"></i> 更新</a> 
+                 <a id="v302" href="liulanjilu.html"><i id="v303" class="fas fa-history"></i> 记录</a> 
+                </div> 
+               </div> 
+               <script>
+  // 加载动画元素
+const loader = document.querySelector('.loader');
+
+// 记录浏览历史
+document.querySelectorAll('.website-link').forEach(link => {
+  link.addEventListener('click', function(e) {
+    // 保存当前滚动位置
+    localStorage.setItem('lastScrollPosition', window.scrollY);
     
-    // 页面加载时恢复滚动位置 
-    window.addEventListener('load', function() {
-      const savedPosition = localStorage.getItem('scrollPosition');
-      if (savedPosition) {
-        window.scrollTo(0, parseInt(savedPosition));
-      }
-      
-      // 监听滚动事件 
-      window.addEventListener('scroll', function() {
-        lastScrollPosition = window.scrollY;
-      });
-    });
- 
-    // 记录浏览历史 
-    document.querySelectorAll('.website-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // 保存当前滚动位置 
-        localStorage.setItem('scrollPosition', lastScrollPosition);
-        
-        // 记录浏览历史 
-        const record = {
-          title: this.textContent.trim(),
-          url: this.href,
-          timestamp: new Date().toISOString()
-        };
-        
-        let history = JSON.parse(localStorage.getItem('browseHistory')) || [];
-        history.unshift(record); // 添加到数组开头 
-        history = history.slice(0, 50); // 只保留最近的50条记录 
-        localStorage.setItem('browseHistory', JSON.stringify(history));
-        
-        // 打开链接 
-        window.open(this.href, '_blank');
-      });
-    });
- 
-    // 返回顶部按钮逻辑 
-    const backToTop = document.querySelector('.back-to-top');
+    e.preventDefault();
+    // 立即显示加载动画
+    loader.classList.add('active');
     
-    window.addEventListener('scroll', function() {
-      if (window.pageYOffset > 300) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    });
+    // 记录浏览历史
+    const record = {
+      title: this.textContent.trim(),
+      url: this.href,
+      timestamp: new Date().toISOString()
+    };
     
-    backToTop.addEventListener('click', function() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
- 
-    // 导航按钮点击处理 
-    const navButtons = document.querySelectorAll('.nav-button');
+    let history = JSON.parse(localStorage.getItem('browseHistory')) || [];
+    history.unshift(record);
+    history = history.slice(0, 50);
+    localStorage.setItem('browseHistory', JSON.stringify(history));
     
-    navButtons.forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        // 移除所有active类 
-        navButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // 添加当前active类 
-        this.classList.add('active');
-        
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-          });
-        }
-      });
+    // 立即跳转
+    window.location.href = this.href;
+  });
+});
+
+// 模态框功能
+const modal = document.querySelector('.modal');
+const moreButton = document.getElementById('more-button');
+const closeModal = document.querySelector('.close-modal');
+const modalCategories = document.querySelectorAll('.modal-category');
+
+// 打开模态框
+moreButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  modal.classList.add('active');
+});
+
+// 关闭模态框
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+// 点击模态框分类
+modalCategories.forEach(category => {
+  category.addEventListener('click', () => {
+    const targetId = category.getAttribute('data-target');
+    const targetElement = document.querySelector(targetId);
+    
+    // 关闭模态框
+    modal.classList.remove('active');
+    
+    if (targetElement) {
+      setTimeout(() => {
+        const scrollPosition = targetElement.offsetTop - 100;
+        // 保存滚动位置
+        localStorage.setItem('lastScrollPosition', scrollPosition);
+        window.scrollTo({
+          top: scrollPosition,
+          behavior: 'smooth'
+        });
+      }, 300);
+    }
+  });
+});
+
+// 返回顶部按钮逻辑 
+const backToTop = document.querySelector('.back-to-top');
+
+window.addEventListener('scroll', function() {
+  // 实时保存滚动位置
+  localStorage.setItem('lastScrollPosition', window.scrollY);
+  
+  if (window.pageYOffset > 300) {
+    backToTop.classList.add('visible');
+  } else {
+    backToTop.classList.remove('visible');
+  }
+});
+
+backToTop.addEventListener('click', function() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+// 搜索功能
+const searchBox = document.querySelector('.search-box');
+
+searchBox.addEventListener('input', function() {
+  const searchTerm = this.value.toLowerCase().trim();
+  const websiteItems = document.querySelectorAll('.website-item');
+  
+  if (searchTerm === '') {
+    // 显示所有项
+    websiteItems.forEach(item => {
+      item.style.display = 'block';
     });
-    // ==================== 屏幕方向壁纸切换 ==================== 
+    return;
+  }
+  
+  // 搜索逻辑
+  websiteItems.forEach(item => {
+    const title = item.querySelector('.website-link').textContent.toLowerCase();
+    const desc = item.querySelector('.website-desc').textContent.toLowerCase();
+    const tags = Array.from(item.querySelectorAll('.website-tag'))
+                     .map(tag => tag.textContent.toLowerCase());
+    
+    // 检查是否匹配
+    const match = title.includes(searchTerm) || 
+                 desc.includes(searchTerm) || 
+                 tags.some(tag => tag.includes(searchTerm));
+    
+    item.style.display = match ? 'block' : 'none';
+  });
+});
+
+// 优化滚动性能
+let isScrolling;
+window.addEventListener('scroll', function() {
+  // 清除之前的定时器
+  window.clearTimeout(isScrolling);
+  
+  // 设置新的定时器
+  isScrolling = setTimeout(function() {
+    // 滚动停止后也保存一次位置
+    localStorage.setItem('lastScrollPosition', window.scrollY);
+  }, 100);
+}, false);
+
+// 点击body关闭模态框
+document.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.classList.remove('active');
+  }
+});
+
+// 按ESC关闭模态框
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('active')) {
+    modal.classList.remove('active');
+  }
+});
+
+// 屏幕方向壁纸切换
 const ORIENTATION_WALLPAPERS = {
   portrait: 'url(bjt1.jpg)',  // 9:16竖屏壁纸路径 
   landscape: 'url(bjt2.jpg)'  // 16:9横屏壁纸路径 
 };
- 
+
 function updateWallpaperByOrientation() {
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
   const newBg = isPortrait ? ORIENTATION_WALLPAPERS.portrait : ORIENTATION_WALLPAPERS.landscape;
@@ -831,11 +1400,19 @@ function updateWallpaperByOrientation() {
   document.body.style.backgroundImage = 
     `linear-gradient(135deg, rgba(40, 20, 80, 0.2), rgba(25, 25, 60, 0.3)), ${newBg}`;
 }
- 
+
 // 初始化检测 
 updateWallpaperByOrientation();
 window.addEventListener('resize', updateWallpaperByOrientation);
+
+// 新增：页面加载时恢复滚动位置
+window.addEventListener('load', function() {
+  const savedPosition = localStorage.getItem('lastScrollPosition');
+  if (savedPosition) {
+    window.scrollTo(0, parseInt(savedPosition));
+  }
+});
 // ==================== 整合结束 ====================
-  </script>
-</body>
+  </script>  
+ </body>
 </html>
