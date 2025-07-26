@@ -64,7 +64,7 @@
         /* 头部标题 */
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 50px; /* 增加底部间距 */
             position: relative;
             z-index: 10;
             width: 100%;
@@ -72,23 +72,23 @@
         }
         
         .logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
+            width: 120px; /* 稍微加大尺寸 */
+            height: 120px;
+            margin: 0 auto 20px; /* 增加底部间距 */
             border-radius: 50%;
-            background: linear-gradient(145deg, var(--neon-purple), #5e17a7);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
-            border: 2px solid rgba(216, 191, 216, 0.3);
+            border: 3px solid rgba(216, 191, 216, 0.4);
+            overflow: hidden; /* 确保图片不会溢出 */
             animation: pulse 4s infinite ease-in-out;
         }
         
-        .logo i {
-            font-size: 40px;
-            color: white;
-            text-shadow: 0 0 12px var(--neon-cyan);
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保图片填满圆形区域 */
         }
         
         @keyframes pulse {
@@ -97,7 +97,7 @@
         }
         
         .header h1 {
-            font-size: 38px;
+            font-size: 36px; /* 调整字体大小 */
             font-weight: 700;
             background: linear-gradient(to right, #e6e6fa, var(--neon-cyan));
             -webkit-background-clip: text;
@@ -105,8 +105,7 @@
             color: transparent;
             text-shadow: 0 0 12px rgba(230, 230, 250, 0.4);
             letter-spacing: 1.5px;
-            margin-bottom: 10px;
-            position: relative;
+            margin-bottom: 8px; /* 调整底部间距 */
         }
         
         .header h1::after {
@@ -122,10 +121,10 @@
         }
         
         .header p {
-            font-size: 15px;
+            font-size: 16px; /* 调整字体大小 */
             color: var(--neon-cyan);
             max-width: 600px;
-            margin: 18px auto 0;
+            margin: 20px auto 0; /* 调整间距 */
             line-height: 1.5;
             text-shadow: var(--text-glow);
         }
@@ -137,6 +136,7 @@
             max-width: 1000px;
             gap: 25px;
             z-index: 10;
+            margin-bottom: 30px; /* 增加底部间距 */
         }
         
         .portal-column {
@@ -205,19 +205,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(74, 30, 122, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.4s ease;
             z-index: 2;
+            background: rgba(74, 30, 122, 0.6);
         }
         
-        .preview-overlay i {
-            font-size: 45px;
-            color: white;
-            text-shadow: 0 0 12px var(--neon-purple);
+        .preview-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .portal-card:hover .preview-overlay {
@@ -268,7 +268,7 @@
         }
         
         .card-desc {
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
             color: #d8bfd8;
             margin-bottom: 20px;
@@ -304,7 +304,6 @@
             font-size: 13px;
             width: 100%;
             max-width: 800px;
-            margin-top: 15px;
             position: relative;
             z-index: 10;
         }
@@ -331,16 +330,16 @@
             }
             
             .logo {
-                width: 90px;
-                height: 90px;
-            }
-            
-            .logo i {
-                font-size: 36px;
+                width: 100px;
+                height: 100px;
             }
             
             .header p {
                 font-size: 14px;
+            }
+            
+            .header {
+                margin-bottom: 40px;
             }
         }
     </style>
@@ -351,12 +350,11 @@
     
     <!-- 头部区域 -->
     <div class="header">
-    <div class="logo">
-        <img src="tx.jpg" alt="巳泷资源库">
-    </div>
-</div>
-        <h1>巳泷资源库入口</h1>
-        <p>精心整理全网优质资源，持续更新中。软件安装包、资源库入口、中转站一应俱全，满足您的各种需求。</p>
+        <div class="logo">
+            <img src="tx.jpg" alt="巳泷头像">
+        </div>
+        <h1>巳泷资源库</h1>
+        <p>精选资源 • 持续更新 • 高效便捷</p>
     </div>
     
     <!-- 两列布局容器 -->
@@ -367,7 +365,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #1a0637, #4a1e7a);">
                     <div class="preview-overlay">
-                         <img src="azbyl.jpg" alt="图片预览">
+                         <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YW5kcm9pZCUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D" alt="软件安装包">
                     </div>
                 </div>
                 <div class="card-content">
@@ -378,7 +376,7 @@
                         <div class="card-title">软件安装包</div>
                     </div>
                     <p class="card-desc">安卓端专用安装包，安全可靠，持续更新。提供最新版本的资源库应用，一键下载安装。</p>
-                    <a href="https://github.com/Silong-Baoku/zyk/releases/download/apk/SilongResPool_v3.0.apk" class="card-link">下载安装包</a>
+                    <a href="#" class="card-link">下载安装包</a>
                 </div>
             </div>
             
@@ -386,7 +384,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #2d0b4d, #5e17a7);">
                     <div class="preview-overlay">
-                         <img src="rjdyl.jpg" alt="图片预览">
+                         <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW9iaWxlJTIwYXBwfGVufDB8fDB8fHww" alt="软件端入口">
                     </div>
                 </div>
                 <div class="card-content">
@@ -397,7 +395,7 @@
                         <div class="card-title">软件端入口</div>
                     </div>
                     <p class="card-desc">进入软件端资源库主界面，海量资源分类整理，高效检索，随时随地获取所需内容。</p>
-                    <a href="zyku.html" class="card-link">进入资源库</a>
+                    <a href="#" class="card-link">进入资源库</a>
                 </div>
             </div>
         </div>
@@ -408,7 +406,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #2d0b4d, #5e17a7);">
                     <div class="preview-overlay">
-                        <img src="wydyl.jpg" alt="图片预览">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2ViJTIwYXBwfGVufDB8fDB8fHww" alt="网页端入口">
                     </div>
                 </div>
                 <div class="card-content">
@@ -419,7 +417,7 @@
                         <div class="card-title">网页端入口</div>
                     </div>
                     <p class="card-desc">进入网页端资源库主界面，海量资源分类整理，高效检索，随时随地获取所需内容。</p>
-                    <a href="https://silong-baoku.github.io/zyk/" class="card-link">进入资源库</a>
+                    <a href="#" class="card-link">进入资源库</a>
                 </div>
             </div>
             
@@ -427,7 +425,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #4a1e7a, #8a2be2);">
                     <div class="preview-overlay">
-                        <img src="zzzyl.jpg" alt="图片预览">
+                        <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzb3VyY2VzfGVufDB8fDB8fHww" alt="资源中转站">
                     </div>
                 </div>
                 <div class="card-content">
@@ -438,7 +436,7 @@
                         <div class="card-title">资源中转站</div>
                     </div>
                     <p class="card-desc">获取最新联系方式与资源跳转链接，保持更新同步，第一时间获取最新资源。</p>
-                    <a href="https://link3.cc/silong6969" class="card-link">访问中转站</a>
+                    <a href="#" class="card-link">访问中转站</a>
                 </div>
             </div>
         </div>
