@@ -64,69 +64,47 @@
         /* 头部标题 */
         .header {
             text-align: center;
-            margin-bottom: 50px; /* 增加底部间距 */
+            margin-bottom: 40px;
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 1000px;
-        }
-        
-        .logo {
-            width: 120px; /* 稍微加大尺寸 */
-            height: 120px;
-            margin: 0 auto 20px; /* 增加底部间距 */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
-            border: 3px solid rgba(216, 191, 216, 0.4);
-            overflow: hidden; /* 确保图片不会溢出 */
-            animation: pulse 4s infinite ease-in-out;
-        }
-        
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 确保图片填满圆形区域 */
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
-            50% { transform: scale(1.04); box-shadow: 0 0 40px rgba(157, 77, 255, 0.7); }
+            padding-top: 30px; /* 顶部增加间距补偿 */
         }
         
         .header h1 {
-            font-size: 36px; /* 调整字体大小 */
+            font-size: 42px; /* 增大标题字号 */
             font-weight: 700;
             background: linear-gradient(to right, #e6e6fa, var(--neon-cyan));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 12px rgba(230, 230, 250, 0.4);
-            letter-spacing: 1.5px;
-            margin-bottom: 8px; /* 调整底部间距 */
+            text-shadow: 0 0 15px rgba(230, 230, 250, 0.5);
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            position: relative;
         }
         
         .header h1::after {
             content: '';
             position: absolute;
-            bottom: -12px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 180px;
-            height: 3px;
+            width: 220px;
+            height: 4px;
             background: linear-gradient(to right, transparent, var(--neon-purple), transparent);
             border-radius: 2px;
         }
         
         .header p {
-            font-size: 16px; /* 调整字体大小 */
+            font-size: 18px; /* 增大副标题字号 */
             color: var(--neon-cyan);
-            max-width: 600px;
-            margin: 20px auto 0; /* 调整间距 */
-            line-height: 1.5;
+            max-width: 700px;
+            margin: 30px auto 0;
+            line-height: 1.6;
             text-shadow: var(--text-glow);
+            padding: 0 20px;
         }
         
         /* 入口卡片容器 - 修改为两列布局 */
@@ -136,7 +114,7 @@
             max-width: 1000px;
             gap: 25px;
             z-index: 10;
-            margin-bottom: 30px; /* 增加底部间距 */
+            margin-bottom: 40px;
         }
         
         .portal-column {
@@ -178,14 +156,36 @@
             border-color: var(--neon-purple);
         }
         
-        /* 卡片预览图 */
+        /* 卡片预览图 - 修改为16:9比例 */
         .card-preview {
-            height: 180px;
-            background-color: var(--light-purple);
-            background-size: cover;
-            background-position: center;
             position: relative;
             overflow: hidden;
+            background-color: var(--light-purple);
+            /* 16:9比例 */
+            padding-bottom: 56.25%; /* 9/16 = 0.5625 */
+        }
+        
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .preview-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .portal-card:hover .preview-overlay img {
+            transform: scale(1.05);
         }
         
         .card-preview::after {
@@ -199,34 +199,9 @@
             z-index: 1;
         }
         
-        .preview-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 2;
-            background: rgba(74, 30, 122, 0.6);
-        }
-        
-        .preview-overlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .portal-card:hover .preview-overlay {
-            opacity: 1;
-        }
-        
         /* 卡片内容 */
         .card-content {
-            padding: 20px;
+            padding: 10px;
             position: relative;
             z-index: 2;
             flex-grow: 1;
@@ -237,47 +212,47 @@
         .card-header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         
         .card-icon {
-            width: 36px;
-            height: 36px;
+            width: 40px; /* 增大图标尺寸 */
+            height: 40px;
             background: rgba(138, 43, 226, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
+            margin-right: 15px;
             flex-shrink: 0;
         }
         
         .card-icon i {
-            font-size: 18px;
+            font-size: 20px; /* 增大图标字号 */
             color: var(--neon-cyan);
         }
         
         .card-title {
-            font-size: 18px;
+            font-size: 20px; /* 增大标题字号 */
             font-weight: 600;
             background: linear-gradient(to right, #e6e6fa, #b19cd9);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
         }
         
         .card-desc {
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 15px; /* 增大描述字号 */
+            line-height: 1.6;
             color: #d8bfd8;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-grow: 1;
         }
         
         .card-link {
             display: inline-block;
-            padding: 10px 22px;
+            padding: 12px 28px;
             background: linear-gradient(to right, var(--neon-purple), #6a1bbd);
             color: white;
             text-decoration: none;
@@ -286,14 +261,33 @@
             text-align: center;
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.25);
-            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            font-size: 16px; /* 增大按钮字号 */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .card-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
         }
         
         .card-link:hover {
             background: linear-gradient(to right, #6a1bbd, var(--neon-purple));
-            box-shadow: 0 4px 18px rgba(138, 43, 226, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.45);
+            transform: translateY(-3px);
+        }
+        
+        .card-link:hover::before {
+            left: 100%;
         }
         
         /* 底部信息 */
@@ -301,7 +295,7 @@
             text-align: center;
             padding: 25px 0;
             color: var(--neon-cyan);
-            font-size: 13px;
+            font-size: 14px;
             width: 100%;
             max-width: 800px;
             position: relative;
@@ -311,10 +305,10 @@
         .footer::before {
             content: '';
             display: block;
-            width: 180px;
+            width: 200px;
             height: 2px;
             background: linear-gradient(to right, transparent, var(--neon-purple), transparent);
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
         }
         
         /* 响应式设计 */
@@ -326,20 +320,16 @@
             }
             
             .header h1 {
-                font-size: 30px;
-            }
-            
-            .logo {
-                width: 100px;
-                height: 100px;
+                font-size: 32px;
             }
             
             .header p {
-                font-size: 14px;
+                font-size: 16px;
             }
             
             .header {
-                margin-bottom: 40px;
+                margin-bottom: 30px;
+                padding-top: 20px;
             }
         }
     </style>
@@ -350,14 +340,11 @@
     
     <!-- 头部区域 -->
     <div class="header">
-        <div class="logo">
-            <img src="https://silong-baoku.github.io/zyk/tx.jpg" alt="巳泷头像">
-        </div>
         <h1>巳泷资源库</h1>
-        <p>精选资源 • 持续更新 • 高效便捷</p>
+        <p>精选资源 • 持续更新 • 高效便捷 </p>
     </div>
     
-    <!-- 两列布局容器 -->
+   <!-- 两列布局容器 -->
     <div class="portal-container">
         <!-- 左列 -->
         <div class="portal-column">
@@ -365,7 +352,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #1a0637, #4a1e7a);">
                     <div class="preview-overlay">
-                         <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YW5kcm9pZCUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D" alt="软件安装包">
+                         <img src="azbyl.jpg" alt="软件安装包">
                     </div>
                 </div>
                 <div class="card-content">
@@ -376,7 +363,7 @@
                         <div class="card-title">软件安装包</div>
                     </div>
                     <p class="card-desc">安卓端专用安装包，安全可靠，持续更新。提供最新版本的资源库应用，一键下载安装。</p>
-                    <a href="#" class="card-link">下载安装包</a>
+                    <a href="https://github.com/Silong-Baoku/zyk/releases/download/apk/SilongResPool_v3.0.apk" class="card-link">下载安装包</a>
                 </div>
             </div>
             
@@ -384,7 +371,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #2d0b4d, #5e17a7);">
                     <div class="preview-overlay">
-                         <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW9iaWxlJTIwYXBwfGVufDB8fDB8fHww" alt="软件端入口">
+                         <img src="rjdyl.jpg" alt="软件端入口">
                     </div>
                 </div>
                 <div class="card-content">
@@ -395,7 +382,7 @@
                         <div class="card-title">软件端入口</div>
                     </div>
                     <p class="card-desc">进入软件端资源库主界面，海量资源分类整理，高效检索，随时随地获取所需内容。</p>
-                    <a href="#" class="card-link">进入资源库</a>
+                    <a href="zyku.html" class="card-link">进入资源库</a>
                 </div>
             </div>
         </div>
@@ -406,7 +393,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #2d0b4d, #5e17a7);">
                     <div class="preview-overlay">
-                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2ViJTIwYXBwfGVufDB8fDB8fHww" alt="网页端入口">
+                        <img src="wydyl.jpg" alt="网页端入口">
                     </div>
                 </div>
                 <div class="card-content">
@@ -417,7 +404,7 @@
                         <div class="card-title">网页端入口</div>
                     </div>
                     <p class="card-desc">进入网页端资源库主界面，海量资源分类整理，高效检索，随时随地获取所需内容。</p>
-                    <a href="#" class="card-link">进入资源库</a>
+                    <a href="https://silong-baoku.github.io/zyk/" class="card-link">进入资源库</a>
                 </div>
             </div>
             
@@ -425,7 +412,7 @@
             <div class="portal-card">
                 <div class="card-preview" style="background: linear-gradient(45deg, #4a1e7a, #8a2be2);">
                     <div class="preview-overlay">
-                        <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzb3VyY2VzfGVufDB8fDB8fHww" alt="资源中转站">
+                        <img src="zzzyl.jpg" alt="资源中转站">
                     </div>
                 </div>
                 <div class="card-content">
@@ -436,7 +423,7 @@
                         <div class="card-title">资源中转站</div>
                     </div>
                     <p class="card-desc">获取最新联系方式与资源跳转链接，保持更新同步，第一时间获取最新资源。</p>
-                    <a href="#" class="card-link">访问中转站</a>
+                    <a href="https://link3.cc/silong6969" class="card-link">访问中转站</a>
                 </div>
             </div>
         </div>
@@ -445,14 +432,14 @@
     <!-- 底部信息 -->
     <div class="footer">
         <p>免费资源会持续更新，后续有新内容会第一时间补充上来～</p>
-        <p>© 2025 巳泷资源库 | 精心整理 持续更新</p>
+        <p>© 2025 巳泷资源库 | 精心整理 持续更新 </p>
     </div>
     
     <script>
         // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('starsContainer');
-            const starCount = 150;
+            const starCount = 200;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
@@ -468,7 +455,7 @@
                 star.style.top = `${Math.random() * 100}%`;
                 
                 // 随机闪烁速度
-                const duration = 3 + Math.random() * 7;
+                const duration = 2 + Math.random() * 6;
                 star.style.setProperty('--duration', `${duration}s`);
                 
                 starsContainer.appendChild(star);
