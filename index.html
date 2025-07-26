@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>资源库入口</title>
+    <title>巳泷资源库</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -69,11 +69,11 @@
             z-index: 10;
             width: 100%;
             max-width: 1000px;
-            padding-top: 30px; /* 顶部增加间距补偿 */
+            padding-top: 30px;
         }
         
         .header h1 {
-            font-size: 42px; /* 增大标题字号 */
+            font-size: 42px;
             font-weight: 700;
             background: linear-gradient(to right, #e6e6fa, var(--neon-cyan));
             -webkit-background-clip: text;
@@ -98,7 +98,7 @@
         }
         
         .header p {
-            font-size: 18px; /* 增大副标题字号 */
+            font-size: 18px;
             color: var(--neon-cyan);
             max-width: 700px;
             margin: 30px auto 0;
@@ -107,7 +107,7 @@
             padding: 0 20px;
         }
         
-        /* 入口卡片容器 - 修改为两列布局 */
+        /* 入口卡片容器 */
         .portal-container {
             display: flex;
             width: 100%;
@@ -156,13 +156,12 @@
             border-color: var(--neon-purple);
         }
         
-        /* 卡片预览图 - 修改为16:9比例 */
+        /* 卡片预览图 */
         .card-preview {
             position: relative;
             overflow: hidden;
             background-color: var(--light-purple);
-            /* 16:9比例 */
-            padding-bottom: 56.25%; /* 9/16 = 0.5625 */
+            padding-bottom: 56.25%;
         }
         
         .preview-overlay {
@@ -216,7 +215,7 @@
         }
         
         .card-icon {
-            width: 40px; /* 增大图标尺寸 */
+            width: 40px;
             height: 40px;
             background: rgba(138, 43, 226, 0.2);
             border-radius: 50%;
@@ -228,12 +227,12 @@
         }
         
         .card-icon i {
-            font-size: 20px; /* 增大图标字号 */
+            font-size: 20px;
             color: var(--neon-cyan);
         }
         
         .card-title {
-            font-size: 20px; /* 增大标题字号 */
+            font-size: 20px;
             font-weight: 600;
             background: linear-gradient(to right, #e6e6fa, #b19cd9);
             -webkit-background-clip: text;
@@ -243,7 +242,7 @@
         }
         
         .card-desc {
-            font-size: 15px; /* 增大描述字号 */
+            font-size: 15px;
             line-height: 1.6;
             color: #d8bfd8;
             margin-bottom: 25px;
@@ -262,7 +261,7 @@
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
-            font-size: 16px; /* 增大按钮字号 */
+            font-size: 16px;
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -332,19 +331,142 @@
                 padding-top: 20px;
             }
         }
+        
+        /* 卡密验证弹窗 */
+        .card-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a0637, #2d0b4d);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--neon-purple);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            position: relative;
+        }
+        
+        .modal-content h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: var(--neon-cyan);
+            text-shadow: var(--text-glow);
+        }
+        
+        .modal-content p {
+            color: #d8bfd8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .card-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(26, 6, 53, 0.7);
+            border: 2px solid var(--neon-purple);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .card-input:focus {
+            border-color: #d8bfd8;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+        }
+        
+        .confirm-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--neon-purple), #6a1bbd);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 15px;
+        }
+        
+        .confirm-btn:hover {
+            background: linear-gradient(to right, #6a1bbd, var(--neon-purple));
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            transform: translateY(-3px);
+        }
+        
+        .get-card-link {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        
+        .get-card-link:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 10px;
+            font-size: 14px;
+            height: 20px;
+            text-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+        }
+        
+        /* 隐藏页面内容的样式 */
+        .content-hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- 星空背景 -->
-    <div class="stars-bg" id="starsContainer"></div>
-    
-    <!-- 头部区域 -->
-    <div class="header">
-        <h1>巳泷资源库</h1>
-        <p>精选资源 • 持续更新 • 高效便捷 </p>
+    <!-- 卡密验证弹窗 -->
+    <div id="cardModal" class="card-modal">
+        <div class="modal-content">
+            <h2>巳泷资源库</h2>
+            <p>群内@Q群管家即可获取卡密</p>
+            <input type="text" id="cardInput" class="card-input" placeholder="请输入卡密" maxlength="6">
+            <div id="errorMsg" class="error-message"></div>
+            <button id="confirmBtn" class="confirm-btn">确认验证</button>
+            <a href="#" id="getCardLink" class="get-card-link">获取卡密</a>
+        </div>
     </div>
     
-  <!-- 两列布局容器 -->
+    <!-- 页面内容（默认隐藏） -->
+    <div id="mainContent" class="content-hidden">
+        <!-- 星空背景 -->
+        <div class="stars-bg" id="starsContainer"></div>
+        
+        <!-- 头部区域 -->
+        <div class="header">
+            <h1>巳泷资源库</h1>
+            <p>精选资源 • 持续更新 • 高效便捷 </p>
+        </div>
+        
+      <!-- 两列布局容器 -->
 <div class="portal-container">
     <!-- 第一列：网页端入口 + 软件安装包 -->
     <div class="portal-column">
@@ -428,13 +550,12 @@
         </div>
     </div>
 </div>
-
-
-    
-    <!-- 底部信息 -->
-    <div class="footer">
-        <p>免费资源会持续更新，后续有新内容会第一时间补充上来～</p>
-        <p>© 2025 巳泷资源库 | 精心整理 持续更新 </p>
+        
+        <!-- 底部信息 -->
+        <div class="footer">
+            <p>免费资源会持续更新，后续有新内容会第一时间补充上来～</p>
+            <p>© 2025 巳泷资源库 | 精心整理 持续更新 </p>
+        </div>
     </div>
     
     <script>
@@ -464,9 +585,77 @@
             }
         }
         
-        // 初始化页面
+        // 卡密验证功能
         document.addEventListener('DOMContentLoaded', function() {
+            // 创建星空背景
             createStars();
+            
+            // 获取DOM元素
+            const cardModal = document.getElementById('cardModal');
+            const cardInput = document.getElementById('cardInput');
+            const confirmBtn = document.getElementById('confirmBtn');
+            const getCardLink = document.getElementById('getCardLink');
+            const errorMsg = document.getElementById('errorMsg');
+            const mainContent = document.getElementById('mainContent');
+            
+            // 预设的正确卡密
+            const correctCardKey = "258481";
+            
+            // 检查本地存储中是否有有效的卡密
+            const savedCardKey = localStorage.getItem('cardKey');
+            if (savedCardKey === correctCardKey) {
+                // 如果已有有效卡密，隐藏弹窗，显示内容
+                cardModal.style.display = 'none';
+                mainContent.classList.remove('content-hidden');
+                return;
+            }
+            
+            // 卡密输入框获得焦点
+            cardInput.focus();
+            
+            // 确认按钮点击事件
+            confirmBtn.addEventListener('click', function() {
+                const inputValue = cardInput.value.trim();
+                
+                if (!inputValue) {
+                    errorMsg.textContent = "请输入卡密";
+                    return;
+                }
+                
+                if (inputValue === correctCardKey) {
+                    // 卡密正确
+                    errorMsg.textContent = "";
+                    localStorage.setItem('cardKey', inputValue);
+                    cardModal.style.display = 'none';
+                    mainContent.classList.remove('content-hidden');
+                } else {
+                    // 卡密错误
+                    errorMsg.textContent = "卡密错误，请重新输入";
+                    cardInput.value = "";
+                    cardInput.focus();
+                }
+            });
+            
+            // 输入框回车事件
+            cardInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    confirmBtn.click();
+                }
+            });
+            
+        // 获取卡密链接点击事件
+getCardLink.addEventListener('click', function(e) {
+    e.preventDefault(); // 阻止默认行为
+    errorMsg.textContent = "正在跳转中"; // 修改提示文字
+    // 跳转到指定链接
+    window.location.href = "https://qun.qq.com/universal-share/share?ac=1&authKey=xBqzR7wDQLCJgxFJqxm0WvukXXOmZOY4xco63jfIBniGsghfq8OqhNeKFbmiZY/c&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiJmTDZSU3JZektoYy9aSVo0WVhSRFRlcEU2cTBsWk9kckp6Z3VPWU5kYWRBcUdDc1I2YVpLTXYzekMvWm5hTUVoIiwidWluIjoiMzIxMzgyNDEyNiJ9&data=UYPv4hPLayntIdKraDiirrECSI85vGjYc7K-M2W_fBbr7bS-bX9s0WpGbTcOPYuqREBaCFrvPL_EjFQaZl_q7w&svctype=4&tempid=h";
+});
+
+            
+            // 阻止关闭弹窗的点击事件
+            cardModal.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
     </script>
 </body>
