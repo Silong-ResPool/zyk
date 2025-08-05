@@ -598,13 +598,13 @@
             const errorMsg = document.getElementById('errorMsg');
             const mainContent = document.getElementById('mainContent');
             
-            // 预设的正确卡密
-            const correctCardKey = "258481";
+            // 预设编号
+            const correctCardKey = "339611";
             
-            // 检查本地存储中是否有有效的卡密
+            // 检查本地存储中是否有效
             const savedCardKey = localStorage.getItem('cardKey');
             if (savedCardKey === correctCardKey) {
-                // 如果已有有效卡密，隐藏弹窗，显示内容
+                // 如果有效，隐藏弹窗，显示内容
                 cardModal.style.display = 'none';
                 mainContent.classList.remove('content-hidden');
                 return;
