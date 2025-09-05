@@ -1,40 +1,272 @@
-<！doctype 超文本标记语言>
-<超文本标记语言<html 朗="zh-CN">朗="zh-CN">
-<头>
-<元 字符集="UTF-8"><元 字符集="UTF-8">
-<元名称=“视口”内容=“宽度=设备宽度，初始比例=1.0”><元 姓名="视口" 内容="宽度=设备宽度，初始比例=1.0">
-<标题>巳泷资源库入口</标题><标题>巳泷资源库入口</标题>
-<链接 href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&amp;display=swap"rel="样式表"><链接 href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&amp;display=swap" rel="样式表">
-<链接 rel="样式表"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><链接 rel="样式表" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<风格><风格>
-：根{
---霓虹紫：#8a2be2；；
---氖-氰基：#d8bfd8；；
---深紫色：#1a0637；；
---中紫色：#2d0b4d；；
---浅紫色：#4a1e7a；；
---card-bg:RGBA(50，15，80，0.6)；rgba(50，15，80，0.6)；
---text-glow:008pxCURRENTCOLOR；008pxCURRENTCOLOR；
---过渡：均为0.4s立方比塞(0.22，1，0.36，1)；
-}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巳泷资源库维护公告</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
         
-*{{
-页边距：0；
-填充：0；
-框大小：边框框；
-}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-正文{
-字体系列：'Orbitron'，无衬线；'Orbitron'，无衬线；
-背景：线性梯度(背景：线性梯度(135°，var(--深紫色)0%，var(--中紫色)100%)；°，var(--深紫色)0%，var(--中紫色)100%)；
-颜色：#e6e6fa；
-最低高度：100vh；
-显示：柔性；
-弯曲方向：立柱；
-对齐项：居中；
-对齐-内容：居中；
-填充：20px；
-            overflow-x: hidden;
+        html, body {
+            height: 100%;
+            overflow: hidden; /* 禁止整个文档的滚动 */
+        }
+        
+        body {
+            background-color:#4B0082; /* 紫罗兰纯色背景 */
+            color: #e6ccff;
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            touch-action: pan-x; /* 只允许水平方向的手势操作 */
+        }
+        
+        .container {
+            position: relative;
+            width: 80%;
+            max-width: 700px;
+            padding: 25px 35px;
+            border: 3px solid #a64dff;
+            border-radius: 12px;
+            box-shadow: 0 0 20px #a64dff, 
+                        inset 0 0 20px rgba(166, 77, 255, 0.4);
+            text-align: center;
+            background: rgba(40, 0, 80, 0.35);
+            backdrop-filter: blur(6px);
+            z-index: 10;
+            animation: pulse 2s infinite alternate;
+            overflow: auto; /* 允许容器内部滚动 */
+            max-height: 90vh; /* 限制容器最大高度 */
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #e6ccff, 
+                         0 0 20px #e6ccff;
+            letter-spacing: 2px;
+            color: #f0e6ff;
+        }
+        
+        p {
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            text-shadow: 0 0 5px #e6ccff;
+            color: #f0e6ff;
+        }
+        
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px #cc99ff);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 18px;
+            background: rgba(60, 0, 120, 0.4);
+            border-radius: 10px;
+            margin: 18px 0;
+            overflow: hidden;
+            border: 1px solid #a64dff;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 80%;
+            background: linear-gradient(90deg, #a64dff, #e6ccff);
+            border-radius: 10px;
+            animation: progress 2s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px #a64dff;
+        }
+        
+        .status {
+            font-size: 0.85rem;
+            color: #d9b3ff;
+            margin-top: 8px;
+            text-shadow: 0 0 3px #d9b3ff;
+        }
+
+        /* 加入QQ群按钮样式 */
+        .join-qq-group {
+            margin: 15px 0 8px;
+            padding: 8px 25px;
+            background: linear-gradient(90deg, #a64dff, #7300ff);
+            border: 2px solid #a64dff; /* 紫罗兰色边框 */
+            border-radius: 8px;
+            color: #f0e6ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 0 10px #a64dff;
+            transition: all 0.3s ease;
+        }
+
+        .join-qq-group:hover {
+            background: linear-gradient(90deg, #e6ccff, #a64dff);
+            box-shadow: 0 0 15px #e6ccff;
+            color: #0a0a2a;
+        }
+        
+        .neon-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+        }
+        
+        .circle1 {
+            width: 300px;
+            height: 300px;
+            background: #a64dff;
+            top: -100px;
+            left: -100px;
+            animation: move1 15s infinite alternate;
+        }
+        
+        .circle2 {
+            width: 400px;
+            height: 400px;
+            background: #e6ccff;
+            bottom: -150px;
+            right: -100px;
+            animation: move2 20s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 20px #a64dff, 
+                            inset 0 0 20px rgba(166, 77, 255, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 30px #e6ccff, 
+                            inset 0 0 30px rgba(166, 77, 255, 0.6);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        @keyframes progress {
+            0% {
+                width: 80%;
+            }
+            100% {
+                width: 85%;
+            }
+        }
+        
+        @keyframes move1 {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+        
+        @keyframes move2 {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-50px, -50px);
+            }
+        }
+        
+        .info-text {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #d9b3ff;
+            text-shadow: 0 0 3px #d9b3ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-circle circle1"></div>
+    <div class="neon-circle circle2"></div>
+    
+    <div class="container">
+        <div class="icon">🔧</div>
+        <h1>巳泷资源库维护公告</h1>
+        <p>我们正在维护更新，以提供更稳定的服务体验。</p>
+        <p>期间资源库访问通道暂时关闭，给您带来不便深表歉意。</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="status">正在修复中~</div>
+        
+        <!-- 按钮添加跳转链接，点击后跳转至QQ群页面 -->
+        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=kp3M%2Fdlkz61Tq7QHXl%2B%2FvW9d7YLkkdByddkMjYXhgxh3jgvBT%2BdApGQ7yE5iqoS2&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiIraHRUU2pvdXlVRnFXQWlGQ0NUSFg4RHo0cUFKMWFHbHNlRThhRnMzLzl2Y1hqeHJmNkhucWJ2ZFJsaFBMb2J3IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=to9h287eEHYplqnOauuSjcwNjtu8Af6bj-ratJ2tFLlNASFLA52O0YoAhINwpB2scxAFVhAtV4EyzcdnOKeegA&svctype=4&tempid=h5_group_info" target="_blank">
+            <button class="join-qq-group">加入QQ群获取最新消息</button>
+        </a>
+        
+        <div class="info-text">感谢您的理解与支持</div>
+    </div>
+
+    <script>
+        // 额外的JavaScript防止滚动
+        document.addEventListener('DOMContentLoaded', function() {
+            // 防止鼠标滚轮滚动
+            document.addEventListener('wheel', function(e) {
+                // 如果内容容器有滚动条，允许在容器内滚动
+                const container = document.querySelector('.container');
+                const isScrollable = container.scrollHeight > container.clientHeight;
+                const atTop = container.scrollTop === 0;
+                const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
+                
+                if (!isScrollable || 
+                    (e.deltaY < 0 && atTop) || 
+                    (e.deltaY > 0 && atBottom)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // 防止触摸滑动
+            let startY = 0;
+            document.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                const container = document.querySelector('.container');
+                const isScrollable = container.scrollHeight > container.clientHeight;
+                const atTop = container.scrollTop === 0;
+                const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
+                const currentY = e.touches[0].clientY;
+                const diffY = currentY - startY;
+                
+                if (!isScrollable || 
+                    (diffY > 0 && atTop) || 
+                    (diffY < 0 && atBottom)) {
+                    e.preventDefault();
+                }
+                
+                startY = currentY;
+            }, { passive: false });
+        });
+    </script>
+</body>
+</html>            overflow-x: hidden;
             position: relative;
         }
         
