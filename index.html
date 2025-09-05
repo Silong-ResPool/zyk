@@ -73,7 +73,7 @@
             border-radius: 50%;
             margin: 0 auto 12px;
             overflow: hidden;
-            animation: float 3s ease-in-out infinite;
+            /* 已移除浮动动画 */
             filter: drop-shadow(0 0 8px #cc99ff);
             border: 2px solid #a64dff;
         }
@@ -167,15 +167,6 @@
             }
         }
         
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-        
         @keyframes progress {
             0% {
                 width: 80%;
@@ -220,8 +211,8 @@
             <img src="https://silong-baoku.github.io/zyk/tx.jpg" alt="巳泷头像">
         </div>
         <h1>巳泷资源库维护公告</h1>
-        <p>我们正在维护更新，以提供更稳定的服务体验。</p>
-        <p>期间资源库访问通道暂时关闭，给您带来不便深表歉意。</p>
+        <p>我们正在维护更新，以提供更稳定的服务体验</p>
+        <p>期间资源库访问通道暂时关闭，给您带来不便深表歉意</p>
         
         <div class="progress-container">
             <div class="progress-bar"></div>
@@ -229,7 +220,7 @@
         <div class="status">正在修复中~</div>
         
         <!-- 按钮添加跳转链接，点击后跳转至QQ群页面 -->
-        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=kp3M%2Fdlkz61Tq7QHXl%2B%2FvW9d7YLkkdByddkMjYXhgxh3jgvBT%2BdApGQ7yE5iqoS2&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiIraHRUU2pvdXlVRnFXQWlGQ0NUSFg4RHo0cUFKMWFHbHNlRThhRnMzLzl2Y1hqeHJmNkhucWJ2ZFJsaFBMb2J3IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=to9h287eEHYplqnOauuSjcwNjtu8Af6bj-ratJ2tFLlNASFLA52O0YoAhINwpB2scxAFVhAtV4EyzcdnOKeegA&svctype=4&tempid=h5_group_info" target="_blank">
+        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=kp3M%2Fdlkz61Tq7QHXl%2F%2FvW9d7YLkkdByddkMjYXhgxh3jgvBT%2BdApGQ7yE5iqoS2&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiIraHRUU2pvdXlVRnFXQWlGQ0NUSFg4RHo0cUFKMWFHbHNlRThhRnMzLzl2Y1hqeHJmNkhucWJ2ZFJsaFBMb2J3IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=to9h287eEHYplqnOauuSjcwNjtu8Af6bj-ratJ2tFLlNASFLA52O0YoAhINwpB2scxAFVhAtV4EyzcdnOKeegA&svctype=4&tempid=h5_group_info" target="_blank">
             <button class="join-qq-group">加入QQ群获取最新消息</button>
         </a>
         
