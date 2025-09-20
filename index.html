@@ -3,271 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>巳泷资源库维护公告</title>
+    <title>巳泷资源库 - 登录界面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        
+        :root {
+            --primary-color: #8A2BE2;
+            --secondary-color: #9370DB;
+            --dark-purple: #4B0082;
+            --light-purple: #E6E6FA;
+            --accent-color: #DA70D6;
+            --text-color: #FFFFFF;
+            --error-color: #FF5252;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
-        
-        html, body {
-            height: 100%;
-            overflow: hidden; /* 禁止整个文档的滚动 */
-        }
-        
+
         body {
-            background-color:#4B0082; /* 紫罗兰纯色背景 */
-            color: #e6ccff;
-            font-family: 'Orbitron', sans-serif;
-            height: 100vh;
+            background: linear-gradient(135deg, var(--dark-purple), var(--primary-color));
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-            touch-action: pan-x; /* 只允许水平方向的手势操作 */
+            padding: 20px;
         }
-        
+
         .container {
+            background: rgba(40, 0, 80, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
             position: relative;
-            width: 80%;
-            max-width: 700px;
-            padding: 25px 35px;
-            border: 3px solid #a64dff;
-            border-radius: 12px;
-            box-shadow: 0 0 20px #a64dff, 
-                        inset 0 0 20px rgba(166, 77, 255, 0.4);
-            text-align: center;
-            background: rgba(40, 0, 80, 0.35);
-            backdrop-filter: blur(6px);
-            z-index: 10;
-            animation: pulse 2s infinite alternate;
-            overflow: auto; /* 允许容器内部滚动 */
-            max-height: 100vh; /* 限制容器最大高度 */
-            margin: 0 auto; /* 确保水平居中 */
-        }
-        
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px #e6ccff, 
-                         0 0 20px #e6ccff;
-            letter-spacing: 2px;
-            color: #f0e6ff;
-        }
-        
-        p {
-            font-size: 1rem;
-            line-height: 1.4;
-            margin-bottom: 12px;
-            text-shadow: 0 0 5px #e6ccff;
-            color: #f0e6ff;
-        }
-        
-        .icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin: 0 auto 12px;
             overflow: hidden;
-            /* 已移除浮动动画 */
-            filter: drop-shadow(0 0 8px #cc99ff);
-            border: 2px solid #a64dff;
         }
-        
-        .icon img {
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+            z-index: -1;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        .logo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
-        .progress-container {
-            width: 100%;
-            height: 18px;
-            background: rgba(60, 0, 120, 0.4);
-            border-radius: 10px;
-            margin: 18px 0;
-            overflow: hidden;
-            border: 1px solid #a64dff;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            width: 80%;
-            background: linear-gradient(90deg, #a64dff, #e6ccff);
-            border-radius: 10px;
-            animation: progress 2s ease-in-out infinite alternate;
-            box-shadow: 0 0 10px #a64dff;
-        }
-        
-        .status {
-            font-size: 0.85rem;
-            color: #d9b3ff;
-            margin-top: 8px;
-            text-shadow: 0 0 3px #d9b3ff;
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        /* 加入QQ群按钮样式 */
-        .join-qq-group {
-            margin: 15px 0 8px;
-            padding: 8px 25px;
-            background: linear-gradient(90deg, #a64dff, #7300ff);
-            border: 2px solid #a64dff; /* 紫罗兰色边框 */
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-color);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(30, 0, 60, 0.7);
+            border: 1px solid var(--secondary-color);
             border-radius: 8px;
-            color: #f0e6ff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 0 10px #a64dff;
+            color: var(--text-color);
+            font-size: 16px;
             transition: all 0.3s ease;
         }
 
-        .join-qq-group:hover {
-            background: linear-gradient(90deg, #e6ccff, #a64dff);
-            box-shadow: 0 0 15px #e6ccff;
-            color: #0a0a2a;
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
         }
-        
-        .neon-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.5;
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
         }
-        
-        .circle1 {
-            width: 300px;
-            height: 300px;
-            background: #a64dff;
-            top: -100px;
-            left: -100px;
-            animation: move1 15s infinite alternate;
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
         }
-        
-        .circle2 {
-            width: 400px;
-            height: 400px;
-            background: #e6ccff;
-            bottom: -150px;
-            right: -100px;
-            animation: move2 20s infinite alternate;
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 20px #a64dff, 
-                            inset 0 0 20px rgba(166, 77, 255, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 30px #e6ccff, 
-                            inset 0 0 30px rgba(166, 77, 255, 0.6);
-            }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
         }
-        
-        @keyframes progress {
-            0% {
-                width: 80%;
-            }
-            100% {
-                width: 85%;
-            }
+
+        .btn-secondary {
+            background: rgba(30, 0, 60, 0.7);
+            color: var(--accent-color);
+            border: 1px solid var(--secondary-color);
         }
-        
-        @keyframes move1 {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(50px, 50px);
-            }
+
+        .btn-secondary:hover {
+            background: rgba(50, 0, 100, 0.7);
         }
-        
-        @keyframes move2 {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(-50px, -50px);
-            }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
         }
-        
-        .info-text {
-            margin-top: 12px;
-            font-size: 0.85rem;
-            color: #d9b3ff;
-            text-shadow: 0 0 3px #d9b3ff;
+
+        .error-message {
+            background: rgba(255, 82, 82, 0.2);
+            border: 1px solid var(--error-color);
+            color: #ffb6c1;
+        }
+
+        .warning-message {
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid var(--warning-color);
+            color: #ffd699;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--success-color);
+            color: #a0ffa8;
+        }
+
+        .welcome-container {
+            text-align: center;
+        }
+
+        .welcome-icon {
+            font-size: 60px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            background: rgba(30, 0, 60, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .time-remaining {
+            font-size: 18px;
+            margin: 15px 0;
+            color: var(--accent-color);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 模态框样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(40, 0, 80, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
+            position: relative;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--accent-color);
+            font-size: 24px;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+        }
+
+        .steps {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .steps li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
-    <div class="neon-circle circle1"></div>
-    <div class="neon-circle circle2"></div>
-    
     <div class="container">
-        <div class="icon">
-            <img src="https://Silong-ResPool.github.io/zyk/tx.jpg" alt="巳泷头像">
+        <!-- 登录表单 -->
+        <div id="loginForm">
+            <div class="header">
+                <div class="logo">
+                    <img src="https://silong-respool.github.io/zyk/tx.jpg" alt="巳泷资源库">
+                </div>
+                <h1>巳泷资源库</h1>
+                <p>登录系统</p>
+            </div>
+            
+            <div class="status-message hidden" id="statusMessage"></div>
+            
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="userName"><i class="fas fa-user"></i> 您的名称</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="userName" placeholder="请输入您的名称" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userQQ"><i class="fab fa-qq"></i> QQ号</label>
+                    <div class="input-with-icon">
+                        <i class="fab fa-qq"></i>
+                        <input type="text" id="userQQ" placeholder="请输入您的QQ号" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cardKey"><i class="fas fa-key"></i> 通行证</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="cardKey" placeholder="请输入通行证" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> 登录
+                </button>
+
+                <!-- 添加获取通行证按钮 -->
+                <button type="button" class="btn btn-secondary" id="getPassBtn">
+                    <i class="fas fa-ticket-alt"></i> 获取通行证
+                </button>
+            </form>
+            
+            <div class="footer">
+                <p>&copy; 2025 巳泷资源库 | 登录系统</p>
+            </div>
         </div>
-        <h1>巳泷资源库维护公告</h1>
-        <p>我们正在维护更新，以提供更稳定的服务体验</p>
-        <p>期间资源库访问通道暂时关闭，给您带来不便深表歉意</p>
         
-        <div class="progress-container">
-            <div class="progress-bar"></div>
+        <!-- 欢迎页面 -->
+        <div class="welcome-container hidden" id="welcomeContainer">
+            <div class="welcome-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="welcomeMessage">欢迎回来!</h2>
+            
+            <div class="user-info">
+                <p>名称: <span id="displayName"></span></p>
+                <p>QQ号: <span id="displayQQ"></span></p>
+                <p>通行证状态: <span id="displayStatus"></span></p>
+            </div>
+            
+            <div class="time-remaining" id="timeRemaining">
+                剩余时间: 计算中...
+            </div>
+            
+            <div class="btn-group">
+                <a href="https://silong-respool.github.io/zyk/zyku1.html" class="btn btn-primary">
+                    <i class="fas fa-door-open"></i> 进入资源库
+                </a>
+                <button class="btn btn-secondary" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> 退出登录
+                </button>
+            </div>
+            
+            <div class="footer">
+                <p>&copy; 2025 巳泷资源库 | 登录系统</p>
+            </div>
         </div>
-        <div class="status">正在修复中~</div>
-        
-        <!-- 按钮添加跳转链接，点击后跳转至QQ群页面 -->
-        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=kp3M%2Fdlkz61Tq7QHXl%2F%2FvW9d7YLkkdByddkMjYXhgxh3jgvBT%2BdApGQ7yE5iqoS2&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiIraHRUU2pvdXlVRnFXQWlGQ0NUSFg4RHo0cUFKMWFHbHNlRThhRnMzLzl2Y1hqeHJmNkhucWJ2ZFJsaFBMb2J3IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=to9h287eEHYplqnOauuSjcwNjtu8Af6bj-ratJ2tFLlNASFLA52O0YoAhINwpB2scxAFVhAtV4EyzcdnOKeegA&svctype=4&tempid=h5_group_info" target="_blank">
-            <button class="join-qq-group">加入QQ群获取最新消息</button>
-        </a>
-        
-        <div class="info-text">感谢您的理解与支持</div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>获取通行证指引</h2>
+            </div>
+            <div class="modal-body">
+                <p>请按照以下步骤获取您的通行证：</p>
+                <ol class="steps">
+                    <li>点击下方"跳转获取"按钮打开链接</li>
+                    <li>关注公众号<strong>巳泷宝库</strong></li>
+                    <li>发送消息字母<strong>a</strong>（不分大小写）到公众号</li>
+                    <li>按照公众号回复的指引获取通行证</li>
+                </ol>
+                <p>如果链接已失效，您可以：</p>
+                <ol class="steps">
+                    <li>到微信公众号搜索<strong>巳泷宝库</strong></li>
+                    <li>关注后发送消息字母<strong>a</strong></li>
+                    <li>按照公众号回复的指引获取通行证</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary modal-btn" id="jumpBtn">
+                    <i class="fas fa-external-link-alt"></i> 跳转获取
+                </button>
+                <button class="btn btn-cancel modal-btn" id="cancelBtn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 额外的JavaScript防止滚动
-        document.addEventListener('DOMContentLoaded', function() {
-            // 防止鼠标滚轮滚动
-            document.addEventListener('wheel', function(e) {
-                // 如果内容容器有滚动条，允许在容器内滚动
-                const container = document.querySelector('.container');
-                const isScrollable = container.scrollHeight > container.clientHeight;
-                const atTop = container.scrollTop === 0;
-                const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
-                
-                if (!isScrollable || 
-                    (e.deltaY < 0 && atTop) || 
-                    (e.deltaY > 0 && atBottom)) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
+        // DOM元素
+        const loginForm = document.getElementById('loginForm');
+        const welcomeContainer = document.getElementById('welcomeContainer');
+        const statusMessage = document.getElementById('statusMessage');
+        const authForm = document.getElementById('authForm');
+        const userNameInput = document.getElementById('userName');
+        const userQQInput = document.getElementById('userQQ');
+        const cardKeyInput = document.getElementById('cardKey');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const displayName = document.getElementById('displayName');
+        const displayQQ = document.getElementById('displayQQ');
+        const displayStatus = document.getElementById('displayStatus');
+        const timeRemaining = document.getElementById('timeRemaining');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const getPassBtn = document.getElementById('getPassBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const jumpBtn = document.getElementById('jumpBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        // 黑名单QQ列表
+        const blacklistedQQ = [
+            "666666"
+            // 可以在这里添加更多黑名单QQ
+        ];
+
+        // 初始化
+        function init() {
+            // 检查是否已登录
+            checkLoginStatus();
             
-            // 防止触摸滑动
-            let startY = 0;
-            document.addEventListener('touchstart', function(e) {
-                startY = e.touches[0].clientY;
-            }, { passive: true });
+            // 设置事件监听器
+            setupEventListeners();
+        }
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const userData = getUserData();
             
-            document.addEventListener('touchmove', function(e) {
-                const container = document.querySelector('.container');
-                const isScrollable = container.scrollHeight > container.clientHeight;
-                const atTop = container.scrollTop === 0;
-                const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
-                const currentY = e.touches[0].clientY;
-                const diffY = currentY - startY;
+            if (userData && userData.expireDate && new Date() < new Date(userData.expireDate)) {
+                // 用户已登录且未过期
+                showWelcomePage(userData.name, userData.qq);
+            } else if (userData && userData.expireDate && new Date() >= new Date(userData.expireDate)) {
+                // 用户已过期
+                showStatusMessage("您的登录已过期，请重新登录", "error");
+                clearUserData();
+            }
+        }
+
+        // 获取用户数据
+        function getUserData() {
+            const userData = localStorage.getItem('userData');
+            return userData ? JSON.parse(userData) : null;
+        }
+
+        // 保存用户数据
+        function saveUserData(name, qq) {
+            const now = new Date();
+            const expireDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30天后
+            
+            const userData = {
+                name: name,
+                qq: qq,
+                loginTime: now.toISOString(),
+                expireDate: expireDate.toISOString()
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+        }
+
+        // 清除用户数据
+        function clearUserData() {
+            localStorage.removeItem('userData');
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 表单提交事件
+            authForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                processLogin();
+            });
+            
+            // 退出登录按钮
+            logoutBtn.addEventListener('click', function() {
+                logout();
+            });
+            
+            // 获取通行证按钮
+            getPassBtn.addEventListener('click', function() {
+                showModal();
+            });
+            
+            // 模态框按钮
+            jumpBtn.addEventListener('click', function() {
+                // 这里替换为实际的公众号链接
+                window.open('https://t1xr.v3z.cn/V7Zkkq', '_blank');
+            });
+            
+            // 修复取消按钮功能
+            cancelBtn.addEventListener('click', function() {
+                hideModal();
+            });
+            
+            // 点击模态框背景关闭
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    hideModal();
+                }
+            });
+        }
+
+        // 显示模态框
+        function showModal() {
+            modalOverlay.classList.add('active');
+        }
+
+        // 隐藏模态框
+        function hideModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        // 处理登录流程
+        function processLogin() {
+            const name = userNameInput.value.trim();
+            const qq = userQQInput.value.trim();
+            const key = cardKeyInput.value.trim();
+            
+            if (!name) {
+                showStatusMessage("请输入您的名称", "error");
+                return;
+            }
+            
+            if (!qq) {
+                showStatusMessage("请输入QQ号", "error");
+                return;
+            }
+            
+            if (!key) {
+                showStatusMessage("请输入通行证", "error");
+                return;
+            }
+            
+            // 检查是否在黑名单中
+            if (isBlacklisted(qq)) {
+                showStatusMessage("该账号已被限制登录，请联系管理员", "warning");
+                return;
+            }
+            
+            // 验证通行证
+            if (key !== "Baoku258481") {
+                showStatusMessage("通行证错误，请检查后重新输入", "error");
+                return;
+            }
+            
+            // 保存用户数据
+            saveUserData(name, qq);
+            
+            // 显示欢迎页面
+            showWelcomePage(name, qq);
+        }
+
+        // 检查QQ是否在黑名单中
+        function isBlacklisted(qq) {
+            return blacklistedQQ.includes(qq);
+        }
+
+        // 显示欢迎页面
+        function showWelcomePage(name, qq) {
+            loginForm.classList.add('hidden');
+            welcomeContainer.classList.remove('hidden');
+            
+            welcomeMessage.textContent = `欢迎回来 ${name}`;
+            displayName.textContent = name;
+            displayQQ.textContent = qq;
+            displayStatus.textContent = "有效";
+            
+            // 开始计时
+            startTimer();
+        }
+
+        // 开始计时
+        function startTimer() {
+            const userData = getUserData();
+            
+            if (!userData || !userData.expireDate) {
+                timeRemaining.textContent = "数据错误";
+                return;
+            }
+            
+            const expireDate = new Date(userData.expireDate);
+            
+            function updateTimer() {
+                const now = new Date();
+                const timeLeft = expireDate - now;
                 
-                if (!isScrollable || 
-                    (diffY > 0 && atTop) || 
-                    (diffY < 0 && atBottom)) {
-                    e.preventDefault();
+                if (timeLeft <= 0) {
+                    timeRemaining.textContent = "登录已过期";
+                    displayStatus.textContent = "已过期";
+                    return;
                 }
                 
-                startY = currentY;
-            }, { passive: false });
-        });
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                timeRemaining.textContent = `剩余时间: ${days}天 ${hours}小时 ${minutes}分 ${seconds}秒`;
+            }
+            
+            // 立即更新一次
+            updateTimer();
+            
+            // 每秒更新一次
+            setInterval(updateTimer, 1000);
+        }
+
+        // 退出登录
+        function logout() {
+            clearUserData();
+            welcomeContainer.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            
+            // 重置表单
+            authForm.reset();
+        }
+
+        // 显示状态消息
+        function showStatusMessage(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}-message`;
+            statusMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
