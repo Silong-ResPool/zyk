@@ -120,6 +120,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--accent-color);
+            z-index: 1; /* 确保图标在输入框上方 */
         }
 
         input {
@@ -131,6 +132,12 @@
             color: var(--text-color);
             font-size: 16px;
             transition: all 0.3s ease;
+            position: relative; /* 确保输入框在图标下方 */
+        }
+
+        /* 修复QQ号输入框的padding */
+        input#userQQ {
+            padding-left: 45px; /* 确保文字不会与图标重叠 */
         }
 
         input:focus {
@@ -139,8 +146,12 @@
             box-shadow: 0 0 10px var(--accent-color);
         }
 
+        /* 数字输入框样式 */
+        input.number-input {
+            padding-left: 14px;
+        }
+
         .btn {
-            width: 100%;
             padding: 14px;
             border: none;
             border-radius: 8px;
@@ -152,7 +163,6 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
-            margin-top: 20px;
         }
 
         .btn-primary {
@@ -273,6 +283,8 @@
             position: relative;
             transform: translateY(-50px);
             transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-overlay.active .modal-content {
@@ -322,6 +334,70 @@
         .btn-cancel:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        /* 充值报告样式 */
+        .report-container {
+            background: rgba(30, 0, 60, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .report-text {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 10px auto;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* 按钮布局调整 */
+        .button-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .button-row .btn {
+            flex: 1;
+        }
+
+        .jump-note {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            color: var(--accent-color);
+        }
+
+        .info-note {
+            background: rgba(30, 0, 60, 0.5);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 3px solid var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -363,12 +439,12 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
                     <i class="fas fa-sign-in-alt"></i> 登录
                 </button>
 
-                <!-- 添加获取通行证按钮 -->
-                <button type="button" class="btn btn-secondary" id="getPassBtn">
+                <!-- 获取通行证按钮 -->
+                <button type="button" class="btn btn-secondary" id="getPassBtn" style="width: 100%; margin-top: 15px;">
                     <i class="fas fa-ticket-alt"></i> 获取通行证
                 </button>
             </form>
@@ -389,6 +465,7 @@
                 <p>名称: <span id="displayName"></span></p>
                 <p>QQ号: <span id="displayQQ"></span></p>
                 <p>通行证状态: <span id="displayStatus"></span></p>
+                <p>通行证类型: <span id="displayPassType"></span></p>
             </div>
             
             <div class="time-remaining" id="timeRemaining">
@@ -396,7 +473,7 @@
             </div>
             
             <div class="btn-group">
-                <a href="https://silong-respool.github.io/zyk/zyku1.html" class="btn btn-primary">
+                <a href="https://silong-respool.github.io/zyk/zyku2.html" class="btn btn-primary">
                     <i class="fas fa-door-open"></i> 进入资源库
                 </a>
                 <button class="btn btn-secondary" id="logoutBtn">
@@ -414,29 +491,55 @@
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>获取通行证指引</h2>
+                <h2>充值获取通行证</h2>
             </div>
             <div class="modal-body">
-                <p>请按照以下步骤获取您的通行证：</p>
-                <ol class="steps">
-                    <li>点击下方"跳转获取"按钮打开链接</li>
-                    <li>关注公众号<strong>巳泷宝库</strong></li>
-                    <li>发送消息字母<strong>a</strong>（不分大小写）到公众号</li>
-                    <li>按照公众号回复的指引获取通行证</li>
-                </ol>
-                <p>如果链接已失效，您可以：</p>
-                <ol class="steps">
-                    <li>到微信公众号搜索<strong>巳泷宝库</strong></li>
-                    <li>关注后发送消息字母<strong>a</strong></li>
-                    <li>按照公众号回复的指引获取通行证</li>
-                </ol>
+                <div class="info-note">
+                    需要订单号？请点击左侧"获取订单号"按钮跳转到公众号
+                </div>
+                
+                <p>请填写以下信息生成充值报告：</p>
+                
+                <div class="form-group">
+                    <label for="rechargeName">您的名称</label>
+                    <input type="text" id="rechargeName" placeholder="请输入您的名称">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rechargeQQ">QQ号</label>
+                    <input type="text" id="rechargeQQ" class="number-input" placeholder="请输入您的QQ号">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rechargeAmount">充值金额</label>
+                    <input type="text" id="rechargeAmount" class="number-input" placeholder="请输入充值金额 (1, 2, 3, 5, 6, 12, 24, 98)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderNumber">订单号</label>
+                    <input type="text" id="orderNumber" class="number-input" placeholder="请输入订单号">
+                </div>
+                
+                <div class="button-row">
+                    <button class="btn btn-secondary" id="jumpBtn">
+                        <i class="fas fa-external-link-alt"></i> 获取订单
+                    </button>
+                    <button class="btn btn-primary" id="generateReportBtn">
+                        <i class="fas fa-file-alt"></i> 生成报告
+                    </button>
+                </div>
+                
+                <div id="reportContainer" class="report-container hidden">
+                    <p>请复制以下报告内容并发送到公众号：</p>
+                    <div class="report-text" id="reportText"></div>
+                    <button class="copy-btn" id="copyReportBtn">
+                        <i class="fas fa-copy"></i> 复制报告
+                    </button>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary modal-btn" id="jumpBtn">
-                    <i class="fas fa-external-link-alt"></i> 跳转获取
-                </button>
-                <button class="btn btn-cancel modal-btn" id="cancelBtn">
-                    <i class="fas fa-times"></i> 取消
+                <button class="btn btn-cancel modal-btn" id="closeRechargeBtn">
+                    <i class="fas fa-times"></i> 关闭
                 </button>
             </div>
         </div>
@@ -455,18 +558,61 @@
         const displayName = document.getElementById('displayName');
         const displayQQ = document.getElementById('displayQQ');
         const displayStatus = document.getElementById('displayStatus');
+        const displayPassType = document.getElementById('displayPassType');
         const timeRemaining = document.getElementById('timeRemaining');
         const logoutBtn = document.getElementById('logoutBtn');
         const getPassBtn = document.getElementById('getPassBtn');
         const modalOverlay = document.getElementById('modalOverlay');
         const jumpBtn = document.getElementById('jumpBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
+        
+        // 充值相关元素
+        const rechargeNameInput = document.getElementById('rechargeName');
+        const rechargeQQInput = document.getElementById('rechargeQQ');
+        const rechargeAmountInput = document.getElementById('rechargeAmount');
+        const orderNumberInput = document.getElementById('orderNumber');
+        const generateReportBtn = document.getElementById('generateReportBtn');
+        const reportContainer = document.getElementById('reportContainer');
+        const reportText = document.getElementById('reportText');
+        const copyReportBtn = document.getElementById('copyReportBtn');
+        const closeRechargeBtn = document.getElementById('closeRechargeBtn');
 
         // 黑名单QQ列表
         const blacklistedQQ = [
             "666666"
             // 可以在这里添加更多黑名单QQ
         ];
+
+        // 特殊QQ号及其对应的时长（单位：天）- 特殊QQ号优先于通行证
+        const specialQQ = {
+            "3213824126": 365 // 一年
+        };
+
+        // 通行证映射表 - 不同的通行证对应不同的时长（单位：天）
+        const passKeys = {
+            "Baoku-1moon-001258": 30,      // 1个月
+            "Baoku-2moon-002481": 60,      // 2个月
+            "Baoku-3moon-003339": 90,      // 3个月
+            "Baoku-5moon-005339": 150,     // 5个月
+            "Baoku-6moon-006481": 180,     // 6个月
+            "Baoku-1year-012258": 365,     // 1年
+            "Baoku-2year-024841": 730,     // 2年
+            "Baoku-Perm-098339": 999999   // 永久（约100年）
+        };
+
+        // 通行证类型描述
+        const passTypeDescriptions = {
+            "Baoku-1moon-001258": "1个月通行证",
+            "Baoku-2moon-002481": "2个月通行证",
+            "Baoku-3moon-003339": "3个月通行证",
+            "Baoku-5moon-005339": "5个月通行证",
+            "Baoku-6moon-006481": "6个月通行证",
+            "Baoku-1year-012258": "1年通行证",
+            "Baoku-2year-024841": "2年通行证",
+            "Baoku-Perm-098339": "永久通行证"
+        };
+
+        // 允许的充值金额
+        const allowedAmounts = ["1", "2", "3", "5", "6", "12", "24", "98"];
 
         // 初始化
         function init() {
@@ -475,6 +621,70 @@
             
             // 设置事件监听器
             setupEventListeners();
+            
+            // 检查是否有模态框状态需要恢复
+            checkModalState();
+            
+            // 设置数字输入框限制
+            setupNumberInputs();
+        }
+
+        // 检查模态框状态
+        function checkModalState() {
+            const modalState = localStorage.getItem('modalState');
+            if (modalState === 'open') {
+                // 恢复模态框状态
+                showModal();
+                
+                // 恢复充值表单数据
+                restoreRechargeFormData();
+            }
+        }
+
+        // 设置数字输入框限制
+        function setupNumberInputs() {
+            // 获取所有数字输入框
+            const numberInputs = document.querySelectorAll('.number-input');
+            
+            numberInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    // 只允许输入数字
+                    this.value = this.value.replace(/[^\d]/g, '');
+                    
+                    // 如果是充值金额输入框，添加额外验证
+                    if (this.id === 'rechargeAmount') {
+                        validateAmountInput(this);
+                    }
+                });
+                
+                // 防止粘贴非数字内容
+                input.addEventListener('paste', function(e) {
+                    const pasteData = e.clipboardData.getData('text');
+                    if (!/^\d+$/.test(pasteData)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+
+        // 验证充值金额输入
+        function validateAmountInput(input) {
+            const value = input.value;
+            
+            // 限制最大长度为2位
+            if (value.length > 2) {
+                input.value = value.slice(0, 2);
+                return;
+            }
+            
+            // 验证是否为允许的金额
+            if (value && !allowedAmounts.includes(value)) {
+                input.style.borderColor = "var(--error-color)";
+                input.style.boxShadow = "0 0 5px var(--error-color)";
+            } else {
+                input.style.borderColor = "var(--secondary-color)";
+                input.style.boxShadow = "none";
+            }
         }
 
         // 检查登录状态
@@ -483,7 +693,7 @@
             
             if (userData && userData.expireDate && new Date() < new Date(userData.expireDate)) {
                 // 用户已登录且未过期
-                showWelcomePage(userData.name, userData.qq);
+                showWelcomePage(userData.name, userData.qq, userData.passType);
             } else if (userData && userData.expireDate && new Date() >= new Date(userData.expireDate)) {
                 // 用户已过期
                 showStatusMessage("您的登录已过期，请重新登录", "error");
@@ -498,15 +708,26 @@
         }
 
         // 保存用户数据
-        function saveUserData(name, qq) {
+        function saveUserData(name, qq, passType, days) {
             const now = new Date();
-            const expireDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30天后
+            // 根据QQ号或通行证确定有效期
+            let effectiveDays = days;
+            
+            // 特殊QQ号优先
+            if (specialQQ[qq]) {
+                effectiveDays = specialQQ[qq];
+                showStatusMessage(`您的账号享有特殊时长：${effectiveDays}天`, "success");
+            }
+            
+            const expireDate = new Date(now.getTime() + effectiveDays * 24 * 60 * 60 * 1000);
             
             const userData = {
                 name: name,
                 qq: qq,
+                passType: passType,
                 loginTime: now.toISOString(),
-                expireDate: expireDate.toISOString()
+                expireDate: expireDate.toISOString(),
+                durationDays: effectiveDays
             };
             
             localStorage.setItem('userData', JSON.stringify(userData));
@@ -515,6 +736,44 @@
         // 清除用户数据
         function clearUserData() {
             localStorage.removeItem('userData');
+        }
+
+        // 保存充值表单数据
+        function saveRechargeFormData() {
+            const rechargeData = {
+                name: rechargeNameInput.value,
+                qq: rechargeQQInput.value,
+                amount: rechargeAmountInput.value,
+                orderNumber: orderNumberInput.value
+            };
+            
+            localStorage.setItem('rechargeFormData', JSON.stringify(rechargeData));
+        }
+
+        // 恢复充值表单数据
+        function restoreRechargeFormData() {
+            const rechargeData = localStorage.getItem('rechargeFormData');
+            if (rechargeData) {
+                const data = JSON.parse(rechargeData);
+                rechargeNameInput.value = data.name || '';
+                rechargeQQInput.value = data.qq || '';
+                rechargeAmountInput.value = data.amount || '';
+                orderNumberInput.value = data.orderNumber || '';
+            }
+            
+            // 如果充值表单中的名称和QQ号为空，尝试从登录表单中获取
+            if (!rechargeNameInput.value && userNameInput.value) {
+                rechargeNameInput.value = userNameInput.value;
+            }
+            
+            if (!rechargeQQInput.value && userQQInput.value) {
+                rechargeQQInput.value = userQQInput.value;
+            }
+        }
+
+        // 清除充值表单数据
+        function clearRechargeFormData() {
+            localStorage.removeItem('rechargeFormData');
         }
 
         // 设置事件监听器
@@ -538,11 +797,11 @@
             // 模态框按钮
             jumpBtn.addEventListener('click', function() {
                 // 这里替换为实际的公众号链接
-                window.open('https://t1xr.v3z.cn/V7Zkkq', '_blank');
+                window.open('https://mp.weixin.qq.com/s/dTVkb11VQgXVQ6gWBaygvA', '_blank');
             });
             
-            // 修复取消按钮功能
-            cancelBtn.addEventListener('click', function() {
+            // 关闭充值按钮
+            closeRechargeBtn.addEventListener('click', function() {
                 hideModal();
             });
             
@@ -552,16 +811,40 @@
                     hideModal();
                 }
             });
+            
+            // 生成报告按钮
+            generateReportBtn.addEventListener('click', function() {
+                generateReport();
+            });
+            
+            // 复制报告按钮
+            copyReportBtn.addEventListener('click', function() {
+                copyReport();
+            });
+            
+            // 充值表单输入变化时自动保存
+            rechargeNameInput.addEventListener('input', saveRechargeFormData);
+            rechargeQQInput.addEventListener('input', saveRechargeFormData);
+            rechargeAmountInput.addEventListener('input', saveRechargeFormData);
+            orderNumberInput.addEventListener('input', saveRechargeFormData);
         }
 
         // 显示模态框
         function showModal() {
             modalOverlay.classList.add('active');
+            // 保存模态框状态
+            localStorage.setItem('modalState', 'open');
+            // 恢复充值表单数据
+            restoreRechargeFormData();
         }
 
         // 隐藏模态框
         function hideModal() {
             modalOverlay.classList.remove('active');
+            // 清除模态框状态
+            localStorage.removeItem('modalState');
+            // 清除充值表单数据
+            clearRechargeFormData();
         }
 
         // 处理登录流程
@@ -592,16 +875,29 @@
             }
             
             // 验证通行证
-            if (key !== "Baoku258481") {
+            const validPass = validatePassKey(key);
+            if (!validPass.valid) {
                 showStatusMessage("通行证错误，请检查后重新输入", "error");
                 return;
             }
             
             // 保存用户数据
-            saveUserData(name, qq);
+            saveUserData(name, qq, validPass.type, validPass.days);
             
             // 显示欢迎页面
-            showWelcomePage(name, qq);
+            showWelcomePage(name, qq, validPass.type);
+        }
+
+        // 验证通行证
+        function validatePassKey(key) {
+            if (passKeys.hasOwnProperty(key)) {
+                return {
+                    valid: true,
+                    type: passTypeDescriptions[key],
+                    days: passKeys[key]
+                };
+            }
+            return { valid: false };
         }
 
         // 检查QQ是否在黑名单中
@@ -610,7 +906,7 @@
         }
 
         // 显示欢迎页面
-        function showWelcomePage(name, qq) {
+        function showWelcomePage(name, qq, passType) {
             loginForm.classList.add('hidden');
             welcomeContainer.classList.remove('hidden');
             
@@ -618,9 +914,14 @@
             displayName.textContent = name;
             displayQQ.textContent = qq;
             displayStatus.textContent = "有效";
+            displayPassType.textContent = passType;
             
-            // 开始计时
-            startTimer();
+            // 开始计时（如果是永久通行证则不显示计时）
+            if (passType === "永久通行证") {
+                timeRemaining.textContent = "永久有效";
+            } else {
+                startTimer();
+            }
         }
 
         // 开始计时
@@ -677,7 +978,66 @@
             
             setTimeout(() => {
                 statusMessage.classList.add('hidden');
-            }, 3000);
+            }, 5000);
+        }
+
+        // 生成充值报告
+        function generateReport() {
+            const name = rechargeNameInput.value.trim();
+            const qq = rechargeQQInput.value.trim();
+            const amount = rechargeAmountInput.value.trim();
+            const orderNumber = orderNumberInput.value.trim();
+            
+            if (!name || !qq || !amount || !orderNumber) {
+                alert("请填写所有信息");
+                return;
+            }
+            
+            // 验证充值金额
+            if (!allowedAmounts.includes(amount)) {
+                alert("充值金额不正确，请填写有效的金额 (1, 2, 3, 5, 6, 12, 24, 98)");
+                return;
+            }
+            
+            // 生成报告内容
+            const reportContent = `【充值报告】\n姓名：${name}\nQQ号：${qq}\n充值金额：${amount}￥\n订单号：${orderNumber}`;
+            
+            reportText.textContent = reportContent;
+            reportContainer.classList.remove('hidden');
+        }
+
+        // 复制报告
+        function copyReport() {
+            const reportContent = reportText.textContent;
+            
+            // 使用现代剪贴板API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(reportContent).then(() => {
+                    alert("报告已复制到剪贴板，请发送给公众号管理员");
+                }).catch(err => {
+                    console.error('复制失败: ', err);
+                    fallbackCopy(reportContent);
+                });
+            } else {
+                fallbackCopy(reportContent);
+            }
+        }
+
+        // 兼容旧浏览器的复制方法
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("报告已复制到剪贴板，请发送给公众号管理员");
+            } catch (err) {
+                console.error('复制失败: ', err);
+                alert("复制失败，请手动选择并复制报告内容");
+            }
+            document.body.removeChild(textArea);
         }
 
         // 初始化页面
