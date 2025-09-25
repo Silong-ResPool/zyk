@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI提示词生成器 - 男性色情版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #2a004f;
+            background-image: linear-gradient(135deg, #1d0033, #3a0066);
+            color: #e0bbff;
+            margin: 0;
+            padding: 15px;
+            text-shadow: 0 0 10px #9b5de5, 0 0 20px #9b5de5;
+            line-height: 1.45;
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3 {
+            color: #d896ff;
+            text-shadow: 0 0 15px #c77dff, 0 0 30px #c77dff;
+            margin-bottom: 12px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #9b5de5;
+            border-radius: 12px;
+            box-shadow: 0 0 25px #9b5de5;
+            background: linear-gradient(180deg, #3a0066, #2a004f);
+        }
+        
+        .section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #6a00cc;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 110px;
+            background-color: rgba(58, 0, 102, 0.7);
+            color: #e0bbff;
+            border: 1px solid #9b5de5;
+            border-radius: 8px;
+            padding: 12px;
+            resize: vertical;
+            font-size: 15px;
+            text-shadow: none;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px #c77dff;
+            border-color: #d896ff;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #9b5de5;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-shadow: 0 0 5px #fff;
+            transition: all 0.25s ease;
+            flex: 1;
+            min-width: 120px;
+            max-width: 160px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+        
+        button:hover {
+            background-color: #c77dff;
+            box-shadow: 0 0 15px #c77dff, 0 0 10px rgba(199, 125, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .warning {
+            color: #ff85ff;
+            font-weight: bold;
+            margin-bottom: 18px;
+            text-shadow: 0 0 10px #ff0aff;
+            font-size: 14px;
+            padding: 10px;
+            background-color: rgba(255, 0, 255, 0.15);
+            border-radius: 8px;
+            border-left: 3px solid #ff85ff;
+        }
+        
+        #chinese-view {
+            display: none;
+            background-color: rgba(58, 0, 102, 0.7);
+            color: #e0bbff;
+            padding: 15px;
+            border: 1px solid #9b5de5;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .category-selector {
+            margin-bottom: 15px;
+        }
+        
+        .category-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #9b5de5 #3a0066;
+        }
+        
+        .category-list::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .category-list::-webkit-scrollbar-track {
+            background: #3a0066;
+            border-radius: 3px;
+        }
+        
+        .category-list::-webkit-scrollbar-thumb {
+            background: #9b5de5;
+            border-radius: 3px;
+        }
+        
+        .category-item {
+            background-color: #4d0099;
+            color: #e0bbff;
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            box-shadow: 0 0 8px rgba(155, 93, 229, 0.5);
+            transition: all 0.25s ease;
+            flex: 0 0 auto;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+        
+        .category-item:hover {
+            background-color: #6a00cc;
+            transform: scale(1.05);
+        }
+        
+        .category-item.active {
+            background-color: #6a00cc;
+            box-shadow: 0 0 15px #c77dff;
+            border-color: #d896ff;
+            transform: scale(1.05);
+        }
+        
+        .preset-container {
+            display: none;
+            background-color: rgba(58, 0, 102, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        
+        .preset-container.active {
+            display: block;
+        }
+        
+        .preset-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #9b5de5 #3a0066;
+        }
+        
+        .preset-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .preset-list::-webkit-scrollbar-track {
+            background: #3a0066;
+            border-radius: 3px;
+        }
+        
+        .preset-list::-webkit-scrollbar-thumb {
+            background: #9b5de5;
+            border-radius: 3px;
+        }
+        
+        .preset-item {
+            background-color: rgba(77, 0, 153, 0.7);
+            color: #e0bbff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12.5px;
+            box-shadow: 0 0 5px rgba(155, 93, 229, 0.5);
+            transition: all 0.2s ease;
+            flex: 0 0 auto;
+            border: 1px solid transparent;
+        }
+        
+        .preset-item:hover {
+            background-color: rgba(106, 0, 204, 0.9);
+            transform: scale(1.05);
+        }
+        
+        .preset-item.active {
+            background-color: rgba(106, 0, 204, 0.9);
+            box-shadow: 0 0 10px #c77dff;
+            border-color: #d896ff;
+        }
+        
+        .preset-item::before {
+            content: "【";
+        }
+        
+        .preset-item::after {
+            content: "】";
+        }
+        
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .footer-buttons button {
+            min-width: 200px;
+            max-width: 250px;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 10px 20px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(106, 0, 204, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: none;
+            font-weight: bold;
+            border: 1px solid #d896ff;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .footer-buttons button {
+                width: 100%;
+                max-width: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px 10px;
+            }
+            
+            textarea {
+                height: 100px;
+                font-size: 14px;
+                padding: 10px;
+            }
+            
+            .category-item {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            
+            .preset-item {
+                font-size: 11.5px;
+                padding: 5px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI提示词生成器</h1>
+        <p class="warning">警告：请先输入或使用默认的反向提示词，否则生成的男性图片可能会出现女性生殖器！</p>
+        
+        <div class="section">
+            <h2>正向提示词</h2>
+            <textarea id="positive-prompt" placeholder="在此输入或添加正向提示词..."></textarea>
+            <div class="button-group">
+                <button onclick="toggleLanguage('zh')">显示中文</button>
+                <button onclick="generateRandomPrompt()">随机生成</button>
+                <button onclick="copyPositive()">复制正向提示词</button>
+            </div>
+            <div id="chinese-view"></div>
+        </div>
+        
+        <div class="section">
+            <h2>提示词分类</h2>
+            <div class="category-selector">
+                <div class="category-list">
+                    <div class="category-item" data-category="quality" onclick="showCategory('quality')">画质风格</div>
+                    <div class="category-item" data-category="age" onclick="showCategory('age')">年龄阶段</div>
+                    <div class="category-item" data-category="face" onclick="showCategory('face')">面部特征</div>
+                    <div class="category-item" data-category="body" onclick="showCategory('body')">身体体型</div>
+                    <div class="category-item" data-category="penis" onclick="showCategory('penis')">性器官</div>
+                    <div class="category-item" data-category="anus" onclick="showCategory('anus')">肛门</div>
+                    <div class="category-item" data-category="action" onclick="showCategory('action')">动作姿势</div>
+                    <div class="category-item" data-category="expression" onclick="showCategory('expression')">表情</div>
+                    <div class="category-item" data-category="skin" onclick="showCategory('skin')">皮肤质感</div>
+                    <div class="category-item" data-category="hair" onclick="showCategory('hair')">头发</div>
+                    <div class="category-item" data-category="hair-color" onclick="showCategory('hair-color')">发色</div>
+                    <div class="category-item" data-category="clothing" onclick="showCategory('clothing')">服装</div>
+                    <div class="category-item" data-category="accessory" onclick="showCategory('accessory')">饰品</div>
+                    <div class="category-item" data-category="background" onclick="showCategory('background')">场景背景</div>
+                    <div class="category-item" data-category="number" onclick="showCategory('number')">人数</div>
+                </div>
+            </div>
+            <div id="preset-display">
+                <!-- Preset containers will be here -->
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>反向提示词</h2>
+            <textarea id="negative-prompt" placeholder="在此输入或添加反向提示词..."></textarea>
+            <div class="button-group">
+                <button onclick="copyNegative()">复制反向提示词</button>
+                <button onclick="resetNegative()">恢复默认</button>
+            </div>
+        </div>
+        
+        <div class="footer-buttons">
+            <button onclick="generateImage()">跳转生成图片</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">已复制提示词！</div>
+
+    <script>
+        // Default prompts with high quality terms
+        document.getElementById('positive-prompt').value = 'high detail, realistic, 4k resolution, photorealistic, cinematic lighting, sharp focus, ultra detailed skin texture';
+        document.getElementById('negative-prompt').value = 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, female vagina, female vulva, female labia, female clitoris, female pussy, female cervix, female vag, female twat, female cunt, female snatch, female cooch, female coochie, female slit, female hole, female beaver, female muff, female quim, female yoni, female downstairs, female privates, female lady parts, female nether regions, female intimate area, female private parts, female sex organs, female reproductive organs, female pudenda, female mons pubis, female vaginal opening, female vaginal canal, female vaginal lips, female inner lips, female outer lips, female clitoral hood, female g-spot, female erogenous zones, female squirting, female orgasm, female female ejaculation, female breasts, female boobs, female tits, female bust, female cleavage, female nipples, female areola, female jugs, female melons, female knockers, female rack, female bosom, female chest, female ta-tas, female hooters, female bazookas, female funbags, female milkers, female pillows, female mounds, female orbs, female globes, female udders, female cans, female headlights, female giant breasts, female huge boobs, female massive tits, female enormous bust, female oversized cleavage, female gigantic nipples, female colossal areola, female mega vagina, female jumbo vulva, female titanic labia, female mammoth clitoris, female humongous pussy, female enormous cervix';
+
+        // Translation dictionary
+        const translationDict = {
+            'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 'masculine': '阳刚',
+            'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二', 'shaft': '茎身', 'glans': '龟头',
+            'foreskin': '包皮', 'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 'erection': '勃起',
+            'hard-on': '硬了', 'boner': '硬屌', 'huge cock': '大鸡巴', 'massive penis': '巨阴茎', 'veiny dick': '青筋老二',
+            'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'thick shaft': '粗大茎身',
+            'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 'puckered anus': '皱褶肛门', 'shaved anus': '剃毛肛门',
+            'hairy anus': '多毛肛门', 'moist anus': '湿润肛门', 'pink anus': '粉红肛门', 'dark anus': '深色肛门',
+            'lubed anus': '润滑肛门', 'relaxed anus': '放松肛门', 'anus': '肛门',
+            'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 'biceps': '二头肌', 'thighs': '大腿',
+            'butt': '臀部', 'ass': '屁股', 'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 'vascular arms': '青筋手臂',
+            'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 'deep voice': '低沉嗓音', 'sharp jawline': '锋利下颌线',
+            'rugged face': '粗犷面容', 'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉', 'high cheekbones': '高颧骨',
+            'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 'speedo': '泳裤', 'leather harness': '皮革束带',
+            'naked': '裸体', 'underwear bulge': '内裤凸起', 'latex suit': '乳胶装', 'cock ring': '阴茎环', 'thong': '丁字裤',
+            'bedroom background': '卧室背景', 'shower scene': '淋浴场景', 'gym setting': '健身房场景', 'beach erotic': '沙滩色情',
+            'forest nude': '森林裸体', 'sauna scene': '桑拿场景', 'hot tub setting': '热水浴场景', 'nightclub vibe': '夜店氛围',
+            'luxury hotel room': '豪华酒店房间', 'public restroom': '公共厕所', 'posing seductively': '诱惑姿势',
+            'flexing muscles': '展示肌肉', 'stroking cock': '抚摸阴茎', 'masturbating': '自慰', 'thrusting': '抽插',
+            'moaning': '呻吟', 'dominant pose': '支配姿势', 'submissive male': '顺从男性', 'group sex': '群交',
+            'oral sex': '口交', 'anal play': '肛门玩法', 'prostate stimulation': '前列腺刺激', 'kissing': '亲吻',
+            'teasing': '挑逗', 'grinding': '研磨', 'sweaty body': '汗湿身体', 'oiled skin': '油光皮肤',
+            'smooth skin': '光滑皮肤', 'rough skin': '粗糙皮肤', 'scarred skin': '瘢痕皮肤', 'tattooed skin': '纹身皮肤',
+            'freckled skin': '雀斑皮肤', 'tanned skin': '古铜色皮肤', 'pale skin': '苍白皮肤', 'olive skin': '橄榄色皮肤',
+            'dark skin': '深色皮肤', 'light skin': '浅色皮肤', 'bronzed skin': '青铜色皮肤', 'short hair': '短发',
+            'long hair': '长发', 'bald head': '光头', 'curly hair': '卷发', 'chest hair': '胸毛', 'shaved pubic hair': '剃光阴毛',
+            'blonde hair': '金发', 'black hair': '黑发', 'high detail': '高细节', 'realistic': '真实', '4k resolution': '4K分辨率',
+            '8k resolution': '8K分辨率', 'photorealistic': '照片级真实', 'cinematic lighting': '电影光效',
+            'one boy': '一个男孩', 'two boys': '两个男孩', 'group of boys': '一群男孩', 'three boys': '三个男孩',
+            'solo male': '单独男性', 'young male': '青年男性', 'teen male': '青少年男性', 'adult male': '成年男性',
+            'middle-aged male': '中年男性', 'mature male': '成熟男性', 'elderly male': '老年男性',
+            'youthful face': '年轻面容', 'mature face': '成熟面容', 'aged face': '年长面容',
+            'slim body': '苗条身材', 'athletic body': '运动身材', 'stocky body': '壮实体型', 'chubby body': '丰满体型',
+            'large penis': '大阴茎', 'small penis': '小阴茎', 'average penis': '普通阴茎', 'circumcised penis': '割包皮阴茎',
+            'uncircumcised penis': '未割包皮阴茎', 'brown hair': '棕发', 'red hair': '红发', 'gray hair': '灰发',
+            'white hair': '白发', 'dyed hair': '染发', 'balding': '秃顶', 'receding hairline': '发际线后移',
+            'facial hair': '面部毛发', 'mustache': '小胡子', 'sideburns': '鬓角', 'goatee': '山羊胡',
+            'full beard': '浓密胡须', 'clean-shaven': '刮干净胡子', 'five o clock shadow': '五点阴影胡茬',
+            'muscle definition': '肌肉线条', 'six-pack abs': '六块腹肌', 'v-line': 'V型线条', 'broad chest': '宽阔胸膛',
+            'strong legs': '强壮腿部', 'bulging biceps': '鼓胀二头肌', 'ripped physique': '健美体型',
+            'body hair': '体毛', 'chest fur': '胸毛', 'back hair': '背毛', 'arm hair': '手臂毛发',
+            'leg hair': '腿毛', 'happy trail': '腹毛线', 'smooth chest': '光滑胸部', 'hairless body': '无毛身体',
+            'facial expression': '面部表情', 'smiling': '微笑', 'serious': '严肃', 'seductive look': '诱惑表情',
+            'intense gaze': '强烈凝视', 'closed eyes': '闭眼', 'open mouth': '张嘴', 'tongue out': '吐舌',
+            'biting lip': '咬唇', 'winking': '眨眼', 'blushing': '脸红', 'sweating': '出汗',
+            'cum': '精液', 'ejaculation': '射精', 'pre-cum': '预射精液', 'semen': '精液',
+            'cum shot': '射精镜头', 'facial': '颜射', 'body cum': '身体精液', 'creampie': '内射',
+            'anal creampie': '肛门内射', 'fingering': '指交', 'rimming': '舔肛', 'fisting': '拳交',
+            'bondage': '束缚', 'BDSM': 'BDSM', 'domination': '支配', 'submission': '顺从',
+            'leash': '皮带', 'collar': '项圈', 'handcuffs': '手铐', 'blindfold': '眼罩',
+            'gag': '口塞', 'whip': '鞭子', 'crop': '短鞭', 'paddle': '拍板',
+            'nipple clamps': '乳头夹', 'ball gag': '球塞', 'rope bondage': '绳缚', 'shibari': '缚绳术',
+            'spanking': '打屁股', 'caning': '藤条抽打', 'flogging': '鞭打', 'whipping': '鞭笞',
+            'outdoor': '户外', 'indoor': '室内', 'urban': '城市', 'rural': '乡村',
+            'nature': '自然', 'water': '水', 'fire': '火', 'earth': '土地',
+            'fantasy': '幻想', 'sci-fi': '科幻', 'historical': '历史', 'modern': '现代',
+            'vintage': '复古', 'futuristic': '未来主义', 'steampunk': '蒸汽朋克', 'cyberpunk': '赛博朋克',
+            'piercing': '穿刺', 'tattoo': '纹身', 'nipple piercing': '乳头穿刺', 'genital piercing': '生殖器穿刺',
+            'leather boots': '皮靴', 'fishnet stockings': '渔网袜', 'choker': '颈环', 'wrist cuffs': '手腕铐',
+            'latex gloves': '乳胶手套', 'harness straps': '束带', 'studded belt': '铆钉腰带',
+            'dog collar': '狗项圈', 'spiked bracelet': '尖刺手镯', 'chain necklace': '链条项链',
+            'ecstatic': '狂喜', 'aroused': '兴奋', 'panting': '喘息', 'grimacing': '扭曲表情',
+            'lustful eyes': '淫欲眼神', 'clenched teeth': '咬紧牙关', 'sweaty forehead': '额头出汗',
+            'flushed cheeks': '脸颊潮红', 'parted lips': '唇部微张', 'heavy breathing': '沉重呼吸',
+            'waiting for cum': '等待精液', 'cum on tongue': '精液在舌头上', 'cum on face': '颜射',
+            'cum on body': '身体精液', 'happy': '开心', 'sad': '悲伤', 'angry': '愤怒',
+            'surprised': '惊讶', 'disgusted': '厌恶', 'fearful': '害怕', 'contempt': '轻蔑',
+            'neutral': '中性', 'dazed': '恍惚', 'pleasure': '愉悦', 'pain': '痛苦',
+            'leather armbands': '皮质臂环', 'metal rings': '金属环', 'nose ring': '鼻环', 'eyebrow piercing': '眉环',
+            'lip piercing': '唇环', 'nipple rings': '乳头环', 'Prince Albert piercing': '阴茎穿孔', 'frenum piercing': '阴茎系带穿孔',
+            'dydoe piercing': '龟头穿孔', 'apadravya piercing': '垂直阴茎穿孔', 'scrotal piercing': '阴囊穿孔',
+            'guiche piercing': '会阴穿孔', 'anal beads': '肛珠', 'butt plug': '肛塞', 'urethral sound': '尿道探针',
+            'lustful': '充满欲望', 'shy': '害羞', 'mischievous': '调皮', 'confident': '自信',
+            'challenging': '挑衅', 'vulnerable': '脆弱', 'exhausted': '筋疲力尽', 'playful': '顽皮',
+            'dominant stare': '支配性凝视', 'submissive gaze': '顺从目光', 'penetrated': '被插入',
+            'penetrating': '插入', 'double penetration': '双插入', 'anal gaping': '肛穴张开',
+            'glory hole': '泄欲孔', 'public exposure': '公共场所暴露', 'urination': '排尿',
+            'watersports': '水上游戏', 'furry': '毛茸茸', 'muscle worship': '肌肉崇拜',
+            'foot fetish': '恋足', 'ball stretching': '睾丸拉伸', 'cock pumping': '阴茎泵吸',
+            'ball weights': '睾丸加重物', 'cock cage': '阴茎笼', 'urethral plug': '尿道塞',
+            'cum eating': '食精', 'facials': '颜射', 'cum swapping': '精液交换', 'multiple orgasms': '多重高潮'
+        };
+
+        // Categories data with more options
+        const categories = {
+            age: {
+                title: '年龄阶段',
+                presets: [
+                    {en: 'young male', zh: '青年男性'},
+                    {en: 'teen male', zh: '青少年男性'},
+                    {en: 'adult male', zh: '成年男性'},
+                    {en: 'middle-aged male', zh: '中年男性'},
+                    {en: 'mature male', zh: '成熟男性'},
+                    {en: 'elderly male', zh: '老年男性'},
+                    {en: 'boyish look', zh: '少年感'},
+                    {en: 'prime adult', zh: '壮年男性'},
+                    {en: 'youthful vigor', zh: '青春活力'},
+                    {en: 'silver fox', zh: '性感熟男'}
+                ],
+                isPositive: true
+            },
+            face: {
+                title: '面部特征',
+                presets: [
+                    {en: 'youthful face', zh: '年轻面容'},
+                    {en: 'mature face', zh: '成熟面容'},
+                    {en: 'aged face', zh: '年长面容'},
+                    {en: 'beard', zh: '胡子'},
+                    {en: 'stubble', zh: '胡渣'},
+                    {en: 'deep voice', zh: '低沉嗓音'},
+                    {en: 'sharp jawline', zh: '锋利下颌线'},
+                    {en: 'rugged face', zh: '粗犷面容'},
+                    {en: 'piercing eyes', zh: '锐利眼神'},
+                    {en: 'bushy eyebrows', zh: '浓眉'},
+                    {en: 'high cheekbones', zh: '高颧骨'},
+                    {en: 'facial hair', zh: '面部毛发'},
+                    {en: 'mustache', zh: '小胡子'},
+                    {en: 'sideburns', zh: '鬓角'},
+                    {en: 'goatee', zh: '山羊胡'},
+                    {en: 'full beard', zh: '浓密胡须'},
+                    {en: 'clean-shaven', zh: '刮干净胡子'},
+                    {en: 'five o clock shadow', zh: '五点阴影胡茬'},
+                    {en: 'scarred face', zh: '有疤面容'},
+                    {en: 'tattooed face', zh: '纹脸'},
+                    {en: 'dimpled chin', zh: '下巴酒窝'},
+                    {en: 'sharp nose', zh: '高挺鼻子'},
+                    {en: 'strong brow', zh: '浓眉大眼'}
+                ],
+                isPositive: true
+            },
+            body: {
+                title: '身体体型',
+                presets: [
+                    {en: 'slim body', zh: '苗条身材'},
+                    {en: 'athletic body', zh: '运动身材'},
+                    {en: 'muscular body', zh: '肌肉身材'},
+                    {en: 'stocky body', zh: '壮实体型'},
+                    {en: 'chubby body', zh: '丰满体型'},
+                    {en: 'abs', zh: '腹肌'},
+                    {en: 'pecs', zh: '胸肌'},
+                    {en: 'biceps', zh: '二头肌'},
+                    {en: 'thighs', zh: '大腿'},
+                    {en: 'butt', zh: '臀部'},
+                    {en: 'ass', zh: '屁股'},
+                    {en: 'broad shoulders', zh: '宽肩'},
+                    {en: 'defined calves', zh: '小腿肌肉'},
+                    {en: 'vascular arms', zh: '青筋手臂'},
+                    {en: 'muscle definition', zh: '肌肉线条'},
+                    {en: 'six-pack abs', zh: '六块腹肌'},
+                    {en: 'v-line', zh: 'V型线条'},
+                    {en: 'broad chest', zh: '宽阔胸膛'},
+                    {en: 'strong legs', zh: '强壮腿部'},
+                    {en: 'bulging biceps', zh: '鼓胀二头肌'},
+                    {en: 'ripped physique', zh: '健美体型'},
+                    {en: 'body hair', zh: '体毛'},
+                    {en: 'chest fur', zh: '胸毛'},
+                    {en: 'back hair', zh: '背毛'},
+                    {en: 'arm hair', zh: '手臂毛发'},
+                    {en: 'leg hair', zh: '腿毛'},
+                    {en: 'happy trail', zh: '腹毛线'},
+                    {en: 'smooth chest', zh: '光滑胸部'},
+                    {en: 'hairless body', zh: '无毛身体'},
+                    {en: 'dad bod', zh: '爸爸身材'},
+                    {en: 'bear physique', zh: '熊系身材'},
+                    {en: 'twink body', zh: '瘦削身材'}
+                ],
+                isPositive: true
+            },
+            penis: {
+                title: '性器官',
+                presets: [
+                    {en: 'penis', zh: '阴茎'},
+                    {en: 'cock', zh: '鸡巴'},
+                    {en: 'dick', zh: '老二'},
+                    {en: 'shaft', zh: '茎身'},
+                    {en: 'glans', zh: '龟头'},
+                    {en: 'foreskin', zh: '包皮'},
+                    {en: 'balls', zh: '睾丸'},
+                    {en: 'testicles', zh: '卵蛋'},
+                    {en: 'scrotum', zh: '阴囊'},
+                    {en: 'erection', zh: '勃起'},
+                    {en: 'hard-on', zh: '硬了'},
+                    {en: 'boner', zh: '硬屌'},
+                    {en: 'huge cock', zh: '大鸡巴'},
+                    {en: 'large penis', zh: '大阴茎'},
+                    {en: 'small penis', zh: '小阴茎'},
+                    {en: 'average penis', zh: '普通阴茎'},
+                    {en: 'massive penis', zh: '巨阴茎'},
+                    {en: 'veiny dick', zh: '青筋老二'},
+                    {en: 'throbbing shaft', zh: '跳动茎身'},
+                    {en: 'curved penis', zh: '弯曲阴茎'},
+                    {en: 'thick shaft', zh: '粗大茎身'},
+                    {en: 'circumcised penis', zh: '割包皮阴茎'},
+                    {en: 'uncircumcised penis', zh: '未割包皮阴茎'},
+                    {en: 'cum', zh: '精液'},
+                    {en: 'ejaculation', zh: '射精'},
+                    {en: 'pre-cum', zh: '预射精液'},
+                    {en: 'semen', zh: '精液'},
+                    {en: 'cum shot', zh: '射精镜头'},
+                    {en: 'facial', zh: '颜射'},
+                    {en: 'body cum', zh: '身体精液'},
+                    {en: 'creampie', zh: '内射'},
+                    {en: 'anal creampie', zh: '肛门内射'},
+                    {en: 'flaccid penis', zh: '疲软阴茎'},
+                    {en: 'semi-erect', zh: '半勃起'}
+                ],
+                isPositive: true
+            },
+            anus: {
+                title: '肛门',
+                presets: [
+                    {en: 'anus', zh: '肛门'},
+                    {en: 'tight anus', zh: '紧实肛门'},
+                    {en: 'smooth anus', zh: '光滑肛门'},
+                    {en: 'puckered anus', zh: '皱褶肛门'},
+                    {en: 'shaved anus', zh: '剃毛肛门'},
+                    {en: 'hairy anus', zh: '多毛肛门'},
+                    {en: 'moist anus', zh: '湿润肛门'},
+                    {en: 'pink anus', zh: '粉红肛门'},
+                    {en: 'dark anus', zh: '深色肛门'},
+                    {en: 'lubed anus', zh: '润滑肛门'},
+                    {en: 'relaxed anus', zh: '放松肛门'},
+                    {en: 'open anus', zh: '张开肛门'},
+                    {en: 'prolapsed anus', zh: '脱肛'},
+                    {en: 'anal wink', zh: '肛门收缩'}
+                ],
+                isPositive: true
+            },
+            action: {
+                title: '动作姿势',
+                presets: [
+                    {en: 'posing seductively', zh: '诱惑姿势'},
+                    {en: 'flexing muscles', zh: '展示肌肉'},
+                    {en: 'stroking cock', zh: '抚摸阴茎'},
+                    {en: 'masturbating', zh: '自慰'},
+                    {en: 'thrusting', zh: '抽插'},
+                    {en: 'moaning', zh: '呻吟'},
+                    {en: 'dominant pose', zh: '支配姿势'},
+                    {en: 'submissive male', zh: '顺从男性'},
+                    {en: 'group sex', zh: '群交'},
+                    {en: 'oral sex', zh: '口交'},
+                    {en: 'anal play', zh: '肛门玩法'},
+                    {en: 'prostate stimulation', zh: '前列腺刺激'},
+                    {en: 'kissing', zh: '亲吻'},
+                    {en: 'teasing', zh: '挑逗'},
+                    {en: 'grinding', zh: '研磨'},
+                    {en: 'fingering', zh: '指交'},
+                    {en: 'rimming', zh: '舔肛'},
+                    {en: 'fisting', zh: '拳交'},
+                    {en: 'bondage', zh: '束缚'},
+                    {en: 'BDSM', zh: 'BDSM'},
+                    {en: 'domination', zh: '支配'},
+                    {en: 'submission', zh: '顺从'},
+                    {en: 'double penetration', zh: '双插入'},
+                    {en: 'anal gaping', zh: '肛门张开'},
+                    {en: 'glory hole', zh: '泄欲孔'},
+                    {en: 'urination', zh: '排尿'},
+                    {en: 'cum eating', zh: '食精'},
+                    {en: 'facials', zh: '颜射'}
+                ],
+                isPositive: true
+            },
+            expression: {
+                title: '表情',
+                presets: [
+                    {en: 'smiling', zh: '微笑'},
+                    {en: 'serious', zh: '严肃'},
+                    {en: 'seductive look', zh: '诱惑表情'},
+                    {en: 'intense gaze', zh: '强烈凝视'},
+                    {en: 'closed eyes', zh: '闭眼'},
+                    {en: 'open mouth', zh: '张嘴'},
+                    {en: 'tongue out', zh: '吐舌'},
+                    {en: 'biting lip', zh: '咬唇'},
+                    {en: 'winking', zh: '眨眼'},
+                    {en: 'blushing', zh: '脸红'},
+                    {en: 'sweating', zh: '出汗'},
+                    {en: 'ecstatic', zh: '狂喜'},
+                    {en: 'aroused', zh: '兴奋'},
+                    {en: 'panting', zh: '喘息'},
+                    {en: 'grimacing', zh: '扭曲表情'},
+                    {en: 'lustful eyes', zh: '淫欲眼神'},
+                    {en: 'clenched teeth', zh: '咬紧牙关'},
+                    {en: 'sweaty forehead', zh: '额头出汗'},
+                    {en: 'flushed cheeks', zh: '脸颊潮红'},
+                    {en: 'parted lips', zh: '唇部微张'},
+                    {en: 'heavy breathing', zh: '沉重呼吸'},
+                    {en: 'waiting for cum', zh: '等待精液'},
+                    {en: 'orgasmic expression', zh: '高潮表情'},
+                    {en: 'painful expression', zh: '痛苦表情'},
+                    {en: 'dominant stare', zh: '支配性凝视'},
+                    {en: 'submissive gaze', zh: '顺从目光'},
+                    {en: 'challenging look', zh: '挑衅眼神'},
+                    {en: 'vulnerable expression', zh: '脆弱表情'}
+                ],
+                isPositive: true
+            },
+            skin: {
+                title: '皮肤质感',
+                presets: [
+                    {en: 'sweaty body', zh: '汗湿身体'},
+                    {en: 'oiled skin', zh: '油光皮肤'},
+                    {en: 'smooth skin', zh: '光滑皮肤'},
+                    {en: 'rough skin', zh: '粗糙皮肤'},
+                    {en: 'scarred skin', zh: '瘢痕皮肤'},
+                    {en: 'tattooed skin', zh: '纹身皮肤'},
+                    {en: 'freckled skin', zh: '雀斑皮肤'},
+                    {en: 'tanned skin', zh: '古铜色皮肤'},
+                    {en: 'pale skin', zh: '苍白皮肤'},
+                    {en: 'olive skin', zh: '橄榄色皮肤'},
+                    {en: 'dark skin', zh: '深色皮肤'},
+                    {en: 'light skin', zh: '浅色皮肤'},
+                    {en: 'bronzed skin', zh: '青铜色皮肤'},
+                    {en: 'glistening skin', zh: '闪光皮肤'},
+                    {en: 'flushed skin', zh: '潮红皮肤'},
+                    {en: 'soft skin', zh: '柔软皮肤'},
+                    {en: 'rugged skin', zh: '粗犷皮肤'},
+                    {en: 'porcelain skin', zh: '瓷白皮肤'},
+                    {en: 'sunburned skin', zh: '晒伤皮肤'}
+                ],
+                isPositive: true
+            },
+            hair: {
+                title: '头发',
+                presets: [
+                    {en: 'pubic hair', zh: '阴毛'},
+                    {en: 'short hair', zh: '短发'},
+                    {en: 'long hair', zh: '长发'},
+                    {en: 'bald head', zh: '光头'},
+                    {en: 'curly hair', zh: '卷发'},
+                    {en: 'chest hair', zh: '胸毛'},
+                    {en: 'shaved pubic hair', zh: '剃光阴毛'},
+                    {en: 'balding', zh: '秃顶'},
+                    {en: 'receding hairline', zh: '发际线后移'},
+                    {en: 'messy hair', zh: '凌乱头发'},
+                    {en: 'braided hair', zh: '编发'},
+                    {en: 'dreadlocks', zh: '脏辫'},
+                    {en: 'man bun', zh: '男士发髻'},
+                    {en: 'undercut', zh: '底层修剪'},
+                    {en: 'fade haircut', zh: '渐变发型'},
+                    {en: 'buzz cut', zh: '寸头'},
+                    {en: 'mohawk', zh: '莫西干发型'},
+                    {en: 'quiff', zh: '蓬巴杜发型'}
+                ],
+                isPositive: true
+            },
+            'hair-color': {
+                title: '发色',
+                presets: [
+                    {en: 'blonde hair', zh: '金发'},
+                    {en: 'black hair', zh: '黑发'},
+                    {en: 'brown hair', zh: '棕发'},
+                    {en: 'red hair', zh: '红发'},
+                    {en: 'gray hair', zh: '灰发'},
+                    {en: 'white hair', zh: '白发'},
+                    {en: 'dyed hair', zh: '染发'},
+                    {en: 'blue hair', zh: '蓝发'},
+                    {en: 'green hair', zh: '绿发'},
+                    {en: 'purple hair', zh: '紫发'},
+                    {en: 'pink hair', zh: '粉发'},
+                    {en: 'silver hair', zh: '银发'},
+                    {en: 'platinum blonde', zh: '铂金色'},
+                    {en: 'strawberry blonde', zh: '草莓金'},
+                    {en: 'auburn hair', zh: '赤褐色'}
+                ],
+                isPositive: true
+            },
+            clothing: {
+                title: '服装',
+                presets: [
+                    {en: 'boxers', zh: '四角裤'},
+                    {en: 'briefs', zh: '三角裤'},
+                    {en: 'jockstrap', zh: '护裆'},
+                    {en: 'speedo', zh: '泳裤'},
+                    {en: 'leather harness', zh: '皮革束带'},
+                    {en: 'naked', zh: '裸体'},
+                    {en: 'underwear bulge', zh: '内裤凸起'},
+                    {en: 'latex suit', zh: '乳胶装'},
+                    {en: 'cock ring', zh: '阴茎环'},
+                    {en: 'thong', zh: '丁字裤'},
+                    {en: 'mesh top', zh: '网眼上衣'},
+                    {en: 'leather pants', zh: '皮裤'},
+                    {en: 'open shirt', zh: '敞开衬衫'},
+                    {en: 'torn jeans', zh: '破洞牛仔裤'},
+                    {en: 'military uniform', zh: '军装'},
+                    {en: 'business suit', zh: '西装'},
+                    {en: 'school uniform', zh: '校服'},
+                    {en: 'cowboy attire', zh: '牛仔装'},
+                    {en: 'fitness wear', zh: '健身服'},
+                    {en: 'pajamas', zh: '睡衣'}
+                ],
+                isPositive: true
+            },
+            accessory: {
+                title: '饰品',
+                presets: [
+                    {en: 'piercing', zh: '穿刺'},
+                    {en: 'tattoo', zh: '纹身'},
+                    {en: 'nipple piercing', zh: '乳头穿刺'},
+                    {en: 'genital piercing', zh: '生殖器穿刺'},
+                    {en: 'leather boots', zh: '皮靴'},
+                    {en: 'fishnet stockings', zh: '渔网袜'},
+                    {en: 'choker', zh: '颈环'},
+                    {en: 'wrist cuffs', zh: '手腕铐'},
+                    {en: 'latex gloves', zh: '乳胶手套'},
+                    {en: 'harness straps', zh: '束带'},
+                    {en: 'studded belt', zh: '铆钉腰带'},
+                    {en: 'dog collar', zh: '狗项圈'},
+                    {en: 'spiked bracelet', zh: '尖刺手镯'},
+                    {en: 'chain necklace', zh: '链条项链'},
+                    {en: 'leather armbands', zh: '皮质臂环'},
+                    {en: 'metal rings', zh: '金属环'},
+                    {en: 'nose ring', zh: '鼻环'},
+                    {en: 'eyebrow piercing', zh: '眉环'},
+                    {en: 'lip piercing', zh: '唇环'},
+                    {en: 'nipple rings', zh: '乳头环'},
+                    {en: 'Prince Albert piercing', zh: '阴茎穿孔'},
+                    {en: 'frenum piercing', zh: '阴茎系带穿孔'},
+                    {en: 'dydoe piercing', zh: '龟头穿孔'},
+                    {en: 'apadravya piercing', zh: '垂直阴茎穿孔'},
+                    {en: 'scrotal piercing', zh: '阴囊穿孔'},
+                    {en: 'guiche piercing', zh: '会阴穿孔'},
+                    {en: 'anal beads', zh: '肛珠'},
+                    {en: 'butt plug', zh: '肛塞'},
+                    {en: 'urethral sound', zh: '尿道探针'},
+                    {en: 'ball stretching', zh: '睾丸拉伸'},
+                    {en: 'cock cage', zh: '阴茎笼'},
+                    {en: 'urethral plug', zh: '尿道塞'}
+                ],
+                isPositive: true
+            },
+            background: {
+                title: '场景背景',
+                presets: [
+                    {en: 'bedroom background', zh: '卧室背景'},
+                    {en: 'shower scene', zh: '淋浴场景'},
+                    {en: 'gym setting', zh: '健身房场景'},
+                    {en: 'beach erotic', zh: '沙滩色情'},
+                    {en: 'forest nude', zh: '森林裸体'},
+                    {en: 'sauna scene', zh: '桑拿场景'},
+                    {en: 'hot tub setting', zh: '热水浴场景'},
+                    {en: 'nightclub vibe', zh: '夜店氛围'},
+                    {en: 'luxury hotel room', zh: '豪华酒店房间'},
+                    {en: 'public restroom', zh: '公共厕所'},
+                    {en: 'dungeon', zh: '地牢'},
+                    {en: 'rooftop', zh: '屋顶'},
+                    {en: 'dark alley', zh: '黑暗小巷'},
+                    {en: 'poolside', zh: '泳池边'},
+                    {en: 'mountain view', zh: '山景'},
+                    {en: 'desert scene', zh: '沙漠场景'},
+                    {en: 'space station', zh: '空间站'},
+                    {en: 'ancient ruins', zh: '古老遗迹'},
+                    {en: 'tropical island', zh: '热带岛屿'},
+                    {en: 'underwater', zh: '水下'},
+                    {en: 'office setting', zh: '办公室环境'},
+                    {en: 'construction site', zh: '建筑工地'},
+                    {en: 'locker room', zh: '更衣室'},
+                    {en: 'car interior', zh: '车内'}
+                ],
+                isPositive: true
+            },
+            quality: {
+                title: '画质风格',
+                presets: [
+                    {en: 'high detail', zh: '高细节'},
+                    {en: 'realistic', zh: '真实'},
+                    {en: '4k resolution', zh: '4K分辨率'},
+                    {en: '8k resolution', zh: '8K分辨率'},
+                    {en: 'photorealistic', zh: '照片级真实'},
+                    {en: 'cinematic lighting', zh: '电影光效'},
+                    {en: 'ultra realistic', zh: '超现实'},
+                    {en: 'sharp focus', zh: '锐利焦点'},
+                    {en: 'vivid colors', zh: '鲜艳色彩'},
+                    {en: 'soft lighting', zh: '柔和光线'},
+                    {en: 'dynamic shadows', zh: '动态阴影'},
+                    {en: 'high contrast', zh: '高对比度'},
+                    {en: 'detailed skin texture', zh: '细致皮肤纹理'},
+                    {en: 'detailed hair strands', zh: '细致发丝'},
+                    {en: 'studio lighting', zh: '影棚灯光'},
+                    {en: 'dramatic shadows', zh: '戏剧性阴影'},
+                    {en: 'bokeh background', zh: '背景虚化'},
+                    {en: 'depth of field', zh: '景深效果'}
+                ],
+                isPositive: true
+            },
+            number: {
+                title: '人数',
+                presets: [
+                    {en: 'one boy', zh: '一个男孩'},
+                    {en: 'two boys', zh: '两个男孩'},
+                    {en: 'group of boys', zh: '一群男孩'},
+                    {en: 'three boys', zh: '三个男孩'},
+                    {en: 'solo male', zh: '单独男性'},
+                    {en: 'four boys', zh: '四个男孩'},
+                    {en: 'pair of males', zh: '一对男性'},
+                    {en: 'multiple males', zh: '多名男性'},
+                    {en: 'crowd of males', zh: '一群男性'},
+                    {en: 'threesome', zh: '三人行'},
+                    {en: 'orgy', zh: '多人性爱'}
+                ],
+                isPositive: true
+            }
+        };
+
+        // Notification function
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // Reset negative prompt to default
+        function resetNegative() {
+            document.getElementById('negative-prompt').value = 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, female vagina, female vulva, female labia, female clitoris, female pussy, female cervix, female vag, female twat, female cunt, female snatch, female cooch, female coochie, female slit, female hole, female beaver, female muff, female quim, female yoni, female downstairs, female privates, female lady parts, female nether regions, female intimate area, female private parts, female sex organs, female reproductive organs, female pudenda, female mons pubis, female vaginal opening, female vaginal canal, female vaginal lips, female inner lips, female outer lips, female clitoral hood, female g-spot, female erogenous zones, female squirting, female orgasm, female female ejaculation, female breasts, female boobs, female tits, female bust, female cleavage, female nipples, female areola, female jugs, female melons, female knockers, female rack, female bosom, female chest, female ta-tas, female hooters, female bazookas, female funbags, female milkers, female pillows, female mounds, female orbs, female globes, female udders, female cans, female headlights, female giant breasts, female huge boobs, female massive tits, female enormous bust, female oversized cleavage, female gigantic nipples, female colossal areola, female mega vagina, female jumbo vulva, female titanic labia, female mammoth clitoris, female humongous pussy, female enormous cervix';
+            showNotification('反向提示词已恢复默认！');
+        }
+
+        // Dynamically create preset containers
+        const presetDisplay = document.getElementById('preset-display');
+        Object.keys(categories).forEach(key => {
+            const container = document.createElement('div');
+            container.className = 'preset-container';
+            container.id = `preset-${key}`;
+            const h3 = document.createElement('h3');
+            h3.textContent = categories[key].title;
+            h3.style.color = '#c77dff';
+            h3.style.margin = '8px 0 5px';
+            h3.style.fontSize = '16px';
+            container.appendChild(h3);
+            const list = document.createElement('div');
+            list.className = 'preset-list';
+            categories[key].presets.forEach(preset => {
+                const item = document.createElement('div');
+                item.className = 'preset-item';
+                item.textContent = preset.zh;
+                item.dataset.key = preset.en;
+                item.onclick = function() {
+                    togglePreset(this, preset.en, preset.zh);
+                };
+                
+                // Check if this preset is already in positive prompt
+                const currentText = document.getElementById('positive-prompt').value;
+                if (currentText.includes(preset.en)) {
+                    item.classList.add('active');
+                }
+                
+                list.appendChild(item);
+            });
+            container.appendChild(list);
+            presetDisplay.appendChild(container);
+        });
+
+        // Toggle preset item
+        function togglePreset(element, englishTerm, chineseLabel) {
+            const textarea = document.getElementById('positive-prompt');
+            let currentText = textarea.value;
+            
+            if (element.classList.contains('active')) {
+                // Remove the term
+                const regex = new RegExp(`\\b${englishTerm}\\b`, 'g');
+                currentText = currentText.replace(regex, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
+                element.classList.remove('active');
+            } else {
+                // Add the term
+                if (currentText) {
+                    currentText += `, ${englishTerm}`;
+                } else {
+                    currentText = englishTerm;
+                }
+                element.classList.add('active');
+            }
+            
+            textarea.value = currentText;
+        }
+
+        function showCategory(category) {
+            document.querySelectorAll('.preset-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(`preset-${category}`).classList.add('active');
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.category-item[data-category="${category}"]`).classList.add('active');
+        }
+
+        // Show quality category by default
+        showCategory('quality');
+
+        // Translation functions
+        let currentLang = 'en';
+
+        function toggleLanguage(lang) {
+            currentLang = lang;
+            const positive = document.getElementById('positive-prompt').value;
+            const negative = document.getElementById('negative-prompt').value;
+            
+            if (lang === 'zh') {
+                let positiveZh = positive;
+                let negativeZh = negative;
+                
+                Object.keys(translationDict).forEach(english => {
+                    const chinese = translationDict[english];
+                    const regex = new RegExp(`\\b${english}\\b`, 'g');
+                    positiveZh = positiveZh.replace(regex, chinese);
+                    negativeZh = negativeZh.replace(regex, chinese);
+                });
+                
+                document.getElementById('chinese-view').innerHTML = `
+                    <p><strong>正向提示词:</strong> ${positiveZh}</p>
+                    <p><strong>反向提示词:</strong> ${negativeZh}</p>
+                `;
+                document.getElementById('chinese-view').style.display = 'block';
+            } else {
+                document.getElementById('chinese-view').style.display = 'none';
+            }
+        }
+
+        function copyPositive() {
+            const positive = document.getElementById('positive-prompt').value;
+            navigator.clipboard.writeText(positive).then(() => {
+                showNotification('正向提示词已复制！');
+            });
+        }
+
+        function copyNegative() {
+            const negative = document.getElementById('negative-prompt').value;
+            navigator.clipboard.writeText(negative).then(() => {
+                showNotification('反向提示词已复制！');
+            });
+        }
+
+        function generateRandomPrompt() {
+            const numberOptions = categories.number.presets.map(p => p.en);
+            const actionOptions = categories.action.presets.map(p => p.en);
+            const backgroundOptions = categories.background.presets.map(p => p.en);
+            const clothingOptions = categories.clothing.presets.map(p => p.en);
+            const faceOptions = categories.face.presets.map(p => p.en);
+            const bodyOptions = categories.body.presets.map(p => p.en);
+            const skinOptions = categories.skin.presets.map(p => p.en);
+            const colorOptions = categories['hair-color'].presets.map(p => p.en);
+            const hairOptions = categories.hair.presets.map(p => p.en);
+            const qualityOptions = categories.quality.presets.map(p => p.en);
+            const ageOptions = categories.age.presets.map(p => p.en);
+            const expressionOptions = categories.expression.presets.map(p => p.en);
+            const accessoryOptions = categories.accessory.presets.map(p => p.en);
+
+            const number = numberOptions[Math.floor(Math.random() * numberOptions.length)];
+            const action = actionOptions[Math.floor(Math.random() * actionOptions.length)];
+            const background = backgroundOptions[Math.floor(Math.random() * backgroundOptions.length)];
+            const clothing = clothingOptions[Math.floor(Math.random() * clothingOptions.length)];
+            const face = faceOptions[Math.floor(Math.random() * faceOptions.length)];
+            const body = bodyOptions[Math.floor(Math.random() * bodyOptions.length)];
+            const skin = skinOptions[Math.floor(Math.random() * skinOptions.length)];
+            const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+            const hair = hairOptions[Math.floor(Math.random() * hairOptions.length)];
+            const quality = qualityOptions[Math.floor(Math.random() * qualityOptions.length)];
+            const age = ageOptions[Math.floor(Math.random() * ageOptions.length)];
+            const expression = expressionOptions[Math.floor(Math.random() * expressionOptions.length)];
+            const accessory = accessoryOptions[Math.floor(Math.random() * accessoryOptions.length)];
+
+            const randomPrompt = `${number}, ${quality}, ${age}, ${body}, ${face}, ${expression}, ${hair} ${color}, ${skin}, ${clothing}, ${accessory}, ${action}, ${background}`;
+            document.getElementById('positive-prompt').value = randomPrompt;
+            
+            // Update active states
+            document.querySelectorAll('.preset-item').forEach(item => {
+                const key = item.dataset.key;
+                if (randomPrompt.includes(key)) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            showNotification('已生成随机提示词！');
+        }
+
+        function generateImage() {
+            const negative = document.getElementById('negative-prompt').value;
+            if (!negative) {
+                alert('请先确保反向提示词已输入或使用默认值，以避免生成女性特征！');
+                return;
+            }
+            alert('即将跳转到 https://arting.ai/cn/ai-image-generator-nsfw 生成图片。请先复制反向提示词！');
+            window.location.href = 'https://arting.ai/cn/ai-image-generator-nsfw';
+        }
+    </script>
+</body>
+</html>
