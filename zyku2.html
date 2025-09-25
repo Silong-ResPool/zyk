@@ -6068,25 +6068,67 @@ function initMonthlyRedirect() {
     }
 }
 
-// 修改：函数命名同步更新
-function checkReturnFromTargetLink() {
-    const redirectKey = 'redirectStatus';
-    const targetUrl = 'https://silong-respool.github.io/zyk/';
+ 
+// 轮播图跳转功能修复
+document.querySelectorAll('.carousel-slide').forEach(slide => {
+    slide.addEventListener('click', function() {
+        const link = this.dataset.link;
+        if (link) {
+            window.location.href = link;
+        }
+    });
+});
 
-    if (document.referrer.includes(targetUrl)) {
-        const resetStatus = {
-            isActive: false,
-            startTime: Date.now() // 重置计时，重新开始30天计数
-        };
-        localStorage.setItem(redirectKey, JSON.stringify(resetStatus));
+// 安全保护功能
+let attemptCount = 0;
+
+// 禁用文本选择和右键菜单
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    showSecurityAlert();
+});
+
+document.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+});
+
+// 禁用快捷键
+document.addEventListener('keydown', function(e) {
+    // 禁用复制、剪切等快捷键
+    if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'x' || e.key === 'X')) {
+        e.preventDefault();
+        showSecurityAlert();
     }
+    // 禁用开发者工具
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+        showSecurityAlert();
+    }
+});
+
+// 显示安全警告
+function showSecurityAlert() {
+    attemptCount++;
+    document.getElementById('attempt-count').textContent = attemptCount;
+    document.getElementById('security-alert-modal').style.display = 'block';
+    
+    // 更新安全指示器
+    const securityIcon = document.getElementById('security-icon');
+    securityIcon.className = 'fas fa-shield-alt security-alert';
+    document.getElementById('security-text').textContent = '检测到违规操作';
+    
+    setTimeout(() => {
+        securityIcon.className = 'fas fa-shield-alt';
+        document.getElementById('security-text').textContent = '安全模式已启用';
+    }, 5000);
 }
 
-// 页面加载时执行函数
-window.addEventListener('DOMContentLoaded', () => {
-    checkReturnFromTargetLink();
-    initMonthlyRedirect();
+// 关闭安全警告
+document.getElementById('close-security-alert').addEventListener('click', function() {
+    document.getElementById('security-alert-modal').style.display = 'none';
 });
+ 
 </script>
 </body>
 </html>
+ 
