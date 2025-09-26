@@ -411,510 +411,386 @@
         document.getElementById('positive-prompt').value = 'high detail, realistic, 4k resolution, photorealistic, cinematic lighting, sharp focus, ultra detailed skin texture';
         document.getElementById('negative-prompt').value = 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, female vagina, female vulva, female labia, female clitoris, female pussy, female cervix, female vag, female twat, female cunt, female snatch, female cooch, female coochie, female slit, female hole, female beaver, female muff, female quim, female yoni, female downstairs, female privates, female lady parts, female nether regions, female intimate area, female private parts, female sex organs, female reproductive organs, female pudenda, female mons pubis, female vaginal opening, female vaginal canal, female vaginal lips, female inner lips, female outer lips, female clitoral hood, female g-spot, female erogenous zones, female squirting, female orgasm, female female ejaculation, female breasts, female boobs, female tits, female bust, female cleavage, female nipples, female areola, female jugs, female melons, female knockers, female rack, female bosom, female chest, female ta-tas, female hooters, female bazookas, female funbags, female milkers, female pillows, female mounds, female orbs, female globes, female udders, female cans, female headlights, female giant breasts, female huge boobs, female massive tits, female enormous bust, female oversized cleavage, female gigantic nipples, female colossal areola, female mega vagina, female jumbo vulva, female titanic labia, female mammoth clitoris, female humongous pussy, female enormous cervix';
 
-        // Translation dictionary
-        const translationDict = {
-            'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 'masculine': '阳刚',
-            'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二', 'shaft': '茎身', 'glans': '龟头',
-            'foreskin': '包皮', 'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 'erection': '勃起',
-            'hard-on': '硬了', 'boner': '硬屌', 'huge cock': '大鸡巴', 'massive penis': '巨阴茎', 'veiny dick': '青筋老二',
-            'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'thick shaft': '粗大茎身',
-            'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 'puckered anus': '皱褶肛门', 'shaved anus': '剃毛肛门',
-            'hairy anus': '多毛肛门', 'moist anus': '湿润肛门', 'pink anus': '粉红肛门', 'dark anus': '深色肛门',
-            'lubed anus': '润滑肛门', 'relaxed anus': '放松肛门', 'anus': '肛门',
-            'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 'biceps': '二头肌', 'thighs': '大腿',
-            'butt': '臀部', 'ass': '屁股', 'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 'vascular arms': '青筋手臂',
-            'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 'deep voice': '低沉嗓音', 'sharp jawline': '锋利下颌线',
-            'rugged face': '粗犷面容', 'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉', 'high cheekbones': '高颧骨',
-            'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 'speedo': '泳裤', 'leather harness': '皮革束带',
-            'naked': '裸体', 'underwear bulge': '内裤凸起', 'latex suit': '乳胶装', 'cock ring': '阴茎环', 'thong': '丁字裤',
-            'bedroom background': '卧室背景', 'shower scene': '淋浴场景', 'gym setting': '健身房场景', 'beach erotic': '沙滩色情',
-            'forest nude': '森林裸体', 'sauna scene': '桑拿场景', 'hot tub setting': '热水浴场景', 'nightclub vibe': '夜店氛围',
-            'luxury hotel room': '豪华酒店房间', 'public restroom': '公共厕所', 'posing seductively': '诱惑姿势',
-            'flexing muscles': '展示肌肉', 'stroking cock': '抚摸阴茎', 'masturbating': '自慰', 'thrusting': '抽插',
-            'moaning': '呻吟', 'dominant pose': '支配姿势', 'submissive male': '顺从男性', 'group sex': '群交',
-            'oral sex': '口交', 'anal play': '肛门玩法', 'prostate stimulation': '前列腺刺激', 'kissing': '亲吻',
-            'teasing': '挑逗', 'grinding': '研磨', 'sweaty body': '汗湿身体', 'oiled skin': '油光皮肤',
-            'smooth skin': '光滑皮肤', 'rough skin': '粗糙皮肤', 'scarred skin': '瘢痕皮肤', 'tattooed skin': '纹身皮肤',
-            'freckled skin': '雀斑皮肤', 'tanned skin': '古铜色皮肤', 'pale skin': '苍白皮肤', 'olive skin': '橄榄色皮肤',
-            'dark skin': '深色皮肤', 'light skin': '浅色皮肤', 'bronzed skin': '青铜色皮肤', 'short hair': '短发',
-            'long hair': '长发', 'bald head': '光头', 'curly hair': '卷发', 'chest hair': '胸毛', 'shaved pubic hair': '剃光阴毛',
-            'blonde hair': '金发', 'black hair': '黑发', 'high detail': '高细节', 'realistic': '真实', '4k resolution': '4K分辨率',
-            '8k resolution': '8K分辨率', 'photorealistic': '照片级真实', 'cinematic lighting': '电影光效',
-            'one boy': '一个男孩', 'two boys': '两个男孩', 'group of boys': '一群男孩', 'three boys': '三个男孩',
-            'solo male': '单独男性', 'young male': '青年男性', 'teen male': '青少年男性', 'adult male': '成年男性',
-            'middle-aged male': '中年男性', 'mature male': '成熟男性', 'elderly male': '老年男性',
-            'youthful face': '年轻面容', 'mature face': '成熟面容', 'aged face': '年长面容',
-            'slim body': '苗条身材', 'athletic body': '运动身材', 'stocky body': '壮实体型', 'chubby body': '丰满体型',
-            'large penis': '大阴茎', 'small penis': '小阴茎', 'average penis': '普通阴茎', 'circumcised penis': '割包皮阴茎',
-            'uncircumcised penis': '未割包皮阴茎', 'brown hair': '棕发', 'red hair': '红发', 'gray hair': '灰发',
-            'white hair': '白发', 'dyed hair': '染发', 'balding': '秃顶', 'receding hairline': '发际线后移',
-            'facial hair': '面部毛发', 'mustache': '小胡子', 'sideburns': '鬓角', 'goatee': '山羊胡',
-            'full beard': '浓密胡须', 'clean-shaven': '刮干净胡子', 'five o clock shadow': '五点阴影胡茬',
-            'muscle definition': '肌肉线条', 'six-pack abs': '六块腹肌', 'v-line': 'V型线条', 'broad chest': '宽阔胸膛',
-            'strong legs': '强壮腿部', 'bulging biceps': '鼓胀二头肌', 'ripped physique': '健美体型',
-            'body hair': '体毛', 'chest fur': '胸毛', 'back hair': '背毛', 'arm hair': '手臂毛发',
-            'leg hair': '腿毛', 'happy trail': '腹毛线', 'smooth chest': '光滑胸部', 'hairless body': '无毛身体',
-            'facial expression': '面部表情', 'smiling': '微笑', 'serious': '严肃', 'seductive look': '诱惑表情',
-            'intense gaze': '强烈凝视', 'closed eyes': '闭眼', 'open mouth': '张嘴', 'tongue out': '吐舌',
-            'biting lip': '咬唇', 'winking': '眨眼', 'blushing': '脸红', 'sweating': '出汗',
-            'cum': '精液', 'ejaculation': '射精', 'pre-cum': '预射精液', 'semen': '精液',
-            'cum shot': '射精镜头', 'facial': '颜射', 'body cum': '身体精液', 'creampie': '内射',
-            'anal creampie': '肛门内射', 'fingering': '指交', 'rimming': '舔肛', 'fisting': '拳交',
-            'bondage': '束缚', 'BDSM': 'BDSM', 'domination': '支配', 'submission': '顺从',
-            'leash': '皮带', 'collar': '项圈', 'handcuffs': '手铐', 'blindfold': '眼罩',
-            'gag': '口塞', 'whip': '鞭子', 'crop': '短鞭', 'paddle': '拍板',
-            'nipple clamps': '乳头夹', 'ball gag': '球塞', 'rope bondage': '绳缚', 'shibari': '缚绳术',
-            'spanking': '打屁股', 'caning': '藤条抽打', 'flogging': '鞭打', 'whipping': '鞭笞',
-            'outdoor': '户外', 'indoor': '室内', 'urban': '城市', 'rural': '乡村',
-            'nature': '自然', 'water': '水', 'fire': '火', 'earth': '土地',
-            'fantasy': '幻想', 'sci-fi': '科幻', 'historical': '历史', 'modern': '现代',
-            'vintage': '复古', 'futuristic': '未来主义', 'steampunk': '蒸汽朋克', 'cyberpunk': '赛博朋克',
-            'piercing': '穿刺', 'tattoo': '纹身', 'nipple piercing': '乳头穿刺', 'genital piercing': '生殖器穿刺',
-            'leather boots': '皮靴', 'fishnet stockings': '渔网袜', 'choker': '颈环', 'wrist cuffs': '手腕铐',
-            'latex gloves': '乳胶手套', 'harness straps': '束带', 'studded belt': '铆钉腰带',
-            'dog collar': '狗项圈', 'spiked bracelet': '尖刺手镯', 'chain necklace': '链条项链',
-            'ecstatic': '狂喜', 'aroused': '兴奋', 'panting': '喘息', 'grimacing': '扭曲表情',
-            'lustful eyes': '淫欲眼神', 'clenched teeth': '咬紧牙关', 'sweaty forehead': '额头出汗',
-            'flushed cheeks': '脸颊潮红', 'parted lips': '唇部微张', 'heavy breathing': '沉重呼吸',
-            'waiting for cum': '等待精液', 'cum on tongue': '精液在舌头上', 'cum on face': '颜射',
-            'cum on body': '身体精液', 'happy': '开心', 'sad': '悲伤', 'angry': '愤怒',
-            'surprised': '惊讶', 'disgusted': '厌恶', 'fearful': '害怕', 'contempt': '轻蔑',
-            'neutral': '中性', 'dazed': '恍惚', 'pleasure': '愉悦', 'pain': '痛苦',
-            'leather armbands': '皮质臂环', 'metal rings': '金属环', 'nose ring': '鼻环', 'eyebrow piercing': '眉环',
-            'lip piercing': '唇环', 'nipple rings': '乳头环', 'Prince Albert piercing': '阴茎穿孔', 'frenum piercing': '阴茎系带穿孔',
-            'dydoe piercing': '龟头穿孔', 'apadravya piercing': '垂直阴茎穿孔', 'scrotal piercing': '阴囊穿孔',
-            'guiche piercing': '会阴穿孔', 'anal beads': '肛珠', 'butt plug': '肛塞', 'urethral sound': '尿道探针',
-            'lustful': '充满欲望', 'shy': '害羞', 'mischievous': '调皮', 'confident': '自信',
-            'challenging': '挑衅', 'vulnerable': '脆弱', 'exhausted': '筋疲力尽', 'playful': '顽皮',
-            'dominant stare': '支配性凝视', 'submissive gaze': '顺从目光', 'penetrated': '被插入',
-            'penetrating': '插入', 'double penetration': '双插入', 'anal gaping': '肛穴张开',
-            'glory hole': '泄欲孔', 'public exposure': '公共场所暴露', 'urination': '排尿',
-            'watersports': '水上游戏', 'furry': '毛茸茸', 'muscle worship': '肌肉崇拜',
-            'foot fetish': '恋足', 'ball stretching': '睾丸拉伸', 'cock pumping': '阴茎泵吸',
-            'ball weights': '睾丸加重物', 'cock cage': '阴茎笼', 'urethral plug': '尿道塞',
-            'cum eating': '食精', 'facials': '颜射', 'cum swapping': '精液交换', 'multiple orgasms': '多重高潮'
-        };
+ 
+// Translation dictionary (男同专属)
+const translationDict = {
+  // 基础术语
+  'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 
+  'masculine': '阳刚', 'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二',
+  // 性器官相关
+  'shaft': '茎身', 'glans': '龟头', 'foreskin': '包皮', 
+  'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 
+  'erection': '勃起', 'hard-on': '硬了', 'boner': '硬屌',
+  // 特征描述
+  'huge cock': '大鸡巴', 'girthy penis': '粗壮阴茎', 'veiny dick': '青筋老二',
+  'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'bulging veins': '凸起血管',
+  // 肛门相关
+  'anus': '肛门', 'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 
+  'puckered anus': '皱褶肛门', 'hairy perineum': '多毛会阴',
+  // 身体特征
+  'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 
+  'biceps': '二头肌', 'thighs': '大腿', 'butt': '臀部', 'ass': '屁股',
+  'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 
+  'vascular arms': '青筋手臂', 'v-line': 'V型线条',
+  // 新增特征
+  'adonis belt': '人鱼线', 'hip dips': '髋窝', 'collarbone': '锁骨',
+  'back muscles': '背部肌肉', 'shoulder blades': '肩胛骨',
+  // 毛发特征
+  'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 
+  'chest fur': '浓密胸毛', 'happy trail': '腹毛线',
+  // 声音特征
+  'deep voice': '低沉嗓音', 'breathy voice': '喘息嗓音',
+  // 面部特征
+  'sharp jawline': '锋利下颌线', 'rugged face': '粗犷面容', 
+  'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉',
+  'high cheekbones': '高颧骨', 'dimpled cheeks': '酒窝',
+  // 服装类
+  'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 
+  'speedo': '泳裤', 'thong': '丁字裤', 'g-string': '丁字带',
+  'mesh shorts': '网眼短裤', 'leather chaps': '皮套裤', 
+  'denim cutoff': '破洞牛仔', 'silk robe': '真丝睡袍',
+  // 新增男同服装
+  'harness': '束带装', 'muscle tee': '肌肉背心', 'cargo jock': '工装护裆',
+  'latex briefs': '乳胶内裤', 'bondage pants': '束缚裤',
+  // 饰品
+  'cock ring': '阴茎环', 'piercing': '穿刺', 'tattoo': '纹身',
+  'nipple rings': '乳头环', 'guiche piercing': '会阴穿孔',
+  'prince albert': '尿道穿刺', 'apadravya': '垂直阴茎穿孔',
+  // 新增男同饰品
+  'scrotal ladder': '阴囊梯穿孔', 'dydoe cluster': '龟头穿孔群',
+  'frenulum bar': '系带横杆', 'anal hook': '肛门钩',
+  'ball stretcher': '睾丸扩张器', 'urethral plug': '尿道塞',
+  // 场景背景
+  'bedroom': '卧室', 'shower': '淋浴间', 'gym': '健身房',
+  'dungeon': '地牢', 'rooftop': '屋顶', 'dark alley': '暗巷',
+  'sauna': '桑拿房', 'jacuzzi': '按摩浴缸', 'locker room': '更衣室',
+  // 新增男同场景
+  'bathhouse': '澡堂', 'cruising spot': '猎艳点', 'backroom': '暗房',
+  'glory hole booth': '泄欲隔间', 'leather bar': '皮革酒吧',
+  // 动作姿势
+  'flexing': '展示肌肉', 'stroking': '抚摸', 'thrusting': '抽插',
+  'grinding': '研磨', 'doggy style': '后入姿势', 
+  'missionary': '传教士姿势', 'pile driver': '打桩姿势',
+  // 新增男同姿势
+  'frot': '阴茎摩擦', 'anal fisting': '肛门拳交', 
+  'ball sucking': '吸吮睾丸', 'rimming': '舔肛', 
+  'cowboy position': '骑乘位', 'reverse cowboy': '反向骑乘',
+  // 表情
+  'smirking': '坏笑', 'grimacing': '痛苦表情', 'lustful gaze': '欲望凝视',
+  'blushing': '脸红', 'ecstasy': '狂喜', 'afterglow': '高潮余韵',
+  // 新增男同表情
+  'cum face': '射精表情', 'anal penetration wince': '肛交蹙眉',
+  'ball deep groan': '深顶呻吟', 'dominant smirk': '支配性坏笑',
+  // 皮肤特征
+  'dewy skin': '水光肌', 'porcelain skin': '瓷白肌', 'sun-kissed': '日光浴色',
+  'glycolic glow': '果酸焕肤', 'freckled': '雀斑肌', 'scar tissue': '疤痕组织',
+  // 发色
+  'platinum': '铂金色', 'ash brown': '灰褐色', 'burgundy': '酒红色',
+  'pastel pink': '淡粉色', 'silver fox': '银狐灰', 'ombre': '渐变发色',
+  // 新增男同发色
+  'salt and pepper': '盐椒灰', 'dirty blonde': '脏金色', 
+  'jet black': '乌黑色', 'platinum buzzcut': '铂金寸头'
+};
 
-        // Categories data with more options
-        const categories = {
-            age: {
-                title: '年龄阶段',
-                presets: [
-                    {en: 'young male', zh: '青年男性'},
-                    {en: 'teen male', zh: '青少年男性'},
-                    {en: 'adult male', zh: '成年男性'},
-                    {en: 'middle-aged male', zh: '中年男性'},
-                    {en: 'mature male', zh: '成熟男性'},
-                    {en: 'elderly male', zh: '老年男性'},
-                    {en: 'boyish look', zh: '少年感'},
-                    {en: 'prime adult', zh: '壮年男性'},
-                    {en: 'youthful vigor', zh: '青春活力'},
-                    {en: 'silver fox', zh: '性感熟男'}
-                ],
-                isPositive: true
-            },
-            face: {
-                title: '面部特征',
-                presets: [
-                    {en: 'youthful face', zh: '年轻面容'},
-                    {en: 'mature face', zh: '成熟面容'},
-                    {en: 'aged face', zh: '年长面容'},
-                    {en: 'beard', zh: '胡子'},
-                    {en: 'stubble', zh: '胡渣'},
-                    {en: 'deep voice', zh: '低沉嗓音'},
-                    {en: 'sharp jawline', zh: '锋利下颌线'},
-                    {en: 'rugged face', zh: '粗犷面容'},
-                    {en: 'piercing eyes', zh: '锐利眼神'},
-                    {en: 'bushy eyebrows', zh: '浓眉'},
-                    {en: 'high cheekbones', zh: '高颧骨'},
-                    {en: 'facial hair', zh: '面部毛发'},
-                    {en: 'mustache', zh: '小胡子'},
-                    {en: 'sideburns', zh: '鬓角'},
-                    {en: 'goatee', zh: '山羊胡'},
-                    {en: 'full beard', zh: '浓密胡须'},
-                    {en: 'clean-shaven', zh: '刮干净胡子'},
-                    {en: 'five o clock shadow', zh: '五点阴影胡茬'},
-                    {en: 'scarred face', zh: '有疤面容'},
-                    {en: 'tattooed face', zh: '纹脸'},
-                    {en: 'dimpled chin', zh: '下巴酒窝'},
-                    {en: 'sharp nose', zh: '高挺鼻子'},
-                    {en: 'strong brow', zh: '浓眉大眼'}
-                ],
-                isPositive: true
-            },
-            body: {
-                title: '身体体型',
-                presets: [
-                    {en: 'slim body', zh: '苗条身材'},
-                    {en: 'athletic body', zh: '运动身材'},
-                    {en: 'muscular body', zh: '肌肉身材'},
-                    {en: 'stocky body', zh: '壮实体型'},
-                    {en: 'chubby body', zh: '丰满体型'},
-                    {en: 'abs', zh: '腹肌'},
-                    {en: 'pecs', zh: '胸肌'},
-                    {en: 'biceps', zh: '二头肌'},
-                    {en: 'thighs', zh: '大腿'},
-                    {en: 'butt', zh: '臀部'},
-                    {en: 'ass', zh: '屁股'},
-                    {en: 'broad shoulders', zh: '宽肩'},
-                    {en: 'defined calves', zh: '小腿肌肉'},
-                    {en: 'vascular arms', zh: '青筋手臂'},
-                    {en: 'muscle definition', zh: '肌肉线条'},
-                    {en: 'six-pack abs', zh: '六块腹肌'},
-                    {en: 'v-line', zh: 'V型线条'},
-                    {en: 'broad chest', zh: '宽阔胸膛'},
-                    {en: 'strong legs', zh: '强壮腿部'},
-                    {en: 'bulging biceps', zh: '鼓胀二头肌'},
-                    {en: 'ripped physique', zh: '健美体型'},
-                    {en: 'body hair', zh: '体毛'},
-                    {en: 'chest fur', zh: '胸毛'},
-                    {en: 'back hair', zh: '背毛'},
-                    {en: 'arm hair', zh: '手臂毛发'},
-                    {en: 'leg hair', zh: '腿毛'},
-                    {en: 'happy trail', zh: '腹毛线'},
-                    {en: 'smooth chest', zh: '光滑胸部'},
-                    {en: 'hairless body', zh: '无毛身体'},
-                    {en: 'dad bod', zh: '爸爸身材'},
-                    {en: 'bear physique', zh: '熊系身材'},
-                    {en: 'twink body', zh: '瘦削身材'}
-                ],
-                isPositive: true
-            },
-            penis: {
-                title: '性器官',
-                presets: [
-                    {en: 'penis', zh: '阴茎'},
-                    {en: 'cock', zh: '鸡巴'},
-                    {en: 'dick', zh: '老二'},
-                    {en: 'shaft', zh: '茎身'},
-                    {en: 'glans', zh: '龟头'},
-                    {en: 'foreskin', zh: '包皮'},
-                    {en: 'balls', zh: '睾丸'},
-                    {en: 'testicles', zh: '卵蛋'},
-                    {en: 'scrotum', zh: '阴囊'},
-                    {en: 'erection', zh: '勃起'},
-                    {en: 'hard-on', zh: '硬了'},
-                    {en: 'boner', zh: '硬屌'},
-                    {en: 'huge cock', zh: '大鸡巴'},
-                    {en: 'large penis', zh: '大阴茎'},
-                    {en: 'small penis', zh: '小阴茎'},
-                    {en: 'average penis', zh: '普通阴茎'},
-                    {en: 'massive penis', zh: '巨阴茎'},
-                    {en: 'veiny dick', zh: '青筋老二'},
-                    {en: 'throbbing shaft', zh: '跳动茎身'},
-                    {en: 'curved penis', zh: '弯曲阴茎'},
-                    {en: 'thick shaft', zh: '粗大茎身'},
-                    {en: 'circumcised penis', zh: '割包皮阴茎'},
-                    {en: 'uncircumcised penis', zh: '未割包皮阴茎'},
-                    {en: 'cum', zh: '精液'},
-                    {en: 'ejaculation', zh: '射精'},
-                    {en: 'pre-cum', zh: '预射精液'},
-                    {en: 'semen', zh: '精液'},
-                    {en: 'cum shot', zh: '射精镜头'},
-                    {en: 'facial', zh: '颜射'},
-                    {en: 'body cum', zh: '身体精液'},
-                    {en: 'creampie', zh: '内射'},
-                    {en: 'anal creampie', zh: '肛门内射'},
-                    {en: 'flaccid penis', zh: '疲软阴茎'},
-                    {en: 'semi-erect', zh: '半勃起'}
-                ],
-                isPositive: true
-            },
-            anus: {
-                title: '肛门',
-                presets: [
-                    {en: 'anus', zh: '肛门'},
-                    {en: 'tight anus', zh: '紧实肛门'},
-                    {en: 'smooth anus', zh: '光滑肛门'},
-                    {en: 'puckered anus', zh: '皱褶肛门'},
-                    {en: 'shaved anus', zh: '剃毛肛门'},
-                    {en: 'hairy anus', zh: '多毛肛门'},
-                    {en: 'moist anus', zh: '湿润肛门'},
-                    {en: 'pink anus', zh: '粉红肛门'},
-                    {en: 'dark anus', zh: '深色肛门'},
-                    {en: 'lubed anus', zh: '润滑肛门'},
-                    {en: 'relaxed anus', zh: '放松肛门'},
-                    {en: 'open anus', zh: '张开肛门'},
-                    {en: 'prolapsed anus', zh: '脱肛'},
-                    {en: 'anal wink', zh: '肛门收缩'}
-                ],
-                isPositive: true
-            },
-            action: {
-                title: '动作姿势',
-                presets: [
-                    {en: 'posing seductively', zh: '诱惑姿势'},
-                    {en: 'flexing muscles', zh: '展示肌肉'},
-                    {en: 'stroking cock', zh: '抚摸阴茎'},
-                    {en: 'masturbating', zh: '自慰'},
-                    {en: 'thrusting', zh: '抽插'},
-                    {en: 'moaning', zh: '呻吟'},
-                    {en: 'dominant pose', zh: '支配姿势'},
-                    {en: 'submissive male', zh: '顺从男性'},
-                    {en: 'group sex', zh: '群交'},
-                    {en: 'oral sex', zh: '口交'},
-                    {en: 'anal play', zh: '肛门玩法'},
-                    {en: 'prostate stimulation', zh: '前列腺刺激'},
-                    {en: 'kissing', zh: '亲吻'},
-                    {en: 'teasing', zh: '挑逗'},
-                    {en: 'grinding', zh: '研磨'},
-                    {en: 'fingering', zh: '指交'},
-                    {en: 'rimming', zh: '舔肛'},
-                    {en: 'fisting', zh: '拳交'},
-                    {en: 'bondage', zh: '束缚'},
-                    {en: 'BDSM', zh: 'BDSM'},
-                    {en: 'domination', zh: '支配'},
-                    {en: 'submission', zh: '顺从'},
-                    {en: 'double penetration', zh: '双插入'},
-                    {en: 'anal gaping', zh: '肛门张开'},
-                    {en: 'glory hole', zh: '泄欲孔'},
-                    {en: 'urination', zh: '排尿'},
-                    {en: 'cum eating', zh: '食精'},
-                    {en: 'facials', zh: '颜射'}
-                ],
-                isPositive: true
-            },
-            expression: {
-                title: '表情',
-                presets: [
-                    {en: 'smiling', zh: '微笑'},
-                    {en: 'serious', zh: '严肃'},
-                    {en: 'seductive look', zh: '诱惑表情'},
-                    {en: 'intense gaze', zh: '强烈凝视'},
-                    {en: 'closed eyes', zh: '闭眼'},
-                    {en: 'open mouth', zh: '张嘴'},
-                    {en: 'tongue out', zh: '吐舌'},
-                    {en: 'biting lip', zh: '咬唇'},
-                    {en: 'winking', zh: '眨眼'},
-                    {en: 'blushing', zh: '脸红'},
-                    {en: 'sweating', zh: '出汗'},
-                    {en: 'ecstatic', zh: '狂喜'},
-                    {en: 'aroused', zh: '兴奋'},
-                    {en: 'panting', zh: '喘息'},
-                    {en: 'grimacing', zh: '扭曲表情'},
-                    {en: 'lustful eyes', zh: '淫欲眼神'},
-                    {en: 'clenched teeth', zh: '咬紧牙关'},
-                    {en: 'sweaty forehead', zh: '额头出汗'},
-                    {en: 'flushed cheeks', zh: '脸颊潮红'},
-                    {en: 'parted lips', zh: '唇部微张'},
-                    {en: 'heavy breathing', zh: '沉重呼吸'},
-                    {en: 'waiting for cum', zh: '等待精液'},
-                    {en: 'orgasmic expression', zh: '高潮表情'},
-                    {en: 'painful expression', zh: '痛苦表情'},
-                    {en: 'dominant stare', zh: '支配性凝视'},
-                    {en: 'submissive gaze', zh: '顺从目光'},
-                    {en: 'challenging look', zh: '挑衅眼神'},
-                    {en: 'vulnerable expression', zh: '脆弱表情'}
-                ],
-                isPositive: true
-            },
-            skin: {
-                title: '皮肤质感',
-                presets: [
-                    {en: 'sweaty body', zh: '汗湿身体'},
-                    {en: 'oiled skin', zh: '油光皮肤'},
-                    {en: 'smooth skin', zh: '光滑皮肤'},
-                    {en: 'rough skin', zh: '粗糙皮肤'},
-                    {en: 'scarred skin', zh: '瘢痕皮肤'},
-                    {en: 'tattooed skin', zh: '纹身皮肤'},
-                    {en: 'freckled skin', zh: '雀斑皮肤'},
-                    {en: 'tanned skin', zh: '古铜色皮肤'},
-                    {en: 'pale skin', zh: '苍白皮肤'},
-                    {en: 'olive skin', zh: '橄榄色皮肤'},
-                    {en: 'dark skin', zh: '深色皮肤'},
-                    {en: 'light skin', zh: '浅色皮肤'},
-                    {en: 'bronzed skin', zh: '青铜色皮肤'},
-                    {en: 'glistening skin', zh: '闪光皮肤'},
-                    {en: 'flushed skin', zh: '潮红皮肤'},
-                    {en: 'soft skin', zh: '柔软皮肤'},
-                    {en: 'rugged skin', zh: '粗犷皮肤'},
-                    {en: 'porcelain skin', zh: '瓷白皮肤'},
-                    {en: 'sunburned skin', zh: '晒伤皮肤'}
-                ],
-                isPositive: true
-            },
-            hair: {
-                title: '头发',
-                presets: [
-                    {en: 'pubic hair', zh: '阴毛'},
-                    {en: 'short hair', zh: '短发'},
-                    {en: 'long hair', zh: '长发'},
-                    {en: 'bald head', zh: '光头'},
-                    {en: 'curly hair', zh: '卷发'},
-                    {en: 'chest hair', zh: '胸毛'},
-                    {en: 'shaved pubic hair', zh: '剃光阴毛'},
-                    {en: 'balding', zh: '秃顶'},
-                    {en: 'receding hairline', zh: '发际线后移'},
-                    {en: 'messy hair', zh: '凌乱头发'},
-                    {en: 'braided hair', zh: '编发'},
-                    {en: 'dreadlocks', zh: '脏辫'},
-                    {en: 'man bun', zh: '男士发髻'},
-                    {en: 'undercut', zh: '底层修剪'},
-                    {en: 'fade haircut', zh: '渐变发型'},
-                    {en: 'buzz cut', zh: '寸头'},
-                    {en: 'mohawk', zh: '莫西干发型'},
-                    {en: 'quiff', zh: '蓬巴杜发型'}
-                ],
-                isPositive: true
-            },
-            'hair-color': {
-                title: '发色',
-                presets: [
-                    {en: 'blonde hair', zh: '金发'},
-                    {en: 'black hair', zh: '黑发'},
-                    {en: 'brown hair', zh: '棕发'},
-                    {en: 'red hair', zh: '红发'},
-                    {en: 'gray hair', zh: '灰发'},
-                    {en: 'white hair', zh: '白发'},
-                    {en: 'dyed hair', zh: '染发'},
-                    {en: 'blue hair', zh: '蓝发'},
-                    {en: 'green hair', zh: '绿发'},
-                    {en: 'purple hair', zh: '紫发'},
-                    {en: 'pink hair', zh: '粉发'},
-                    {en: 'silver hair', zh: '银发'},
-                    {en: 'platinum blonde', zh: '铂金色'},
-                    {en: 'strawberry blonde', zh: '草莓金'},
-                    {en: 'auburn hair', zh: '赤褐色'}
-                ],
-                isPositive: true
-            },
-            clothing: {
-                title: '服装',
-                presets: [
-                    {en: 'boxers', zh: '四角裤'},
-                    {en: 'briefs', zh: '三角裤'},
-                    {en: 'jockstrap', zh: '护裆'},
-                    {en: 'speedo', zh: '泳裤'},
-                    {en: 'leather harness', zh: '皮革束带'},
-                    {en: 'naked', zh: '裸体'},
-                    {en: 'underwear bulge', zh: '内裤凸起'},
-                    {en: 'latex suit', zh: '乳胶装'},
-                    {en: 'cock ring', zh: '阴茎环'},
-                    {en: 'thong', zh: '丁字裤'},
-                    {en: 'mesh top', zh: '网眼上衣'},
-                    {en: 'leather pants', zh: '皮裤'},
-                    {en: 'open shirt', zh: '敞开衬衫'},
-                    {en: 'torn jeans', zh: '破洞牛仔裤'},
-                    {en: 'military uniform', zh: '军装'},
-                    {en: 'business suit', zh: '西装'},
-                    {en: 'school uniform', zh: '校服'},
-                    {en: 'cowboy attire', zh: '牛仔装'},
-                    {en: 'fitness wear', zh: '健身服'},
-                    {en: 'pajamas', zh: '睡衣'}
-                ],
-                isPositive: true
-            },
-            accessory: {
-                title: '饰品',
-                presets: [
-                    {en: 'piercing', zh: '穿刺'},
-                    {en: 'tattoo', zh: '纹身'},
-                    {en: 'nipple piercing', zh: '乳头穿刺'},
-                    {en: 'genital piercing', zh: '生殖器穿刺'},
-                    {en: 'leather boots', zh: '皮靴'},
-                    {en: 'fishnet stockings', zh: '渔网袜'},
-                    {en: 'choker', zh: '颈环'},
-                    {en: 'wrist cuffs', zh: '手腕铐'},
-                    {en: 'latex gloves', zh: '乳胶手套'},
-                    {en: 'harness straps', zh: '束带'},
-                    {en: 'studded belt', zh: '铆钉腰带'},
-                    {en: 'dog collar', zh: '狗项圈'},
-                    {en: 'spiked bracelet', zh: '尖刺手镯'},
-                    {en: 'chain necklace', zh: '链条项链'},
-                    {en: 'leather armbands', zh: '皮质臂环'},
-                    {en: 'metal rings', zh: '金属环'},
-                    {en: 'nose ring', zh: '鼻环'},
-                    {en: 'eyebrow piercing', zh: '眉环'},
-                    {en: 'lip piercing', zh: '唇环'},
-                    {en: 'nipple rings', zh: '乳头环'},
-                    {en: 'Prince Albert piercing', zh: '阴茎穿孔'},
-                    {en: 'frenum piercing', zh: '阴茎系带穿孔'},
-                    {en: 'dydoe piercing', zh: '龟头穿孔'},
-                    {en: 'apadravya piercing', zh: '垂直阴茎穿孔'},
-                    {en: 'scrotal piercing', zh: '阴囊穿孔'},
-                    {en: 'guiche piercing', zh: '会阴穿孔'},
-                    {en: 'anal beads', zh: '肛珠'},
-                    {en: 'butt plug', zh: '肛塞'},
-                    {en: 'urethral sound', zh: '尿道探针'},
-                    {en: 'ball stretching', zh: '睾丸拉伸'},
-                    {en: 'cock cage', zh: '阴茎笼'},
-                    {en: 'urethral plug', zh: '尿道塞'}
-                ],
-                isPositive: true
-            },
-            background: {
-                title: '场景背景',
-                presets: [
-                    {en: 'bedroom background', zh: '卧室背景'},
-                    {en: 'shower scene', zh: '淋浴场景'},
-                    {en: 'gym setting', zh: '健身房场景'},
-                    {en: 'beach erotic', zh: '沙滩色情'},
-                    {en: 'forest nude', zh: '森林裸体'},
-                    {en: 'sauna scene', zh: '桑拿场景'},
-                    {en: 'hot tub setting', zh: '热水浴场景'},
-                    {en: 'nightclub vibe', zh: '夜店氛围'},
-                    {en: 'luxury hotel room', zh: '豪华酒店房间'},
-                    {en: 'public restroom', zh: '公共厕所'},
-                    {en: 'dungeon', zh: '地牢'},
-                    {en: 'rooftop', zh: '屋顶'},
-                    {en: 'dark alley', zh: '黑暗小巷'},
-                    {en: 'poolside', zh: '泳池边'},
-                    {en: 'mountain view', zh: '山景'},
-                    {en: 'desert scene', zh: '沙漠场景'},
-                    {en: 'space station', zh: '空间站'},
-                    {en: 'ancient ruins', zh: '古老遗迹'},
-                    {en: 'tropical island', zh: '热带岛屿'},
-                    {en: 'underwater', zh: '水下'},
-                    {en: 'office setting', zh: '办公室环境'},
-                    {en: 'construction site', zh: '建筑工地'},
-                    {en: 'locker room', zh: '更衣室'},
-                    {en: 'car interior', zh: '车内'}
-                ],
-                isPositive: true
-            },
-            quality: {
-                title: '画质风格',
-                presets: [
-                    {en: 'high detail', zh: '高细节'},
-                    {en: 'realistic', zh: '真实'},
-                    {en: '4k resolution', zh: '4K分辨率'},
-                    {en: '8k resolution', zh: '8K分辨率'},
-                    {en: 'photorealistic', zh: '照片级真实'},
-                    {en: 'cinematic lighting', zh: '电影光效'},
-                    {en: 'ultra realistic', zh: '超现实'},
-                    {en: 'sharp focus', zh: '锐利焦点'},
-                    {en: 'vivid colors', zh: '鲜艳色彩'},
-                    {en: 'soft lighting', zh: '柔和光线'},
-                    {en: 'dynamic shadows', zh: '动态阴影'},
-                    {en: 'high contrast', zh: '高对比度'},
-                    {en: 'detailed skin texture', zh: '细致皮肤纹理'},
-                    {en: 'detailed hair strands', zh: '细致发丝'},
-                    {en: 'studio lighting', zh: '影棚灯光'},
-                    {en: 'dramatic shadows', zh: '戏剧性阴影'},
-                    {en: 'bokeh background', zh: '背景虚化'},
-                    {en: 'depth of field', zh: '景深效果'}
-                ],
-                isPositive: true
-            },
-            number: {
-                title: '人数',
-                presets: [
-                    {en: 'one boy', zh: '一个男孩'},
-                    {en: 'two boys', zh: '两个男孩'},
-                    {en: 'group of boys', zh: '一群男孩'},
-                    {en: 'three boys', zh: '三个男孩'},
-                    {en: 'solo male', zh: '单独男性'},
-                    {en: 'four boys', zh: '四个男孩'},
-                    {en: 'pair of males', zh: '一对男性'},
-                    {en: 'multiple males', zh: '多名男性'},
-                    {en: 'crowd of males', zh: '一群男性'},
-                    {en: 'threesome', zh: '三人行'},
-                    {en: 'orgy', zh: '多人性爱'}
-                ],
-                isPositive: true
-            }
-        };
-
+// 分类数据 (男同专属)
+ 
+// 分类数据 (男同专属完整版)
+const categories = {
+    age: {
+        title: '年龄阶段',
+        presets: [
+            {en: 'young male', zh: '青年男性'},
+            {en: 'teen male', zh: '青少年男性'},
+            {en: 'adult male', zh: '成年男性'},
+            {en: 'middle-aged male', zh: '中年男性'},
+            {en: 'mature male', zh: '成熟男性'},
+            {en: 'daddy', zh: '爹系熟男'},
+            {en: 'silver fox', zh: '银狐熟男'},
+            {en: 'twink', zh: '少年型'},
+            {en: 'otter', zh: '水獭型'},
+            {en: 'bear', zh: '熊系'},
+            {en: 'cub', zh: '小熊'},
+            {en: 'wolf', zh: '狼系'},
+            {en: 'jock', zh: '运动员型'}
+        ],
+        isPositive: true
+    },
+    face: {
+        title: '面部特征',
+        presets: [
+            {en: 'sharp jawline', zh: '锋利下颌线'},
+            {en: 'rugged face', zh: '粗犷面容'},
+            {en: 'piercing eyes', zh: '锐利眼神'},
+            {en: 'bushy eyebrows', zh: '浓眉'},
+            {en: 'high cheekbones', zh: '高颧骨'},
+            {en: 'beard', zh: '胡子'},
+            {en: 'stubble', zh: '胡渣'},
+            {en: 'goatee', zh: '山羊胡'},
+            {en: 'full beard', zh: '浓密胡须'},
+            {en: 'clean-shaven', zh: '刮干净胡子'},
+            {en: 'five o clock shadow', zh: '五点阴影胡茬'},
+            {en: 'facial scars', zh: '面部疤痕'},
+            {en: 'tattooed face', zh: '脸部纹身'},
+            {en: 'dimpled chin', zh: '下巴酒窝'},
+            {en: 'strong nose', zh: '高挺鼻梁'}
+        ],
+        isPositive: true
+    },
+    body: {
+        title: '身体体型',
+        presets: [
+            {en: 'muscular body', zh: '肌肉身材'},
+            {en: 'slim body', zh: '苗条身材'},
+            {en: 'athletic body', zh: '运动身材'},
+            {en: 'stocky body', zh: '壮实体型'},
+            {en: 'chubby body', zh: '丰满体型'},
+            {en: 'bear physique', zh: '熊系身材'},
+            {en: 'otter build', zh: '水獭体型'},
+            {en: 'dad bod', zh: '爸爸身材'},
+            {en: 'ripped physique', zh: '健美体型'},
+            {en: 'v-line', zh: 'V型线条'},
+            {en: 'six-pack abs', zh: '六块腹肌'},
+            {en: 'broad chest', zh: '宽阔胸膛'},
+            {en: 'bulging biceps', zh: '鼓胀二头肌'},
+            {en: 'thick thighs', zh: '粗壮大腿'},
+            {en: 'bubble butt', zh: '圆润臀部'}
+        ],
+        isPositive: true
+    },
+    penis: {
+        title: '性器官',
+        presets: [
+            {en: 'cock', zh: '鸡巴'},
+            {en: 'dick', zh: '老二'},
+            {en: 'shaft', zh: '茎身'},
+            {en: 'glans', zh: '龟头'},
+            {en: 'foreskin', zh: '包皮'},
+            {en: 'balls', zh: '睾丸'},
+            {en: 'scrotum', zh: '阴囊'},
+            {en: 'huge cock', zh: '大鸡巴'},
+            {en: 'girthy penis', zh: '粗壮阴茎'},
+            {en: 'veiny dick', zh: '青筋老二'},
+            {en: 'throbbing shaft', zh: '跳动茎身'},
+            {en: 'curved penis', zh: '弯曲阴茎'},
+            {en: 'uncut cock', zh: '未割包皮鸡巴'},
+            {en: 'low hangers', zh: '下垂睾丸'},
+            {en: 'cum dripping', zh: '滴精'}
+        ],
+        isPositive: true
+    },
+    anus: {
+        title: '肛门',
+        presets: [
+            {en: 'anus', zh: '肛门'},
+            {en: 'tight hole', zh: '紧致肛穴'},
+            {en: 'gaping anus', zh: '张开肛门'},
+            {en: 'puckered hole', zh: '皱褶肛口'},
+            {en: 'hairy perineum', zh: '多毛会阴'},
+            {en: 'shaved anus', zh: '剃毛肛门'},
+            {en: 'rosy hole', zh: '粉红肛穴'},
+            {en: 'winking anus', zh: '收缩肛门'},
+            {en: 'lubed hole', zh: '润滑肛口'},
+            {en: 'prolapsed rectum', zh: '直肠脱垂'}
+        ],
+        isPositive: true
+    },
+    action: {
+        title: '动作姿势',
+        presets: [
+            {en: 'frot', zh: '阴茎摩擦'},
+            {en: 'anal fisting', zh: '肛门拳交'},
+            {en: 'ball sucking', zh: '吸吮睾丸'},
+            {en: 'rimming', zh: '舔肛'},
+            {en: 'doggy style', zh: '后入姿势'},
+            {en: 'pile driver', zh: '打桩姿势'},
+            {en: 'cowboy position', zh: '骑乘位'},
+            {en: 'reverse cowboy', zh: '反向骑乘'},
+            {en: 'double penetration', zh: '双龙入穴'},
+            {en: 'urethral play', zh: '尿道玩法'},
+            {en: 'fisting', zh: '拳交'},
+            {en: 'ball stretching', zh: '睾丸拉伸'},
+            {en: 'cock pumping', zh: '阴茎泵吸'},
+            {en: 'group sex', zh: '群交'},
+            {en: 'glory hole', zh: '泄欲孔'}
+        ],
+        isPositive: true
+    },
+    expression: {
+        title: '表情',
+        presets: [
+            {en: 'lustful gaze', zh: '欲望凝视'},
+            {en: 'dominant smirk', zh: '支配性坏笑'},
+            {en: 'submissive gaze', zh: '顺从目光'},
+            {en: 'cum face', zh: '射精表情'},
+            {en: 'anal penetration wince', zh: '肛交蹙眉'},
+            {en: 'ball deep groan', zh: '深顶呻吟'},
+            {en: 'ecstasy', zh: '狂喜'},
+            {en: 'afterglow', zh: '高潮余韵'},
+            {en: 'blowing kiss', zh: '飞吻'},
+            {en: 'biting lip', zh: '咬唇'},
+            {en: 'eye rolling', zh: '翻白眼'},
+            {en: 'open mouth moan', zh: '张嘴呻吟'},
+            {en: 'teary eyes', zh: '含泪双眼'}
+        ],
+        isPositive: true
+    },
+    skin: {
+        title: '皮肤质感',
+        presets: [
+            {en: 'sweaty body', zh: '汗湿身体'},
+            {en: 'oiled skin', zh: '油光皮肤'},
+            {en: 'tattooed skin', zh: '纹身皮肤'},
+            {en: 'freckled skin', zh: '雀斑皮肤'},
+            {en: 'tanned skin', zh: '古铜色皮肤'},
+            {en: 'pale skin', zh: '苍白皮肤'},
+            {en: 'dark skin', zh: '深色皮肤'},
+            {en: 'rough skin', zh: '粗糙皮肤'},
+            {en: 'scarred skin', zh: '瘢痕皮肤'},
+            {en: 'dewy skin', zh: '水光肌'},
+            {en: 'sun-kissed', zh: '日光浴色'},
+            {en: 'glycolic glow', zh: '果酸焕肤'},
+            {en: 'rope burns', zh: '绳缚痕迹'}
+        ],
+        isPositive: true
+    },
+    hair: {
+        title: '头发',
+        presets: [
+            {en: 'buzz cut', zh: '寸头'},
+            {en: 'undercut', zh: '底层修剪'},
+            {en: 'man bun', zh: '男士发髻'},
+            {en: 'fade haircut', zh: '渐变发型'},
+            {en: 'mohawk', zh: '莫西干发型'},
+            {en: 'quiff', zh: '蓬巴杜发型'},
+            {en: 'dreadlocks', zh: '脏辫'},
+            {en: 'shaved sides', zh: '两侧剃光'},
+            {en: 'long top', zh: '顶部长发'},
+            {en: 'balding', zh: '秃顶'},
+            {en: 'receding hairline', zh: '发际线后移'},
+            {en: 'slicked back', zh: '后梳发型'},
+            {en: 'messy hair', zh: '凌乱头发'}
+        ],
+        isPositive: true
+    },
+    'hair-color': {
+        title: '发色',
+        presets: [
+            {en: 'jet black', zh: '乌黑色'},
+            {en: 'dirty blonde', zh: '脏金色'},
+            {en: 'platinum', zh: '铂金色'},
+            {en: 'silver fox', zh: '银狐灰'},
+            {en: 'salt and pepper', zh: '盐椒灰'},
+            {en: 'burgundy', zh: '酒红色'},
+            {en: 'pastel pink', zh: '淡粉色'},
+            {en: 'neon blue', zh: '霓虹蓝'},
+            {en: 'vibrant purple', zh: '亮紫色'},
+            {en: 'fiery red', zh: '火焰红'},
+            {en: 'bleached blonde', zh: '漂白金'},
+            {en: 'ash brown', zh: '灰褐色'},
+            {en: 'ombre', zh: '渐变发色'},
+            {en: 'rainbow hair', zh: '彩虹发色'}
+        ],
+        isPositive: true
+    },
+    clothing: {
+        title: '服装',
+        presets: [
+            {en: 'jockstrap', zh: '护裆'},
+            {en: 'speedo', zh: '泳裤'},
+            {en: 'harness', zh: '束带装'},
+            {en: 'latex briefs', zh: '乳胶内裤'},
+            {en: 'bondage pants', zh: '束缚裤'},
+            {en: 'leather chaps', zh: '皮套裤'},
+            {en: 'muscle tee', zh: '肌肉背心'},
+            {en: 'cargo jock', zh: '工装护裆'},
+            {en: 'mesh shorts', zh: '网眼短裤'},
+            {en: 'denim cutoff', zh: '破洞牛仔'},
+            {en: 'silk robe', zh: '真丝睡袍'},
+            {en: 'kink hood', zh: '蒙面头套'},
+            {en: 'leather vest', zh: '皮质背心'},
+            {en: 'neoprene shorts', zh: '氯丁橡胶短裤'},
+            {en: 'crop top', zh: '露脐装'}
+        ],
+        isPositive: true
+    },
+    accessory: {
+        title: '饰品',
+        presets: [
+            {en: 'cock ring', zh: '阴茎环'},
+            {en: 'ball stretcher', zh: '睾丸扩张器'},
+            {en: 'anal hook', zh: '肛门钩'},
+            {en: 'scrotal ladder', zh: '阴囊梯穿孔'},
+            {en: 'dydoe cluster', zh: '龟头穿孔群'},
+            {en: 'prince albert', zh: '尿道穿刺'},
+            {en: 'apadravya', zh: '垂直阴茎穿孔'},
+            {en: 'frenulum bar', zh: '系带横杆'},
+            {en: 'urethral plug', zh: '尿道塞'},
+            {en: 'nipple clamps', zh: '乳头夹'},
+            {en: 'collar', zh: '项圈'},
+            {en: 'leash', zh: '皮带'},
+            {en: 'wrist cuffs', zh: '手腕铐'},
+            {en: 'ankle cuffs', zh: '脚踝铐'},
+            {en: 'gag', zh: '口塞'}
+        ],
+        isPositive: true
+    },
+    background: {
+        title: '场景背景',
+        presets: [
+            {en: 'dungeon', zh: '地牢'},
+            {en: 'bathhouse', zh: '澡堂'},
+            {en: 'glory hole booth', zh: '泄欲隔间'},
+            {en: 'backroom', zh: '暗房'},
+            {en: 'leather bar', zh: '皮革酒吧'},
+            {en: 'cruising spot', zh: '猎艳点'},
+            {en: 'sauna', zh: '桑拿房'},
+            {en: 'locker room', zh: '更衣室'},
+            {en: 'abandoned factory', zh: '废弃工厂'},
+            {en: 'rooftop', zh: '屋顶'},
+            {en: 'dark alley', zh: '暗巷'},
+            {en: 'bondage club', zh: '束缚俱乐部'},
+            {en: 'sex dungeon', zh: '性爱地牢'},
+            {en: 'public restroom', zh: '公共厕所'},
+            {en: 'bdsm studio', zh: 'BDSM影棚'}
+        ],
+        isPositive: true
+    },
+    quality: {
+        title: '画质风格',
+        presets: [
+            {en: 'photorealistic', zh: '照片级真实'},
+            {en: 'cinematic lighting', zh: '电影光效'},
+            {en: 'high detail', zh: '高细节'},
+            {en: '8k resolution', zh: '8K分辨率'},
+            {en: 'sharp focus', zh: '锐利焦点'},
+            {en: 'dramatic shadows', zh: '戏剧性阴影'},
+            {en: 'bokeh background', zh: '背景虚化'},
+            {en: 'film grain', zh: '胶片颗粒'},
+            {en: 'vivid colors', zh: '鲜艳色彩'},
+            {en: 'moody lighting', zh: '情绪光影'},
+            {en: 'high contrast', zh: '高对比度'},
+            {en: 'soft focus', zh: '柔焦'},
+            {en: 'gritty texture', zh: '粗粝质感'}
+        ],
+        isPositive: true
+    },
+    number: {
+        title: '人数',
+        presets: [
+            {en: 'solo male', zh: '单独男性'},
+            {en: 'two men', zh: '两个男人'},
+            {en: 'threesome', zh: '三人行'},
+            {en: 'group sex', zh: '群交'},
+            {en: 'gangbang', zh: '多人轮交'},
+            {en: 'orgy', zh: '性爱派对'},
+            {en: 'double penetration', zh: '双人插入'},
+            {en: 'circle jerk', zh: '互助打飞机'},
+            {en: 'train', zh: '接龙性交'}
+        ],
+        isPositive: true
+    }
+};
+ 
         // Notification function
         function showNotification(message) {
             const notification = document.getElementById('notification');
@@ -928,7 +804,7 @@
 
         // Reset negative prompt to default
         function resetNegative() {
-            document.getElementById('negative-prompt').value = 'painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, female vagina, female vulva, female labia, female clitoris, female pussy, female cervix, female vag, female twat, female cunt, female snatch, female cooch, female coochie, female slit, female hole, female beaver, female muff, female quim, female yoni, female downstairs, female privates, female lady parts, female nether regions, female intimate area, female private parts, female sex organs, female reproductive organs, female pudenda, female mons pubis, female vaginal opening, female vaginal canal, female vaginal lips, female inner lips, female outer lips, female clitoral hood, female g-spot, female erogenous zones, female squirting, female orgasm, female female ejaculation, female breasts, female boobs, female tits, female bust, female cleavage, female nipples, female areola, female jugs, female melons, female knockers, female rack, female bosom, female chest, female ta-tas, female hooters, female bazookas, female funbags, female milkers, female pillows, female mounds, female orbs, female globes, female udders, female cans, female headlights, female giant breasts, female huge boobs, female massive tits, female enormous bust, female oversized cleavage, female gigantic nipples, female colossal areola, female mega vagina, female jumbo vulva, female titanic labia, female mammoth clitoris, female humongous pussy, female enormous cervix';
+            document.getElementById('negative-prompt').value = 'extra,fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, bad anatomy, bad proportions, extra limbs, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, malformed penis, bifurcated penis, extra penises, misplaced penis, deformed genitalia, fused testicles, asymmetric scrotum, female vagina, female vulva, female labia, female clitoris, female cervix, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, uterus in abdomen, ovaries in pelvis, ectopic tissue, supernumerary organs, extra kidneys, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, liver fused to diaphragm, kidneys fused together, conjoined organs, atrophied organs, shrunken kidneys, hypoplastic lungs, hypertrophic heart, enlarged prostate, distended bladder, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, malocclusion, uneven shoulders, scoliosis, kyphosis, lordosis, twisted spine, rib deformities, pectus excavatum, pect pectus excavatum, pectus carinatum, extra ribs, missing ribs, fused vertebrae, limb deformities, shortened limbs, disproportionate limbs, unilateral atrophy, leg length discrepancy, arm length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hip dislocation, knee dislocation, elbow dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, unilateral atrophy, muscle wasting, missing muscles, extra muscles, skin defects, excessive wrinkles, premature aging, sagging skin, stretch marks, cellulite, keloid scars, hypertrophic scars, atrophic scars, birthmarks, port-wine stains, hemangiomas, vascular malformations, lipomas, neurofibromas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, jaundice, cyanosis, pallor, erythema, bruising, petechiae, ecchymosis, hematoma, lacerations, abrasions, ulcers, pressure sores, fistulas, sinuses, gangrene, necrosis, amputated limbs, phantom limbs, congenital amputations, vestigial tails, supernumerary nipples, inverted nipples, accessory breasts, polymastia, polythelia, gynecomastia, abnormal hair growth, hirsutism, alopecia, baldness, patchy hair, unibrow, fused eyebrows, missing eyebrows, missing eyelashes, trichotillomania';
             showNotification('反向提示词已恢复默认！');
         }
 
