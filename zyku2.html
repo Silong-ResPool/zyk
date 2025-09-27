@@ -114,19 +114,21 @@
  
         /* 顶部导航栏优化 */
         .top-nav {
-            grid-area: header;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            background: rgba(40, 40, 60, 1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            position: sticky;
-            top: 0;
-            gap: 20px;
-        }
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    /* 核心修改：调整上下内边距（第一个值为上下，第二个为左右） */
+    padding: 20px 10px; 
+    background: rgba(40, 40, 60, 1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    gap: 20px;
+}
+
  
         .logo {
             font-size: 1.125rem;
@@ -206,17 +208,20 @@
  
         /* 侧边栏优化 */
         .sidebar {
-            grid-area: sidebar;
-            background: rgba(30, 30, 50, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 10px;
-            position: sticky;
-            top: var(--header-height);
-            height: calc(100vh - var(--header-height));
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-            z-index: 100;
-        }
+    grid-area: sidebar;
+    background: rgba(30, 30, 50, 1);
+    backdrop-filter: blur(10px);
+    padding: 15px 10px;
+    position: sticky;
+    /* 核心修改：在原有头部高度基础上，向上偏移30px（数值可自定义） */
+    top: calc(var(--header-height) + 10px); 
+    /* 同步调整高度，抵消top增加的偏移，保证高度不变 */
+    height: calc(100vh - var(--header-height) - 10px); 
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 100;
+}
+
  
         .sidebar-title {
             font-size: 1rem;
@@ -232,8 +237,12 @@
             flex-direction: column;
             gap: 6px;
         }
- 
-        .sidebar-menu a {
+
+        .menu-group {
+            position: relative;
+        }
+
+        .menu-main {
             color: var(--text-color);
             text-decoration: none;
             padding: 8px 10px;
@@ -244,9 +253,37 @@
             gap: 8px;
             transition: all var(--transition-speed);
         }
- 
-        .sidebar-menu a:hover {
+
+        .menu-main:hover {
             background: var(--card-hover);
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            padding-left: 20px;
+            margin-top: 4px;
+        }
+
+        .submenu a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.8125rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed);
+        }
+
+        .submenu a:hover {
+            background: var(--card-hover);
+        }
+
+        .menu-group:hover .submenu {
+            display: flex;
         }
  
         /* 主内容区优化 */
@@ -423,17 +460,30 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
- 
-        /* 底部优化 */
+        
+        /*脚页*/
         .footer {
-            grid-area: footer;
-            background: rgba(30, 30, 50, 1);
-            padding: 15px;
-            text-align: center;
-            font-size: 0.8125rem;
-            color: rgba(255, 255, 255, 0.7);
-            z-index: 20;
-        }
+    grid-area: footer;
+    background: rgba(30, 30, 50, 1);
+    padding: 15px;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 100;
+    /* 关键修改：固定在视口底部，初始隐藏 */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(100%); /* 向下移出视口，初始不显示 */
+    transition: transform 0.3s ease; /* 添加入场动画，更流畅 */
+}
+
+/* 显示页脚的类 */
+.footer.show {
+    transform: translateY(0); /* 移回视口底部，显示出来 */
+}
+
  
         /* 自定义滚动条优化 */
         ::-webkit-scrollbar {
@@ -776,6 +826,7 @@
                     "main"
                     "footer";
                 grid-template-columns: 1fr;
+                grid-template-rows: var(--header-height) 1fr auto;
             }
  
             .sidebar {
@@ -1122,9 +1173,9 @@
         /* 新增轮播图样式 */
         .carousel-container {
             position: relative;
-            width: 100%;
-            max-width: 100%; /* 与搜索框相当 */
-            margin-bottom: 20px; /* 与搜索框间距 */
+            width: calc(100% - 40px); /* 左右各留20px空隙 */
+            max-width: 1200px; /* 大屏最大宽度 */
+            margin: 0 auto 20px; /* 上下0，左右自动居中，底部20px */
             overflow: hidden;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -1137,8 +1188,8 @@
 
         .carousel-slide {
             flex: 0 0 100%;
-            height: 0; /* 保持16:9比例 */
-            padding-bottom: 56.25%; /* 16:9 = 9/16 ≈ 56.25% */
+            height: 0; 
+            padding-bottom: 40%; /* 调整宽高比，原来是56.25%，现在更矮 */
             background-size: cover;
             background-position: center;
             cursor: pointer;
@@ -1202,6 +1253,71 @@
             pointer-events: none;
             border: 2px dashed var(--accent-color);
             box-sizing: border-box;
+        }
+
+        /* 平板设备优化 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .carousel-slide {
+                padding-bottom: 45%; /* 在平板设备上稍高一点 */
+            }
+
+            .sidebar {
+                width: 110px; /* 缩小侧边栏宽度 */
+            }
+            
+            .sidebar-menu a span {
+                display: none; /* 平板设备只显示图标 */
+            }
+            
+            .sidebar-menu a {
+                justify-content: center;
+                padding: 12px 5px;
+            }
+            
+            .sidebar-title {
+                text-align: center;
+            }
+            
+            .resource-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        /* 大屏设备优化 */
+        @media (min-width: 1025px) {
+            .carousel-container {
+                max-width: 1400px; /* 大屏设备最大宽度更大 */
+            }
+            
+            .carousel-slide {
+                padding-bottom: 35%; /* 大屏设备高度比例更小 */
+            }
+        }
+
+        /* 平板和大屏设备上优化脚注位置 */
+        @media (min-width: 769px) {
+            .app-container {
+                min-height: 100vh;
+                display: grid;
+                grid-template-rows: auto 1fr auto; /* 确保脚注在底部 */
+            }
+            
+            .footer {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+            }
+        }
+
+        /* 小屏幕设备上的轮播图调整 */
+        @media (max-width: 768px) {
+            .carousel-container {
+                width: calc(100% - 20px); /* 在小屏幕上左右留10px */
+            }
+            
+            .carousel-slide {
+                padding-bottom: 60%; /* 在移动设备上高度比例更大 */
+            }
         }
     </style>
 </head>
@@ -1754,32 +1870,141 @@
         <div class="sidebar-scrollable">
             <h3 class="sidebar-title">分类导航</h3>
             <nav class="sidebar-menu">
-                <a href="#search-section"><i class="fas fa-search"></i> 磁力搜索</a>
-                <a href="#comprehensive-section"><i class="fas fa-folder"></i> 综合网站</a>
-                <a href="#comics-section"><i class="fas fa-palette"></i> 漫画网站</a>
-                <a href="#novels-section"><i class="fas fa-book"></i> 小说网站</a>
-                <a href="#games-section"><i class="fas fa-gamepad"></i> 游戏网站</a>
-                <a href="#videos-section"><i class="fas fa-film"></i> 影视网站</a>
-                <a href="#cloud-section"><i class="fas fa-cloud-download"></i> 网盘资源</a>
-                <a href="#tools-section"><i class="fas fa-wrench"></i> 实用工具</a>
-                <a href="#design-resources-section"><i class="fas fa-palette"></i> 设计资源</a>
-                <a href="#ai-tools-section"><i class="fas fa-robot"></i> AI工具</a>
-                <a href="#life-section"><i class="fas fa-home"></i> 生活服务</a>
-                <a href="#learning-section"><i class="fas fa-graduation-cap"></i> 学习资源</a>
-                <a href="#regular-update-section"><i class="fas fa-sync-alt"></i> 近期更新</a>
-                <a href="https://voidchat.org/v/silong-chat-rm" target="_blank"><i class="fas fa-comments"></i> 聊天室</a>
+                <div class="menu-group">
+                    <a href="#search-section" class="menu-main"><i class="fas fa-search"></i> 磁力搜索</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#comprehensive-section" class="menu-main"><i class="fas fa-folder"></i> 综合网站</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#comics-section" class="menu-main"><i class="fas fa-palette"></i> 漫画网站</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#novels-section" class="menu-main"><i class="fas fa-book"></i> 小说网站</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#games-section" class="menu-main"><i class="fas fa-gamepad"></i> 游戏网站</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#videos-section" class="menu-main"><i class="fas fa-film"></i> 影视网站</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#cloud-section" class="menu-main"><i class="fas fa-cloud-download"></i> 网盘资源</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#tools-section" class="menu-main"><i class="fas fa-wrench"></i> 实用工具</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#design-resources-section" class="menu-main"><i class="fas fa-palette"></i> 设计资源</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#ai-tools-section" class="menu-main"><i class="fas fa-robot"></i> AI工具</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#life-section" class="menu-main"><i class="fas fa-home"></i> 生活服务</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#learning-section" class="menu-main"><i class="fas fa-graduation-cap"></i> 学习资源</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="#regular-update-section" class="menu-main"><i class="fas fa-sync-alt"></i> 近期更新</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="https://voidchat.org/v/silong-chat-rm" class="menu-main" target="_blank"><i class="fas fa-comments"></i> 聊天室</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="https://silong-respool.github.io/zyk/aitsci.html" class="menu-main" id="contact-btn" target="_blank"><i class="fas fa-image"></i> AI绘图</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
+                <div class="menu-group">
+                    <a href="https://silong-respool.github.io/zyk/aitsci.html" class="menu-main" id="contact-btn" target="_blank"><i class="fas fa-volume-down"></i> AI绘图</a>
+                    <div class="submenu">
+                        <a href="#">内容一</a>
+                        <a href="#">内容二</a>
+                    </div>
+                </div>
             </nav>
         
-            <h3 class="sidebar-title" style="margin-top: 20px;">设置</h3>
-            <nav class="sidebar-menu">
-                <a href="#" id="favorites-btn"><i class="fas fa-star"></i> 最近收藏</a>
-                <a href="#" id="history-btn"><i class="fas fa-history"></i> 浏览记录</a>
-                <a href="#" id="manage-btn"><i class="fas fa-cog"></i> 编辑模式</a>
-                <a href="#" id="customize-bg-btn"><i class="fas fa-palette"></i> 主题设置</a>
-                <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=nmYA0ujvWx9Fd2c0CzW9Q4X3323%2FfepKfz3kf%2Bp5QEoOl9IzYsrO%2BmBnsmE8WgF%2F&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiJ1YVBlZ2NsWmpTY0NNc09uU1NORzgrTzZGaFBzV1dOZm1RUmI3V0t2Z1BIQk5pMEJhbHF6WUlxdDM3ZUx1YTR0IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=inZxKB5wpJdBoExZjAGwrb6X-_yFTLrTq32lwTnyIaW1NznGLmS2UXAGs8k7o5m-BTpfrd8aOqn9V12uyulhNg&svctype=4&tempid=h5_group_info" id="contact-btn" target="_blank"><i class="fas fa-envelope"></i> 联系方式</a>
-            </nav>
-        </div>
-    </aside>
+            
+<h3 class="sidebar-title" style="margin-top: 20px;">设置</h3>
+<nav class="sidebar-menu">
+    <div class="menu-group">
+        <a href="#" id="favorites-btn" class="menu-main"><i class="fas fa-star"></i> 最近收藏</a>
+    </div>
+    <div class="menu-group">
+        <a href="#" id="history-btn" class="menu-main"><i class="fas fa-history"></i> 浏览记录</a>
+    </div>
+    <div class="menu-group">
+        <a href="#" id="manage-btn" class="menu-main"><i class="fas fa-cog"></i> 编辑模式</a>
+    </div>
+    <div class="menu-group">
+        <a href="#" id="customize-bg-btn" class="menu-main"><i class="fas fa-palette"></i> 主题设置</a>
+    </div>
+    <div class="menu-group">
+        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=nmYA0ujvWx9Fd2c0CzW9Q4X3323%2FfepKfz3kf%2Bp5QEoOl9IzYsrO%2BmBnsmE8WgF%2F&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiJ1YVBlZ2NsWmpTY0NNc09uU1NORzgrTzZGaFBzV1dOZm1RUmI3V0t2Z1BIQk5pMEJhbHF6WUlxdDM3ZUx1YTR0IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=inZxKB5wpJdBoExZjAGwrb6X-_yFTLrTq32lwTnyIaW1NznGLmS2UXAGs8k7o5m-BTpfrd8aOqn9V12uyulhNg&svctype=4&tempid=h5_group_info" id="contact-btn" target="_blank" class="menu-main"><i class="fas fa-envelope"></i> 联系方式</a>
+    </div>
+</nav>
+    </div>
+</aside>
 
     <!-- 主内容区 -->
     <main class="main-content">
@@ -1844,7 +2069,7 @@
                     <button class="favorite-btn" data-module="module-1-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-search"></i></div>
-                        <h3 class="category-title">磁力资源 (2)</h3>
+                        <h3 class="category-title">磁力资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://cili.xyz/" class="website-item" data-keywords="磁力导航" 
@@ -1918,7 +2143,7 @@
                     <button class="favorite-btn" data-module="module-2-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-globe"></i></div>
-                        <h3 class="category-title">综合资源 (2)</h3>
+                        <h3 class="category-title">综合资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://search.chongbuluo.com" class="website-item" data-keywords="虫部落" 
@@ -1949,7 +2174,7 @@
                     <button class="favorite-btn" data-module="module-2-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-globe"></i></div>
-                        <h3 class="category-title">综合资源 (3)</h3>
+                        <h3 class="category-title">综合资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://poipiku.com/12082901/12042343.html" class="website-item" data-keywords="Poipiku插画" 
@@ -1979,7 +2204,7 @@
                     <button class="favorite-btn" data-module="module-2-3"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-globe"></i></div>
-                        <h3 class="category-title">综合资源 (4)</h3>
+                        <h3 class="category-title">综合资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.sopanxia.com/" class="website-item" data-keywords="搜盘侠" 
@@ -2086,7 +2311,7 @@
                     <button class="favorite-btn" data-module="module-4-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
-                        <h3 class="category-title">漫画资源 (3)</h3>
+                        <h3 class="category-title">漫画资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://acgmhn.com/tags/yaoi.html" class="website-item" data-keywords="ACG漫画网" 
@@ -2162,7 +2387,7 @@
                     <button class="favorite-btn" data-module="module-5-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-book"></i></div>
-                        <h3 class="category-title">小说资源 (2)</h3>
+                        <h3 class="category-title">小说资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.cxc90.com" class="website-item" data-keywords="海棠花" 
@@ -2194,7 +2419,7 @@
                     <button class="favorite-btn" data-module="module-5-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-book"></i></div>
-                        <h3 class="category-title">小说资源 (3)</h3>
+                        <h3 class="category-title">小说资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.ihuaben.com/category/nantongxiaoshuo/" class="website-item" data-keywords="男同小说" 
@@ -2213,9 +2438,9 @@
                            data-desc="男同小说资源平台，提供热门和经典男同小说作品" 
                            data-features="热门作品丰富|经典作品收录|分类清晰明确|持续更新维护" 
                            data-problems="">
-                            <div class="website-img">男同小说2</div>
+                            <div class="website-img">男同小说</div>
                             <div class="website-info">
-                                <div class="website-name">男同小说2</div>
+                                <div class="website-name">男同小说</div>
                                 <div class="website-desc">男同题材小说网站</div>
                             </div>
                         </a>
@@ -2249,7 +2474,7 @@
                            data-problems="">
                             <div class="website-img">BL游戏1</div>
                             <div class="website-info">
-                                <div class="website-name">BL游戏1</div>
+                                <div class="website-name">BL游戏</div>
                                 <div class="website-desc">BL游戏网站</div>
                             </div>
                         </a>
@@ -2258,7 +2483,7 @@
                            data-desc="BL游戏资源平台，提供多种类型的BL游戏下载" 
                            data-features="丰富的BL游戏资源|多种类型作品|分类清晰明确|持续更新维护" 
                            data-problems="">
-                            <div class="website-img">BL游戏2</div>
+                            <div class="website-img">BL游戏</div>
                             <div class="website-info">
                                 <div class="website-name">BL游戏2</div>
                                 <div class="website-desc">BL游戏网站</div>
@@ -2270,7 +2495,7 @@
                     <button class="favorite-btn" data-module="module-6-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-gamepad"></i></div>
-                        <h3 class="category-title">游戏资源 (2)</h3>
+                        <h3 class="category-title">游戏资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://srk.games/" class="website-item" data-keywords="兽人游戏库" 
@@ -2301,7 +2526,7 @@
                     <button class="favorite-btn" data-module="module-6-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-gamepad"></i></div>
-                        <h3 class="category-title">游戏资源 (3)</h3>
+                        <h3 class="category-title">游戏资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.emu666.com/" class="website-item" data-keywords="Emu666" 
@@ -2374,7 +2599,7 @@
                     <button class="favorite-btn" data-module="module-7-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (2)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.gaymaletube.com/zh/cat/chinese" class="website-item" data-keywords="国产Gay片【VPN】" 
@@ -2405,7 +2630,7 @@
                     <button class="favorite-btn" data-module="module-7-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (3)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.gaymaletube.com/zh/" class="website-item" data-keywords="Gay片大合集【VPN】" 
@@ -2436,7 +2661,7 @@
                     <button class="favorite-btn" data-module="module-7-3"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (4)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.boyfriendtv3.com/search/?q=Yaoi" class="website-item" data-keywords="BOYFRIENDTV【VPN】" 
@@ -2467,7 +2692,7 @@
                     <button class="favorite-btn" data-module="module-7-4"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (5)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="http://www.hotbearporn.com/zh/hardcore/" class="website-item" data-keywords="HOTBEAR PORN【免VPN】" 
@@ -2498,7 +2723,7 @@
                     <button class="favorite-btn" data-module="module-7-5"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (6)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://gaylime.com//" class="website-item" data-keywords="GAY LIME【免VPN】" 
@@ -2530,28 +2755,28 @@
                     <button class="favorite-btn" data-module="module-7-6"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (7)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://scu.bwstupgm.biz/" class="website-item" data-keywords="搜同影视1" 
-                           data-title="搜同影视1" data-url="https://scu.bwstupgm.biz/" 
+                           data-title="搜同影视" data-url="https://scu.bwstupgm.biz/" 
                            data-desc="搜同影视资源平台，提供丰富的男同影视内容" 
                            data-features="丰富的男同影视资源|高清画质|分类细致|更新及时" 
                            data-problems="">
-                            <div class="website-img">搜同影视1</div>
+                            <div class="website-img">搜同影视</div>
                             <div class="website-info">
-                                <div class="website-name">搜同影视1</div>
+                                <div class="website-name">搜同影视</div>
                                 <div class="website-desc">搜同影视资源网站</div>
                             </div>
                         </a>
                         <a href="https://416.boirdozm.cc/" class="website-item" data-keywords="搜同影视2" 
-                           data-title="搜同影视2" data-url="https://416.boirdozm.cc/" 
+                           data-title="搜同影视" data-url="https://416.boirdozm.cc/" 
                            data-desc="搜同影视资源平台，提供多种类型的男同影视内容" 
                            data-features="多种类型影视资源|高清画质|分类细致|更新及时" 
                            data-problems="">
-                            <div class="website-img">搜同影视2</div>
+                            <div class="website-img">搜同影视</div>
                             <div class="website-info">
-                                <div class="website-name">搜同影视2</div>
+                                <div class="website-name">搜同影视</div>
                                 <div class="website-desc">搜同影视资源网站</div>
                             </div>
                         </a>
@@ -2562,7 +2787,7 @@
                     <button class="favorite-btn" data-module="module-7-7"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (8)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://catch.eibkvww.cc/" class="website-item" data-keywords="小蓝视频网" 
@@ -2572,7 +2797,7 @@
                            data-problems="">
                             <div class="website-img" style="background: linear-gradient(45deg, #1e90ff, #87cefa);">小蓝视频</div>
                             <div class="website-info">
-                                <div class="website-name">小蓝视频网</div>
+                                <div class="website-name">小蓝视频</div>
                                 <div class="website-desc">小蓝视频资源网站</div>
                             </div>
                         </a>
@@ -2594,17 +2819,17 @@
                     <button class="favorite-btn" data-module="module-7-8"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (9)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://91nt.com/" class="website-item" data-keywords="男同网1" 
-                           data-title="男同网1" data-url="https://91nt.com/" 
+                           data-title="男同网" data-url="https://91nt.com/" 
                            data-desc="男同影视资源平台，提供丰富的男同视频内容" 
                            data-features="丰富的男同视频资源|高清画质|分类细致|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网1</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网1</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
@@ -2615,7 +2840,7 @@
                            data-problems="">
                             <div class="website-img">男同网2</div>
                             <div class="website-info">
-                                <div class="website-name">男同网2</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
@@ -2626,28 +2851,28 @@
                     <button class="favorite-btn" data-module="module-7-9"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (10)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://gv107.top/index.php/vod/type/id/50.html" class="website-item" data-keywords="男同网3" 
-                           data-title="男同网3" data-url="https://gv107.top/index.php/vod/type/id/50.html" 
+                           data-title="男同网" data-url="https://gv107.top/index.php/vod/type/id/50.html" 
                            data-desc="男同影视资源平台，提供分类清晰的男同视频内容" 
                            data-features="分类清晰明确|高清画质|多种类型|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网3</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网3</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
                         <a href="https://374gv.com/" class="website-item" data-keywords="男同网4" 
-                           data-title="男同网4" data-url="https://374gv.com/" 
+                           data-title="男同网" data-url="https://374gv.com/" 
                            data-desc="男同影视资源平台，提供丰富的男同视频内容" 
                            data-features="丰富的视频资源|高清画质|分类细致|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网4</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网4</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
@@ -2658,28 +2883,28 @@
                     <button class="favorite-btn" data-module="module-7-10"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (11)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.pornsitebros.com/zh/?k=gay" class="website-item" data-keywords="男同网5" 
-                           data-title="男同网5" data-url="https://www.pornsitebros.com/zh/?k=gay" 
+                           data-title="男同网" data-url="https://www.pornsitebros.com/zh/?k=gay" 
                            data-desc="男同影视资源平台，提供搜索功能的男同视频内容" 
                            data-features="搜索功能强大|高清画质|多种类型|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网5</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网5</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
                         <a href="https://100c9n4.ukdevilz.com/video/%E6%AD%A3%E5%9C%A0%E6%92%AD%E6%94%BE+%E5%8F%B0%E6%B9%BE%E5%B8%85%E6%B0%94%E7%94%B7%E7%94%9F%E8%A2%AB%E5%B9%B21" class="website-item" data-keywords="男同网6" 
-                           data-title="男同网6" data-url="https://100c9n4.ukdevilz.com/video/%E6%AD%A3%E5%9C%A0%E6%92%AD%E6%94%BE+%E5%8F%B0%E6%B9%BE%E5%B8%85%E6%B0%94%E7%94%B7%E7%94%9F%E8%A2%AB%E5%B9%B21" 
+                           data-title="男同网" data-url="https://100c9n4.ukdevilz.com/video/%E6%AD%A3%E5%9C%A0%E6%92%AD%E6%94%BE+%E5%8F%B0%E6%B9%BE%E5%B8%85%E6%B0%94%E7%94%B7%E7%94%9F%E8%A2%AB%E5%B9%B21" 
                            data-desc="男同影视资源平台，提供特定主题的男同视频内容" 
                            data-features="特定主题内容|高清画质|分类细致|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网6</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网6</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
@@ -2690,28 +2915,28 @@
                     <button class="favorite-btn" data-module="module-7-11"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (12)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
-                        <a href="https://zh.xhchannel.com/gay" class="website-item" data-keywords="男同网7" 
-                           data-title="男同网7" data-url="https://zh.xhchannel.com/gay" 
+                        <a href="https://zh.xhchannel.com/gay" class="website-item" data-keywords="男同网" 
+                           data-title="男同网" data-url="https://zh.xhchannel.com/gay" 
                            data-desc="男同影视资源平台，提供频道式的男同视频内容" 
                            data-features="频道式内容|高清画质|多种类型|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网7</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网7</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
-                        <a href="https://mgfvtyunuspv.buzz/sort/id/98.html" class="website-item" data-keywords="男同网8" 
-                           data-title="男同网8" data-url="https://mgfvtyunuspv.buzz/sort/id/98.html" 
+                        <a href="https://mgfvtyunuspv.buzz/sort/id/98.html" class="website-item" data-keywords="男同网" 
+                           data-title="男同网" data-url="https://mgfvtyunuspv.buzz/sort/id/98.html" 
                            data-desc="男同影视资源平台，提供分类排序的男同视频内容" 
                            data-features="分类排序功能|高清画质|多种类型|更新及时" 
                            data-problems="">
-                            <div class="website-img">男同网8</div>
+                            <div class="website-img">男同网</div>
                             <div class="website-info">
-                                <div class="website-name">男同网8</div>
+                                <div class="website-name">男同网</div>
                                 <div class="website-desc">男同影视资源网站</div>
                             </div>
                         </a>
@@ -2722,7 +2947,7 @@
                     <button class="favorite-btn" data-module="module-7-12"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (13)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://qcdr.qizhidaru94.top/index.php/vod/type/id/65.html" class="website-item" data-keywords="奇耻大屌" 
@@ -2754,7 +2979,7 @@
                     <button class="favorite-btn" data-module="module-7-13"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (14)</h3>
+                        <h3 class="category-title">影视资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://m.sanjipian123.com/nantong/" class="website-item" data-keywords="同性电影" 
@@ -2841,7 +3066,7 @@
                     <button class="favorite-btn" data-module="module-8-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-cloud-download"></i></div>
-                        <h3 class="category-title">网盘资源 (2)</h3>
+                        <h3 class="category-title">网盘资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="http://www.quanbuzy.top/fuju.html" class="website-item" data-keywords="未知星球腐剧合集" 
@@ -2849,7 +3074,7 @@
                            data-desc="专注于BL题材影视作品的资源站点" 
                            data-features="按年份分类|提供剧情简介|支持多网盘下载|更新国内外新剧" 
                            data-problems="建议选择高清资源|提供多语言字幕支持|优化访问速度">
-                            <div class="website-img">未知星球腐剧合集</div>
+                            <div class="website-img">腐剧合集</div>
                             <div class="website-info">
                                 <div class="website-name">未知星球腐剧合集</div>
                                 <div class="website-desc">腐剧分类网站</div>
@@ -2860,7 +3085,7 @@
                            data-desc="综合类资源分享平台，需使用特定客户端下载" 
                            data-features="涵盖多种资源类型|提供资源预览|支持资源求档|定期更新维护" 
                            data-problems="推荐下载小飞机APP|提供解压密码支持|资源有效性有保障">
-                            <div class="website-img">巳泷网盘资源</div>
+                            <div class="website-img">网盘资源</div>
                             <div class="website-info">
                                 <div class="website-name">巳泷网盘资源</div>
                                 <div class="website-desc">必须下载小飞机网盘APP再获取资源</div>
@@ -2870,696 +3095,17 @@
                 </div>
                 <div class="category-card" data-module-id="module-8-2" data-default="true">
                     <button class="favorite-btn" data-module="module-8-2"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-cloud-download"></i></div>
-                        <h3 class="category-title">网盘资源 (3)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://kdocs.cn/l/ckfKgdsLm5n6" class="website-item" data-keywords="羽梦星河网盘资源" 
-                           data-title="羽梦星河网盘资源" data-url="https://kdocs.cn/l/ckfKgdsLm5n6" 
-                           data-desc="二次元向资源分享社区，专注动漫、游戏相关内容" 
-                           data-features="动漫资源丰富|提供游戏MOD|支持资源交流|有专属论坛" 
-                           data-problems="建议使用分类筛选|资源有效性有保障|注册会员获取完整资源">
-                            <div class="website-img">羽梦星河网盘资源</div>
-                            <div class="website-info">
-                                <div class="website-name">羽梦星河网盘资源</div>
-                                <div class="website-desc">必须下载小飞机网盘APP再获取资源</div>
-                            </div>
-                        </a>
-                        <a href="https://pan.soku.one/" class="website-item" data-keywords="聚合网盘资源【暂不可用】" 
-                           data-title="聚合网盘资源【暂不可用】" data-url="https://pan.soku.one/" 
-                           data-desc="一站式网盘搜索引擎，可跨平台查找资源" 
-                           data-features="支持多网盘搜索|可直接在线预览|提供资源热度分析|过滤无效链接" 
-                           data-problems="服务维护中敬请期待|搜索结果质量有保障|遵守版权规范">
-                            <div class="website-img">聚合网盘资源</div>
-                            <div class="website-info">
-                                <div class="website-name">聚合网盘资源【暂不可用】</div>
-                                <div class="website-desc">一站式搜索各类资源在线观看</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="scroll-indicators" id="cloud-indicators">
-                <div class="scroll-indicator active" data-index="0"></div>
-                <div class="scroll-indicator" data-index="1"></div>
-                <div class="scroll-indicator" data-index="2"></div>
-            </div>
-        </section>
-
-        <!-- 实用工具区域 -->
-        <section id="tools-section" class="category-section" data-default="true">
-            <div class="section-header">
-                <h2 class="section-title">实用工具</h2>
-            </div>
-            <div class="resource-grid" id="tools-resource-grid">
-                <div class="category-card" data-module-id="module-9" data-default="true">
-                    <button class="favorite-btn" data-module="module-9"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">实用工具</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.aiachuan.com/" class="website-item" data-keywords="阿川工具库" 
-                           data-title="阿川工具库" data-url="https://www.aiachuan.com/" 
-                           data-desc="一站式在线工具集合平台，解决各类日常需求" 
-                           data-features="200+实用工具|无需安装软件|支持工具收藏|定期更新" 
-                           data-problems="高级工具需要会员|广告支持平台运营|优化移动端体验">
-                            <div class="website-img">阿川工具库</div>
-                            <div class="website-info">
-                                <div class="website-name">阿川工具库</div>
-                                <div class="website-desc">这是一个能够解决你所有工具问题的网站</div>
-                            </div>
-                        </a>
-                        <a href="https://converterpro.net" class="website-item" data-keywords="格式转换站" 
-                           data-title="格式转换站" data-url="https://converterpro.net" 
-                           data-desc="专业的多格式文件转换平台，支持各类常见格式互转" 
-                           data-features="支持100+格式|批量转换功能|云端处理|保持原始质量" 
-                           data-problems="大文件转换请耐心等待|高级功能需要订阅|文件大小有限制">
-                            <div class="website-img">格式转换站</div>
-                            <div class="website-info">
-                                <div class="website-name">格式转换站</div>
-                                <div class="website-desc">多格式在线转换工具</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-9-1" data-default="true">
-                    <button class="favorite-btn" data-module="module-9-1"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">图片处理工具</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.remove.bg/zh" class="website-item" data-keywords="图片背景去除 AI工具" 
-                           data-title="Remove.bg" data-url="https://www.remove.bg/zh" 
-                           data-desc="AI驱动的在线背景去除工具，一键去除图片背景" 
-                           data-features="AI智能识别|快速去除背景|支持多种格式|在线使用无需下载">
-                            <div class="website-img">RBG</div>
-                            <div class="website-info">
-                                <div class="website-name">Remove.bg</div>
-                                <div class="website-desc">AI背景去除工具</div>
-                            </div>
-                        </a>
-                        <a href="https://tinypng.com/" class="website-item" data-keywords="图片压缩 优化" 
-                           data-title="TinyPNG" data-url="https://tinypng.com/" 
-                           data-desc="智能PNG和JPEG图片压缩工具，减少文件大小但不影响质量" 
-                           data-features="智能压缩|保持画质|批量处理|API支持">
-                            <div class="website-img">TPNG</div>
-                            <div class="website-info">
-                                <div class="website-name">TinyPNG</div>
-                                <div class="website-desc">智能图片压缩</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-9-2" data-default="true">
-                    <button class="favorite-btn" data-module="module-9-2"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">文件转换工具</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.aconvert.com/" class="website-item" data-keywords="文件转换 多媒体处理" 
-                           data-title="AConvert" data-url="https://www.aconvert.com/" 
-                           data-desc="全面的在线文件转换工具，包括文档、图片、视频、音频等多种格式" 
-                           data-features="多格式支持|在线转换|批量处理|免费使用">
-                            <div class="website-img">AC</div>
-                            <div class="website-info">
-                                <div class="website-name">AConvert</div>
-                                <div class="website-desc">全能文件转换工具</div>
-                            </div>
-                        </a>
-                        <a href="https://www.iloveimg.com/zh" class="website-item" data-keywords="图片编辑 批量处理" 
-                           data-title="iLoveIMG" data-url="https://www.iloveimg.com/zh" 
-                           data-desc="全套图片编辑工具，包括调整大小、裁剪、压缩、转换格式等" 
-                           data-features="多功能编辑|批量处理|在线使用|免费基础功能">
-                            <div class="website-img">ILIMG</div>
-                            <div class="website-info">
-                                <div class="website-name">iLoveIMG</div>
-                                <div class="website-desc">全能图片编辑工具</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-9-3" data-default="true">
-                    <button class="favorite-btn" data-module="module-9-3"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">软件工具</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.bandisoft.com/bandizip/" class="website-item" data-keywords="压缩软件 文件管理" 
-                           data-title="Bandizip" data-url="https://www.bandisoft.com/bandizip/" 
-                           data-desc="轻量快速的文件压缩和解压缩软件，支持多种压缩格式" 
-                           data-features="快速压缩|多种格式|预览功能|免费使用">
-                            <div class="website-img">BZ</div>
-                            <div class="website-info">
-                                <div class="website-name">Bandizip</div>
-                                <div class="website-desc">文件压缩工具</div>
-                            </div>
-                        </a>
-                        <a href="https://www.huorong.cn/" class="website-item" data-keywords="安全软件 病毒防护" 
-                           data-title="火绒安全" data-url="https://www.huorong.cn/" 
-                           data-desc="轻量高效的电脑安全防护软件，提供病毒防护和系统优化功能" 
-                           data-features="病毒防护|系统优化|轻量高效|免费使用">
-                            <div class="website-img">HR</div>
-                            <div class="website-info">
-                                <div class="website-name">火绒安全</div>
-                                <div class="website-desc">电脑安全软件</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-9-4" data-default="true">
-                    <button class="favorite-btn" data-module="module-9-4"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">效率工具</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.irfanview.com/" class="website-item" data-keywords="图片查看 图像处理" 
-                           data-title="IrfanView" data-url="https://www.irfanview.com/" 
-                           data-desc="快速小巧的图像查看和处理软件，支持多种图像格式" 
-                           data-features="快速查看|格式支持|基本编辑|插件扩展">
-                            <div class="website-img">IV</div>
-                            <div class="website-info">
-                                <div class="website-name">IrfanView</div>
-                                <div class="website-desc">图像查看器</div>
-                            </div>
-                        </a>
-                        <a href="https://www.voidtools.com/zh-cn/" class="website-item" data-keywords="文件搜索 效率工具" 
-                           data-title="Everything" data-url="https://www.voidtools.com/zh-cn/" 
-                           data-desc="极速文件搜索工具，几乎瞬间找到电脑上的任何文件" 
-                           data-features="极速搜索|轻量高效|实时索引|高级过滤">
-                            <div class="website-img">EV</div>
-                            <div class="website-info">
-                                <div class="website-name">Everything</div>
-                                <div class="website-desc">文件搜索工具</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="scroll-indicators" id="tools-indicators">
-                <div class="scroll-indicator active" data-index="0"></div>
-                <div class="scroll-indicator" data-index="1"></div>
-                <div class="scroll-indicator" data-index="2"></div>
-                <div class="scroll-indicator" data-index="3"></div>
-                <div class="scroll-indicator" data-index="4"></div>
-            </div>
-        </section>
-
-        <!-- 设计资源区域 -->
-        <section id="design-resources-section" class="category-section" data-default="true">
-            <div class="section-header">
-                <h2 class="section-title">设计资源</h2>
-            </div>
-            <div class="resource-grid" id="design-resources-grid">
-                <div class="category-card" data-module-id="module-13" data-default="true">
-                    <button class="favorite-btn" data-module="module-13"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计创作平台</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.wentu.io/" class="website-item" data-keywords="文档处理 在线工具" 
-                           data-title="文图" data-url="https://www.wentu.io/" 
-                           data-desc="数据可视化文档制作工具，轻松创建专业级报告和演示" 
-                           data-features="数据可视化|模板丰富|协作功能|输出多种格式">
-                            <div class="website-img">文图</div>
-                            <div class="website-info">
-                                <div class="website-name">文图</div>
-                                <div class="website-desc">数据可视化文档工具</div>
-                            </div>
-                        </a>
-                        <a href="https://www.processon.com/" class="website-item" data-keywords="思维导图 流程图" 
-                           data-title="ProcessOn" data-url="https://www.processon.com/" 
-                           data-desc="专业在线思维导图和流程图制作工具，支持多人协作" 
-                           data-features="多种图表类型|实时协作|模板社区|云端存储">
-                            <div class="website-img">PO</div>
-                            <div class="website-info">
-                                <div class="website-name">ProcessOn</div>
-                                <div class="website-desc">在线图表制作工具</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-13-1" data-default="true">
-                    <button class="favorite-btn" data-module="module-13-1"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计社区与灵感</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.behance.net/" class="website-item" data-keywords="设计作品 创意展示" 
-                           data-title="Behance" data-url="https://www.behance.net/" 
-                           data-desc="Adobe旗下的创意展示平台，设计师展示和发现创意工作的首选" 
-                           data-features="高质量作品|行业标杆|创意灵感|人才招聘">
-                            <div class="website-img">BH</div>
-                            <div class="website-info">
-                                <div class="website-name">Behance</div>
-                                <div class="website-desc">创意作品展示平台</div>
-                            </div>
-                        </a>
-                        <a href="https://dribbble.com/" class="website-item" data-keywords="设计师社区 创意灵感" 
-                           data-title="Dribbble" data-url="https://dribbble.com/" 
-                           data-desc="全球设计师社区，分享设计作品、获取灵感和招聘设计人才" 
-                           data-features="设计师社区|创意灵感|作品展示|招聘平台">
-                            <div class="website-img">DR</div>
-                            <div class="website-info">
-                                <div class="website-name">Dribbble</div>
-                                <div class="website-desc">设计师创意社区</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-13-2" data-default="true">
-                    <button class="favorite-btn" data-module="module-13-2"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计素材资源</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.freepik.com/" class="website-item" data-keywords="免费素材 矢量图" 
-                           data-title="Freepik" data-url="https://www.freepik.com/" 
-                           data-desc="高质量免费矢量图、照片和PSD素材资源库" 
-                           data-features="免费素材|高质量|多种类型|每日更新">
-                            <div class="website-img">FP</div>
-                            <div class="website-info">
-                                <div class="website-name">Freepik</div>
-                                <div class="website-desc">免费设计素材库</div>
-                            </div>
-                        </a>
-                        <a href="https://www.iconfont.cn/" class="website-item" data-keywords="图标库 矢量图标" 
-                           data-title="iconfont" data-url="https://www.iconfont.cn/" 
-                           data-desc="阿里巴巴矢量图标库，提供海量免费矢量图标资源" 
-                           data-features="矢量图标|免费使用|在线编辑|多格式下载">
-                            <div class="website-img">IF</div>
-                            <div class="website-info">
-                                <div class="website-name">iconfont</div>
-                                <div class="website-desc">矢量图标库</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-13-3" data-default="true">
-                    <button class="favorite-btn" data-module="module-13-3"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">多媒体素材</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.storyblocks.com/" class="website-item" data-keywords="视频素材 音频资源" 
-                           data-title="Storyblocks" data-url="https://www.storyblocks.com/" 
-                           data-desc="高质量视频、音频和图片素材订阅平台" 
-                           data-features="视频素材|音频资源|高质量|订阅制">
-                            <div class="website-img">SB</div>
-                            <div class="website-info">
-                                <div class="website-name">Storyblocks</div>
-                                <div class="website-desc">多媒体素材库</div>
-                            </div>
-                        </a>
-                        <a href="https://gaylime.com//" class="website-item" data-keywords="GAY LIME【免VPN】" 
-                           data-title="GAY LIME【免VPN】" data-url="https://gaylime.com//" 
-                           data-desc="男同视频资源平台，提供各类主题内容" 
-                           data-features="多种主题内容|无需VPN|免费观看|搜索功能" 
-                           data-problems="广告较多|内容更新慢|部分视频质量不高">
-                            <div class="website-img">GAY LIME</div>
-                            <div class="website-info">
-                                <div class="website-name">GAY LIME【免VPN】</div>
-                                <div class="website-desc">综合Gay片网站4无需加速器可访问但广告较多</div>
-                            </div>
-                        </a>
-                        <a href="http://taiquantv.com/" class="website-item" data-keywords="泰圈【日常】" 
-                           data-title="泰圈【日常】" data-url="http://taiquantv.com/" 
-                           data-desc="专注于泰剧及男同内容的综合资源平台" 
-                           data-features="泰剧资源丰富|腐剧内容全面|更新及时|社区交流" 
-                           data-problems="部分内容需要注册|广告支持运营|加载速度一般">
-                            <div class="website-img">泰圈</div>
-                            <div class="website-info">
-                                <div class="website-name">泰圈【日常】</div>
-                                <div class="website-desc">腐剧 漫画 动漫 广播剧 电影</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：搜同影视 -->
-                <div class="category-card" data-module-id="module-7-6" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-6"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (7)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://scu.bwstupgm.biz/" class="website-item" data-keywords="搜同影视1" 
-                           data-title="搜同影视1" data-url="https://scu.bwstupgm.biz/" 
-                           data-desc="搜同影视资源平台，提供丰富的男同影视内容" 
-                           data-features="丰富的男同影视资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">搜同影视1</div>
-                            <div class="website-info">
-                                <div class="website-name">搜同影视1</div>
-                                <div class="website-desc">搜同影视资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://416.boirdozm.cc/" class="website-item" data-keywords="搜同影视2" 
-                           data-title="搜同影视2" data-url="https://416.boirdozm.cc/" 
-                           data-desc="搜同影视资源平台，提供多种类型的男同影视内容" 
-                           data-features="多种类型影视资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">搜同影视2</div>
-                            <div class="website-info">
-                                <div class="website-name">搜同影视2</div>
-                                <div class="website-desc">搜同影视资源网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：小蓝视频网 -->
-                <div class="category-card" data-module-id="module-7-7" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-7"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (8)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://catch.eibkvww.cc/" class="website-item" data-keywords="小蓝视频网" 
-                           data-title="小蓝视频网" data-url="https://catch.eibkvww.cc/" 
-                           data-desc="小蓝视频资源平台，提供丰富的男同视频内容" 
-                           data-features="丰富的男同视频资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img" style="background: linear-gradient(45deg, #1e90ff, #87cefa);">小蓝视频</div>
-                            <div class="website-info">
-                                <div class="website-name">小蓝视频网</div>
-                                <div class="website-desc">小蓝视频资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://tv-skyairav.cc/cn/tag?tid=1496" class="website-item" data-keywords="Yaoi男同" 
-                           data-title="Yaoi男同" data-url="https://tv-skyairav.cc/cn/tag?tid=1496" 
-                           data-desc="Yaoi男同影视资源平台，专注于Yaoi题材的影视内容" 
-                           data-features="Yaoi题材丰富|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img" style="background: linear-gradient(45deg, #ff69b4, #ffb6c1);">Yaoi男同</div>
-                            <div class="website-info">
-                                <div class="website-name">Yaoi男同</div>
-                                <div class="website-desc">Yaoi男同影视网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：男同网系列 -->
-                <div class="category-card" data-module-id="module-7-8" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-8"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (9)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://91nt.com/" class="website-item" data-keywords="男同网1" 
-                           data-title="男同网1" data-url="https://91nt.com/" 
-                           data-desc="男同影视资源平台，提供丰富的男同视频内容" 
-                           data-features="丰富的男同视频资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网1</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网1</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://nrboyyzxspoy.buzz/type/98.html" class="website-item" data-keywords="男同网2" 
-                           data-title="男同网2" data-url="https://nrboyyzxspoy.buzz/type/98.html" 
-                           data-desc="男同影视资源平台，提供多种类型的男同视频内容" 
-                           data-features="多种类型视频资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网2</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网2</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：更多男同网 -->
-                <div class="category-card" data-module-id="module-7-9" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-9"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (10)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://gv107.top/index.php/vod/type/id/50.html" class="website-item" data-keywords="男同网3" 
-                           data-title="男同网3" data-url="https://gv107.top/index.php/vod/type/id/50.html" 
-                           data-desc="男同影视资源平台，提供分类清晰的男同视频内容" 
-                           data-features="分类清晰明确|高清画质|多种类型|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网3</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网3</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://374gv.com/" class="website-item" data-keywords="男同网4" 
-                           data-title="男同网4" data-url="https://374gv.com/" 
-                           data-desc="男同影视资源平台，提供丰富的男同视频内容" 
-                           data-features="丰富的视频资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网4</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网4</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：更多男同网 -->
-                <div class="category-card" data-module-id="module-7-10" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-10"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (11)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://www.pornsitebros.com/zh/?k=gay" class="website-item" data-keywords="男同网5" 
-                           data-title="男同网5" data-url="https://www.pornsitebros.com/zh/?k=gay" 
-                           data-desc="男同影视资源平台，提供搜索功能的男同视频内容" 
-                           data-features="搜索功能强大|高清画质|多种类型|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网5</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网5</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://100c9n4.ukdevilz.com/video/%E6%AD%A3%E5%9C%A0%E6%92%AD%E6%94%BE+%E5%8F%B0%E6%B9%BE%E5%B8%85%E6%B0%94%E7%94%B7%E7%94%9F%E8%A2%AB%E5%B9%B21" class="website-item" data-keywords="男同网6" 
-                           data-title="男同网6" data-url="https://100c9n4.ukdevilz.com/video/%E6%AD%A3%E5%9C%A0%E6%92%AD%E6%94%BE+%E5%8F%B0%E6%B9%BE%E5%B8%85%E6%B0%94%E7%94%B7%E7%94%9F%E8%A2%AB%E5%B9%B21" 
-                           data-desc="男同影视资源平台，提供特定主题的男同视频内容" 
-                           data-features="特定主题内容|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网6</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网6</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：更多男同网 -->
-                <div class="category-card" data-module-id="module-7-11" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-11"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (12)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://zh.xhchannel.com/gay" class="website-item" data-keywords="男同网7" 
-                           data-title="男同网7" data-url="https://zh.xhchannel.com/gay" 
-                           data-desc="男同影视资源平台，提供频道式的男同视频内容" 
-                           data-features="频道式内容|高清画质|多种类型|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网7</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网7</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://mgfvtyunuspv.buzz/sort/id/98.html" class="website-item" data-keywords="男同网8" 
-                           data-title="男同网8" data-url="https://mgfvtyunuspv.buzz/sort/id/98.html" 
-                           data-desc="男同影视资源平台，提供分类排序的男同视频内容" 
-                           data-features="分类排序功能|高清画质|多种类型|更新及时" 
-                           data-problems="">
-                            <div class="website-img">男同网8</div>
-                            <div class="website-info">
-                                <div class="website-name">男同网8</div>
-                                <div class="website-desc">男同影视资源网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：奇耻大屌 -->
-                <div class="category-card" data-module-id="module-7-12" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-12"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (13)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://qcdr.qizhidaru94.top/index.php/vod/type/id/65.html" class="website-item" data-keywords="奇耻大屌" 
-                           data-title="奇耻大屌" data-url="https://qcdr.qizhidaru94.top/index.php/vod/type/id/65.html" 
-                           data-desc="奇耻大屌影视资源平台，提供特定主题的男同视频内容" 
-                           data-features="特定主题内容|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">奇耻大屌</div>
-                            <div class="website-info">
-                                <div class="website-name">奇耻大屌</div>
-                                <div class="website-desc">奇耻大屌影视网站</div>
-                            </div>
-                        </a>
-                        <a href="https://d3fzqoxno61m61.roosjkfd.cc/tag/%E7%94%B7%E5%90%8C/" class="website-item" data-keywords="R☆每日大赛" 
-                           data-title="R☆每日大赛" data-url="https://d3fzqoxno61m61.roosjkfd.cc/tag/%E7%94%B7%E5%90%8C/" 
-                           data-desc="R☆每日大赛影视资源平台，提供每日更新的男同视频内容" 
-                           data-features="每日更新内容|高清画质|多种类型|分类细致" 
-                           data-problems="">
-                            <div class="website-img">R☆每日</div>
-                            <div class="website-info">
-                                <div class="website-name">R☆每日大赛</div>
-                                <div class="website-desc">R☆每日大赛影视网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- 新增：同性电影 -->
-                <div class="category-card" data-module-id="module-7-13" data-default="true">
-                    <button class="favorite-btn" data-module="module-7-13"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="category-title">影视资源 (14)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="https://m.sanjipian123.com/nantong/" class="website-item" data-keywords="同性电影" 
-                           data-title="同性电影" data-url="https://m.sanjipian123.com/nantong/" 
-                           data-desc="同性电影资源平台，提供丰富的同性题材电影内容" 
-                           data-features="丰富的同性电影资源|高清画质|分类细致|更新及时" 
-                           data-problems="">
-                            <div class="website-img">同性电影</div>
-                            <div class="website-info">
-                                <div class="website-name">同性电影</div>
-                                <div class="website-desc">同性电影资源网站</div>
-                            </div>
-                        </a>
-                        <a href="https://yandex.com/search/touch/?text=%E7%94%B7%E5%90%8C&lr=111454&mda=0&search_source=yacom_touch_common" class="website-item" data-keywords="俄罗斯搜索引擎" 
-                           data-title="俄罗斯搜索引擎" data-url="https://yandex.com/search/touch/?text=%E7%94%B7%E5%90%8C&lr=111454&mda=0&search_source=yacom_touch_common" 
-                           data-desc="俄罗斯搜索引擎，提供男同相关内容的搜索服务" 
-                           data-features="强大的搜索功能|多语言支持|丰富的搜索结果|分类细致" 
-                           data-problems="">
-                            <div class="website-img">Yandex</div>
-                            <div class="website-info">
-                                <div class="website-name">俄罗斯搜索引擎</div>
-                                <div class="website-desc">俄罗斯搜索引擎网站</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="scroll-indicators" id="videos-indicators">
-                <div class="scroll-indicator active" data-index="0"></div>
-                <div class="scroll-indicator" data-index="1"></div>
-                <div class="scroll-indicator" data-index="2"></div>
-                <div class="scroll-indicator" data-index="3"></div>
-                <div class="scroll-indicator" data-index="4"></div>
-                <div class="scroll-indicator" data-index="5"></div>
-                <div class="scroll-indicator" data-index="6"></div>
-                <div class="scroll-indicator" data-index="7"></div>
-                <div class="scroll-indicator" data-index="8"></div>
-                <div class="scroll-indicator" data-index="9"></div>
-                <div class="scroll-indicator" data-index="10"></div>
-                <div class="scroll-indicator" data-index="11"></div>
-                <div class="scroll-indicator" data-index="12"></div>
-                <div class="scroll-indicator" data-index="13"></div>
-            </div>
-        </section>
-
-        <!-- 网盘资源区域 -->
-        <section id="cloud-section" class="category-section" data-default="true">
-            <div class="section-header">
-                <h2 class="section-title">网盘资源</h2>
-            </div>
-            <div class="resource-grid" id="cloud-resource-grid">
-                <div class="category-card" data-module-id="module-8" data-default="true">
-                    <button class="favorite-btn" data-module="module-8"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-cloud-download"></i></div>
                         <h3 class="category-title">网盘资源</h3>
                     </div>
                     <div class="website-list">
-                        <a href="https://www.321flac.com/m/list.php?tid=5" class="website-item" data-keywords="321无损广播剧" 
-                           data-title="321无损广播剧" data-url="https://www.321flac.com/m/list.php?tid=5" 
-                           data-desc="专注耽美题材的广播剧资源平台，提供高质量无损音频下载" 
-                           data-features="专业音频处理技术|按作品类型分类|提供剧情简介|支持批量下载" 
-                           data-problems="建议注册会员获取完整资源|新剧更新周期约1-2周|网站广告支持运营">
-                            <div class="website-img">321无损广播剧</div>
-                            <div class="website-info">
-                                <div class="website-name">321无损广播剧</div>
-                                <div class="website-desc">广播剧网盘资源</div>
-                            </div>
-                        </a>
-                        <a href="http://www.quanbuzy.top/guangbo.html" class="website-item" data-keywords="未知星球广播剧" 
-                           data-title="未知星球广播剧" data-url="http://www.quanbuzy.top/guangbo.html" 
-                           data-desc="综合性广播剧资源聚合平台，包含多种题材和类型" 
-                           data-features="资源更新及时|支持在线试听|提供多种下载方式|按声优分类" 
-                           data-problems="建议定期访问获取最新资源|链接有效性有保障|经典界面">
-                            <div class="website-img">未知星球广播剧</div>
-                            <div class="website-info">
-                                <div class="website-name">未知星球广播剧</div>
-                                <div class="website-desc">综合广播剧网盘资源</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-8-1" data-default="true">
-                    <button class="favorite-btn" data-module="module-8-1"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-cloud-download"></i></div>
-                        <h3 class="category-title">网盘资源 (2)</h3>
-                    </div>
-                    <div class="website-list">
-                        <a href="http://www.quanbuzy.top/fuju.html" class="website-item" data-keywords="未知星球腐剧合集" 
-                           data-title="未知星球腐剧合集" data-url="http://www.quanbuzy.top/fuju.html" 
-                           data-desc="专注于BL题材影视作品的资源站点" 
-                           data-features="按年份分类|提供剧情简介|支持多网盘下载|更新国内外新剧" 
-                           data-problems="建议选择高清资源|提供多语言字幕支持|优化访问速度">
-                            <div class="website-img">未知星球腐剧合集</div>
-                            <div class="website-info">
-                                <div class="website-name">未知星球腐剧合集</div>
-                                <div class="website-desc">腐剧分类网站</div>
-                            </div>
-                        </a>
-                        <a href="https://kdocs.cn/l/ce93kgpKt0mY" class="website-item" data-keywords="巳泷网盘资源" 
-                           data-title="巳泷网盘资源" data-url="https://kdocs.cn/l/ce93kgpKt0mY" 
-                           data-desc="综合类资源分享平台，需使用特定客户端下载" 
-                           data-features="涵盖多种资源类型|提供资源预览|支持资源求档|定期更新维护" 
-                           data-problems="推荐下载小飞机APP|提供解压密码支持|资源有效性有保障">
-                            <div class="website-img">巳泷网盘资源</div>
-                            <div class="website-info">
-                                <div class="website-name">巳泷网盘资源</div>
-                                <div class="website-desc">必须下载小飞机网盘APP再获取资源</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="category-card" data-module-id="module-8-2" data-default="true">
-                    <button class="favorite-btn" data-module="module-8-2"><i class="far fa-star"></i></button>
-                    <div class="category-header">
-                        <div class="category-icon"><i class="fas fa-cloud-download"></i></div>
-                        <h3 class="category-title">网盘资源 (3)</h3>
-                    </div>
-                    <div class="website-list">
                         <a href="https://kdocs.cn/l/ckfKgdsLm5n6" class="website-item" data-keywords="羽梦星河网盘资源" 
                            data-title="羽梦星河网盘资源" data-url="https://kdocs.cn/l/ckfKgdsLm5n6" 
                            data-desc="二次元向资源分享社区，专注动漫、游戏相关内容" 
                            data-features="动漫资源丰富|提供游戏MOD|支持资源交流|有专属论坛" 
                            data-problems="建议使用分类筛选|资源有效性有保障|注册会员获取完整资源">
-                            <div class="website-img">羽梦星河网盘资源</div>
+                            <div class="website-img">网盘资源</div>
                             <div class="website-info">
                                 <div class="website-name">羽梦星河网盘资源</div>
                                 <div class="website-desc">必须下载小飞机网盘APP再获取资源</div>
@@ -3570,7 +3116,7 @@
                            data-desc="一站式网盘搜索引擎，可跨平台查找资源" 
                            data-features="支持多网盘搜索|可直接在线预览|提供资源热度分析|过滤无效链接" 
                            data-problems="服务维护中敬请期待|搜索结果质量有保障|遵守版权规范">
-                            <div class="website-img">聚合网盘资源</div>
+                            <div class="website-img">网盘资源</div>
                             <div class="website-info">
                                 <div class="website-name">聚合网盘资源【暂不可用】</div>
                                 <div class="website-desc">一站式搜索各类资源在线观看</div>
@@ -3604,7 +3150,7 @@
                            data-desc="一站式在线工具集合平台，解决各类日常需求" 
                            data-features="200+实用工具|无需安装软件|支持工具收藏|定期更新" 
                            data-problems="高级工具需要会员|广告支持平台运营|优化移动端体验">
-                            <div class="website-img">阿川工具库</div>
+                            <div class="website-img">工具库</div>
                             <div class="website-info">
                                 <div class="website-name">阿川工具库</div>
                                 <div class="website-desc">这是一个能够解决你所有工具问题的网站</div>
@@ -3615,7 +3161,7 @@
                            data-desc="专业的多格式文件转换平台，支持各类常见格式互转" 
                            data-features="支持100+格式|批量转换功能|云端处理|保持原始质量" 
                            data-problems="大文件转换请耐心等待|高级功能需要订阅|文件大小有限制">
-                            <div class="website-img">格式转换站</div>
+                            <div class="website-img">转换站</div>
                             <div class="website-info">
                                 <div class="website-name">格式转换站</div>
                                 <div class="website-desc">多格式在线转换工具</div>
@@ -3627,7 +3173,7 @@
                     <button class="favorite-btn" data-module="module-9-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">图片处理工具</h3>
+                        <h3 class="category-title">处理工具</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.remove.bg/zh" class="website-item" data-keywords="图片背景去除 AI工具" 
@@ -3637,7 +3183,7 @@
                             <div class="website-img">RBG</div>
                             <div class="website-info">
                                 <div class="website-name">Remove.bg</div>
-                                <div class="website-desc">AI背景去除工具</div>
+                                <div class="website-desc">去除工具</div>
                             </div>
                         </a>
                         <a href="https://tinypng.com/" class="website-item" data-keywords="图片压缩 优化" 
@@ -3647,7 +3193,7 @@
                             <div class="website-img">TPNG</div>
                             <div class="website-info">
                                 <div class="website-name">TinyPNG</div>
-                                <div class="website-desc">智能图片压缩</div>
+                                <div class="website-desc">图片压缩</div>
                             </div>
                         </a>
                     </div>
@@ -3656,7 +3202,7 @@
                     <button class="favorite-btn" data-module="module-9-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-wrench"></i></div>
-                        <h3 class="category-title">文件转换工具</h3>
+                        <h3 class="category-title">转换工具</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.aconvert.com/" class="website-item" data-keywords="文件转换 多媒体处理" 
@@ -3666,7 +3212,7 @@
                             <div class="website-img">AC</div>
                             <div class="website-info">
                                 <div class="website-name">AConvert</div>
-                                <div class="website-desc">全能文件转换工具</div>
+                                <div class="website-desc">转换工具</div>
                             </div>
                         </a>
                         <a href="https://www.iloveimg.com/zh" class="website-item" data-keywords="图片编辑 批量处理" 
@@ -3676,7 +3222,7 @@
                             <div class="website-img">ILIMG</div>
                             <div class="website-info">
                                 <div class="website-name">iLoveIMG</div>
-                                <div class="website-desc">全能图片编辑工具</div>
+                                <div class="website-desc">编辑工具</div>
                             </div>
                         </a>
                     </div>
@@ -3688,14 +3234,14 @@
                         <h3 class="category-title">软件工具</h3>
                     </div>
                     <div class="website-list">
-                        <a href="https://www.bandisoft.com/bandizip/" class="website-item" data-keywords="压缩软件 文件管理" 
+                        <a href="https://www.bandisoft.com/bandizip/bandizip/" class="website-item" data-keywords="压缩软件 文件管理" 
                            data-title="Bandizip" data-url="https://www.bandisoft.com/bandizip/" 
                            data-desc="轻量快速的文件压缩和解压缩软件，支持多种压缩格式" 
                            data-features="快速压缩|多种格式|预览功能|免费使用">
                             <div class="website-img">BZ</div>
                             <div class="website-info">
                                 <div class="website-name">Bandizip</div>
-                                <div class="website-desc">文件压缩工具</div>
+                                <div class="website-desc">压缩工具</div>
                             </div>
                         </a>
                         <a href="https://www.huorong.cn/" class="website-item" data-keywords="安全软件 病毒防护" 
@@ -3759,7 +3305,7 @@
                     <button class="favorite-btn" data-module="module-13"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计创作平台</h3>
+                        <h3 class="category-title">创作平台</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.wentu.io/" class="website-item" data-keywords="文档处理 在线工具" 
@@ -3788,7 +3334,7 @@
                     <button class="favorite-btn" data-module="module-13-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计社区与灵感</h3>
+                        <h3 class="category-title">设计社区</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.behance.net/" class="website-item" data-keywords="设计作品 创意展示" 
@@ -3798,7 +3344,7 @@
                             <div class="website-img">BH</div>
                             <div class="website-info">
                                 <div class="website-name">Behance</div>
-                                <div class="website-desc">创意作品展示平台</div>
+                                <div class="website-desc">创意作品</div>
                             </div>
                         </a>
                         <a href="https://dribbble.com/" class="website-item" data-keywords="设计师社区 创意灵感" 
@@ -3808,7 +3354,7 @@
                             <div class="website-img">DR</div>
                             <div class="website-info">
                                 <div class="website-name">Dribbble</div>
-                                <div class="website-desc">设计师创意社区</div>
+                                <div class="website-desc">创意社区</div>
                             </div>
                         </a>
                     </div>
@@ -3817,7 +3363,7 @@
                     <button class="favorite-btn" data-module="module-13-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">设计素材资源</h3>
+                        <h3 class="category-title">素材资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.freepik.com/" class="website-item" data-keywords="免费素材 矢量图" 
@@ -3827,7 +3373,7 @@
                             <div class="website-img">FP</div>
                             <div class="website-info">
                                 <div class="website-name">Freepik</div>
-                                <div class="website-desc">免费设计素材库</div>
+                                <div class="website-desc">素材库</div>
                             </div>
                         </a>
                         <a href="https://www.iconfont.cn/" class="website-item" data-keywords="图标库 矢量图标" 
@@ -3837,7 +3383,7 @@
                             <div class="website-img">IF</div>
                             <div class="website-info">
                                 <div class="website-name">iconfont</div>
-                                <div class="website-desc">矢量图标库</div>
+                                <div class="website-desc">图标库</div>
                             </div>
                         </a>
                     </div>
@@ -3846,7 +3392,7 @@
                     <button class="favorite-btn" data-module="module-13-3"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">多媒体素材</h3>
+                        <h3 class="category-title">媒体素材</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.storyblocks.com/" class="website-item" data-keywords="视频素材 音频资源" 
@@ -3856,7 +3402,7 @@
                             <div class="website-img">SB</div>
                             <div class="website-info">
                                 <div class="website-name">Storyblocks</div>
-                                <div class="website-desc">多媒体素材库</div>
+                                <div class="website-desc">媒体素材库</div>
                             </div>
                         </a>
                         <a href="https://gayflaticon.com/" class="website-item" data-keywords="gay flaticon" 
@@ -3866,7 +3412,7 @@
                             <div class="website-img">FI</div>
                             <div class="website-info">
                                 <div class="website-name">gay flaticon</div>
-                                <div class="website-desc">免费图标数据库</div>
+                                <div class="website-desc">标数据库</div>
                             </div>
                         </a>
                     </div>
@@ -3875,7 +3421,7 @@
                     <button class="favorite-btn" data-module="module-13-4"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-palette"></i></div>
-                        <h3 class="category-title">本土设计资源</h3>
+                        <h3 class="category-title">设计资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.58pic.com/" class="website-item" data-keywords="设计素材 中国平台" 
@@ -3910,7 +3456,7 @@
                     <button class="favorite-btn" data-module="module-14"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-robot"></i></div>
-                        <h3 class="category-title">AI创作与生成</h3>
+                        <h3 class="category-title">AI创作</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://runwayml.com/" class="website-item" data-keywords="AI视频生成 机器学习" 
@@ -3939,7 +3485,7 @@
                     <button class="favorite-btn" data-module="module-14-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-robot"></i></div>
-                        <h3 class="category-title">AI写作与动画</h3>
+                        <h3 class="category-title">AI写作</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.writesonic.com/chatsonic" class="website-item" data-keywords="AI写作 聊天机器人" 
@@ -4003,7 +3549,7 @@
                             <div class="website-img">一淘</div>
                             <div class="website-info">
                                 <div class="website-name">一淘</div>
-                                <div class="website-desc">淘宝官方优惠券及返利平台</div>
+                                <div class="website-desc">淘宝官方优惠优惠券及返利平台</div>
                             </div>
                         </a>
                     </div>
@@ -4012,7 +3558,7 @@
                     <button class="favorite-btn" data-module="module-10-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-home"></i></div>
-                        <h3 class="category-title">生活服务 (2)</h3>
+                        <h3 class="category-title">生活服务</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.meituan.com/" class="website-item" data-keywords="美团" 
@@ -4043,7 +3589,7 @@
                     <button class="favorite-btn" data-module="module-10-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-home"></i></div>
-                        <h3 class="category-title">生活服务 (3)</h3>
+                        <h3 class="category-title">生活服务</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.vip.com/" class="website-item" data-keywords="唯品会" 
@@ -4085,7 +3631,7 @@
                            data-desc="国家开放大学出品的免费学习平台，涵盖多领域课程" 
                            data-features="多领域免费课程|边学边做笔记|课程评分系统|官方权威资源" 
                            data-problems="持续优化内容丰富度|提升用户交互体验|扩展课程覆盖范围">
-                            <div class="website-img">终身教育平台</div>
+                            <div class="website-img">教育平台</div>
                             <div class="website-info">
                                 <div class="website-name">终身教育平台</div>
                                 <div class="website-desc">国家提供的终身学习平台，含生活、职场等多类课程</div>
@@ -4108,7 +3654,7 @@
                     <button class="favorite-btn" data-module="module-11-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h3 class="category-title">学习资源 (2)</h3>
+                        <h3 class="category-title">学习资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.ixuexi.cn/" class="website-item" data-keywords="学习强国" 
@@ -4139,7 +3685,7 @@
                     <button class="favorite-btn" data-module="module-11-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h3 class="category-title">学习资源 (3)</h3>
+                        <h3 class="category-title">学习资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.bilibili.com/" class="website-item" data-keywords="B站学习区" 
@@ -4170,7 +3716,7 @@
                     <button class="favorite-btn" data-module="module-11-3"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h3 class="category-title">学习资源 (4)</h3>
+                        <h3 class="category-title">学习资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.csdn.net/" class="website-item" data-keywords="CSDN" 
@@ -4201,7 +3747,7 @@
                     <button class="favorite-btn" data-module="module-11-4"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h3 class="category-title">学习资源 (5)</h3>
+                        <h3 class="category-title">学习资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.icourse163.org/" class="website-item" data-keywords="中国大学MOOC" 
@@ -4218,7 +3764,7 @@
                         <a href="https://www.lingq.com/" class="website-item" data-keywords="LingQ" 
                            data-title="LingQ" data-url="https://www.lingq.com/" 
                            data-desc="通过阅读文章学习多种语言的平台" 
-                           data-features="多语言学习|真实语境材料|词汇追踪系统|社区交流" 
+                           data-features="多语言学习|真实语境材料|词汇追踪|社区交流" 
                            data-problems="高级功能需订阅|扩展中文资源|优化学习曲线">
                             <div class="website-img">LingQ</div>
                             <div class="website-info">
@@ -4232,7 +3778,7 @@
                     <button class="favorite-btn" data-module="module-11-5"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h3 class="category-title">学习资源 (6)</h3>
+                        <h3 class="category-title">学习资源</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.coursera.org/" class="website-item" data-keywords="Coursera" 
@@ -4278,7 +3824,7 @@
                     <button class="favorite-btn" data-module="module-12"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-sync-alt"></i></div>
-                        <h3 class="category-title">近期更新资源</h3>
+                        <h3 class="category-title">近期更新</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://kdocs.cn/l/cqIaeFhJ86ne" class="website-item" data-keywords="蓝凑云资源合集" 
@@ -4309,7 +3855,7 @@
                     <button class="favorite-btn" data-module="module-12-1"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-sync-alt"></i></div>
-                        <h3 class="category-title">近期更新资源 (2)</h3>
+                        <h3 class="category-title">近期更新</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://kdocs.cn/l/csOszCHS1Eoo" class="website-item" data-keywords="图集整合" 
@@ -4340,7 +3886,7 @@
                     <button class="favorite-btn" data-module="module-12-2"><i class="far fa-star"></i></button>
                     <div class="category-header">
                         <div class="category-icon"><i class="fas fa-sync-alt"></i></div>
-                        <h3 class="category-title">近期更新资源 (3)</h3>
+                        <h3 class="category-title">近期更新</h3>
                     </div>
                     <div class="website-list">
                         <a href="https://www.weiyun.com/document?fileId=RlddTUdaaGdRVA%3D%3D_06b4294a6ee5ca21277d53546429f4a0_6afbd5ba-3a43-4f52-8037-56745b5e5234&officeType=pdf&tdsourcetag=s_weiyun_file&qq_aio_chat_type=3&s_trans=6633073262_&s_channel=4" class="website-item" data-keywords="帅哥预览图" 
@@ -5163,7 +4709,7 @@ function updateCategorySelects() {
     });
 }
 
-// 图片上传处理
+// 图片上传处理（保持原功能，未修改）
 document.getElementById('website-image-upload').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -5172,13 +4718,17 @@ document.getElementById('website-image-upload').addEventListener('change', funct
     reader.onload = function(event) {
         const preview = document.getElementById('website-image-preview');
         preview.src = event.target.result;
+        // 新增：图片自适应样式
         preview.style.display = 'block';
+        preview.style.objectFit = 'cover'; // 保持比例填充容器，超出部分裁剪
+        preview.style.width = '100%';
+        preview.style.height = 'auto';
         document.getElementById('website-image').value = event.target.result;
     };
     reader.readAsDataURL(file);
 });
 
-// 编辑网站图片上传处理
+// 编辑网站图片上传处理（保持原功能，未修改）
 document.getElementById('edit-website-image-upload').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -5187,25 +4737,20 @@ document.getElementById('edit-website-image-upload').addEventListener('change', 
     reader.onload = function(event) {
         const preview = document.getElementById('edit-website-image-preview');
         preview.src = event.target.result;
+        // 新增：图片自适应样式
         preview.style.display = 'block';
+        preview.style.objectFit = 'cover';
+        preview.style.width = '100%';
+        preview.style.height = 'auto';
         document.getElementById('edit-website-image').value = event.target.result;
     };
     reader.readAsDataURL(file);
 });
 
-// 修改后的背景图片上传逻辑（添加裁剪支持）
-function setupCrop(type) {
+// 简化后的背景图片上传逻辑（删除裁剪，仅保留上传和自适应）
+function setupSimpleUpload(type) {
     const uploadId = `bg-image-${type}-upload`;
     const previewId = `bg-image-${type}-preview`;
-    const cropContainerId = `crop-${type}`;
-    const cropImageId = `crop-image-${type}`;
-    const cropControlsId = `crop-controls-${type}`;
-    const cropScaleId = `crop-scale-${type}`;
-    const cropConfirmId = `crop-confirm-${type}`;
-    const cropCancelId = `crop-cancel-${type}`;
-    const aspectRatioId = `crop-aspect-${type}`;
-
-    const aspectRatio = (type === 'landscape') ? 16 / 9 : 9 / 16; // 横屏16:9, 竖屏9:16
 
     document.getElementById(uploadId).addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -5214,107 +4759,42 @@ function setupCrop(type) {
         const reader = new FileReader();
         reader.onload = function(event) {
             const dataUrl = event.target.result;
+            const preview = document.getElementById(previewId);
 
-            // 显示裁剪容器
-            const cropContainer = document.getElementById(cropContainerId);
-            cropContainer.classList.add('active');
-            document.getElementById(cropControlsId).style.display = 'flex';
+            // 图片自适应显示设置
+            preview.src = dataUrl;
+            preview.style.display = 'block';
+            preview.style.objectFit = 'cover'; // 核心自适应属性：保持比例填充容器
+            preview.style.width = '100%';
+            preview.style.height = '100%';
+            preview.style.objectPosition = 'center'; // 居中显示
 
-            // 设置图片
-            const cropImage = document.getElementById(cropImageId);
-            cropImage.src = dataUrl;
+            // 保存到自定义设置并应用为背景
+            customSettings[`bgImage${type.charAt(0).toUpperCase() + type.slice(1)}`] = dataUrl;
+            document.documentElement.style.setProperty(
+                `--bg-image-${type}`, 
+                `url(${dataUrl})`
+            );
+            // 背景图也添加自适应样式
+            document.documentElement.style.setProperty(
+                `--bg-image-${type}-size`, 
+                'cover'
+            );
+            document.documentElement.style.setProperty(
+                `--bg-image-${type}-position`, 
+                'center'
+            );
 
-            // 设置裁剪框比例
-            const aspectElement = document.getElementById(aspectRatioId);
-            aspectElement.style.paddingBottom = `${100 / aspectRatio}%`; // 设置高宽比
-
-            // 初始化缩放和拖动
-            let scale = 1;
-            let isDragging = false;
-            let startX = 0;
-            let startY = 0;
-            let translateX = 0;
-            let translateY = 0;
-
-            // 缩放滑块
-            document.getElementById(cropScaleId).addEventListener('input', function() {
-                scale = this.value;
-                cropImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
-            });
-
-            // 拖动图片
-            cropImage.addEventListener('mousedown', function(e) {
-                e.preventDefault();
-                isDragging = true;
-                startX = e.clientX - translateX;
-                startY = e.clientY - translateY;
-                cropImage.classList.add('dragging');
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                translateX = e.clientX - startX;
-                translateY = e.clientY - startY;
-                cropImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
-            });
-
-            document.addEventListener('mouseup', function() {
-                isDragging = false;
-                cropImage.classList.remove('dragging');
-            });
-
-            // 确认裁剪
-            document.getElementById(cropConfirmId).addEventListener('click', function() {
-                const containerRect = cropContainer.getBoundingClientRect();
-                const imgRect = cropImage.getBoundingClientRect();
-
-                // 使用canvas裁剪
-                const canvas = document.createElement('canvas');
-                canvas.width = containerRect.width;
-                canvas.height = containerRect.height;
-                const ctx = canvas.getContext('2d');
-
-                // 计算裁剪参数
-                const sx = Math.max(0, (containerRect.left - imgRect.left) / scale);
-                const sy = Math.max(0, (containerRect.top - imgRect.top) / scale);
-                const sw = containerRect.width / scale;
-                const sh = containerRect.height / scale;
-
-                ctx.drawImage(cropImage, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
-
-                const croppedDataUrl = canvas.toDataURL('image/jpeg');
-
-                // 应用裁剪结果
-                const preview = document.getElementById(previewId);
-                preview.src = croppedDataUrl;
-                preview.style.display = 'block';
-
-                // 保存到自定义设置
-                customSettings[`bgImage${type.charAt(0).toUpperCase() + type.slice(1)}`] = croppedDataUrl;
-                document.documentElement.style.setProperty(`--bg-image-${type}`, `url(${croppedDataUrl})`);
-
-                // 隐藏裁剪界面
-                cropContainer.classList.remove('active');
-                document.getElementById(cropControlsId).style.display = 'none';
-
-                showSuccessMessage('背景图裁剪成功');
-            });
-
-            // 取消裁剪
-            document.getElementById(cropCancelId).addEventListener('click', function() {
-                cropContainer.classList.remove('active');
-                document.getElementById(cropControlsId).style.display = 'none';
-                document.getElementById(uploadId).value = ''; // 清空上传
-            });
+            showSuccessMessage('背景图上传成功');
         };
         reader.readAsDataURL(file);
     });
 }
 
-// 初始化裁剪功能
-setupCrop('landscape');
-setupCrop('portrait');
+// 初始化简化版上传功能（替代原裁剪初始化）
+setupSimpleUpload('landscape');
+setupSimpleUpload('portrait');
+
 
 // 自定义编辑按钮
 document.querySelectorAll('.edit-btn').forEach(btn => {
@@ -5993,6 +5473,7 @@ function initCarousel() {
     
     startAutoPlay();
 }
+
 
 // 页面加载时初始化
 document.addEventListener('DOMContentLoaded', function() {
