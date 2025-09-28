@@ -31,6 +31,9 @@
         
         h1 {
             font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         h2 {
@@ -79,6 +82,12 @@
             border-color: #d896ff;
         }
         
+        .translation-box {
+            background-color: rgba(45, 0, 85, 0.7);
+            color: #d896ff;
+            font-size: 14px;
+        }
+        
         .button-group {
             display: flex;
             gap: 8px;
@@ -119,18 +128,6 @@
             background-color: rgba(255, 0, 255, 0.15);
             border-radius: 8px;
             border-left: 3px solid #ff85ff;
-        }
-        
-        #chinese-view {
-            display: none;
-            background-color: rgba(58, 0, 102, 0.7);
-            color: #e0bbff;
-            padding: 15px;
-            border: 1px solid #9b5de5;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 15px;
-            line-height: 1.6;
         }
         
         .category-selector {
@@ -293,6 +290,122 @@
             opacity: 1;
         }
         
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #3a0066, #2a004f);
+            border: 2px solid #9b5de5;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px #c77dff;
+            text-align: center;
+            color: #e0bbff;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #d896ff;
+            text-shadow: 0 0 15px #c77dff;
+        }
+        
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .modal-option {
+            background: linear-gradient(to right, #6a00cc, #4d0099);
+            border: 1px solid #9b5de5;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-option:hover {
+            background: linear-gradient(to right, #7a10dc, #5d10a9);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(155, 93, 229, 0.5);
+        }
+        
+        .modal-option h3 {
+            color: #d896ff;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        
+        .modal-option p {
+            font-size: 14px;
+            color: #e0bbff;
+            margin-bottom: 5px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .modal-button {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-confirm {
+            background-color: #9b5de5;
+            color: white;
+            border: none;
+        }
+        
+        .modal-confirm:hover {
+            background-color: #c77dff;
+        }
+        
+        .modal-cancel {
+            background-color: transparent;
+            color: #e0bbff;
+            border: 1px solid #9b5de5;
+        }
+        
+        .modal-cancel:hover {
+            background-color: rgba(155, 93, 229, 0.2);
+        }
+        
+        .video-btn {
+            background: linear-gradient(to right, #ff85ff, #ff0aff);
+            font-size: 14px;
+            padding: 6px 15px;
+            min-width: auto;
+            max-width: none;
+        }
+        
+        .video-btn:hover {
+            background: linear-gradient(to right, #ff0aff, #ff85ff);
+            box-shadow: 0 0 15px #ff85ff;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -318,6 +431,14 @@
             .footer-buttons button {
                 width: 100%;
                 max-width: none;
+            }
+            
+            .modal-options {
+                gap: 10px;
+            }
+            
+            .modal-option {
+                padding: 12px;
             }
         }
         
@@ -345,23 +466,33 @@
                 font-size: 11.5px;
                 padding: 5px 8px;
             }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI提示词生成器</h1>
+        <h1>
+            AI提示词生成器
+            <button class="video-btn" onclick="window.open('https://silong-respool.github.io/zyk/spjc2778.mp4', '_blank')">视频教程</button>
+        </h1>
         <p class="warning">警告：请先输入或使用默认的反向提示词，否则生成的男性图片可能会出现女性生殖器！</p>
         
         <div class="section">
             <h2>正向提示词</h2>
             <textarea id="positive-prompt" placeholder="在此输入或添加正向提示词..."></textarea>
+            <textarea id="positive-translation" class="translation-box" placeholder="正向提示词中文翻译..."></textarea>
             <div class="button-group">
-                <button onclick="toggleLanguage('zh')">显示中文</button>
                 <button onclick="generateRandomPrompt()">随机生成</button>
                 <button onclick="copyPositive()">复制正向提示词</button>
             </div>
-            <div id="chinese-view"></div>
         </div>
         
         <div class="section">
@@ -393,6 +524,7 @@
         <div class="section">
             <h2>反向提示词</h2>
             <textarea id="negative-prompt" placeholder="在此输入或添加反向提示词..."></textarea>
+            <textarea id="negative-translation" class="translation-box" placeholder="反向提示词中文翻译..."></textarea>
             <div class="button-group">
                 <button onclick="copyNegative()">复制反向提示词</button>
                 <button onclick="resetNegative()">恢复默认</button>
@@ -400,7 +532,38 @@
         </div>
         
         <div class="footer-buttons">
-            <button onclick="generateImage()">跳转生成图片</button>
+            <button onclick="showGenerateOptions()">跳转生成图片</button>
+        </div>
+    </div>
+
+    <!-- Modal for generation options -->
+    <div class="modal" id="generateModal">
+        <div class="modal-content">
+            <h2 class="modal-title">选择生成方式</h2>
+            <p>请选择您喜欢的生成方式：</p>
+            
+            <div class="modal-options">
+                <div class="modal-option" onclick="selectOption(1)">
+                    <h3>无限制免费AI生成</h3>
+                    <p>✓ 完全免费</p>
+                    <p>✓ 无内容限制</p>
+                    <p>✗ 生成速度较慢</p>
+                    <p>✗ 质量一般</p>
+                </div>
+                
+                <div class="modal-option" onclick="selectOption(2)">
+                    <h3>高级AI生成</h3>
+                    <p>✓ 生成速度快</p>
+                    <p>✓ 可批量生成</p>
+                    <p>✓ 高质量输出</p>
+                    <p>✗ 可能出现畸形</p>
+                    <p>✗ 需要加速器</p>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-button modal-cancel" onclick="closeModal()">取消</button>
+            </div>
         </div>
     </div>
 
@@ -408,389 +571,419 @@
 
     <script>
         // Default prompts with high quality terms
-        document.getElementById('positive-prompt').value = 'high detail, realistic, 4k resolution, photorealistic, cinematic lighting, sharp focus, ultra detailed skin texture';
-        document.getElementById('negative-prompt').value = 'extra,fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, bad anatomy, bad proportions, extra limbs, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, malformed penis, bifurcated penis, extra penises, misplaced penis, deformed genitalia, fused testicles, asymmetric scrotum, female vagina, female vulva, female labia, female clitoris, female cervix, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, uterus in abdomen, ovaries in pelvis, ectopic tissue, supernumerary organs, extra kidneys, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, liver fused to diaphragm, kidneys fused together, conjoined organs, atrophied organs, shrunken kidneys, hypoplastic lungs, hypertrophic heart, enlarged prostate, distended bladder, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, malocclusion, uneven shoulders, scoliosis, kyphosis, lordosis, twisted spine, rib deformities, pectus excavatum, pect pectus excavatum, pectus carinatum, extra ribs, missing ribs, fused vertebrae, limb deformities, shortened limbs, disproportionate limbs, unilateral atrophy, leg length discrepancy, arm length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hip dislocation, knee dislocation, elbow dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, unilateral atrophy, muscle wasting, missing muscles, extra muscles, skin defects, excessive wrinkles, premature aging, sagging skin, stretch marks, cellulite, keloid scars, hypertrophic scars, atrophic scars, birthmarks, port-wine stains, hemangiomas, vascular malformations, lipomas, neurofibromas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, jaundice, cyanosis, pallor, erythema, bruising, petechiae, ecchymosis, hematoma, lacerations, abrasions, ulcers, pressure sores, fistulas, sinuses, gangrene, necrosis, amputated limbs, phantom limbs, congenital amputations, vestigial tails, supernumerary nipples, inverted nipples, accessory breasts, polymastia, polythelia, gynecomastia, abnormal hair growth, hirsutism, alopecia, baldness, patchy hair, unibrow, fused eyebrows, missing eyebrows, missing eyelashes, trichotillomania';
+        document.getElementById('positive-prompt').value = 'BL (Boy\'s Love), Yaoi, gay, male-male, full body, hyperdetailed male physique, defined musculature, volumetric natural lighting, matte skin texture';
+        document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
 
- 
-// Translation dictionary (男同专属)
-const translationDict = {
-  // 基础术语
-  'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 
-  'masculine': '阳刚', 'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二',
-  // 性器官相关
-  'shaft': '茎身', 'glans': '龟头', 'foreskin': '包皮', 
-  'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 
-  'erection': '勃起', 'hard-on': '硬了', 'boner': '硬屌',
-  // 特征描述
-  'huge cock': '大鸡巴', 'girthy penis': '粗壮阴茎', 'veiny dick': '青筋老二',
-  'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'bulging veins': '凸起血管',
-  // 肛门相关
-  'anus': '肛门', 'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 
-  'puckered anus': '皱褶肛门', 'hairy perineum': '多毛会阴',
-  // 身体特征
-  'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 
-  'biceps': '二头肌', 'thighs': '大腿', 'butt': '臀部', 'ass': '屁股',
-  'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 
-  'vascular arms': '青筋手臂', 'v-line': 'V型线条',
-  // 新增特征
-  'adonis belt': '人鱼线', 'hip dips': '髋窝', 'collarbone': '锁骨',
-  'back muscles': '背部肌肉', 'shoulder blades': '肩胛骨',
-  // 毛发特征
-  'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 
-  'chest fur': '浓密胸毛', 'happy trail': '腹毛线',
-  // 声音特征
-  'deep voice': '低沉嗓音', 'breathy voice': '喘息嗓音',
-  // 面部特征
-  'sharp jawline': '锋利下颌线', 'rugged face': '粗犷面容', 
-  'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉',
-  'high cheekbones': '高颧骨', 'dimpled cheeks': '酒窝',
-  // 服装类
-  'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 
-  'speedo': '泳裤', 'thong': '丁字裤', 'g-string': '丁字带',
-  'mesh shorts': '网眼短裤', 'leather chaps': '皮套裤', 
-  'denim cutoff': '破洞牛仔', 'silk robe': '真丝睡袍',
-  // 新增男同服装
-  'harness': '束带装', 'muscle tee': '肌肉背心', 'cargo jock': '工装护裆',
-  'latex briefs': '乳胶内裤', 'bondage pants': '束缚裤',
-  // 饰品
-  'cock ring': '阴茎环', 'piercing': '穿刺', 'tattoo': '纹身',
-  'nipple rings': '乳头环', 'guiche piercing': '会阴穿孔',
-  'prince albert': '尿道穿刺', 'apadravya': '垂直阴茎穿孔',
-  // 新增男同饰品
-  'scrotal ladder': '阴囊梯穿孔', 'dydoe cluster': '龟头穿孔群',
-  'frenulum bar': '系带横杆', 'anal hook': '肛门钩',
-  'ball stretcher': '睾丸扩张器', 'urethral plug': '尿道塞',
-  // 场景背景
-  'bedroom': '卧室', 'shower': '淋浴间', 'gym': '健身房',
-  'dungeon': '地牢', 'rooftop': '屋顶', 'dark alley': '暗巷',
-  'sauna': '桑拿房', 'jacuzzi': '按摩浴缸', 'locker room': '更衣室',
-  // 新增男同场景
-  'bathhouse': '澡堂', 'cruising spot': '猎艳点', 'backroom': '暗房',
-  'glory hole booth': '泄欲隔间', 'leather bar': '皮革酒吧',
-  // 动作姿势
-  'flexing': '展示肌肉', 'stroking': '抚摸', 'thrusting': '抽插',
-  'grinding': '研磨', 'doggy style': '后入姿势', 
-  'missionary': '传教士姿势', 'pile driver': '打桩姿势',
-  // 新增男同姿势
-  'frot': '阴茎摩擦', 'anal fisting': '肛门拳交', 
-  'ball sucking': '吸吮睾丸', 'rimming': '舔肛', 
-  'cowboy position': '骑乘位', 'reverse cowboy': '反向骑乘',
-  // 表情
-  'smirking': '坏笑', 'grimacing': '痛苦表情', 'lustful gaze': '欲望凝视',
-  'blushing': '脸红', 'ecstasy': '狂喜', 'afterglow': '高潮余韵',
-  // 新增男同表情
-  'cum face': '射精表情', 'anal penetration wince': '肛交蹙眉',
-  'ball deep groan': '深顶呻吟', 'dominant smirk': '支配性坏笑',
-  // 皮肤特征
-  'dewy skin': '水光肌', 'porcelain skin': '瓷白肌', 'sun-kissed': '日光浴色',
-  'glycolic glow': '果酸焕肤', 'freckled': '雀斑肌', 'scar tissue': '疤痕组织',
-  // 发色
-  'platinum': '铂金色', 'ash brown': '灰褐色', 'burgundy': '酒红色',
-  'pastel pink': '淡粉色', 'silver fox': '银狐灰', 'ombre': '渐变发色',
-  // 新增男同发色
-  'salt and pepper': '盐椒灰', 'dirty blonde': '脏金色', 
-  'jet black': '乌黑色', 'platinum buzzcut': '铂金寸头'
-};
+        // Translation dictionary (男同专属)
+        const translationDict = {
+          // 基础术语
+          'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 
+          'masculine': '阳刚', 'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二',
+          // 性器官相关
+          'shaft': '茎身', 'glans': '龟头', 'foreskin': '包皮', 
+          'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 
+          'erection': '勃起', 'hard-on': '硬了', 'boner': '硬屌',
+          // 特征描述
+          'huge cock': '大鸡巴', 'girthy penis': '粗壮阴茎', 'veiny dick': '青筋老二',
+          'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'bulging veins': '凸起血管',
+          // 肛门相关
+          'anus': '肛门', 'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 
+          'puckered anus': '皱褶肛门', 'hairy perineum': '多毛会阴',
+          // 身体特征
+          'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 
+          'biceps': '二头肌', 'thighs': '大腿', 'butt': '臀部', 'ass': '屁股',
+          'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 
+          'vascular arms': '青筋手臂', 'v-line': 'V型线条',
+          // 新增特征
+          'adonis belt': '人鱼线', 'hip dips': '髋窝', 'collarbone': '锁骨',
+          'back muscles': '背部肌肉', 'shoulder blades': '肩胛骨',
+          // 毛发特征
+          'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 
+          'chest fur': '浓密胸毛', 'happy trail': '腹毛线',
+          // 声音特征
+          'deep voice': '低沉嗓音', 'breathy voice': '喘息嗓音',
+          // 面部特征
+          'sharp jawline': '锋利下颌线', 'rugged face': '粗犷面容', 
+          'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉',
+          'high cheekbones': '高颧骨', 'dimpled cheeks': '酒窝',
+          // 服装类
+          'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 
+          'speedo': '泳裤', 'thong': '丁字裤', 'g-string': '丁字带',
+          'mesh shorts': '网眼短裤', 'leather chaps': '皮套裤', 
+          'denim cutoff': '破洞牛仔', 'silk robe': '真丝睡袍',
+          // 新增男同服装
+          'harness': '束带装', 'muscle tee': '肌肉背心', 'cargo jock': '工装护裆',
+          'latex briefs': '乳胶内裤', 'bondage pants': '束缚裤',
+          // 饰品
+          'cock ring': '阴茎环', 'piercing': '穿刺', 'tattoo': '纹身',
+          'nipple rings': '乳头环', 'guiche piercing': '会阴穿孔',
+          'prince albert': '尿道穿刺', 'apadravya': '垂直阴茎穿孔',
+          // 新增男同饰品
+          'scrotal ladder': '阴囊梯穿孔', 'dydoe cluster': '龟头穿孔群',
+          'frenulum bar': '系带横杆', 'anal hook': '肛门钩',
+          'ball stretcher': '睾丸扩张器', 'urethral plug': '尿道塞',
+          // 场景背景
+          'bedroom': '卧室', 'shower': '淋浴间', 'gym': '健身房',
+          'dungeon': '地牢', 'rooftop': '屋顶', 'dark alley': '暗巷',
+          'sauna': '桑拿房', 'jacuzzi': '按摩浴缸', 'locker room': '更衣室',
+          // 新增男同场景
+          'bathhouse': '澡堂', 'cruising spot': '猎艳点', 'backroom': '暗房',
+          'glory hole booth': '泄欲隔间', 'leather bar': '皮革酒吧',
+          // 动作姿势
+          'flexing': '展示肌肉', 'stroking': '抚摸', 'thrusting': '抽插',
+          'grinding': '研磨', 'doggy style': '后入姿势', 
+          'missionary': '传教士姿势', 'pile driver': '打桩姿势',
+          // 新增男同姿势
+          'frot': '阴茎摩擦', 'anal fisting': '肛门拳交', 
+          'ball sucking': '吸吮睾丸', 'rimming': '舔肛', 
+          'cowboy position': '骑乘位', 'reverse cowboy': '反向骑乘',
+          // 表情
+          'smirking': '坏笑', 'grimacing': '痛苦表情', 'lustful gaze': '欲望凝视',
+          'blushing': '脸红', 'ecstasy': '狂喜', 'afterglow': '高潮余韵',
+          // 新增男同表情
+          'cum face': '射精表情', 'anal penetration wince': '肛交蹙眉',
+          'ball deep groan': '深顶呻吟', 'dominant smirk': '支配性坏笑',
+          // 皮肤特征
+          'dewy skin': '水光肌', 'porcelain skin': '瓷白肌', 'sun-kissed': '日光浴色',
+          'glycolic glow': '果酸焕肤', 'freckled': '雀斑肌', 'scar tissue': '疤痕组织',
+          // 发色
+          'platinum': '铂金色', 'ash brown': '灰褐色', 'burgundy': '酒红色',
+          'pastel pink': '淡粉色', 'silver fox': '银狐灰', 'ombre': '渐变发色',
+          // 新增男同发色
+          'salt and pepper': '盐椒灰', 'dirty blonde': '脏金色', 
+          'jet black': '乌黑色', 'platinum buzzcut': '铂金寸头',
+          // 其他
+          'naked': '裸体', 'nude': '全裸', 'erotic': '情色', 'explicit': '露骨',
+          'sensual': '性感', 'provocative': '挑逗', 'seductive': '诱惑',
+          'aroused': '性唤起', 'passionate': '热情', 'intimate': '亲密',
+          'penetration': '插入', 'ejaculation': '射精', 'semen': '精液',
+          'cum': '精液', 'precum': '前列腺液', 'orgasm': '性高潮',
+          'BL': '男同性恋', 'Yaoi': '男同性恋漫画', 'gay': '同性恋',
+          'male-male': '男男', 'full body': '全身', 'hyperdetailed': '超细节',
+          'musculature': '肌肉组织', 'volumetric': '立体感', 'natural lighting': '自然光',
+          'matte skin': '哑光皮肤', 'texture': '纹理'
+        };
 
-// 分类数据 (男同专属)
- 
-// 分类数据 (男同专属完整版)
-const categories = {
-    age: {
-        title: '年龄阶段',
-        presets: [
-            {en: 'young male', zh: '青年男性'},
-            {en: 'teen male', zh: '青少年男性'},
-            {en: 'adult male', zh: '成年男性'},
-            {en: 'middle-aged male', zh: '中年男性'},
-            {en: 'mature male', zh: '成熟男性'},
-            {en: 'daddy', zh: '爹系熟男'},
-            {en: 'silver fox', zh: '银狐熟男'},
-            {en: 'twink', zh: '少年型'},
-            {en: 'otter', zh: '水獭型'},
-            {en: 'bear', zh: '熊系'},
-            {en: 'cub', zh: '小熊'},
-            {en: 'wolf', zh: '狼系'},
-            {en: 'jock', zh: '运动员型'}
-        ],
-        isPositive: true
-    },
-    face: {
-        title: '面部特征',
-        presets: [
-            {en: 'sharp jawline', zh: '锋利下颌线'},
-            {en: 'rugged face', zh: '粗犷面容'},
-            {en: 'piercing eyes', zh: '锐利眼神'},
-            {en: 'bushy eyebrows', zh: '浓眉'},
-            {en: 'high cheekbones', zh: '高颧骨'},
-            {en: 'beard', zh: '胡子'},
-            {en: 'stubble', zh: '胡渣'},
-            {en: 'goatee', zh: '山羊胡'},
-            {en: 'full beard', zh: '浓密胡须'},
-            {en: 'clean-shaven', zh: '刮干净胡子'},
-            {en: 'five o clock shadow', zh: '五点阴影胡茬'},
-            {en: 'facial scars', zh: '面部疤痕'},
-            {en: 'tattooed face', zh: '脸部纹身'},
-            {en: 'dimpled chin', zh: '下巴酒窝'},
-            {en: 'strong nose', zh: '高挺鼻梁'}
-        ],
-        isPositive: true
-    },
-    body: {
-        title: '身体体型',
-        presets: [
-            {en: 'muscular body', zh: '肌肉身材'},
-            {en: 'slim body', zh: '苗条身材'},
-            {en: 'athletic body', zh: '运动身材'},
-            {en: 'stocky body', zh: '壮实体型'},
-            {en: 'chubby body', zh: '丰满体型'},
-            {en: 'bear physique', zh: '熊系身材'},
-            {en: 'otter build', zh: '水獭体型'},
-            {en: 'dad bod', zh: '爸爸身材'},
-            {en: 'ripped physique', zh: '健美体型'},
-            {en: 'v-line', zh: 'V型线条'},
-            {en: 'six-pack abs', zh: '六块腹肌'},
-            {en: 'broad chest', zh: '宽阔胸膛'},
-            {en: 'bulging biceps', zh: '鼓胀二头肌'},
-            {en: 'thick thighs', zh: '粗壮大腿'},
-            {en: 'bubble butt', zh: '圆润臀部'}
-        ],
-        isPositive: true
-    },
-    penis: {
-        title: '性器官',
-        presets: [
-            {en: 'cock', zh: '鸡巴'},
-            {en: 'dick', zh: '老二'},
-            {en: 'shaft', zh: '茎身'},
-            {en: 'glans', zh: '龟头'},
-            {en: 'foreskin', zh: '包皮'},
-            {en: 'balls', zh: '睾丸'},
-            {en: 'scrotum', zh: '阴囊'},
-            {en: 'huge cock', zh: '大鸡巴'},
-            {en: 'girthy penis', zh: '粗壮阴茎'},
-            {en: 'veiny dick', zh: '青筋老二'},
-            {en: 'throbbing shaft', zh: '跳动茎身'},
-            {en: 'curved penis', zh: '弯曲阴茎'},
-            {en: 'uncut cock', zh: '未割包皮鸡巴'},
-            {en: 'low hangers', zh: '下垂睾丸'},
-            {en: 'cum dripping', zh: '滴精'}
-        ],
-        isPositive: true
-    },
-    anus: {
-        title: '肛门',
-        presets: [
-            {en: 'anus', zh: '肛门'},
-            {en: 'tight hole', zh: '紧致肛穴'},
-            {en: 'gaping anus', zh: '张开肛门'},
-            {en: 'puckered hole', zh: '皱褶肛口'},
-            {en: 'hairy perineum', zh: '多毛会阴'},
-            {en: 'shaved anus', zh: '剃毛肛门'},
-            {en: 'rosy hole', zh: '粉红肛穴'},
-            {en: 'winking anus', zh: '收缩肛门'},
-            {en: 'lubed hole', zh: '润滑肛口'},
-            {en: 'prolapsed rectum', zh: '直肠脱垂'}
-        ],
-        isPositive: true
-    },
-    action: {
-        title: '动作姿势',
-        presets: [
-            {en: 'frot', zh: '阴茎摩擦'},
-            {en: 'anal fisting', zh: '肛门拳交'},
-            {en: 'ball sucking', zh: '吸吮睾丸'},
-            {en: 'rimming', zh: '舔肛'},
-            {en: 'doggy style', zh: '后入姿势'},
-            {en: 'pile driver', zh: '打桩姿势'},
-            {en: 'cowboy position', zh: '骑乘位'},
-            {en: 'reverse cowboy', zh: '反向骑乘'},
-            {en: 'double penetration', zh: '双龙入穴'},
-            {en: 'urethral play', zh: '尿道玩法'},
-            {en: 'fisting', zh: '拳交'},
-            {en: 'ball stretching', zh: '睾丸拉伸'},
-            {en: 'cock pumping', zh: '阴茎泵吸'},
-            {en: 'group sex', zh: '群交'},
-            {en: 'glory hole', zh: '泄欲孔'}
-        ],
-        isPositive: true
-    },
-    expression: {
-        title: '表情',
-        presets: [
-            {en: 'lustful gaze', zh: '欲望凝视'},
-            {en: 'dominant smirk', zh: '支配性坏笑'},
-            {en: 'submissive gaze', zh: '顺从目光'},
-            {en: 'cum face', zh: '射精表情'},
-            {en: 'anal penetration wince', zh: '肛交蹙眉'},
-            {en: 'ball deep groan', zh: '深顶呻吟'},
-            {en: 'ecstasy', zh: '狂喜'},
-            {en: 'afterglow', zh: '高潮余韵'},
-            {en: 'blowing kiss', zh: '飞吻'},
-            {en: 'biting lip', zh: '咬唇'},
-            {en: 'eye rolling', zh: '翻白眼'},
-            {en: 'open mouth moan', zh: '张嘴呻吟'},
-            {en: 'teary eyes', zh: '含泪双眼'}
-        ],
-        isPositive: true
-    },
-    skin: {
-        title: '皮肤质感',
-        presets: [
-            {en: 'sweaty body', zh: '汗湿身体'},
-            {en: 'oiled skin', zh: '油光皮肤'},
-            {en: 'tattooed skin', zh: '纹身皮肤'},
-            {en: 'freckled skin', zh: '雀斑皮肤'},
-            {en: 'tanned skin', zh: '古铜色皮肤'},
-            {en: 'pale skin', zh: '苍白皮肤'},
-            {en: 'dark skin', zh: '深色皮肤'},
-            {en: 'rough skin', zh: '粗糙皮肤'},
-            {en: 'scarred skin', zh: '瘢痕皮肤'},
-            {en: 'dewy skin', zh: '水光肌'},
-            {en: 'sun-kissed', zh: '日光浴色'},
-            {en: 'glycolic glow', zh: '果酸焕肤'},
-            {en: 'rope burns', zh: '绳缚痕迹'}
-        ],
-        isPositive: true
-    },
-    hair: {
-        title: '头发',
-        presets: [
-            {en: 'buzz cut', zh: '寸头'},
-            {en: 'undercut', zh: '底层修剪'},
-            {en: 'man bun', zh: '男士发髻'},
-            {en: 'fade haircut', zh: '渐变发型'},
-            {en: 'mohawk', zh: '莫西干发型'},
-            {en: 'quiff', zh: '蓬巴杜发型'},
-            {en: 'dreadlocks', zh: '脏辫'},
-            {en: 'shaved sides', zh: '两侧剃光'},
-            {en: 'long top', zh: '顶部长发'},
-            {en: 'balding', zh: '秃顶'},
-            {en: 'receding hairline', zh: '发际线后移'},
-            {en: 'slicked back', zh: '后梳发型'},
-            {en: 'messy hair', zh: '凌乱头发'}
-        ],
-        isPositive: true
-    },
-    'hair-color': {
-        title: '发色',
-        presets: [
-            {en: 'jet black', zh: '乌黑色'},
-            {en: 'dirty blonde', zh: '脏金色'},
-            {en: 'platinum', zh: '铂金色'},
-            {en: 'silver fox', zh: '银狐灰'},
-            {en: 'salt and pepper', zh: '盐椒灰'},
-            {en: 'burgundy', zh: '酒红色'},
-            {en: 'pastel pink', zh: '淡粉色'},
-            {en: 'neon blue', zh: '霓虹蓝'},
-            {en: 'vibrant purple', zh: '亮紫色'},
-            {en: 'fiery red', zh: '火焰红'},
-            {en: 'bleached blonde', zh: '漂白金'},
-            {en: 'ash brown', zh: '灰褐色'},
-            {en: 'ombre', zh: '渐变发色'},
-            {en: 'rainbow hair', zh: '彩虹发色'}
-        ],
-        isPositive: true
-    },
-    clothing: {
-        title: '服装',
-        presets: [
-            {en: 'jockstrap', zh: '护裆'},
-            {en: 'speedo', zh: '泳裤'},
-            {en: 'harness', zh: '束带装'},
-            {en: 'latex briefs', zh: '乳胶内裤'},
-            {en: 'bondage pants', zh: '束缚裤'},
-            {en: 'leather chaps', zh: '皮套裤'},
-            {en: 'muscle tee', zh: '肌肉背心'},
-            {en: 'cargo jock', zh: '工装护裆'},
-            {en: 'mesh shorts', zh: '网眼短裤'},
-            {en: 'denim cutoff', zh: '破洞牛仔'},
-            {en: 'silk robe', zh: '真丝睡袍'},
-            {en: 'kink hood', zh: '蒙面头套'},
-            {en: 'leather vest', zh: '皮质背心'},
-            {en: 'neoprene shorts', zh: '氯丁橡胶短裤'},
-            {en: 'crop top', zh: '露脐装'}
-        ],
-        isPositive: true
-    },
-    accessory: {
-        title: '饰品',
-        presets: [
-            {en: 'cock ring', zh: '阴茎环'},
-            {en: 'ball stretcher', zh: '睾丸扩张器'},
-            {en: 'anal hook', zh: '肛门钩'},
-            {en: 'scrotal ladder', zh: '阴囊梯穿孔'},
-            {en: 'dydoe cluster', zh: '龟头穿孔群'},
-            {en: 'prince albert', zh: '尿道穿刺'},
-            {en: 'apadravya', zh: '垂直阴茎穿孔'},
-            {en: 'frenulum bar', zh: '系带横杆'},
-            {en: 'urethral plug', zh: '尿道塞'},
-            {en: 'nipple clamps', zh: '乳头夹'},
-            {en: 'collar', zh: '项圈'},
-            {en: 'leash', zh: '皮带'},
-            {en: 'wrist cuffs', zh: '手腕铐'},
-            {en: 'ankle cuffs', zh: '脚踝铐'},
-            {en: 'gag', zh: '口塞'}
-        ],
-        isPositive: true
-    },
-    background: {
-        title: '场景背景',
-        presets: [
-            {en: 'dungeon', zh: '地牢'},
-            {en: 'bathhouse', zh: '澡堂'},
-            {en: 'glory hole booth', zh: '泄欲隔间'},
-            {en: 'backroom', zh: '暗房'},
-            {en: 'leather bar', zh: '皮革酒吧'},
-            {en: 'cruising spot', zh: '猎艳点'},
-            {en: 'sauna', zh: '桑拿房'},
-            {en: 'locker room', zh: '更衣室'},
-            {en: 'abandoned factory', zh: '废弃工厂'},
-            {en: 'rooftop', zh: '屋顶'},
-            {en: 'dark alley', zh: '暗巷'},
-            {en: 'bondage club', zh: '束缚俱乐部'},
-            {en: 'sex dungeon', zh: '性爱地牢'},
-            {en: 'public restroom', zh: '公共厕所'},
-            {en: 'bdsm studio', zh: 'BDSM影棚'}
-        ],
-        isPositive: true
-    },
-    quality: {
-        title: '画质风格',
-        presets: [
-            {en: 'photorealistic', zh: '照片级真实'},
-            {en: 'cinematic lighting', zh: '电影光效'},
-            {en: 'high detail', zh: '高细节'},
-            {en: '8k resolution', zh: '8K分辨率'},
-            {en: 'sharp focus', zh: '锐利焦点'},
-            {en: 'dramatic shadows', zh: '戏剧性阴影'},
-            {en: 'bokeh background', zh: '背景虚化'},
-            {en: 'film grain', zh: '胶片颗粒'},
-            {en: 'vivid colors', zh: '鲜艳色彩'},
-            {en: 'moody lighting', zh: '情绪光影'},
-            {en: 'high contrast', zh: '高对比度'},
-            {en: 'soft focus', zh: '柔焦'},
-            {en: 'gritty texture', zh: '粗粝质感'}
-        ],
-        isPositive: true
-    },
-    number: {
-        title: '人数',
-        presets: [
-            {en: 'solo male', zh: '单独男性'},
-            {en: 'two men', zh: '两个男人'},
-            {en: 'threesome', zh: '三人行'},
-            {en: 'group sex', zh: '群交'},
-            {en: 'gangbang', zh: '多人轮交'},
-            {en: 'orgy', zh: '性爱派对'},
-            {en: 'double penetration', zh: '双人插入'},
-            {en: 'circle jerk', zh: '互助打飞机'},
-            {en: 'train', zh: '接龙性交'}
-        ],
-        isPositive: true
-    }
-};
- 
+        // Create reverse dictionary (Chinese to English)
+        const reverseDict = {};
+        Object.entries(translationDict).forEach(([en, zh]) => {
+            reverseDict[zh] = en;
+        });
+
+        // 分类数据 (男同专属完整版，补充更多预设)
+        const categories = {
+            age: {
+                title: '年龄阶段',
+                presets: [
+                    {en: 'young male', zh: '青年男性'},
+                    {en: 'teen male', zh: '青少年男性'},
+                    {en: 'adult male', zh: '成年男性'},
+                    {en: 'twink', zh: '少年型'},
+                    {en: 'otter', zh: '水獭型'},
+                    {en: 'cub', zh: '小熊'},
+                    {en: 'jock', zh: '运动员型'},
+                    {en: 'hunk', zh: '猛男型'},
+                    {en: 'stud', zh: '种马型'},
+                    {en: 'pup', zh: '小狗型'},
+                    {en: 'master', zh: '主人型'}
+                ],
+                isPositive: true
+            },
+            face: {
+                title: '面部特征',
+                presets: [
+                    {en: 'sharp jawline', zh: '锋利下颌线'},
+                    {en: 'piercing eyes', zh: '锐利眼神'},
+                    {en: 'bushy eyebrows', zh: '浓眉'},
+                    {en: 'high cheekbones', zh: '高颧骨'},
+                    {en: 'dimpled chin', zh: '下巴酒窝'},
+                    {en: 'strong nose', zh: '高挺鼻梁'},
+                    {en: 'square jaw', zh: '方形下巴'},
+                    {en: 'defined cheekbones', zh: '鲜明颧骨'},
+                    {en: 'freckled face', zh: '雀斑脸'},
+                    {en: 'clean-shaven', zh: '刮干净胡子'},
+                    {en: 'five o clock shadow', zh: '五点阴影胡茬'},
+                    {en: 'handsome face', zh: '英俊面容'}
+                ],
+                isPositive: true
+            },
+            body: {
+                title: '身体体型',
+                presets: [
+                    {en: 'muscular body', zh: '肌肉身材'},
+                    {en: 'athletic body', zh: '运动身材'},
+                    {en: 'ripped physique', zh: '健美体型'},
+                    {en: 'v-line', zh: 'V型线条'},
+                    {en: 'six-pack abs', zh: '六块腹肌'},
+                    {en: 'broad chest', zh: '宽阔胸膛'},
+                    {en: 'bulging biceps', zh: '鼓胀二头肌'},
+                    {en: 'thick thighs', zh: '粗壮大腿'},
+                    {en: 'bubble butt', zh: '圆润臀部'},
+                    {en: 'toned arms', zh: '紧实手臂'},
+                    {en: 'chiseled abs', zh: '雕刻腹肌'},
+                    {en: 'powerful legs', zh: '有力大腿'},
+                    {en: 'lean build', zh: '精瘦体型'}
+                ],
+                isPositive: true
+            },
+            penis: {
+                title: '性器官',
+                presets: [
+                    {en: 'cock', zh: '鸡巴'},
+                    {en: 'dick', zh: '老二'},
+                    {en: 'shaft', zh: '茎身'},
+                    {en: 'glans', zh: '龟头'},
+                    {en: 'foreskin', zh: '包皮'},
+                    {en: 'balls', zh: '睾丸'},
+                    {en: 'scrotum', zh: '阴囊'},
+                    {en: 'huge cock', zh: '大鸡巴'},
+                    {en: 'girthy penis', zh: '粗壮阴茎'},
+                    {en: 'veiny dick', zh: '青筋老二'},
+                    {en: 'throbbing shaft', zh: '跳动茎身'},
+                    {en: 'curved penis', zh: '弯曲阴茎'},
+                    {en: 'uncut cock', zh: '未割包皮鸡巴'},
+                    {en: 'low hangers', zh: '下垂睾丸'},
+                    {en: 'cum dripping', zh: '滴精'},
+                    {en: 'thick shaft', zh: '粗茎身'},
+                    {en: 'erect penis', zh: '勃起阴茎'},
+                    {en: 'pulsing veins', zh: '脉动血管'}
+                ],
+                isPositive: true
+            },
+            anus: {
+                title: '肛门',
+                presets: [
+                    {en: 'anus', zh: '肛门'},
+                    {en: 'tight hole', zh: '紧致肛穴'},
+                    {en: 'gaping anus', zh: '张开肛门'},
+                    {en: 'puckered hole', zh: '皱褶肛口'},
+                    {en: 'rosy hole', zh: '粉红肛穴'},
+                    {en: 'winking anus', zh: '收缩肛门'},
+                    {en: 'lubed hole', zh: '润滑肛口'},
+                    {en: 'clean anus', zh: '干净肛门'},
+                    {en: 'moist anus', zh: '湿润肛门'},
+                    {en: 'tight puckered', zh: '紧皱褶'},
+                    {en: 'exposed anus', zh: '暴露肛门'},
+                    {en: 'inviting hole', zh: '诱人肛穴'}
+                ],
+                isPositive: true
+            },
+            action: {
+                title: '动作姿势',
+                presets: [
+                    {en: 'frot', zh: '阴茎摩擦'},
+                    {en: 'anal fisting', zh: '肛门拳交'},
+                    {en: 'ball sucking', zh: '吸吮睾丸'},
+                    {en: 'rimming', zh: '舔肛'},
+                    {en: 'doggy style', zh: '后入姿势'},
+                    {en: 'pile driver', zh: '打桩姿势'},
+                    {en: 'cowboy position', zh: '骑乘位'},
+                    {en: 'reverse cowboy', zh: '反向骑乘'},
+                    {en: 'double penetration', zh: '双龙入穴'},
+                    {en: 'urethral play', zh: '尿道玩法'},
+                    {en: 'fisting', zh: '拳交'},
+                    {en: 'ball stretching', zh: '睾丸拉伸'},
+                    {en: 'cock pumping', zh: '阴茎泵吸'},
+                    {en: 'group sex', zh: '群交'},
+                    {en: 'glory hole', zh: '泄欲孔'},
+                    {en: 'handjob', zh: '手淫'},
+                    {en: 'blowjob', zh: '口交'},
+                    {en: 'deepthroat', zh: '深喉'},
+                    {en: '69 position', zh: '69姿势'},
+                    {en: 'edging', zh: '边缘控制'},
+                    {en: 'teasing', zh: '挑逗'},
+                    {en: 'anal sex', zh: '肛交'}
+                ],
+                isPositive: true
+            },
+            expression: {
+                title: '表情',
+                presets: [
+                    {en: 'lustful gaze', zh: '欲望凝视'},
+                    {en: 'dominant smirk', zh: '支配性坏笑'},
+                    {en: 'submissive gaze', zh: '顺从目光'},
+                    {en: 'cum face', zh: '射精表情'},
+                    {en: 'anal penetration wince', zh: '肛交蹙眉'},
+                    {en: 'ball deep groan', zh: '深顶呻吟'},
+                    {en: 'ecstasy', zh: '狂喜'},
+                    {en: 'afterglow', zh: '高潮余韵'},
+                    {en: 'blowing kiss', zh: '飞吻'},
+                    {en: 'biting lip', zh: '咬唇'},
+                    {en: 'eye rolling', zh: '翻白眼'},
+                    {en: 'open mouth moan', zh: '张嘴呻吟'},
+                    {en: 'seductive smile', zh: '诱惑微笑'},
+                    {en: 'intense stare', zh: '激烈凝视'},
+                    {en: 'playful wink', zh: '顽皮眨眼'},
+                    {en: 'pained pleasure', zh: '痛苦快感'},
+                    {en: 'satisfied grin', zh: '满足笑容'}
+                ],
+                isPositive: true
+            },
+            skin: {
+                title: '皮肤质感',
+                presets: [
+                    {en: 'sweaty body', zh: '汗湿身体'},
+                    {en: 'oiled skin', zh: '油光皮肤'},
+                    {en: 'tattooed skin', zh: '纹身皮肤'},
+                    {en: 'freckled skin', zh: '雀斑皮肤'},
+                    {en: 'tanned skin', zh: '古铜色皮肤'},
+                    {en: 'pale skin', zh: '苍白皮肤'},
+                    {en: 'dark skin', zh: '深色皮肤'},
+                    {en: 'smooth skin', zh: '光滑皮肤'},
+                    {en: 'dewy skin', zh: '水光肌'},
+                    {en: 'sun-kissed', zh: '日光浴色'},
+                    {en: 'bronzed skin', zh: '青铜皮肤'},
+                    {en: 'matte skin', zh: '哑光皮肤'},
+                    {en: 'glowing skin', zh: '发光皮肤'}
+                ],
+                isPositive: true
+            },
+            hair: {
+                title: '头发',
+                presets: [
+                    {en: 'buzz cut', zh: '寸头'},
+                    {en: 'undercut', zh: '底层修剪'},
+                    {en: 'fade haircut', zh: '渐变发型'},
+                    {en: 'slicked back', zh: '后梳发型'},
+                    {en: 'messy hair', zh: '凌乱头发'},
+                    {en: 'long hair', zh: '长发'},
+                    {en: 'short hair', zh: '短发'},
+                    {en: 'crew cut', zh: '平头'},
+                    {en: 'spiky hair', zh: '刺猬头'},
+                    {en: 'curly hair', zh: '卷发'},
+                    {en: 'straight hair', zh: '直发'},
+                    {en: 'wavy hair', zh: '波浪发'}
+                ],
+                isPositive: true
+            },
+            'hair-color': {
+                title: '发色',
+                presets: [
+                    {en: 'jet black', zh: '乌黑色'},
+                    {en: 'dirty blonde', zh: '脏金色'},
+                    {en: 'platinum', zh: '铂金色'},
+                    {en: 'silver fox', zh: '银狐灰'},
+                    {en: 'salt and pepper', zh: '盐椒灰'},
+                    {en: 'burgundy', zh: '酒红色'},
+                    {en: 'pastel pink', zh: '淡粉色'},
+                    {en: 'neon blue', zh: '霓虹蓝'},
+                    {en: 'fiery red', zh: '火焰红'},
+                    {en: 'bleached blonde', zh: '漂白金'},
+                    {en: 'ash brown', zh: '灰褐色'},
+                    {en: 'chestnut brown', zh: '栗褐色'},
+                    {en: 'golden blonde', zh: '金黄色'},
+                    {en: 'auburn', zh: '红褐色'},
+                    {en: 'midnight blue', zh: '午夜蓝'},
+                    {en: 'emerald green', zh: '祖母绿'}
+                ],
+                isPositive: true
+            },
+            clothing: {
+                title: '服装',
+                presets: [
+                    {en: 'jockstrap', zh: '护裆'},
+                    {en: 'speedo', zh: '泳裤'},
+                    {en: 'harness', zh: '束带装'},
+                    {en: 'latex briefs', zh: '乳胶内裤'},
+                    {en: 'bondage pants', zh: '束缚裤'},
+                    {en: 'leather chaps', zh: '皮套裤'},
+                    {en: 'muscle tee', zh: '肌肉背心'},
+                    {en: 'cargo jock', zh: '工装护裆'},
+                    {en: 'mesh shorts', zh: '网眼短裤'},
+                    {en: 'denim cutoff', zh: '破洞牛仔'},
+                    {en: 'tank top', zh: '背心'},
+                    {en: 'leather jacket', zh: '皮夹克'},
+                    {en: 'ripped jeans', zh: '破洞牛仔裤'},
+                    {en: 'compression shorts', zh: '压缩短裤'},
+                    {en: 'fishnet stockings', zh: '鱼网袜'},
+                    {en: 'naked', zh: '裸体'},
+                    {en: 'nude', zh: '全裸'}
+                ],
+                isPositive: true
+            },
+            accessory: {
+                title: '饰品',
+                presets: [
+                    {en: 'cock ring', zh: '阴茎环'},
+                    {en: 'ball stretcher', zh: '睾丸扩张器'},
+                    {en: 'anal hook', zh: '肛门钩'},
+                    {en: 'nipple clamps', zh: '乳头夹'},
+                    {en: 'collar', zh: '项圈'},
+                    {en: 'leash', zh: '皮带'},
+                    {en: 'wrist cuffs', zh: '手腕铐'},
+                    {en: 'ankle cuffs', zh: '脚踝铐'},
+                    {en: 'gag', zh: '口塞'},
+                    {en: 'blindfold', zh: '眼罩'},
+                    {en: 'whip', zh: '鞭子'},
+                    {en: 'paddle', zh: '拍打器'},
+                    {en: 'chastity cage', zh: '贞操笼'},
+                    {en: 'body chain', zh: '身体链'}
+                ],
+                isPositive: true
+            },
+            background: {
+                title: '场景背景',
+                presets: [
+                    {en: 'dungeon', zh: '地牢'},
+                    {en: 'bathhouse', zh: '澡堂'},
+                    {en: 'glory hole booth', zh: '泄欲隔间'},
+                    {en: 'backroom', zh: '暗房'},
+                    {en: 'leather bar', zh: '皮革酒吧'},
+                    {en: 'cruising spot', zh: '猎艳点'},
+                    {en: 'sauna', zh: '桑拿房'},
+                    {en: 'locker room', zh: '更衣室'},
+                    {en: 'abandoned factory', zh: '废弃工厂'},
+                    {en: 'rooftop', zh: '屋顶'},
+                    {en: 'dark alley', zh: '暗巷'},
+                    {en: 'bondage club', zh: '束缚俱乐部'},
+                    {en: 'sex dungeon', zh: '性爱地牢'},
+                    {en: 'beach', zh: '海滩'},
+                    {en: 'forest', zh: '森林'},
+                    {en: 'hotel room', zh: '酒店房间'},
+                    {en: 'poolside', zh: '泳池边'},
+                    {en: 'night club', zh: '夜店'}
+                ],
+                isPositive: true
+            },
+            quality: {
+                title: '画质风格',
+                presets: [
+                    {en: 'photorealistic', zh: '照片级真实'},
+                    {en: 'cinematic lighting', zh: '电影光效'},
+                    {en: 'high detail', zh: '高细节'},
+                    {en: '8k resolution', zh: '8K分辨率'},
+                    {en: 'sharp focus', zh: '锐利焦点'},
+                    {en: 'dramatic shadows', zh: '戏剧性阴影'},
+                    {en: 'bokeh background', zh: '背景虚化'},
+                    {en: 'vivid colors', zh: '鲜艳色彩'},
+                    {en: 'moody lighting', zh: '情绪光影'},
+                    {en: 'high contrast', zh: '高对比度'},
+                    {en: 'ultra realistic', zh: '超真实'},
+                    {en: 'HDR', zh: '高动态范围'},
+                    {en: 'ray tracing', zh: '光线追踪'},
+                    {en: 'detailed textures', zh: '细致纹理'},
+                    {en: 'immersive', zh: '沉浸式'}
+                ],
+                isPositive: true
+            },
+            number: {
+                title: '人数',
+                presets: [
+                    {en: 'solo male', zh: '单独男性'},
+                    {en: 'two men', zh: '两个男人'},
+                    {en: 'threesome', zh: '三人行'},
+                    {en: 'group sex', zh: '群交'},
+                    {en: 'gangbang', zh: '多人轮交'},
+                    {en: 'orgy', zh: '性爱派对'},
+                    {en: 'double penetration', zh: '双人插入'},
+                    {en: 'circle jerk', zh: '互助打飞机'},
+                    {en: 'four men', zh: '四个男人'},
+                    {en: 'pair', zh: '一对'}
+                ],
+                isPositive: true
+            }
+        };
+
         // Notification function
         function showNotification(message) {
             const notification = document.getElementById('notification');
@@ -804,175 +997,175 @@ const categories = {
 
         // Reset negative prompt to default
         function resetNegative() {
-            document.getElementById('negative-prompt').value = 'extra,fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, bad anatomy, bad proportions, extra limbs, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, malformed penis, bifurcated penis, extra penises, misplaced penis, deformed genitalia, fused testicles, asymmetric scrotum, female vagina, female vulva, female labia, female clitoris, female cervix, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, uterus in abdomen, ovaries in pelvis, ectopic tissue, supernumerary organs, extra kidneys, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, liver fused to diaphragm, kidneys fused together, conjoined organs, atrophied organs, shrunken kidneys, hypoplastic lungs, hypertrophic heart, enlarged prostate, distended bladder, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, malocclusion, uneven shoulders, scoliosis, kyphosis, lordosis, twisted spine, rib deformities, pectus excavatum, pect pectus excavatum, pectus carinatum, extra ribs, missing ribs, fused vertebrae, limb deformities, shortened limbs, disproportionate limbs, unilateral atrophy, leg length discrepancy, arm length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hip dislocation, knee dislocation, elbow dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, unilateral atrophy, muscle wasting, missing muscles, extra muscles, skin defects, excessive wrinkles, premature aging, sagging skin, stretch marks, cellulite, keloid scars, hypertrophic scars, atrophic scars, birthmarks, port-wine stains, hemangiomas, vascular malformations, lipomas, neurofibromas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, jaundice, cyanosis, pallor, erythema, bruising, petechiae, ecchymosis, hematoma, lacerations, abrasions, ulcers, pressure sores, fistulas, sinuses, gangrene, necrosis, amputated limbs, phantom limbs, congenital amputations, vestigial tails, supernumerary nipples, inverted nipples, accessory breasts, polymastia, polythelia, gynecomastia, abnormal hair growth, hirsutism, alopecia, baldness, patchy hair, unibrow, fused eyebrows, missing eyebrows, missing eyelashes, trichotillomania';
-            showNotification('反向提示词已恢复默认！');
+            document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
+            showNotification('已恢复默认反向提示词');
         }
 
-        // Dynamically create preset containers
-        const presetDisplay = document.getElementById('preset-display');
-        Object.keys(categories).forEach(key => {
-            const container = document.createElement('div');
-            container.className = 'preset-container';
-            container.id = `preset-${key}`;
-            const h3 = document.createElement('h3');
-            h3.textContent = categories[key].title;
-            h3.style.color = '#c77dff';
-            h3.style.margin = '8px 0 5px';
-            h3.style.fontSize = '16px';
-            container.appendChild(h3);
-            const list = document.createElement('div');
-            list.className = 'preset-list';
-            categories[key].presets.forEach(preset => {
-                const item = document.createElement('div');
-                item.className = 'preset-item';
-                item.textContent = preset.zh;
-                item.dataset.key = preset.en;
-                item.onclick = function() {
-                    togglePreset(this, preset.en, preset.zh);
-                };
-                
-                // Check if this preset is already in positive prompt
-                const currentText = document.getElementById('positive-prompt').value;
-                if (currentText.includes(preset.en)) {
-                    item.classList.add('active');
-                }
-                
-                list.appendChild(item);
-            });
-            container.appendChild(list);
-            presetDisplay.appendChild(container);
-        });
-
-        // Toggle preset item
-        function togglePreset(element, englishTerm, chineseLabel) {
+        // Copy positive prompt to clipboard
+        function copyPositive() {
             const textarea = document.getElementById('positive-prompt');
-            let currentText = textarea.value;
-            
-            if (element.classList.contains('active')) {
-                // Remove the term
-                const regex = new RegExp(`\\b${englishTerm}\\b`, 'g');
-                currentText = currentText.replace(regex, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
-                element.classList.remove('active');
-            } else {
-                // Add the term
-                if (currentText) {
-                    currentText += `, ${englishTerm}`;
-                } else {
-                    currentText = englishTerm;
-                }
-                element.classList.add('active');
-            }
-            
-            textarea.value = currentText;
+            textarea.select();
+            document.execCommand('copy');
+            showNotification('已复制正向提示词');
         }
 
+        // Copy negative prompt to clipboard
+        function copyNegative() {
+            const textarea = document.getElementById('negative-prompt');
+            textarea.select();
+            document.execCommand('copy');
+            showNotification('已复制反向提示词');
+        }
+
+        // Show category presets
         function showCategory(category) {
-            document.querySelectorAll('.preset-container').forEach(el => el.classList.remove('active'));
-            document.getElementById(`preset-${category}`).classList.add('active');
-            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.category-item[data-category="${category}"]`).classList.add('active');
-        }
-
-        // Show quality category by default
-        showCategory('quality');
-
-        // Translation functions
-        let currentLang = 'en';
-
-        function toggleLanguage(lang) {
-            currentLang = lang;
-            const positive = document.getElementById('positive-prompt').value;
-            const negative = document.getElementById('negative-prompt').value;
+            // Remove active class from all category items
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
             
-            if (lang === 'zh') {
-                let positiveZh = positive;
-                let negativeZh = negative;
+            // Add active class to selected category
+            document.querySelector(`.category-item[data-category="${category}"]`).classList.add('active');
+            
+            // Generate preset display
+            const presetDisplay = document.getElementById('preset-display');
+            presetDisplay.innerHTML = '';
+            
+            const categoryData = categories[category];
+            if (!categoryData) return;
+            
+            // Create container for presets
+            const presetContainer = document.createElement('div');
+            presetContainer.className = 'preset-container active';
+            
+            // Create title
+            const title = document.createElement('h3');
+            title.textContent = categoryData.title;
+            presetContainer.appendChild(title);
+            
+            // Create preset list
+            const presetList = document.createElement('div');
+            presetList.className = 'preset-list';
+            
+            // Add presets to list
+            categoryData.presets.forEach(preset => {
+                const presetItem = document.createElement('div');
+                presetItem.className = 'preset-item';
+                presetItem.textContent = preset.zh;
+                presetItem.title = preset.en; // Show English on hover
                 
-                Object.keys(translationDict).forEach(english => {
-                    const chinese = translationDict[english];
-                    const regex = new RegExp(`\\b${english}\\b`, 'g');
-                    positiveZh = positiveZh.replace(regex, chinese);
-                    negativeZh = negativeZh.replace(regex, chinese);
+                presetItem.addEventListener('click', () => {
+                    const textarea = categoryData.isPositive 
+                        ? document.getElementById('positive-prompt') 
+                        : document.getElementById('negative-prompt');
+                    
+                    // Add comma if textarea is not empty
+                    const prefix = textarea.value.length > 0 ? ', ' : '';
+                    textarea.value += prefix + preset.en;
+                    
+                    // Update translation
+                    updateTranslation(categoryData.isPositive ? 'positive' : 'negative');
                 });
                 
-                document.getElementById('chinese-view').innerHTML = `
-                    <p><strong>正向提示词:</strong> ${positiveZh}</p>
-                    <p><strong>反向提示词:</strong> ${negativeZh}</p>
-                `;
-                document.getElementById('chinese-view').style.display = 'block';
-            } else {
-                document.getElementById('chinese-view').style.display = 'none';
-            }
-        }
-
-        function copyPositive() {
-            const positive = document.getElementById('positive-prompt').value;
-            navigator.clipboard.writeText(positive).then(() => {
-                showNotification('正向提示词已复制！');
+                presetList.appendChild(presetItem);
             });
-        }
-
-        function copyNegative() {
-            const negative = document.getElementById('negative-prompt').value;
-            navigator.clipboard.writeText(negative).then(() => {
-                showNotification('反向提示词已复制！');
-            });
-        }
-
-        function generateRandomPrompt() {
-            const numberOptions = categories.number.presets.map(p => p.en);
-            const actionOptions = categories.action.presets.map(p => p.en);
-            const backgroundOptions = categories.background.presets.map(p => p.en);
-            const clothingOptions = categories.clothing.presets.map(p => p.en);
-            const faceOptions = categories.face.presets.map(p => p.en);
-            const bodyOptions = categories.body.presets.map(p => p.en);
-            const skinOptions = categories.skin.presets.map(p => p.en);
-            const colorOptions = categories['hair-color'].presets.map(p => p.en);
-            const hairOptions = categories.hair.presets.map(p => p.en);
-            const qualityOptions = categories.quality.presets.map(p => p.en);
-            const ageOptions = categories.age.presets.map(p => p.en);
-            const expressionOptions = categories.expression.presets.map(p => p.en);
-            const accessoryOptions = categories.accessory.presets.map(p => p.en);
-
-            const number = numberOptions[Math.floor(Math.random() * numberOptions.length)];
-            const action = actionOptions[Math.floor(Math.random() * actionOptions.length)];
-            const background = backgroundOptions[Math.floor(Math.random() * backgroundOptions.length)];
-            const clothing = clothingOptions[Math.floor(Math.random() * clothingOptions.length)];
-            const face = faceOptions[Math.floor(Math.random() * faceOptions.length)];
-            const body = bodyOptions[Math.floor(Math.random() * bodyOptions.length)];
-            const skin = skinOptions[Math.floor(Math.random() * skinOptions.length)];
-            const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
-            const hair = hairOptions[Math.floor(Math.random() * hairOptions.length)];
-            const quality = qualityOptions[Math.floor(Math.random() * qualityOptions.length)];
-            const age = ageOptions[Math.floor(Math.random() * ageOptions.length)];
-            const expression = expressionOptions[Math.floor(Math.random() * expressionOptions.length)];
-            const accessory = accessoryOptions[Math.floor(Math.random() * accessoryOptions.length)];
-
-            const randomPrompt = `${number}, ${quality}, ${age}, ${body}, ${face}, ${expression}, ${hair} ${color}, ${skin}, ${clothing}, ${accessory}, ${action}, ${background}`;
-            document.getElementById('positive-prompt').value = randomPrompt;
             
-            // Update active states
-            document.querySelectorAll('.preset-item').forEach(item => {
-                const key = item.dataset.key;
-                if (randomPrompt.includes(key)) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
+            presetContainer.appendChild(presetList);
+            presetDisplay.appendChild(presetContainer);
+        }
+
+        // Update translation from English to Chinese
+        function updateTranslation(type) {
+            let promptId, translationId;
+            if (type === 'positive') {
+                promptId = 'positive-prompt';
+                translationId = 'positive-translation';
+            } else {
+                promptId = 'negative-prompt';
+                translationId = 'negative-translation';
+            }
+            
+            const prompt = document.getElementById(promptId).value;
+            let translation = '';
+            prompt.split(',').forEach(term => {
+                const trimmedTerm = term.trim();
+                if (trimmedTerm) {
+                    translation += (translationDict[trimmedTerm] || trimmedTerm) + '，';
                 }
             });
-            
-            showNotification('已生成随机提示词！');
+            document.getElementById(translationId).value = translation.slice(0, -1); // Remove last comma or Chinese comma
         }
 
-        function generateImage() {
-            const negative = document.getElementById('negative-prompt').value;
-            if (!negative) {
-                alert('请先确保反向提示词已输入或使用默认值，以避免生成女性特征！');
-                return;
+        // Update prompt from Chinese to English
+        function updateFromTranslation(type) {
+            let promptId, translationId;
+            if (type === 'positive') {
+                promptId = 'positive-prompt';
+                translationId = 'positive-translation';
+            } else {
+                promptId = 'negative-prompt';
+                translationId = 'negative-translation';
             }
-            alert('即将跳转到 https://arting.ai/cn/ai-image-generator-nsfw 生成图片。请先复制反向提示词！');
-            window.location.href = 'https://arting.ai/cn/ai-image-generator-nsfw';
+            
+            const translation = document.getElementById(translationId).value;
+            let prompt = '';
+            translation.split('，').forEach(term => {  // Split by Chinese comma
+                const trimmedTerm = term.trim();
+                if (trimmedTerm) {
+                    prompt += (reverseDict[trimmedTerm] || trimmedTerm) + ', ';
+                }
+            });
+            document.getElementById(promptId).value = prompt.slice(0, -2); // Remove last comma and space
         }
+
+        // Generate random prompt
+        function generateRandomPrompt() {
+            // Select random category
+            const categoryKeys = Object.keys(categories);
+            const randomCategoryKey = categoryKeys[Math.floor(Math.random() * categoryKeys.length)];
+            const randomCategory = categories[randomCategoryKey];
+            
+            // Select random preset from category
+            const randomPreset = randomCategory.presets[Math.floor(Math.random() * randomCategory.presets.length)];
+            
+            // Add to positive prompt
+            const textarea = document.getElementById('positive-prompt');
+            const prefix = textarea.value.length > 0 ? ', ' : '';
+            textarea.value += prefix + randomPreset.en;
+            
+            // Update translation
+            updateTranslation('positive');
+            
+            showNotification(`已添加随机提示词: ${randomPreset.zh}`);
+        }
+
+        // Modal functions
+        function showGenerateOptions() {
+            document.getElementById('generateModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('generateModal').style.display = 'none';
+        }
+
+        function selectOption(option) {
+            closeModal();
+            if (option === 1) {
+                window.open('https://arting.ai/cn/ai-image-generator-nsfw', '_blank');
+            } else if (option === 2) {
+                window.open('https://perchance.org/ai-text-to-image-generator', '_blank');
+            }
+        }
+
+        // Initialize translations
+        updateTranslation('positive');
+        updateTranslation('negative');
+
+        // Add event listeners for translation updates (double-way)
+        document.getElementById('positive-prompt').addEventListener('input', () => updateTranslation('positive'));
+        document.getElementById('negative-prompt').addEventListener('input', () => updateTranslation('negative'));
+        document.getElementById('positive-translation').addEventListener('input', () => updateFromTranslation('positive'));
+        document.getElementById('negative-translation').addEventListener('input', () => updateFromTranslation('negative'));
     </script>
 </body>
 </html>
