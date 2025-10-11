@@ -20,7 +20,7 @@
             position: relative;
         }
         
-        /* 星光背景效果 */
+        /* 简化星光背景效果 */
         .stars {
             position: fixed;
             top: 0;
@@ -28,54 +28,29 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
         
         .star {
             position: absolute;
             background-color: #fff;
             border-radius: 50%;
-            animation: twinkle 5s infinite;
+            animation: twinkle 8s infinite;
+            opacity: 0.2;
         }
         
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
         }
         
-        /* 粒子背景效果 */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(157, 107, 201, 0.3);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-        
-        /* 霓虹灯效果 */
+        /* 简化霓虹灯效果 */
         .neon-text {
             text-shadow: 
                 0 0 5px #9d6bc9,
                 0 0 10px #9d6bc9,
-                0 0 15px #9d6bc9,
-                0 0 20px #6b3fa0,
-                0 0 25px #6b3fa0,
-                0 0 30px #6b3fa0;
-            animation: neon-pulse 2s infinite alternate;
+                0 0 15px #6b3fa0;
+            animation: neon-pulse 3s infinite alternate;
         }
         
         @keyframes neon-pulse {
@@ -83,19 +58,13 @@
                 text-shadow: 
                 0 0 5px #9d6bc9,
                 0 0 10px #9d6bc9,
-                0 0 15px #9d6bc9,
-                0 0 20px #6b3fa0,
-                0 0 25px #6b3fa0,
-                0 0 30px #6b3fa0;
+                0 0 15px #6b3fa0;
             }
             to {
                 text-shadow: 
                     0 0 10px #9d6bc9,
                     0 0 20px #9d6bc9,
-                    0 0 30px #9d6bc9,
-                    0 0 40px #6b3fa0,
-                    0 0 50px #6b3fa0,
-                    0 0 60px #6b3fa0;
+                    0 0 25px #6b3fa0;
             }
         }
         
@@ -103,11 +72,8 @@
             box-shadow: 
                 0 0 5px #9d6bc9,
                 0 0 10px #9d6bc9,
-                0 0 15px #9d6bc9,
-                0 0 20px #6b3fa0,
-                inset 0 0 5px #9d6bc9,
-                inset 0 0 10px #9d6bc9;
-            animation: border-glow 3s infinite alternate;
+                0 0 15px #6b3fa0;
+            animation: border-glow 4s infinite alternate;
         }
         
         @keyframes border-glow {
@@ -115,19 +81,13 @@
                 box-shadow: 
                     0 0 5px #9d6bc9,
                     0 0 10px #9d6bc9,
-                    0 0 15px #9d6bc9,
-                    0 0 20px #6b3fa0,
-                    inset 0 0 5px #9d6bc9,
-                    inset 0 0 10px #9d6bc9;
+                    0 0 15px #6b3fa0;
             }
             to {
                 box-shadow: 
                     0 0 10px #9d6bc9,
                     0 0 20px #9d6bc9,
-                    0 0 30px #9d6bc9,
-                    0 0 40px #6b3fa0,
-                    inset 0 0 10px #9d6bc9,
-                    inset 0 0 20px #9d6bc9;
+                    0 0 25px #6b3fa0;
             }
         }
         
@@ -143,7 +103,6 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(5px);
         }
         
         .verification-box {
@@ -238,12 +197,6 @@
         
         .logo {
             margin-bottom: 30px;
-            animation: logoFloat 6s ease-in-out infinite;
-        }
-        
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
         
         .logo h1 {
@@ -388,22 +341,6 @@
             overflow: hidden;
         }
         
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(157, 107, 201, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-        
         .feature-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -413,12 +350,6 @@
             font-size: 40px;
             margin-bottom: 20px;
             color: #9d6bc9;
-            animation: iconPulse 3s infinite;
-        }
-        
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
         
         .feature-card h3 {
@@ -511,9 +442,6 @@
     <!-- 星光背景 -->
     <div class="stars" id="stars"></div>
     
-    <!-- 粒子背景 -->
-    <div class="particles" id="particles"></div>
-    
     <!-- 年龄验证遮罩层 -->
     <div class="age-verification" id="ageVerification">
         <div class="verification-box neon-border">
@@ -531,7 +459,7 @@
     </div>
     
     <!-- 主内容区域 -->
-    <div class="container" id="mainContent" style="display: none;">
+    <div class="container" id="mainContent">
         <div class="logo">
             <h1 class="neon-text">巳泷资源库</h1>
             <p>SILONG RESOURCE LIBRARY</p>
@@ -542,7 +470,7 @@
             <p>巳泷资源库是一个专注于男男BL耽美内容的数字资源分享平台，汇集了各类高质量的耽美小说、漫画、影视、动画等资源。我们致力于为用户提供安全、便捷的资源获取体验，同时坚决保护未成年人免受不适宜内容的影响。</p>
             
             <div class="action-buttons">
-                <a href="https://silong-respool.github.io/zyk/zyku.html" class="action-btn btn-primary neon-border">
+                <a href="https://silong-respool.github.io/zyk/zyku.html" class="action-btn btn-primary neon-border" id="resourceLink">
                     <div class="btn-text">
                         <span class="btn-main-text">进入资源库</span>
                         <span class="btn-sub-text">在线浏览海量资源</span>
@@ -586,18 +514,18 @@
         // 创建星光背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            const starCount = 200;
+            const starCount = 60;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 
                 // 随机位置和大小
-                const size = Math.random() * 3 + 1;
+                const size = Math.random() * 2 + 1;
                 const left = Math.random() * 100;
                 const top = Math.random() * 100;
-                const delay = Math.random() * 5;
-                const duration = 3 + Math.random() * 4;
+                const delay = Math.random() * 8;
+                const duration = 5 + Math.random() * 5;
                 
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
@@ -610,33 +538,33 @@
             }
         }
         
-        // 创建粒子背景
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // 随机大小、位置和动画延迟
-                const size = Math.random() * 20 + 5;
-                const left = Math.random() * 100;
-                const delay = Math.random() * 15;
-                const duration = 10 + Math.random() * 10;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${left}%`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                
-                particlesContainer.appendChild(particle);
+        // 检查是否已经通过年龄验证
+        function checkAgeVerification() {
+            return localStorage.getItem('ageVerified') === 'true';
+        }
+        
+        // 设置年龄验证状态
+        function setAgeVerified() {
+            localStorage.setItem('ageVerified', 'true');
+        }
+        
+        // 初始化页面
+        function initPage() {
+            // 检查是否已经通过年龄验证
+            if (checkAgeVerification()) {
+                // 已通过验证，直接跳转到资源库
+                window.location.href = 'https://silong-respool.github.io/zyk/zyku.html';
+                return;
             }
+            
+            // 未通过验证，显示年龄验证界面，隐藏主内容
+            document.getElementById('ageVerification').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
         }
         
         // 年龄验证逻辑
         document.getElementById('adultBtn').addEventListener('click', function() {
+            setAgeVerified();
             document.getElementById('ageVerification').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
         });
@@ -673,7 +601,7 @@
         // 初始化
         window.onload = function() {
             createStars();
-            createParticles();
+            initPage();
         };
     </script>
 </body>
