@@ -5778,8 +5778,7 @@ window.addEventListener('click', (e) => {
 function updateModuleSelect() {
     const moduleSelect = document.getElementById('website-module');
     moduleSelect.innerHTML = '';
-    const modules = document.querySelectorAll('.category-card');
-    modules.forEach(module => {
+    document.querySelectorAll('.category-card').forEach(module => {
         const option = document.createElement('option');
         option.value = module.dataset.moduleId;
         option.textContent = module.querySelector('.category-title').textContent;
