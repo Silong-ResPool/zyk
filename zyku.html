@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件链接变更公告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* 全屏背景基础样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: "Inter", "Microsoft YaHei", sans-serif;
+            /* 紫罗兰渐变背景+纹理增强高级感 */
+            background: radial-gradient(circle at top left, #4a00e0, #8e2de2, #6a0dad);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03) 0%, transparent 30%),
+                radial-gradient(circle at top left, #4a00e0, #8e2de2, #6a0dad);
+            position: relative;
+        }
+        /* 动态粒子背景（增强科技感） */
+        .particle-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(191, 131, 255, 0.5);
+            animation: float 8s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-20px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+        /* 公告栏主体（居中+高级质感） */
+        .notice-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+        .notice-card {
+            width: 100%;
+            max-width: 850px;
+            background: rgba(25, 15, 40, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 50px 60px;
+            border: 1px solid rgba(191, 131, 255, 0.2);
+            box-shadow: 
+                0 0 25px rgba(138, 43, 226, 0.4),
+                0 8px 30px rgba(0, 0, 0, 0.2),
+                inset 0 0 15px rgba(191, 131, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        .notice-card:hover {
+            box-shadow: 
+                0 0 35px rgba(138, 43, 226, 0.6),
+                0 10px 40px rgba(0, 0, 0, 0.25),
+                inset 0 0 20px rgba(191, 131, 255, 0.15);
+            transform: translateY(-5px);
+        }
+        /* 霓虹灯边框效果 */
+        .notice-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #9370db, #e0b0ff, #9370db);
+            background-size: 200% auto;
+            animation: neonBorder 3s linear infinite;
+        }
+        .notice-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #e0b0ff, #9370db, #e0b0ff);
+            background-size: 200% auto;
+            animation: neonBorder 3s linear infinite reverse;
+        }
+        @keyframes neonBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+        /* 标题样式 */
+        .notice-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f8f0ff;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .notice-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 15%;
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c490ff, transparent);
+        }
+        .notice-title span {
+            text-shadow: 
+                0 0 10px rgba(191, 131, 255, 0.7),
+                0 0 20px rgba(138, 43, 226, 0.5);
+        }
+        /* 内容样式 */
+        .notice-content {
+            font-size: 19px;
+            color: #e6d9f7;
+            line-height: 2.2;
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .notice-content p {
+            margin-bottom: 15px;
+        }
+        .notice-content strong {
+            color: #f0e6fa;
+            text-shadow: 0 0 6px rgba(191, 131, 255, 0.4);
+        }
+        /* 按钮样式（可点击跳转） */
+        .web-link-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #8e2de2, #4a00e0);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 
+                0 4px 15px rgba(138, 43, 226, 0.5),
+                inset 0 2px 3px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .web-link-btn::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            animation: btnShine 2s infinite linear;
+        }
+        @keyframes btnShine {
+            0% {
+                transform: rotate(30deg) translate(-100%, -100%);
+            }
+            100% {
+                transform: rotate(30deg) translate(100%, 100%);
+            }
+        }
+        .web-link-btn:hover {
+            background: linear-gradient(135deg, #a24bff, #5b10e0);
+            box-shadow: 
+                0 6px 20px rgba(138, 43, 226, 0.7),
+                inset 0 2px 3px rgba(255, 255, 255, 0.25),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+            transform: translateY(-3px);
+        }
+        .web-link-btn:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 2px 10px rgba(138, 43, 226, 0.5),
+                inset 0 2px 3px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+        /* 底部提示文字 */
+        .notice-footer {
+            font-size: 16px;
+            color: #c4b0e8;
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .notice-card {
+                padding: 35px 25px;
+                border-radius: 15px;
+            }
+            .notice-title {
+                font-size: 26px;
+            }
+            .notice-content {
+                font-size: 17px;
+                line-height: 2;
+            }
+            .web-link-btn {
+                padding: 14px 32px;
+                font-size: 18px;
+            }
+            .notice-footer {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态粒子背景 -->
+    <div class="particle-bg" id="particleContainer"></div>
+
+    <!-- 公告主体 -->
+    <div class="notice-wrapper">
+        <div class="notice-card">
+            <h2 class="notice-title"><span>软件链接变更公告</span></h2>
+            <div class="notice-content">
+                <p>各位用户，因系统升级优化，当前软件链接已临时变更，原链接暂时无法正常访问。</p>
+                <p>为确保您的使用体验不受影响，<strong>请点击下方按钮直接访问网页版</strong>，所有功能均与软件端保持一致。</p>
+                <p>新软件链接将在升级完成后第一时间通过公告通知，感谢您的理解与支持！</p>
+            </div>
+            <!-- 可跳转按钮（链接已设置为目标地址） -->
+            <div style="text-align: center;">
+                <a href="https://silong-respool.github.io/zyk/" target="_blank" class="web-link-btn">访问网页版</a>
+            </div>
+            <div class="notice-footer">
+                公告更新时间：2025年10月18日 | 如有问题可通过网页版反馈通道联系我们
+            </div>
+        </div>
+    </div>
+
+    <!-- 动态生成粒子背景（增强画面精美度） -->
+    <script>
+        const particleContainer = document.getElementById('particleContainer');
+        const particleCount = 30; // 粒子数量
+
+        // 生成随机粒子
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // 随机粒子大小、位置、动画延迟
+            const size = Math.random() * 8 + 3; // 3-11px
+            const left = Math.random() * 100; // 0-100%
+            const top = Math.random() * 100; // 0-100%
+            const delay = Math.random() * 5; // 0-5s 延迟
+            const duration = Math.random() * 6 + 6; // 6-12s 动画时长
+
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${left}%`;
+            particle.style.top = `${top}%`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+
+            particleContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
