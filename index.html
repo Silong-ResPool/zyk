@@ -18,8 +18,8 @@
             --transition-speed: 0.3s;
             --header-height: 60px;
             --sidebar-width: 100px;
-            --bg-image-portrait: url('http://silong-library.infinityfree.me/private_resources/zybjt1.jpg');
-            --bg-image-landscape: url('http://silong-library.infinityfree.me/private_resources/zybjt2.jpg');
+            --bg-image-portrait: url('zybjt1.jpg');
+            --bg-image-landscape: url('zybjt2.jpg');
             --text-size: 1rem;
             --text-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
             --btn-radius: 25px;
@@ -1775,8 +1775,8 @@
                     <div class="menu-group">
                         <a href="#" id="customize-bg-btn" class="menu-main"><i class="fas fa-palette"></i> 主题</a>
                     </div>
-                    <div class="menu-group">
-                        <a href="#" id="account-btn" class="menu-main"><i class="fas fa-user"></i> 账号</a>
+                     <div class="menu-group">
+                        <a href="https://www.kdocs.cn/l/csWfeTAvERSk" target="_blank" class="menu-main"><i class="fas fa-sync-alt"></i> 更新</a>
                     </div>
                     <div class="menu-group">
                         <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=nmYA0ujvWx9Fd2c0CzW9Q4X3323%2FfepKfz3kf%2Bp5QEoOl9IzYsrO%2BmBnsmE8WgF%2F&busi_data=eyJncm91cENvZGUiOiIxMDQxNTQ3NTc4IiwidG9rZW4iOiJ1YVBlZ2NsWmpTY0NNc09uU1NORzgrTzZGaFBzV1dOZm1RUmI3V0t2Z1BIQk5pMEJhbHF6WUlxdDM3ZUx1YTR0IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=inZxKB5wpJdBoExZjAGwrb6X-_yFTLrTq32lwTnyIaW1NznGLmS2UXAGs8k7o5m-BTpfrd8aOqn9V12uyulhNg&svctype=4&tempid=h5_group_info" target="_blank" class="menu-main"><i class="fas fa-envelope"></i> 联系</a>
@@ -1786,21 +1786,30 @@
         </aside>
         
          <main class="main-content">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="输入关键词搜索资源..." aria-label="搜索资源" id="site-search">
-                    <button class="search-btn" id="site-search-btn">搜索</button>
-                    <button class="filter-btn" id="filter-btn">筛选</button>
-                </div>
-            </div>       
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="输入关键词搜索资源..." aria-label="搜索资源" id="site-search">
+            <button class="search-btn" id="site-search-btn">搜索</button>
+            <button class="filter-btn" id="filter-btn">筛选</button>
+        </div>
+    </div> 
 
-            <div class="button-container">
-                <a href="https://link.3ceng.cn/view/da473ddf" class="grid-btn" target="_blank">AI绘图</a>
-                <a href="https://voidchat.org/v/silong-Baoku" class="grid-btn" target="_blank">聊天室</a>
-                <a href="https://poipiku.com/12082901/" class="grid-btn" target="_blank">相册集</a>
-                <a href="https://link.3ceng.cn/view/d30a5c7e" class="grid-btn" target="_blank">AI聊天</a>
-                <a href="https://link.3ceng.cn/view/4ff38aaa" class="grid-btn" target="_blank">更新中</a>     
-            </div>
+    <!-- 半透明黑色框：包裹按钮和提示文字 -->
+    <div style="background-color: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-top: 15px;">
+        <div class="button-container">
+            <a href="https://link.3ceng.cn/view/da473ddf" class="grid-btn" target="_blank">AI绘图</a>
+            <a href="https://voidchat.org/v/silong-Baoku" class="grid-btn" target="_blank">聊天室</a>
+            <a href="https://poipiku.com/12082901/" class="grid-btn" target="_blank">相册集</a>
+            <a href="https://link.3ceng.cn/view/d30a5c7e" class="grid-btn" target="_blank">AI聊天</a>
+            <a href="https://0d56.hfjkzxan.xyz/" class="grid-btn" target="_blank">男同网</a>
+            <a href="https://catch.eibkvww.cc/" class="grid-btn" target="_blank">小蓝网</a>
+            <a href="https://share.feijipan.com/s/YHFIoHyT" class="grid-btn" target="_blank">SL网盘</a>
+            <a href="https://www.kdocs.cn/l/csWfeTAvERSk" class="grid-btn" target="_blank">更新中</a>     
+        </div>
+        <a href="#" style="display:block; color:#ffffff; font-size:14px; font-weight:bold; text-decoration:none; margin-top:12px; text-align:center;">
+           【链接打不开就用加速器或者换浏览器访问】
+        </a>
+    </div>
               <div id="resources-container">
                 <section id="search-section" class="category-section active" data-default="true">
         <div class="section-header">
@@ -8429,8 +8438,8 @@ let customSettings = {
     btnBgColor: '#8e44ad',
     btnTextColor: '#ffffff',
     btnRadius: 25,
-    bgImageLandscape: 'http://silong-library.infinityfree.me/private_resources/zybjt2.jpg',
-    bgImagePortrait: 'http://silong-library.infinityfree.me/private_resources/zybjt1.jpg',
+    bgImageLandscape: 'zybjt2.jpg',
+    bgImagePortrait: 'zybjt1.jpg',
     hue: 0,
     opacity: 100,
     blur: 0
@@ -9373,8 +9382,8 @@ function setupCustomization() {
                 btnBgColor: '#8e44ad',
                 btnTextColor: '#ffffff',
                 btnRadius: 25,
-                bgImageLandscape: 'http://silong-library.infinityfree.me/private_resources/zybjt2.jpg',
-                bgImagePortrait: 'http://silong-library.infinityfree.me/private_resources/zybjt1.jpg',
+                bgImageLandscape: 'zybjt2.jpg',
+                bgImagePortrait: 'zybjt1.jpg',
                 hue: 0,
                 opacity: 100,
                 blur: 0
