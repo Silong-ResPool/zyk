@@ -2,16 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 新增兼容性标签 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="巳泷资源库 - 提供各类优质网络资源导航">
     <title>巳泷资源库</title>
-    <script>
-      // 新增HTTPS强制跳转脚本
-      if (window.location.protocol !== "https:") {
-        window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-      }
-    </script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
@@ -25,8 +18,8 @@
             --transition-speed: 0.3s;
             --header-height: 60px;
             --sidebar-width: 100px;
-            --bg-image-portrait: url('https://silong-respool.github.io/zyk/zybjt1.jpg');
-            --bg-image-landscape: url('https://silong-respool.github.io/zyk/zybjt2.jpg');
+            --bg-image-portrait: url('zybjt1.jpg');
+            --bg-image-landscape: url('zybjt2.jpg');
             --text-size: 1rem;
             --text-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
             --btn-radius: 25px;
@@ -1297,17 +1290,9 @@
                     <i class="fas fa-home"></i>
                     <div>站内搜索</div>
                 </div>
-                <div class="search-engine-option" data-type="baidu">
-                    <i class="fas fa-search"></i>
-                    <div>百度搜索</div>
-                </div>
                 <div class="search-engine-option" data-type="yandex">
                     <i class="fab fa-yandex"></i>
                     <div>俄罗斯搜索</div>
-                </div>
-                <div class="search-engine-option" data-type="bing">
-                    <i class="fab fa-microsoft"></i>
-                    <div>必应搜索</div>
                 </div>
             </div>
         </div>
@@ -1808,8 +1793,15 @@
             <a href="https://voidchat.org/v/silong-Baoku" class="grid-btn" target="_blank">聊天室</a>
             <a href="https://poipiku.com/12082901/" class="grid-btn" target="_blank">相册集</a>
             <a href="https://link.3ceng.cn/view/d30a5c7e" class="grid-btn" target="_blank">AI聊天</a>
-            <a href="https://0d56.hfjkzxan.xyz/" class="grid-btn" target="_blank">男同网</a>
+            <a href="https://0d56.hfjkzxan.xyz/" class="grid-btn" target="_blank">搜同网</a>
             <a href="https://catch.eibkvww.cc/" class="grid-btn" target="_blank">小蓝网</a>
+            <a href="https://zx52q.vvvypik.cc/" class="grid-btn" target="_blank">男同网</a>
+            <a href="https://noodlemagazine.com/new-video" class="grid-btn" target="_blank">R18搜索</a>
+            <a href="https://www.xn--cjs381f.xyz/" class="grid-btn" target="_blank">空域网</a>
+            <a href="https://aishenqi.net/" class="grid-btn" target="_blank">AI大全</a>
+            <a href="https://yinghezhinan.com/" class="grid-btn" target="_blank">硬核网</a>
+            <a href="https://tool.lu/" class="grid-btn" target="_blank">工具箱</a>
+            <a href="https://share.feijipan.com/s/peNbmN1l" class="grid-btn" target="_blank">HY网盘</a>
             <a href="https://share.feijipan.com/s/YHFIoHyT" class="grid-btn" target="_blank">SL网盘</a>
             <a href="https://www.kdocs.cn/l/csWfeTAvERSk" class="grid-btn" target="_blank">更新中</a>     
         </div>
@@ -8445,8 +8437,8 @@ let customSettings = {
     btnBgColor: '#8e44ad',
     btnTextColor: '#ffffff',
     btnRadius: 25,
-    bgImageLandscape: 'https://silong-respool.github.io/zyk/zybjt2.jpg',
-    bgImagePortrait: 'https://silong-respool.github.io/zyk/zybjt1.jpg',
+    bgImageLandscape: 'zybjt2.jpg',
+    bgImagePortrait: 'zybjt1.jpg',
     hue: 0,
     opacity: 100,
     blur: 0
@@ -8492,14 +8484,8 @@ function setupSearch() {
             } else {
                 let engineUrl;
                 switch(type) {
-                    case 'baidu':
-                        engineUrl = 'https://www.baidu.com/s?wd=';
-                        break;
                     case 'yandex':
                         engineUrl = 'https://yandex.com/search?text=';
-                        break;
-                    case 'bing':
-                        engineUrl = 'https://www.bing.com/search?q=';
                         break;
                 }
                 showLoader();
@@ -9389,8 +9375,8 @@ function setupCustomization() {
                 btnBgColor: '#8e44ad',
                 btnTextColor: '#ffffff',
                 btnRadius: 25,
-                bgImageLandscape: 'https://silong-respool.github.io/zyk/zybjt2.jpg',
-                bgImagePortrait: 'https://silong-respool.github.io/zyk/zybjt1.jpg',
+                bgImageLandscape: 'zybjt2.jpg',
+                bgImagePortrait: 'zybjt1.jpg',
                 hue: 0,
                 opacity: 100,
                 blur: 0
