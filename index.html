@@ -11,8 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
-    <script src="path/to/ruffle.js"></script>
-  <style>
+    <style>
+
         :root {
     --primary-color: #b026ff;
     --secondary-color: #7b2cbf;
@@ -48,6 +48,8 @@ html {
     padding: 0;
     overflow: hidden;
 }
+
+
 
 body {
     font-family: var(--text-font);
@@ -2326,116 +2328,128 @@ body::after {
             <div class="modal-content">
                 <div class="modal-header">游戏库♂</div>
                 <div class="game-list" id="gameList">
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/E/e7a14f3ec44e52eb3465b88b8eb9c114.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《猜拳游戏》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/E/Emiya-Kiritsugu-Solo.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《卫宫切嗣Solo》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/S/Scent-Bioshock-Infinite-The-Raw-End-of-the-Deal.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《生化奇兵：无限》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/Y/YinDangWIthTentacles.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《触手敏感区探索》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/S/SolBadGuy.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《索尔》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/L/Link.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《马眼刺激》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/0-9/%E3%80%90FlashGame%E3%80%91SanjiZoro.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《山治&索隆》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/M/Mako-and-Bolin.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《兄弟之爱》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom//S/Soccer_Fucker_Hunter.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《足球狂猎人》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/K/KangWenYinDangSofack.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《床上性交》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/0-9/1ddad940ccd3c1dcb0feed546b4a5c69.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《触碰与挑逗1》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/T/Touch%20and%20Tease%20Vol.2%20Hiishi%20Mamoru.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《触碰与挑逗2》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/0-9/105ad01a478980dca82af58c1da06cda-1.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《悟空&贝吉塔》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Gladiolus.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《阿米西提亚》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Vindictus-Kai-Lunde-Gives-a-Few-Fucks.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《Vindictus》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/0-9/10b48668e9471cc4638d816be7d6d7a3.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《蜘蛛侠》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/Z/ZoroBathyAnimation.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《巴托&索隆》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/B/BasaraToujo.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《东城刃更》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/V/VergoVSSmoker.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《斯摩格VS维尔戈》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Dante-Pecfuck.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《鬼泣但丁1》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Devil-May-Cry-Dante-2-Ride-it-Like-a-True-Demon-1.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《鬼泣但丁2》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Wanted-Dead-or-Alive.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《通缉：生死相依》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Mass-Effect-James-Vega-Threesome.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《质量效应》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/D/DBZ_TRUHAN_BLUE_LAGOON_BONUS20MUSIC.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《龙珠z-海滩》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/saint_seiya-1.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《圣星矢-海滩》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/G/Guanino-Dragon-Ball-Z-Broly-vs-Trunks.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《龙珠大战》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item" data-url="https://gaymes.net/wp-content/uploads/games/custom/E/Eoleo.swf" data-builtin="true">
-                        <div class="game-item-left"><span>《黄金太阳》</span></div>
-                        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
-                    </div>
-                    <div class="game-item more-games" onclick="window.open('https://gaymes.net/', '_blank')">《更多游戏》</div>
-                </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-1.swf" data-builtin="true">
+        <div class="game-item-left"><span>《孙坚》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-2.swf" data-builtin="true">
+        <div class="game-item-left"><span>《卫宫切嗣Solo》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-3.swf" data-builtin="true">
+        <div class="game-item-left"><span>《生化奇兵：无限》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-4.swf" data-builtin="true">
+        <div class="game-item-left"><span>《触手敏感区探索》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-5.swf" data-builtin="true">
+        <div class="game-item-left"><span>《索尔》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-6.swf" data-builtin="true">
+        <div class="game-item-left"><span>《马眼刺激》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-7.swf" data-builtin="true">
+        <div class="game-item-left"><span>《山治&索隆》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-8.swf" data-builtin="true">
+        <div class="game-item-left"><span>《兄弟之爱》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-9.swf" data-builtin="true">
+        <div class="game-item-left"><span>《足球狂猎人》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-10.swf" data-builtin="true">
+        <div class="game-item-left"><span>《床上性交》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-11.swf" data-builtin="true">
+        <div class="game-item-left"><span>《触碰与挑逗1》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-12.swf" data-builtin="true">
+        <div class="game-item-left"><span>《触碰与挑逗2》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-13.swf" data-builtin="true">
+        <div class="game-item-left"><span>《悟空&贝吉塔》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-14.swf" data-builtin="true">
+        <div class="game-item-left"><span>《阿米西提亚》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-15.swf" data-builtin="true">
+        <div class="game-item-left"><span>《Vindictus》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-16.swf" data-builtin="true">
+        <div class="game-item-left"><span>《Flesh Jack Game》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-17.swf" data-builtin="true">
+        <div class="game-item-left"><span>《巴托&索隆》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-18.swf" data-builtin="true">
+        <div class="game-item-left"><span>《东城刃更》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-19.swf" data-builtin="true">
+        <div class="game-item-left"><span>《斯摩格VS维尔戈》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-20.swf" data-builtin="true">
+        <div class="game-item-left"><span>《鬼泣但丁1》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-21.swf" data-builtin="true">
+        <div class="game-item-left"><span>《鬼泣但丁2》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-22.swf" data-builtin="true">
+        <div class="game-item-left"><span>《通缉：生死相依》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-23.swf" data-builtin="true">
+        <div class="game-item-left"><span>《徐金》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-24.swf" data-builtin="true">
+        <div class="game-item-left"><span>《龙珠z-海滩》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-25.swf" data-builtin="true">
+        <div class="game-item-left"><span>《圣星矢-海滩》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-26.swf" data-builtin="true">
+        <div class="game-item-left"><span>《龙珠大战》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-27.swf" data-builtin="true">
+        <div class="game-item-left"><span>《黄金太阳》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-28.swf" data-builtin="true">
+        <div class="game-item-left"><span>《尹当面交康·温 》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-29.swf" data-builtin="true">
+        <div class="game-item-left"><span>《合金装备x》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item" data-url="https://silong-respool.github.io/zyk/gay/yx-30.swf" data-builtin="true">
+        <div class="game-item-left"><span>《猜拳游戏》</span></div>
+        <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+    </div>
+    <div class="game-item more-games" onclick="window.open('https://gaymes.net/', '_blank')">《更多游戏》</div>
+</div>
             </div>
         </div>
 
@@ -10814,6 +10828,14 @@ function initGameConsole() {
         menuModal.style.display = 'flex';
     };
 }
+
+// Ruffle跨域配置（必须放在最前面）
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+  unlock_swfs: true,
+  allow_networking: "all",
+  allow_script_access: "always"
+};
 
 // 页面加载完成时初始化
 if (document.readyState === 'loading') {
