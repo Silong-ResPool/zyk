@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<cross-domain-policy>
+  <allow-access-from domain="*" />
+  <!-- domain="*" 表示允许所有域名访问，如果你想限制特定域名，比如本地服务器是http://localhost:8080，就把*换成"http://localhost:8080" -->
+  <site-control permitted-cross-domain-policies="all" />
+  <allow-http-request-headers-from domain="*" headers="*" />
+  <!-- 允许所有请求头，方便Ruffle加载文件时的通信 -->
+  <allow-http-request-methods-from domain="*" methods="GET,POST" />
+  <!-- 允许常用的GET、POST请求方法 -->
+  <allow-access-from-identity domain="*" />
+  <allow-http-request-headers-from domain="*" headers="*" secure="false" />
+  <allow-http-request-methods-from domain="*" methods="*" secure="false" />
+  <allow-access-from domain="*" secure="false" />
+  <allow-http-request-headers-from domain="*" headers="*" />
+  <allow-http-request-methods-from domain="*" methods="*" />
+  <allow-http-request-headers-from domain="*" headers="*" secure="true" />
+  <allow-http-request-methods-from domain="*" methods="*" secure="true" />
+  <allow-access-from domain="*" secure="true" />
+  <allow-http-request-headers-from domain="*" headers="*" />
+  <allow-http-request-methods-from domain="*" methods="*" />
+  <allow-http-request-headers-from domain="*" headers="*" secure="false" />
+  <allow-http-request-methods-from domain="*" methods="*" secure="false" />
+  <allow-access-from domain="*" secure="false" />
+  <allow-http-request-headers-from domain="*" headers="*" />
+  <allow-http-request
