@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI提示词生成器 - 男性色情版</title>
+    <title>巳泷资源库-AI提示词生成器</title>
     <style>
         * {
             box-sizing: border-box;
@@ -34,10 +34,14 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         h2 {
             font-size: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .container {
@@ -46,14 +50,24 @@
             padding: 20px;
             border: 2px solid #9b5de5;
             border-radius: 12px;
-            box-shadow: 0 0 25px #9b5de5;
+            box-shadow: 0 0 25px #9b5de5, 0 0 50px rgba(155, 93, 229, 0.3);
             background: linear-gradient(180deg, #3a0066, #2a004f);
+            transition: all 0.3s ease;
+        }
+        
+        .container:hover {
+            box-shadow: 0 0 35px #9b5de5, 0 0 60px rgba(155, 93, 229, 0.5);
         }
         
         .section {
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px solid #6a00cc;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            border-bottom-color: #d896ff;
         }
         
         .section:last-child {
@@ -78,7 +92,7 @@
         
         textarea:focus {
             outline: none;
-            box-shadow: 0 0 10px #c77dff;
+            box-shadow: 0 0 10px #c77dff, 0 0 20px rgba(199, 125, 255, 0.3);
             border-color: #d896ff;
         }
         
@@ -115,7 +129,26 @@
         button:hover {
             background-color: #c77dff;
             box-shadow: 0 0 15px #c77dff, 0 0 10px rgba(199, 125, 255, 0.5);
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        button.secondary {
+            background-color: #6a00cc;
+        }
+        button.secondary:hover {
+            background-color: #7a10dc;
+        }
+        
+        #edit-toggle-btn.editing {
+            background-color: #ff4081;
+            box-shadow: 0 0 15px #ff4081;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .warning {
@@ -128,6 +161,7 @@
             background-color: rgba(255, 0, 255, 0.15);
             border-radius: 8px;
             border-left: 3px solid #ff85ff;
+            box-shadow: 0 2px 5px rgba(255, 0, 255, 0.2);
         }
         
         .category-selector {
@@ -141,6 +175,9 @@
             padding: 10px;
             scrollbar-width: thin;
             scrollbar-color: #9b5de5 #3a0066;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
         }
         
         .category-list::-webkit-scrollbar {
@@ -170,11 +207,12 @@
             flex: 0 0 auto;
             white-space: nowrap;
             border: 1px solid transparent;
+            user-select: none;
         }
         
         .category-item:hover {
             background-color: #6a00cc;
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(1deg);
         }
         
         .category-item.active {
@@ -184,16 +222,36 @@
             transform: scale(1.05);
         }
         
+        .category-item.add-btn {
+            background-color: #ff9800;
+            color: white;
+            font-weight: bold;
+        }
+
+        .category-item.add-btn:hover {
+            background-color: #f57c00;
+        }
+        
         .preset-container {
             display: none;
             background-color: rgba(58, 0, 102, 0.5);
             border-radius: 10px;
             padding: 10px;
             margin-top: 5px;
+            box-shadow: inset 0 0 10px rgba(155, 93, 229, 0.3);
         }
         
         .preset-container.active {
             display: block;
+        }
+
+        .preset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(155, 93, 229, 0.3);
         }
         
         .preset-list {
@@ -201,58 +259,90 @@
             flex-wrap: wrap;
             gap: 8px;
             padding: 8px;
-            max-height: 180px;
+            max-height: 500px;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #9b5de5 #3a0066;
         }
         
         .preset-list::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         
         .preset-list::-webkit-scrollbar-track {
             background: #3a0066;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         
         .preset-list::-webkit-scrollbar-thumb {
             background: #9b5de5;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         
         .preset-item {
             background-color: rgba(77, 0, 153, 0.7);
             color: #e0bbff;
-            padding: 6px 12px;
-            border-radius: 15px;
+            padding: 12px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            text-align: center;
-            font-size: 12.5px;
-            box-shadow: 0 0 5px rgba(155, 93, 229, 0.5);
+            text-align: left;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease;
-            flex: 0 0 auto;
-            border: 1px solid transparent;
+            border: 2px solid transparent;
+            user-select: none;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .preset-item:hover {
             background-color: rgba(106, 0, 204, 0.9);
-            transform: scale(1.05);
+            transform: translateX(5px) scale(1.02);
         }
         
         .preset-item.active {
-            background-color: rgba(106, 0, 204, 0.9);
-            box-shadow: 0 0 10px #c77dff;
-            border-color: #d896ff;
+            background-color: #d896ff;
+            color: #2a004f;
+            box-shadow: 0 0 15px #d896ff;
+            border-color: #fff;
+            font-weight: bold;
         }
         
         .preset-item::before {
-            content: "【";
+            content: "➤ ";
+            margin-right: 8px;
+            opacity: 0.7;
         }
-        
-        .preset-item::after {
-            content: "】";
+
+        body.editing-mode .preset-item {
+            border: 1px dashed #ff4081;
+            background-color: rgba(255, 64, 129, 0.1);
+            cursor: alias;
         }
+        body.editing-mode .preset-item:hover {
+            background-color: rgba(255, 64, 129, 0.3);
+            box-shadow: 0 0 10px #ff4081;
+        }
+        body.editing-mode .preset-item::after {
+            content: "✎";
+            font-size: 1.2em;
+            color: #ff4081;
+        }
+
+        .preset-item.add-preset-btn {
+            background-color: #00bcd4;
+            color: white;
+            border-color: #00bcd4;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .preset-item.add-preset-btn:hover {
+            background-color: #00acc1;
+            transform: none;
+        }
+        .preset-item.add-preset-btn::before { content: "+ "; }
         
         .footer-buttons {
             display: flex;
@@ -284,13 +374,13 @@
             text-shadow: none;
             font-weight: bold;
             border: 1px solid #d896ff;
+            pointer-events: none;
         }
         
         .notification.show {
             opacity: 1;
         }
         
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -302,6 +392,7 @@
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         
         .modal-content {
@@ -311,9 +402,16 @@
             padding: 30px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 0 30px #c77dff;
+            box-shadow: 0 0 30px #c77dff, 0 0 50px rgba(199, 125, 255, 0.2);
             text-align: center;
             color: #e0bbff;
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-content:hover {
+            transform: scale(1.02);
         }
         
         .modal-title {
@@ -360,7 +458,7 @@
         
         .modal-buttons {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             gap: 15px;
             margin-top: 20px;
         }
@@ -371,16 +469,24 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: none;
         }
         
         .modal-confirm {
             background-color: #9b5de5;
             color: white;
-            border: none;
         }
         
         .modal-confirm:hover {
             background-color: #c77dff;
+        }
+        
+        .modal-delete {
+            background-color: #e91e63;
+            color: white;
+        }
+        .modal-delete:hover {
+            background-color: #ff4081;
         }
         
         .modal-cancel {
@@ -399,81 +505,102 @@
             padding: 6px 15px;
             min-width: auto;
             max-width: none;
+            margin-left: auto;
         }
         
         .video-btn:hover {
             background: linear-gradient(to right, #ff0aff, #ff85ff);
             box-shadow: 0 0 15px #ff85ff;
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 1.6rem;
-            }
-            
-            h2 {
-                font-size: 1.3rem;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-            
-            button {
-                width: 100%;
-                max-width: none;
-            }
-            
-            .footer-buttons button {
-                width: 100%;
-                max-width: none;
-            }
-            
-            .modal-options {
-                gap: 10px;
-            }
-            
-            .modal-option {
-                padding: 12px;
-            }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #d896ff;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #9b5de5;
+            background-color: rgba(58, 0, 102, 0.7);
+            color: white;
+            font-size: 14px;
         }
         
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 15px 10px;
-            }
-            
-            textarea {
-                height: 100px;
-                font-size: 14px;
-                padding: 10px;
-            }
-            
-            .category-item {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
-            
-            .preset-item {
-                font-size: 11.5px;
-                padding: 5px 8px;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-            
-            .modal-title {
-                font-size: 20px;
-            }
+        .replace-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(45, 0, 85, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(199, 125, 255, 0.3);
+        }
+        
+        .replace-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .replace-inputs input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #9b5de5;
+            border-radius: 4px;
+            background: rgba(58, 0, 102, 0.7);
+            color: #e0bbff;
+        }
+        
+        .replace-btn {
+            background-color: #ff4081;
+            margin-top: 5px;
+        }
+        
+        .replace-btn:hover {
+            background-color: #e91e63;
+        }
+        
+        .replace-words-container {
+            display: none;
+            background-color: rgba(45, 0, 85, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        .replace-word {
+            display: inline-block;
+            background-color: rgba(77, 0, 153, 0.7);
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .replace-word:hover {
+            background-color: rgba(106, 0, 204, 0.9);
+        }
+
+        .preset-item .star {
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.6rem; }
+            .button-group { flex-direction: column; }
+            button { width: 100%; max-width: none; }
+            .footer-buttons button { width: 100%; max-width: none; }
+            .replace-inputs { flex-direction: column; }
         }
     </style>
 </head>
@@ -483,51 +610,51 @@
             AI提示词生成器
             <button class="video-btn" onclick="window.open('https://silong-respool.github.io/zyk/spjc2778.mp4', '_blank')">视频教程</button>
         </h1>
-        <p class="warning">警告：请先输入或使用默认的反向提示词，否则生成的男性图片可能会出现女性生殖器！</p>
+        <p class="warning">警告：请先输入或使用默认的反向提示词，否则生成的男性图片可能会出现女性生殖器！本版本已优化关键词，移除可能的负面引导词。</p>
         
         <div class="section">
             <h2>正向提示词</h2>
-            <textarea id="positive-prompt" placeholder="在此输入或添加正向提示词..."></textarea>
+            <textarea id="positive-prompt" placeholder="在此输入中文或英文提示词... （输入中文会自动转英文）"></textarea>
             <textarea id="positive-translation" class="translation-box" placeholder="正向提示词中文翻译..."></textarea>
+            <div id="positive-replace-words" class="replace-words-container"></div>
+            <div class="replace-section">
+                <h3>替换提示词</h3>
+                <div class="replace-inputs">
+                    <input id="replace-from" placeholder="需要替换的文本...">
+                    <input id="replace-to" placeholder="替换成的文本...">
+                </div>
+                <button class="replace-btn" onclick="replaceText()">确认替换</button>
+            </div>
             <div class="button-group">
                 <button onclick="generateRandomPrompt()">随机生成</button>
                 <button onclick="copyPositive()">复制正向提示词</button>
+                <button onclick="clearPositive()">清空正向</button>
             </div>
         </div>
         
         <div class="section">
-            <h2>提示词分类</h2>
+            <h2>
+                提示词分类 
+                <button id="edit-toggle-btn" class="secondary" style="max-width: 140px; margin-left: 10px; font-size: 12px; padding: 4px 10px;" onclick="toggleEditMode()">✎ 进入编辑模式</button>
+            </h2>
             <div class="category-selector">
-                <div class="category-list">
-                    <div class="category-item" data-category="quality" onclick="showCategory('quality')">画质风格</div>
-                    <div class="category-item" data-category="age" onclick="showCategory('age')">年龄阶段</div>
-                    <div class="category-item" data-category="face" onclick="showCategory('face')">面部特征</div>
-                    <div class="category-item" data-category="body" onclick="showCategory('body')">身体体型</div>
-                    <div class="category-item" data-category="penis" onclick="showCategory('penis')">性器官</div>
-                    <div class="category-item" data-category="anus" onclick="showCategory('anus')">肛门</div>
-                    <div class="category-item" data-category="action" onclick="showCategory('action')">动作姿势</div>
-                    <div class="category-item" data-category="expression" onclick="showCategory('expression')">表情</div>
-                    <div class="category-item" data-category="skin" onclick="showCategory('skin')">皮肤质感</div>
-                    <div class="category-item" data-category="hair" onclick="showCategory('hair')">头发</div>
-                    <div class="category-item" data-category="hair-color" onclick="showCategory('hair-color')">发色</div>
-                    <div class="category-item" data-category="clothing" onclick="showCategory('clothing')">服装</div>
-                    <div class="category-item" data-category="accessory" onclick="showCategory('accessory')">饰品</div>
-                    <div class="category-item" data-category="background" onclick="showCategory('background')">场景背景</div>
-                    <div class="category-item" data-category="number" onclick="showCategory('number')">人数</div>
+                <div class="category-list" id="category-list">
+                    <div class="category-item add-btn" onclick="openAddCategoryModal()">+ 添加分类</div>
                 </div>
             </div>
             <div id="preset-display">
-                <!-- Preset containers will be here -->
-            </div>
+                </div>
         </div>
         
         <div class="section">
             <h2>反向提示词</h2>
             <textarea id="negative-prompt" placeholder="在此输入或添加反向提示词..."></textarea>
             <textarea id="negative-translation" class="translation-box" placeholder="反向提示词中文翻译..."></textarea>
+            <div id="negative-replace-words" class="replace-words-container"></div>
             <div class="button-group">
                 <button onclick="copyNegative()">复制反向提示词</button>
                 <button onclick="resetNegative()">恢复默认</button>
+                <button onclick="clearNegative()">清空反向</button>
             </div>
         </div>
         
@@ -536,7 +663,6 @@
         </div>
     </div>
 
-    <!-- Modal for generation options -->
     <div class="modal" id="generateModal">
         <div class="modal-content">
             <h2 class="modal-title">选择生成方式</h2>
@@ -545,24 +671,85 @@
             <div class="modal-options">
                 <div class="modal-option" onclick="selectOption(1)">
                     <h3>无限制免费AI生成</h3>
-                    <p>✓ 完全免费</p>
-                    <p>✓ 无内容限制</p>
-                    <p>✗ 生成速度较慢</p>
-                    <p>✗ 质量一般</p>
+                    <p>✓ 完全免费 / 无内容限制</p>
                 </div>
                 
                 <div class="modal-option" onclick="selectOption(2)">
                     <h3>高级AI生成</h3>
-                    <p>✓ 生成速度快</p>
-                    <p>✓ 可批量生成</p>
-                    <p>✓ 高质量输出</p>
-                    <p>✗ 可能出现畸形</p>
-                    <p>✗ 需要加速器</p>
+                    <p>✓ 高质量 / 速度快</p>
                 </div>
             </div>
             
             <div class="modal-buttons">
-                <button class="modal-button modal-cancel" onclick="closeModal()">取消</button>
+                <button class="modal-button modal-cancel" onclick="closeModal('generateModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="customModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="customModalTitle">添加/编辑内容</h2>
+            
+            <div id="addCategoryForm" style="display:none;">
+                <div class="form-group">
+                    <label>分类ID (英文，如 my_style)</label>
+                    <input type="text" id="newCatId" placeholder="category_id">
+                </div>
+                <div class="form-group">
+                    <label>分类名称 (显示文字)</label>
+                    <input type="text" id="newCatTitle" placeholder="我的自定义分类">
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-button modal-confirm" onclick="confirmAddCategory()">添加分类</button>
+                    <button class="modal-button modal-cancel" onclick="closeModal('customModal')">取消</button>
+                </div>
+            </div>
+
+            <div id="addPresetForm" style="display:none;">
+                <div class="form-group">
+                    <label>按钮标题 (显示在按钮上的文字)</label>
+                    <input type="text" id="newPresetZh" placeholder="例如：清爽短发">
+                </div>
+                <div class="form-group">
+                    <label>英文提示词 (AI识别)</label>
+                    <textarea id="newPresetEn" style="height: 60px;" placeholder="例如：short hair, clean cut"></textarea>
+                </div>
+                <input type="hidden" id="currentCatId">
+                <div class="modal-buttons">
+                    <button class="modal-button modal-confirm" onclick="confirmAddPreset()">添加提示词</button>
+                    <button class="modal-button modal-cancel" onclick="closeModal('customModal')">取消</button>
+                </div>
+            </div>
+
+            <div id="editPresetForm" style="display:none;">
+                <div class="form-group">
+                    <label>标签名称 (中文)</label>
+                    <input type="text" id="editPresetZh">
+                </div>
+                <div class="form-group">
+                    <label>AI提示词 (英文)</label>
+                    <textarea id="editPresetEn" style="height: 80px;"></textarea>
+                </div>
+                <input type="hidden" id="editCatKey">
+                <input type="hidden" id="editPresetIdx">
+                <div class="modal-buttons">
+                    <button class="modal-button modal-confirm" onclick="saveEditedPreset()">保存修改</button>
+                    <button class="modal-button modal-delete" onclick="deletePreset()">删除此标签</button>
+                    <button class="modal-button modal-cancel" onclick="closeModal('customModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="presetOptionModal">
+        <div class="modal-content">
+            <h2 class="modal-title">选择操作</h2>
+            <div class="modal-options">
+                <div class="modal-option" id="addOption">添加</div>
+                <div class="modal-option" id="replaceOption">替换</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button modal-cancel" onclick="closeModal('presetOptionModal')">取消</button>
             </div>
         </div>
     </div>
@@ -570,602 +757,1987 @@
     <div class="notification" id="notification">已复制提示词！</div>
 
     <script>
-        // Default prompts with high quality terms
-        document.getElementById('positive-prompt').value = 'BL (Boy\'s Love), Yaoi, gay, male-male, full body, hyperdetailed male physique, defined musculature, volumetric natural lighting, matte skin texture';
-        document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
-
-        // Translation dictionary (男同专属)
-        const translationDict = {
-          // 基础术语
-          'man': '男性', 'male': '男人', 'guy': '家伙', 'dude': '兄弟', 
-          'masculine': '阳刚', 'penis': '阴茎', 'cock': '鸡巴', 'dick': '老二',
-          // 性器官相关
-          'shaft': '茎身', 'glans': '龟头', 'foreskin': '包皮', 
-          'balls': '睾丸', 'testicles': '卵蛋', 'scrotum': '阴囊', 
-          'erection': '勃起', 'hard-on': '硬了', 'boner': '硬屌',
-          // 特征描述
-          'huge cock': '大鸡巴', 'girthy penis': '粗壮阴茎', 'veiny dick': '青筋老二',
-          'throbbing shaft': '跳动茎身', 'curved penis': '弯曲阴茎', 'bulging veins': '凸起血管',
-          // 肛门相关
-          'anus': '肛门', 'tight anus': '紧实肛门', 'smooth anus': '光滑肛门', 
-          'puckered anus': '皱褶肛门', 'hairy perineum': '多毛会阴',
-          // 身体特征
-          'muscular body': '肌肉身材', 'abs': '腹肌', 'pecs': '胸肌', 
-          'biceps': '二头肌', 'thighs': '大腿', 'butt': '臀部', 'ass': '屁股',
-          'broad shoulders': '宽肩', 'defined calves': '小腿肌肉', 
-          'vascular arms': '青筋手臂', 'v-line': 'V型线条',
-          // 新增特征
-          'adonis belt': '人鱼线', 'hip dips': '髋窝', 'collarbone': '锁骨',
-          'back muscles': '背部肌肉', 'shoulder blades': '肩胛骨',
-          // 毛发特征
-          'pubic hair': '阴毛', 'beard': '胡子', 'stubble': '胡渣', 
-          'chest fur': '浓密胸毛', 'happy trail': '腹毛线',
-          // 声音特征
-          'deep voice': '低沉嗓音', 'breathy voice': '喘息嗓音',
-          // 面部特征
-          'sharp jawline': '锋利下颌线', 'rugged face': '粗犷面容', 
-          'piercing eyes': '锐利眼神', 'bushy eyebrows': '浓眉',
-          'high cheekbones': '高颧骨', 'dimpled cheeks': '酒窝',
-          // 服装类
-          'boxers': '四角裤', 'briefs': '三角裤', 'jockstrap': '护裆', 
-          'speedo': '泳裤', 'thong': '丁字裤', 'g-string': '丁字带',
-          'mesh shorts': '网眼短裤', 'leather chaps': '皮套裤', 
-          'denim cutoff': '破洞牛仔', 'silk robe': '真丝睡袍',
-          // 新增男同服装
-          'harness': '束带装', 'muscle tee': '肌肉背心', 'cargo jock': '工装护裆',
-          'latex briefs': '乳胶内裤', 'bondage pants': '束缚裤',
-          // 饰品
-          'cock ring': '阴茎环', 'piercing': '穿刺', 'tattoo': '纹身',
-          'nipple rings': '乳头环', 'guiche piercing': '会阴穿孔',
-          'prince albert': '尿道穿刺', 'apadravya': '垂直阴茎穿孔',
-          // 新增男同饰品
-          'scrotal ladder': '阴囊梯穿孔', 'dydoe cluster': '龟头穿孔群',
-          'frenulum bar': '系带横杆', 'anal hook': '肛门钩',
-          'ball stretcher': '睾丸扩张器', 'urethral plug': '尿道塞',
-          // 场景背景
-          'bedroom': '卧室', 'shower': '淋浴间', 'gym': '健身房',
-          'dungeon': '地牢', 'rooftop': '屋顶', 'dark alley': '暗巷',
-          'sauna': '桑拿房', 'jacuzzi': '按摩浴缸', 'locker room': '更衣室',
-          // 新增男同场景
-          'bathhouse': '澡堂', 'cruising spot': '猎艳点', 'backroom': '暗房',
-          'glory hole booth': '泄欲隔间', 'leather bar': '皮革酒吧',
-          // 动作姿势
-          'flexing': '展示肌肉', 'stroking': '抚摸', 'thrusting': '抽插',
-          'grinding': '研磨', 'doggy style': '后入姿势', 
-          'missionary': '传教士姿势', 'pile driver': '打桩姿势',
-          // 新增男同姿势
-          'frot': '阴茎摩擦', 'anal fisting': '肛门拳交', 
-          'ball sucking': '吸吮睾丸', 'rimming': '舔肛', 
-          'cowboy position': '骑乘位', 'reverse cowboy': '反向骑乘',
-          // 表情
-          'smirking': '坏笑', 'grimacing': '痛苦表情', 'lustful gaze': '欲望凝视',
-          'blushing': '脸红', 'ecstasy': '狂喜', 'afterglow': '高潮余韵',
-          // 新增男同表情
-          'cum face': '射精表情', 'anal penetration wince': '肛交蹙眉',
-          'ball deep groan': '深顶呻吟', 'dominant smirk': '支配性坏笑',
-          // 皮肤特征
-          'dewy skin': '水光肌', 'porcelain skin': '瓷白肌', 'sun-kissed': '日光浴色',
-          'glycolic glow': '果酸焕肤', 'freckled': '雀斑肌', 'scar tissue': '疤痕组织',
-          // 发色
-          'platinum': '铂金色', 'ash brown': '灰褐色', 'burgundy': '酒红色',
-          'pastel pink': '淡粉色', 'silver fox': '银狐灰', 'ombre': '渐变发色',
-          // 新增男同发色
-          'salt and pepper': '盐椒灰', 'dirty blonde': '脏金色', 
-          'jet black': '乌黑色', 'platinum buzzcut': '铂金寸头',
-          // 其他
-          'naked': '裸体', 'nude': '全裸', 'erotic': '情色', 'explicit': '露骨',
-          'sensual': '性感', 'provocative': '挑逗', 'seductive': '诱惑',
-          'aroused': '性唤起', 'passionate': '热情', 'intimate': '亲密',
-          'penetration': '插入', 'ejaculation': '射精', 'semen': '精液',
-          'cum': '精液', 'precum': '前列腺液', 'orgasm': '性高潮',
-          'BL': '男同性恋', 'Yaoi': '男同性恋漫画', 'gay': '同性恋',
-          'male-male': '男男', 'full body': '全身', 'hyperdetailed': '超细节',
-          'musculature': '肌肉组织', 'volumetric': '立体感', 'natural lighting': '自然光',
-          'matte skin': '哑光皮肤', 'texture': '纹理'
-        };
-
-        // Create reverse dictionary (Chinese to English)
-        const reverseDict = {};
-        Object.entries(translationDict).forEach(([en, zh]) => {
-            reverseDict[zh] = en;
-        });
-
-        // 分类数据 (男同专属完整版，补充更多预设)
-        const categories = {
-            age: {
-                title: '年龄阶段',
+        let categories = {
+    favorites: {
+        title: '收藏',
+        presets: [],
+        isPositive: true
+    },
+    style: {
+        title: '画风',
+        presets: [
+            {
+                en: 'masterpiece, best quality, ultra detailed, authentic hand-drawn anime illustration, delicate visible paper grain and subtle sand noise overlay, soft organic uneven lineart with gentle imperfections, warm intimate low-saturation tones, authentic traditional cel shading with faint natural gradients and micro speckles, genuine hand-painted warmth and breathing texture, no digital smoothness or artificial sharpening',
+                zh: '细腻磨砂手绘颗粒风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, thick impasto oil painting anime style, visible heavy yet controlled brush strokes, authentic textured paint layers with natural canvas weave, expressive yet refined buildup, warm balanced mid-saturation palette with subtle paint ridges and gentle sheen, true artist hand-painted depth and tactility, no clean digital polish',
+                zh: '精致厚涂油画风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, traditional watercolor anime illustration, soft natural bleeding edges with controlled watercolor flow, authentic cold-press paper texture and faint grain, translucent layered washes with delicate grain overlay, gentle wet-on-wet brushwork, warm soft mid-tone harmony, genuine hand-painted watercolor luminosity and breathing quality, no over-sharpened edges',
+                zh: '高级水彩颗粒融合风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, colored pencil anime style on textured paper, visible layered pencil strokes with natural cross-hatching and burnishing, authentic subtle sandpaper grain throughout, soft intimate shading with gentle pressure variation, warm balanced low-to-mid saturation tones, true hand-drawn colored pencil depth and tactile soul, no digital blending smoothness',
+                zh: '真实彩铅磨砂质感风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, japanese manga style enhanced with selective thick impasto accents, bold confident inking with organic line weight variation, authentic textured paint overlays only on key highlights and shadows, visible controlled brush marks, dramatic yet refined shading, warm sensual mid-saturation tones with natural paper feel, genuine hand-crafted manga authenticity, no ai sterility',
+                zh: '日漫精修厚涂风'
+            },
+            {
+                en: 'masterpiece, best quality, highly detailed, nostalgic 90s retro anime aesthetic, classic hand-painted cel shading with subtle registration imperfections, soft vhs tracking lines and gentle chromatic noise, muted yet warm natural color palette, authentic sailor moon era atmosphere and hand-drawn charm, faint analog grain overlay, no modern digital crispness',
+                zh: '90年代纯手工复古赛璐璐风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, semi-realistic anime game CG style inspired by arcane, authentic painterly brushwork on textured canvas, natural skin micro-texture and subtle pore detail, cinematic soft diffused lighting with gentle rim glow, balanced warm mid-saturation tones, dramatic yet grounded atmosphere, true digital hand-painting feel with visible artist intent, no plastic ai finish',
+                zh: '高级半写实游戏CG厚涂风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, traditional east asian ink wash anime style, expressive sumi-e brush strokes with varying ink density and natural splatter, minimalist yet soulful composition, high artistic contrast with deliberate dry brush texture, subtle warm gray-to-black tonal harmony, authentic traditional ink paper feel and breathing space, no digital over-processing',
+                zh: '高级水墨写意动漫风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, cyberpunk anime illustration with restrained neon, authentic hand-painted futuristic details, subtle chromatic aberration and film grain overlay, glowing elements with natural light bloom, balanced mid-saturation palette emphasizing deep shadows and selective highlights, genuine cyber-noir atmosphere with tactile urban texture, no oversaturated glow',
+                zh: '克制霓虹赛博朋克手绘风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, bold expressive anime illustration, confident angular yet organic linework with natural variation, dramatic hand-painted high-contrast lighting, deep velvety shadows and warm golden rim light, glistening wet skin texture with authentic sweat beads and subtle subsurface scattering, energetic yet intimate erotic mood, balanced natural saturation, true artist passion and imperfection',
+                zh: '激情表现主义手绘动漫风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, surreal dreamlike anime illustration, ethereal yet grounded hand-painted atmosphere, soft natural diffused glow with subtle lens-like imperfections, intricate organic patterns with visible brush direction, otherworldly yet warm mid-saturation color harmony, genuine surreal artist dreamscape texture and soul, no synthetic perfection',
+                zh: '梦境写实手绘超现实风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, refined modern digital hand-painted anime style, clean yet organic linework with subtle natural pressure variation, vibrant but restrained saturation with painterly color mixing, dynamic composition with authentic light behavior, warm intimate mood, visible artist brush direction and gentle canvas texture overlay, true digital traditional painting feel without ai artifacts',
+                zh: '现代精修手绘数字风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, raw expressive anime sketch style, confident rough pencil lines with natural hatching and cross-hatching, visible paper tooth and subtle graphite sheen, monochromatic warm gray tones with delicate pressure gradation, authentic hand-sketch energy and immediacy, genuine unfinished artist soul, no digital cleanup',
+                zh: '灵魂草图手绘风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, vintage comic book anime style, halftone dots and subtle color separation, authentic yellowed paper effect with faint ink bleed, bold heroic poses with dramatic speed lines, warm retro color palette with natural print variations, genuine golden age comic atmosphere, no modern vector crispness',
+                zh: '复古漫画点阵风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, minimalist line art anime style, elegant sparse lines with intentional negative space, subtle ink wash accents for depth, monochromatic with selective warm accents, authentic zen-like composition and brush economy, genuine artistic restraint and breathing room, no unnecessary details',
+                zh: '极简线条禅意风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, steampunk anime illustration, intricate mechanical details with brass and gear textures, authentic hand-painted Victorian elements, subtle smoke and gear oil stains, warm copper-toned palette with industrial shadows, genuine retro-futuristic atmosphere, no clean digital rendering',
+                zh: '蒸汽朋克机械手绘风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, fantasy epic anime style, ornate hand-painted armor and magical auras, natural elemental particle effects with subtle glow, rich warm earth tones with mystical highlights, authentic heroic saga atmosphere with visible artist passion, no generic fantasy tropes',
+                zh: '史诗幻想手绘风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, noir detective anime illustration, high-contrast shadows with subtle rain-slicked gloss, authentic fedora and trench coat textures, moody blue-gray palette with selective warm light spills, genuine pulp mystery vibe with hand-drawn grit, no bright colors',
+                zh: '黑色侦探雨夜风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, psychedelic anime style, swirling organic patterns with natural distortion, authentic hand-painted hallucinogenic effects, vibrant yet harmonious color explosions with subtle gradients, genuine mind-bending artistic vision, no structured forms',
+                zh: '迷幻漩涡手绘风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, gothic horror anime illustration, intricate lace and shadow details with natural cobweb textures, pale desaturated tones with deep crimson accents, authentic Victorian macabre atmosphere with hand-painted unease, no modern horror clichés',
+                zh: '哥特恐怖阴森风'
+            },
+            {
+                en: 'masterpiece, best quality, ultra detailed, semi-realistic semi-thick paint style, bold expressive anime illustration, confident angular yet organic linework with natural variation, dramatic hand-painted high-contrast lighting, deep velvety shadows and warm golden rim light, soft and seamless shadow transitions with no harsh two-tone shading, balanced natural saturation, true artist passion and imperfection, exquisitely detailed textures, smooth natural color gradations, lifelike skin tones, fine brushstrokes, refined visual details, thick brush texture, realistic anatomy, stylized color blocks',
+                zh: '半写实半厚涂风'
+            },
+            { en: "highly detailed anime-style digital illustration, hyper-realistic, 8k resolution", zh: "超写实动漫" },
+            { en: "high contrast, detailed shading", zh: "画面: 高对比度" },
+            { en: "volumetric lighting, tyndall effect, ray tracing", zh: "光影: 体积光" },
+            { en: "oiled skin texture, glossy surfaces, wet effects", zh: "质感: 油润光泽" },
+            { en: "impasto, thick brushstrokes, oil painting style", zh: "厚涂" },
+            { en: "2.5D, semi-realistic, unreal engine 5 render style", zh: "2.5D" }
+        ],
+        isPositive: true,
+        addToBeginning: true
+            },
+            mihoyo: {
+                title: '米哈游男角色',
                 presets: [
-                    {en: 'young male', zh: '青年男性'},
-                    {en: 'teen male', zh: '青少年男性'},
-                    {en: 'adult male', zh: '成年男性'},
-                    {en: 'twink', zh: '少年型'},
-                    {en: 'otter', zh: '水獭型'},
-                    {en: 'cub', zh: '小熊'},
-                    {en: 'jock', zh: '运动员型'},
-                    {en: 'hunk', zh: '猛男型'},
-                    {en: 'stud', zh: '种马型'},
-                    {en: 'pup', zh: '小狗型'},
-                    {en: 'master', zh: '主人型'}
+                    {en: 'Gallagher', zh: '加拉赫 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Boothill', zh: '波提欧 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Sunday', zh: '星期日 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Argenti', zh: '银枝 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Jing Yuan', zh: '景元 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Blade', zh: '刃 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Dan Heng', zh: '丹恒 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Imbibitor Lunae', zh: '丹恒·饮月 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Aventurine', zh: '砂金 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Dr. Ratio', zh: '真理医生 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Luocha', zh: '罗刹 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Gepard Landau', zh: '杰帕德 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Sampo Koski', zh: '桑博 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Jiaoqiu', zh: '椒丘 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Moze', zh: '貊泽 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Luka', zh: '卢卡 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Welt Yang', zh: '瓦尔特·杨 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Arlan', zh: '阿兰 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Cocolia Rand', zh: '可可利亚 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Yanqing', zh: '彦卿 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Luocha', zh: '罗刹 (星穹铁道)', gameZh: '星穹铁道'},
+                    {en: 'Wriothesley', zh: '莱欧斯利 (原神)', gameZh: '原神'},
+                    {en: 'Arataki Itto', zh: '荒泷一斗 (原神)', gameZh: '原神'},
+                    {en: 'Zhongli', zh: '钟离 (原神)', gameZh: '原神'},
+                    {en: 'Neuvillette', zh: '那维莱特 (原神)', gameZh: '原神'},
+                    {en: 'Kaedehara Kazuha', zh: '枫原万叶 (原神)', gameZh: '原神'},
+                    {en: 'Alhaitham', zh: '艾尔海森 (原神)', gameZh: '原神'},
+                    {en: 'Xiao', zh: '魈 (原神)', gameZh: '原神'},
+                    {en: 'Tartaglia', zh: '达达利亚 (原神)', gameZh: '原神'},
+                    {en: 'Kamisato Ayato', zh: '神里绫人 (原神)', gameZh: '原神'},
+                    {en: 'Cyno', zh: '赛诺 (原神)', gameZh: '原神'},
+                    {en: 'Diluc Ragnvindr', zh: '迪卢克 (原神)', gameZh: '原神'},
+                    {en: 'Kaeya Alberich', zh: '凯亚 (原神)', gameZh: '原神'},
+                    {en: 'Thoma', zh: '托马 (原神)', gameZh: '原神'},
+                    {en: 'Baizhu', zh: '白术 (原神)', gameZh: '原神'},
+                    {en: 'Ororon', zh: '奥罗伦 (原神)', gameZh: '原神'},
+                    {en: 'Kinich', zh: '基诺奇 (原神)', gameZh: '原神'},
+                    {en: 'Capitano', zh: '队长 (原神)', gameZh: '原神'},
+                    {en: 'Il Dottore', zh: '博士 (原神)', gameZh: '原神'},
+                    {en: 'Dainsleif', zh: '戴因斯雷布 (原神)', gameZh: '原神'},
+                    {en: 'Gorou', zh: '五郎 (原神)', gameZh: '原神'},
+                    {en: 'Sethos', zh: '赛索斯 (原神)', gameZh: '原神'},
+                    { en: "Arataki Itto, muscular male oni, tanned skin, curved red horns, spiky white hair with pinkish-red gradients", zh: "荒泷一斗 (基础)", gameZh: '原神' },
+                    { en: "Zhongli, mature male, glowing amber eyes, dark brown hair with gold tips, geo archon symbol", zh: "钟离", gameZh: '原神' },
+                    { en: "Alhaitham, muscular scholar, grey hair with teal gradients, green eyes, headset", zh: "艾尔海森", gameZh: '原神' },
+                    { en: "Wriothesley, muscular build, scars on neck, messy black hair with grey tufts, blue eyes", zh: "莱欧斯利", gameZh: '原神' },
+                    { en: "Tartaglia, ginger hair, dull blue eyes, lean muscle, fatui mask", zh: "达达利亚 (公子)", gameZh: '原神' },
+                    { en: "Neuvillette, long white hair with blue streaks, slit pupils, elegant aristocrat", zh: "那维莱特", gameZh: '原神' },
+                    { en: "Kaeya, tanned skin, eyepatch, blue hair, exotic appearance", zh: "凯亚", gameZh: '原神' },
+                    { en: "Diluc, red hair, red eyes, high ponytail, serious expression", zh: "迪卢克", gameZh: '原神' },
+                    {en: 'Von Lycaon', zh: '冯·莱卡恩 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Komano Manato', zh: '狛野真斗 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Billy Kid', zh: '比利小子 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Seth Lowell', zh: '赛斯·洛威尔 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Anton Ivanov', zh: '安东·伊万诺夫 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Ben Bigger', zh: '本·比格 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Wise', zh: '贤 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Lucius', zh: '卢修斯 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Gaston', zh: '加斯东 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Sha Ming', zh: '沙明 (绝区零)', gameZh: '绝区零'},
+                    {en: 'Marius von Hagen', zh: '陆景和 (未定事件簿)', gameZh: '未定事件簿'},
+                    {en: 'Artem Wing', zh: '左然 (未定事件簿)', gameZh: '未定事件簿'},
+                    {en: 'Vyn Richter', zh: '莫弈 (未定事件簿)', gameZh: '未定事件簿'},
+                    {en: 'Luke Pearce', zh: '夏彦 (未定事件簿)', gameZh: '未定事件簿'},
+                    {en: 'Xia Yan', zh: '夏彦 (未定事件簿)', gameZh: '未定事件簿'},
+                    {en: 'Mo Yi', zh: '莫弈 (未定事件簿)', gameZh: '未定事件簿'}
                 ],
                 isPositive: true
             },
-            face: {
-                title: '面部特征',
+            game: {
+                title: '游戏分类',
                 presets: [
-                    {en: 'sharp jawline', zh: '锋利下颌线'},
-                    {en: 'piercing eyes', zh: '锐利眼神'},
-                    {en: 'bushy eyebrows', zh: '浓眉'},
-                    {en: 'high cheekbones', zh: '高颧骨'},
-                    {en: 'dimpled chin', zh: '下巴酒窝'},
-                    {en: 'strong nose', zh: '高挺鼻梁'},
-                    {en: 'square jaw', zh: '方形下巴'},
-                    {en: 'defined cheekbones', zh: '鲜明颧骨'},
-                    {en: 'freckled face', zh: '雀斑脸'},
-                    {en: 'clean-shaven', zh: '刮干净胡子'},
-                    {en: 'five o clock shadow', zh: '五点阴影胡茬'},
-                    {en: 'handsome face', zh: '英俊面容'}
+                    {en: 'Honkai: Star Rail', zh: '崩坏：星穹铁道'},
+                    {en: 'Genshin Impact', zh: '原神'},
+                    {en: 'Zenless Zone Zero', zh: '绝区零'},
+                    {en: 'Tears of Themis', zh: '未定事件簿'},
+                    {en: 'Honkai Impact 3rd', zh: '崩坏3'},
+                    {en: 'Arknights', zh: '明日方舟'},
+                    {en: 'Fate/Grand Order', zh: '命运冠位指定'},
+                    {en: 'Granblue Fantasy', zh: '碧蓝幻想'},
+                    {en: 'Azur Lane', zh: '碧蓝航线'},
+                    {en: 'Blue Archive', zh: '蓝色档案'},
+                    {en: 'Ensemble Stars', zh: '偶像梦幻祭'},
+                    {en: 'Twisted Wonderland', zh: '扭曲仙境'},
+                    {en: 'Project Sekai', zh: '世界计划'},
+                    {en: 'Identity V', zh: '第五人格'},
+                    {en: 'Punishing: Gray Raven', zh: '战双帕弥什'},
+                    {en: 'Epic Seven', zh: '第七史诗'},
+                    {en: 'Dragalia Lost', zh: '失落的龙约'},
+                    {en: 'Fire Emblem Heroes', zh: '火焰纹章英雄'},
+                    {en: 'Summoners War', zh: '召唤师战争'},
+                    {en: 'Genshin Impact Fan', zh: '原神粉丝创作'},
+                    {en: 'League of Legends', zh: '英雄联盟'},
+                    {en: 'Valorant', zh: '无畏契约'},
+                    {en: 'Overwatch', zh: '守望先锋'}
                 ],
-                isPositive: true
+                isPositive: true,
+                addToBeginning: true
             },
-            body: {
-                title: '身体体型',
+            scene: {
+                title: '场景',
                 presets: [
-                    {en: 'muscular body', zh: '肌肉身材'},
-                    {en: 'athletic body', zh: '运动身材'},
-                    {en: 'ripped physique', zh: '健美体型'},
-                    {en: 'v-line', zh: 'V型线条'},
-                    {en: 'six-pack abs', zh: '六块腹肌'},
-                    {en: 'broad chest', zh: '宽阔胸膛'},
-                    {en: 'bulging biceps', zh: '鼓胀二头肌'},
-                    {en: 'thick thighs', zh: '粗壮大腿'},
-                    {en: 'bubble butt', zh: '圆润臀部'},
-                    {en: 'toned arms', zh: '紧实手臂'},
-                    {en: 'chiseled abs', zh: '雕刻腹肌'},
-                    {en: 'powerful legs', zh: '有力大腿'},
-                    {en: 'lean build', zh: '精瘦体型'}
-                ],
-                isPositive: true
-            },
-            penis: {
-                title: '性器官',
-                presets: [
-                    {en: 'cock', zh: '鸡巴'},
-                    {en: 'dick', zh: '老二'},
-                    {en: 'shaft', zh: '茎身'},
-                    {en: 'glans', zh: '龟头'},
-                    {en: 'foreskin', zh: '包皮'},
-                    {en: 'balls', zh: '睾丸'},
-                    {en: 'scrotum', zh: '阴囊'},
-                    {en: 'huge cock', zh: '大鸡巴'},
-                    {en: 'girthy penis', zh: '粗壮阴茎'},
-                    {en: 'veiny dick', zh: '青筋老二'},
-                    {en: 'throbbing shaft', zh: '跳动茎身'},
-                    {en: 'curved penis', zh: '弯曲阴茎'},
-                    {en: 'uncut cock', zh: '未割包皮鸡巴'},
-                    {en: 'low hangers', zh: '下垂睾丸'},
-                    {en: 'cum dripping', zh: '滴精'},
-                    {en: 'thick shaft', zh: '粗茎身'},
-                    {en: 'erect penis', zh: '勃起阴茎'},
-                    {en: 'pulsing veins', zh: '脉动血管'}
-                ],
-                isPositive: true
-            },
-            anus: {
-                title: '肛门',
-                presets: [
-                    {en: 'anus', zh: '肛门'},
-                    {en: 'tight hole', zh: '紧致肛穴'},
-                    {en: 'gaping anus', zh: '张开肛门'},
-                    {en: 'puckered hole', zh: '皱褶肛口'},
-                    {en: 'rosy hole', zh: '粉红肛穴'},
-                    {en: 'winking anus', zh: '收缩肛门'},
-                    {en: 'lubed hole', zh: '润滑肛口'},
-                    {en: 'clean anus', zh: '干净肛门'},
-                    {en: 'moist anus', zh: '湿润肛门'},
-                    {en: 'tight puckered', zh: '紧皱褶'},
-                    {en: 'exposed anus', zh: '暴露肛门'},
-                    {en: 'inviting hole', zh: '诱人肛穴'}
+                    {en: 'public bathhouse, steamy atmosphere, tiled walls, wooden benches, naked men, foggy air, hot water pools', zh: '澡堂'},
+                    {en: 'bathroom, shower running, wet floor, mirror fogged, soap bubbles, steamy glass, dripping water', zh: '浴室'},
+                    {en: 'bedroom, soft bed, dim lights, pillows scattered, rumpled sheets, intimate atmosphere', zh: '房间'},
+                    {en: 'hotel room, king size bed, city view window, city lights twinkling outside, luxury sheets, champagne glasses, luxury linens, romantic lighting, velvet curtains', zh: '酒店'},
+                    {en: 'beach, ocean waves crashing, sunset casting golden hues, sand between toes, palm trees swaying, sea breeze, towels on sand', zh: '沙滩'},
+                    {en: 'locker room, metal lockers lining walls, benches, sweaty air, towels hanging, sports equipment scattered', zh: '更衣室'},
+                    {en: 'gym, weights clanking, exercise machines, mirrors reflecting sweat, sweat puddles, fitness equipment', zh: '健身房'},
+                    {en: 'forest, trees rustling, sunlight filtering through leaves, mossy ground soft underfoot, natural sounds of birds', zh: '森林'},
+                    {en: 'office, desk cluttered with papers, computer glowing, papers scattered, late night lighting casting shadows, blinds closed', zh: '办公室'},
+                    {en: 'sauna, wooden walls beaded with moisture, hot stones hissing, steam rising, towels draped, dim red light', zh: '桑拿房'},
+                    {en: 'poolside, swimming pool rippling, lounge chairs, water reflections dancing, sunny day with blue sky', zh: '泳池边'},
+                    {en: 'rooftop, city skyline sprawling, night lights twinkling, wind whistling, urban view expansive', zh: '屋顶'},
+                    {en: 'dungeon, chains rattling, dim torches flickering, stone walls damp, mysterious atmosphere thick', zh: '地牢'},
+                    {en: 'space station, futuristic panels glowing, stars outside windows, zero gravity elements floating', zh: '太空站'},
+                    {en: 'ancient temple, ruins overgrown, vines climbing, golden light filtering in through cracks', zh: '古庙'},
+                    {en: 'night club, neon lights pulsing, dancing crowd moving, pulsing music vibes thrumming', zh: '夜店'},
+                    {en: 'leather bar, dim lighting casting shadows, chains on walls, muscular patrons, smoky air thick, bar stools worn', zh: '皮革酒吧'},
+                    {en: 'underground club, strobe lights flashing, crowded dance floor heaving, sweat-soaked bodies glistening, bass thumping deeply', zh: '地下俱乐部'},
+                    {en: 'private yacht, ocean view vast, luxury deck polished, champagne bubbling, sunset horizon painting sky, wave sounds gentle', zh: '私人游艇'},
+                    {en: 'cabin in woods, fireplace crackling, wooden walls creaking, fur rugs soft, snow outside windows drifting', zh: '林中小屋'},
+                    {en: 'alleyway at night, graffiti walls vibrant, dim streetlights humming, urban grit palpable, shadows lurking', zh: '夜间小巷'},
+                    {en: 'steam room, thick fog swirling, wooden benches warm, heat waves rising, dripping condensation echoing', zh: '蒸汽室'},
+                    {en: 'warehouse, industrial beams overhead, chains hanging loosely, concrete floor cold, dim industrial lights buzzing', zh: '仓库'},
+                    {en: 'penthouse suite, floor-to-ceiling windows panoramic, city lights below sparkling, jacuzzi tub bubbling', zh: '顶层公寓'},
+                    {en: 'cruise ship cabin, porthole window framing sea, rocking motion gentle, nautical decor authentic', zh: '游轮舱室'},
+                    {en: 'abandoned factory, rusted machinery groaning, broken windows letting in moonlight, moonlight filtering in eerily', zh: '废弃工厂'},
+                    {en: 'hot springs, natural rocks steaming, steam rising lazily, bamboo fences swaying, lantern light soft', zh: '温泉'},
+                    {en: 'gay sauna complex, multiple rooms interconnected, glory holes mysterious, stuck in wall, public use', zh: '同志桑拿综合体'},
+                    {en: 'beach house, open windows breezy, sea breeze fresh, hammock swaying, tropical plants lush', zh: '海滩小屋'},
+                    {en: 'gym shower area, multiple shower heads spraying, tiled floors slippery, steam rising, lockers nearby clanging', zh: '健身房淋浴区'},
+                    {en: 'rooftop pool, city skyline silhouetted, night swimming serene, underwater lights glowing, lounge chairs empty', zh: '屋顶泳池'},
+                    {en: 'leather workshop, tools on walls organized, workbenches sturdy, leather straps hanging, dim lighting focused', zh: '皮革工坊'},
+                    {en: 'campsite, tent pitched, campfire crackling, stars above brilliant, sleeping bags cozy, wilderness sounds ambient', zh: '露营地'},
+                    {en: 'luxury car interior, leather seats supple, tinted windows dark, city lights passing blurred, night drive smooth', zh: '豪华车内'},
+                    {en: 'prison cell, bars cold, concrete walls stark, bunk beds creaky, dim fluorescent light flickering', zh: '监狱牢房'},
+                    {en: 'art studio, easels standing, paint splatters colorful, nude models posing, natural light from windows streaming', zh: '艺术工作室'},
+                    {en: 'construction site, scaffolding towering, hard hats scattered, tools clanging, dust in air thick', zh: '建筑工地'},
+                    { en: "dimly lit modern indoor setting, laboratory, glass walls", zh: "现代实验室" },
+                    { en: "fluorescent ceiling lights, soft green-blue glow, cinematic lighting", zh: "灯光: 荧光蓝绿" },
+                    { en: "blurred background, depth of field", zh: "背景虚化" },
+                    { en: "cyberpunk city street, neon lights, rain, wet pavement", zh: "赛博朋克城市" },
+                    { en: "locker room, gym, tiled walls", zh: "更衣室/健身房" },
+                    { en: "luxury bedroom, silk sheets, dim lamp light", zh: "奢华卧室" },
+                    { en: "onsen, steam, wet tiles, bathhouse", zh: "温泉/浴室" },
+                    { en: "dungeon, dark room, chains, spotlight", zh: "地牢/暗室" }
                 ],
                 isPositive: true
             },
             action: {
-                title: '动作姿势',
+                title: '动作',
                 presets: [
-                    {en: 'frot', zh: '阴茎摩擦'},
-                    {en: 'anal fisting', zh: '肛门拳交'},
-                    {en: 'ball sucking', zh: '吸吮睾丸'},
-                    {en: 'rimming', zh: '舔肛'},
-                    {en: 'doggy style', zh: '后入姿势'},
-                    {en: 'pile driver', zh: '打桩姿势'},
-                    {en: 'cowboy position', zh: '骑乘位'},
-                    {en: 'reverse cowboy', zh: '反向骑乘'},
-                    {en: 'double penetration', zh: '双龙入穴'},
-                    {en: 'urethral play', zh: '尿道玩法'},
-                    {en: 'fisting', zh: '拳交'},
-                    {en: 'ball stretching', zh: '睾丸拉伸'},
-                    {en: 'cock pumping', zh: '阴茎泵吸'},
-                    {en: 'group sex', zh: '群交'},
-                    {en: 'glory hole', zh: '泄欲孔'},
-                    {en: 'handjob', zh: '手淫'},
-                    {en: 'blowjob', zh: '口交'},
-                    {en: 'deepthroat', zh: '深喉'},
-                    {en: '69 position', zh: '69姿势'},
-                    {en: 'edging', zh: '边缘控制'},
-                    {en: 'teasing', zh: '挑逗'},
-                    {en: 'anal sex', zh: '肛交'}
+                    {en: 'flesh colored tentacles, slimy tentacles, tentacle insertion, anal tentacle play, squirming tentacles, internal view, tentacles in stomach, tentacles wrapping around body, slime dripping, writhing in pleasure', zh: '肉色触手Play'},
+                    {en: 'handjob, milking, constant penile stimulation, edging, ruined orgasm, precum dripping, forced orgasm, penis massage, intense pleasure face, milking machine, repeated stroking', zh: '常驻撸管'},
+                    {en: 'frot, frottage, rubbing cocks together, docking, penis touching penis', zh: '阴茎摩擦'}, 
+                    {en: 'anal fisting, stretching anus, prolapse, gaped hole, whole hand inside, elbow deep', zh: '肛门拳交'},
+                    {en: 'ball sucking, licking testicles, ball worship, balls in mouth', zh: '吸吮睾丸'}, 
+                    {en: 'rimming, tongue in ass, eating ass, face buried in ass', zh: '舔肛'},
+                    {en: 'doggy style, from behind, grabbing hips, arching back', zh: '后入姿势'}, 
+                    {en: 'pile driver position, legs up, holding legs, deep penetration', zh: '打桩姿势'},
+                    {en: 'cowboy position, riding top, bouncing on cock, straddling', zh: '骑乘位'}, 
+                    {en: 'double penetration, dp, two cocks one hole, sandwich, spitroast', zh: '双龙'}, 
+                    {en: 'urethral play, sounding, urethral insertion, sounding rod', zh: '尿道玩法'},
+                    {en: 'cock pumping, enlarged penis, hyper penis, vacuum pump', zh: '阴茎泵吸'}, 
+                    {en: 'group sex, gangbang, bukkake, multiple boys, orgy', zh: '群交'},
+                    {en: 'glory hole, anonymous sex, stuck in wall, stuck in wall', zh: '泄欲孔'}, 
+                    {en: 'blowjob, sucking dick, deepthroat, cheek bulge, face fuck, saliva trail', zh: '口交'},
+                    {en: '69 position, mutual oral, upside down', zh: '69姿势'}, 
+                    {en: 'anal sex, penetration, balls slapping, knotting', zh: '肛交'},
+                    {en: 'fingering, prostate massage, internal pleasure', zh: '指交'},
+                    {en: 'facesitting, smothering, worshiping ass, smelling ass', zh: '坐脸'},
+                    {en: 'spanking, red buttocks, hand print on ass, discipline', zh: '打屁股'},
+                    {en: 'bondage, shibari, rope binding, suspension, tied up', zh: '日式绳艺'},
+                    {en: 'machine fuck, fucking machine, dildo machine, automated pleasure', zh: '机器奸'},
+                    {en: 'cum inside, creampie, overflowing cum, leaking cum', zh: '内射'},
+                    {en: 'edging play, teasing, denial, begging for release', zh: '边缘控制'},
+                    {en: 'nipple play, pinching nipples, nipple clamps, sensitive nipples', zh: '乳头玩弄'},
+                    {en: 'foot job, feet on penis, toe sucking', zh: '足交'},
+                    {en: 'whipping, flogging, red marks, pain play', zh: '鞭鞭'},
+                    {en: 'electro stimulation, e-stim, electrodes on genitals, vibrating current', zh: '电击刺激'},
+                    {en: 'wax play, dripping hot wax, candle wax on skin, red marks', zh: '蜡烛滴蜡'},
+                    {en: 'temperature play, ice cubes on skin, hot and cold sensations', zh: '温度游戏'},
+                    {en: 'breath play, choking, hand on throat, light asphyxiation', zh: '窒息游戏'},
+                    {en: 'pet play, collar wearing, crawling on fours, master-pet dynamic', zh: '宠物扮演'},
+                    {en: 'role reversal, top becoming bottom, power switch', zh: '角色反转'},
+                    {en: 'public exposure, flashing penis, voyeurism, exhibitionism', zh: '公开暴露'},
+                    {en: 'orgasm denial, chastity device, begging for cum', zh: '高潮拒绝'},
+                    {en: 'prostate milking, anal stimulation, cum extraction', zh: '前列腺挤奶'},
+                    {en: 'sounding with beads, urethral beads insertion, deep sounding', zh: '尿道珠子'},
+                    {en: 'ball stretching, weights on balls, scrotum pull', zh: '睾丸拉伸'},
+                    {en: 'cock slapping, penis hitting face, dominance display', zh: '阴茎拍打'},
+                    {en: 'threesome, mm m, two tops one bottom, alternating penetration', zh: '三人行'},
+                    {en: 'train position, multiple penetration in line, gangbang train', zh: '列车位'},
+                    {en: 'suspension play, hanging from ceiling, bound in air', zh: '悬挂游戏'},
+                    {en: 'impact play, paddling ass, bruising marks', zh: '冲击游戏'},
+                    {en: 'sensory overload, multiple stimulations at once, overwhelming pleasure', zh: '感官超载'},
+                    {en: 'humiliation play, verbal degradation, name calling', zh: '羞辱游戏'},
+                    {en: 'forced nudity, stripped clothes, embarrassed exposure', zh: '强制裸体'},
+                    {en: 'caging, locked in cage, pet confinement', zh: '关笼'},
+                    {en: 'medical play, doctor examination, prostate check', zh: '医疗扮演'},
+                    {en: 'watersports, pissing on body, urine play', zh: '尿液游戏'},
+                    {en: 'scat play, feces involvement, dirty anal', zh: '粪便游戏'},
+                    {en: 'blood play, light cutting, vampire bites', zh: '血液游戏'},
+                    {en: 'needle play, piercing skin, temporary needles', zh: '针刺游戏'},
+                    {en: 'fire play, flame near skin, controlled burns', zh: '火焰游戏'},
+                    {en: 'knife play, blade tracing skin, threat simulation', zh: '刀具游戏'},
+                    { en: "viewed from behind, looking over shoulder, seductive glance back", zh: "背面: 回眸" },
+                    { en: "leaning forward over a metallic counter, elbows resting on surface", zh: "姿势: 趴在台面上" },
+                    { en: "back arched to emphasize prominent buttocks, round buttocks, lordosis", zh: "重点: 弓背翘臀" },
+                    { en: "dynamic angle from low perspective, close-up on lower body", zh: "视角: 动态低机位" },
+                    { en: "kabedon, pinning viewer against wall, dominant pose", zh: "壁咚" },
+                    { en: "legs spread, manspreading", zh: "张开双腿" },
+                    { en: "kneeling on floor, submissive pose", zh: "跪姿" },
+                    { en: "pulling clothing, undressing", zh: "拉扯衣服" },
+                    { en: "hand on crotch, grabbing bulge", zh: "手在胯部" },
+                    { en: "hands tied behind back, bound wrists", zh: "被束缚" },
+                    { en: "smirking expression, naughty smile", zh: "坏笑" },
+                    { en: "tongue out, licking lips", zh: "吐舌" },
+                    { en: "blushing, shy expression, averted eyes", zh: "害羞" },
+                    { en: "ahegao, rolled back eyes, heavy breathing, saliva", zh: "高潮脸" },
+                    { en: "angry, furrowed brows, intense stare", zh: "愤怒" },
+                    { en: "disdainful look, looking down on viewer", zh: "轻蔑" }
                 ],
                 isPositive: true
             },
-            expression: {
-                title: '表情',
+            play: {
+                title: '玩法（含NSFW）',
                 presets: [
-                    {en: 'lustful gaze', zh: '欲望凝视'},
-                    {en: 'dominant smirk', zh: '支配性坏笑'},
-                    {en: 'submissive gaze', zh: '顺从目光'},
-                    {en: 'cum face', zh: '射精表情'},
-                    {en: 'anal penetration wince', zh: '肛交蹙眉'},
-                    {en: 'ball deep groan', zh: '深顶呻吟'},
-                    {en: 'ecstasy', zh: '狂喜'},
-                    {en: 'afterglow', zh: '高潮余韵'},
-                    {en: 'blowing kiss', zh: '飞吻'},
-                    {en: 'biting lip', zh: '咬唇'},
-                    {en: 'eye rolling', zh: '翻白眼'},
-                    {en: 'open mouth moan', zh: '张嘴呻吟'},
-                    {en: 'seductive smile', zh: '诱惑微笑'},
-                    {en: 'intense stare', zh: '激烈凝视'},
-                    {en: 'playful wink', zh: '顽皮眨眼'},
-                    {en: 'pained pleasure', zh: '痛苦快感'},
-                    {en: 'satisfied grin', zh: '满足笑容'}
+                    {en: 'handjob, milking, constant penile stimulation, edging, ruined orgasm, precum dripping, forced orgasm, penis massage, intense pleasure face, milking machine, repeated stroking', zh: '榨精'},
+                    {en: 'frot, frottage, rubbing cocks together, docking, penis touching penis', zh: '对接'}, 
+                    {en: 'anal fisting, stretching anus, prolapse, gaped hole, whole hand inside, elbow deep', zh: '脱肛'},
+                    {en: 'rimming, tongue in ass, eating ass, face buried in ass', zh: '毒龙钻'},
+                    {en: 'double penetration, dp, two cocks one hole, sandwich, spitroast', zh: '夹心'}, 
+                    {en: 'double penetration, dp, two cocks one hole, sandwich, spitroast', zh: '烤肉串'}, 
+                    {en: 'urethral play, sounding, urethral insertion, sounding rod', zh: '马眼棒'},
+                    {en: 'cock pumping, enlarged penis, hyper penis, vacuum pump', zh: '巨根'}, 
+                    {en: 'group sex, gangbang, bukkake, multiple boys, orgy', zh: '颜射派对'},
+                    {en: 'glory hole, anonymous sex, stuck in wall, stuck in wall', zh: '公用'}, 
+                    {en: 'blowjob, sucking dick, deepthroat, cheek bulge, face fuck, saliva trail', zh: '深喉'},
+                    {en: 'blowjob, sucking dick, deepthroat, cheek bulge, face fuck, saliva trail', zh: '颜面骑乘'},
+                    {en: 'anal sex, penetration, balls slapping, knotting', zh: '结'},
+                    {en: 'fingering, prostate massage, internal pleasure', zh: '前列腺按摩'},
+                    {en: 'facesitting, smothering, worshiping ass, smelling ass', zh: '闻屁股'},
+                    {en: 'spanking, red buttocks, hand print on ass, discipline', zh: '调教'},
+                    {en: 'bondage, shibari, rope binding, suspension, tied up', zh: '束缚'},
+                    {en: 'machine fuck, fucking machine, dildo machine, automated pleasure', zh: '炮机'},
+                    {en: 'cum inside, creampie, overflowing cum, leaking cum', zh: '奶油派'},
+                    {en: 'edging play, teasing, denial, begging for release', zh: '挑逗'},
+                    {en: 'foot job, feet on penis, toe sucking', zh: '脚玩'},
+                    {en: 'whipping, flogging, red marks, pain play', zh: '痛觉游戏'},
+                    {en: 'electro stimulation, e-stim, electrodes on genitals, vibrating current', zh: '电流玩弄'},
+                    {en: 'wax play, dripping hot wax, candle wax on skin, red marks', zh: '热蜡游戏'},
+                    {en: 'temperature play, ice cubes on skin, hot and cold sensations', zh: '冰火两重天'},
+                    {en: 'breath play, choking, hand on throat, light asphyxiation', zh: '扼喉'},
+                    {en: 'pet play, collar wearing, crawling on fours, master-pet dynamic', zh: '爬行'},
+                    {en: 'role reversal, top becoming bottom, power switch', zh: '攻受互换'},
+                    {en: 'public exposure, flashing penis, voyeurism, exhibitionism', zh: '窥淫'},
+                    {en: 'orgasm denial, chastity device, begging for cum', zh: '禁欲'},
+                    {en: 'prostate milking, anal stimulation, cum extraction', zh: '肛门刺激'},
+                    {en: 'sounding with beads, urethral beads insertion, deep sounding', zh: '马眼插入'},
+                    {en: 'ball stretching, weights on balls, scrotum pull', zh: '重物挂蛋'},
+                    {en: 'cock slapping, penis hitting face, dominance display', zh: '鸡巴打脸'},
+                    {en: 'threesome, mm m, two tops one bottom, alternating penetration', zh: '两攻一受'},
+                    {en: 'train position, multiple penetration in line, gangbang train', zh: '连续插入'},
+                    {en: 'suspension play, hanging from ceiling, bound in air', zh: '空中束缚'},
+                    {en: 'impact play, paddling ass, bruising marks', zh: '拍打臀部'},
+                    {en: 'sensory overload, multiple stimulations at once, overwhelming pleasure', zh: '多重刺激'},
+                    {en: 'humiliation play, verbal degradation, name calling', zh: '言语贬低'},
+                    {en: 'forced nudity, stripped clothes, embarrassed exposure', zh: '剥衣'},
+                    {en: 'caging, locked in cage, pet confinement', zh: '宠物囚禁'},
+                    {en: 'medical play, doctor examination, prostate check', zh: '前列腺检查'},
+                    {en: 'watersports, pissing on body, urine play', zh: '淋尿'},
+                    {en: 'scat play, feces involvement, dirty anal', zh: '脏肛'},
+                    {en: 'blood play, light cutting, vampire bites', zh: '轻度切割'},
+                    {en: 'needle play, piercing skin, temporary needles', zh: '皮肤穿刺'},
+                    {en: 'fire play, flame near skin, controlled burns', zh: '控火烧灼'},
+                    {en: 'knife play, blade tracing skin, threat simulation', zh: '刀刃划肤'},
+                    { en: "smirking expression, naughty smile", zh: "邪魅" },
+                    { en: "blushing, shy expression, averted eyes", zh: "脸红" },
+                    { en: "angry, furrowed brows, intense stare", zh: "强硬" }
                 ],
                 isPositive: true
             },
-            skin: {
-                title: '皮肤质感',
+            clothing_general: {
+                title: '普通服装',
                 presets: [
-                    {en: 'sweaty body', zh: '汗湿身体'},
-                    {en: 'oiled skin', zh: '油光皮肤'},
-                    {en: 'tattooed skin', zh: '纹身皮肤'},
-                    {en: 'freckled skin', zh: '雀斑皮肤'},
-                    {en: 'tanned skin', zh: '古铜色皮肤'},
-                    {en: 'pale skin', zh: '苍白皮肤'},
-                    {en: 'dark skin', zh: '深色皮肤'},
-                    {en: 'smooth skin', zh: '光滑皮肤'},
-                    {en: 'dewy skin', zh: '水光肌'},
-                    {en: 'sun-kissed', zh: '日光浴色'},
-                    {en: 'bronzed skin', zh: '青铜皮肤'},
-                    {en: 'matte skin', zh: '哑光皮肤'},
-                    {en: 'glowing skin', zh: '发光皮肤'}
+                    {en: 'suit and tie, formal wear, business suit, unbuttoned shirt', zh: '西装革履'},
+                    {en: 'police uniform, officer outfit, hat, tie, handcuffs', zh: '警服制服'},
+                    {en: 'doctor coat, stethoscope, scrubs, medical mask', zh: '医生白大褂'},
+                    {en: 'soccer uniform, knee high socks, cleats, shin guards', zh: '足球队服'},
+                    {en: 'soccer uniform, knee high socks, cleats, shin guards', zh: '长筒袜'},
+                    {en: 'waiter uniform, butler outfit, vest, bow tie, gloves', zh: '侍者'},
+                    {en: 'waiter uniform, butler outfit, vest, bow tie, gloves', zh: '执事服'},
+                    {en: 'military uniform, camouflage, boots, dog tags', zh: '军装'},
+                    {en: 'military uniform, camouflage, boots, dog tags', zh: '迷彩'},
+                    {en: 'swimsuit, speedo, wet fabric, pool water', zh: '泳装'},
+                    {en: 'swimsuit, speedo, wet fabric, pool water', zh: '三角泳裤'},
+                    {en: 'apron only, naked apron, kitchen setting', zh: '裸体围裙'},
+                    {en: 'tank top, wife beater, sweaty shirt', zh: '背心'}, 
+                    {en: 'muscle tee, tight tshirt, wet tshirt, nipples showing', zh: '紧身肌肉T恤'}, 
+                    {en: 'mesh shorts, see-through shorts, bulge clearly visible', zh: '网眼透视短裤'},
+                    {en: 'casual jeans, ripped jeans, belt unbuckled', zh: '休闲牛仔裤'},
+                    {en: 'casual jeans, ripped jeans, belt unbuckled', zh: '破洞'},
+                    {en: 'hoodie, sweatpants, casual athletic wear', zh: '连帽衫'},
+                    {en: 'hoodie, sweatpants, casual athletic wear', zh: '运动裤'},
+                    {en: 'leather jacket, biker outfit, gloves', zh: '皮夹克'},
+                    {en: 'leather jacket, biker outfit, gloves', zh: '机车服'},
+                    {en: 'tuxedo, bow tie, formal event wear', zh: '燕尾服'},
+                    {en: 'tuxedo, bow tie, formal event wear', zh: '礼服'},
+                    {en: 'chef uniform, apron, hat, kitchen tools', zh: '厨师服'},
+                    {en: 'construction worker outfit, hard hat, tool belt', zh: '建筑工服装'},
+                    {en: 'construction worker outfit, hard hat, tool belt', zh: '安全帽'},
+                    {en: 'firefighter uniform, helmet, boots, suspenders', zh: '消防员制服'},
+                    {en: 'pilot uniform, captain hat, epaulets', zh: '飞行员制服'},
+                    {en: 'sailor outfit, navy uniform, white hat', zh: '水手服'},
+                    {en: 'gym shorts, running shoes, athletic socks', zh: '健身短裤'},
+                    {en: 'business casual, polo shirt, khakis', zh: '商务休闲'},
+                    {en: 'beachwear, flip flops, sunglasses', zh: '沙滩装'},
+                    {en: 'winter coat, scarf, gloves, boots', zh: '冬装外套'},
+                    {en: 'summer shorts, sandals, tank top', zh: '夏季短裤'},
+                    {en: 'formal shirt, vest, pocket watch', zh: '正式衬衫'},
+                    {en: 'formal shirt, vest, pocket watch', zh: '马甲'},
+                    {en: 'cowboy outfit, hat, boots, spurs', zh: '牛仔服'},
+                    {en: 'samurai armor, traditional japanese', zh: '武士盔甲'},
+                    {en: 'knight armor, shield, helmet', zh: '骑士盔甲'},
+                    {en: 'superhero costume, cape, mask', zh: '超级英雄服装'},
+                    { en: "open black leather jacket with glossy shine, no shirt underneath", zh: "一斗: 敞开皮夹克" },
+                    { en: "tight black latex thong panties, hugging buttocks", zh: "一斗: 紧身丁字裤" },
+                    { en: "shiny black latex material, reflective highlights, glossy surface", zh: "材质: 乳胶" },
+                    { en: "shiny black latex material, reflective highlights, glossy surface", zh: "漆皮" },
+                    { en: "red bracelet on left wrist", zh: "配饰: 红色手镯" },
+                    { en: "red geometric tattoos on back and arms, red markings on face", zh: "特征: 鬼族纹身" },
+                    { en: "sharp fangs", zh: "特征: 尖牙" },
+                    { en: "smooth shiny skin, sweaty skin, visible droplets of sweat, wet oiled appearance", zh: "特征: 汗湿皮肤" },
+                    { en: "highly detailed muscle definition, abs, biceps, latissimus dorsi", zh: "特征: 肌肉定义" },
+                    { en: "black sclera eyes", zh: "特征: 黑色巩膜" },
+                    { en: "small black earring", zh: "配饰: 耳环" },
+                    { en: "leather body harness, chest harness, buckles", zh: "束缚带" },
+                    { en: "leather body harness, chest harness, buckles", zh: "背带" },
+                    { en: "fishnet top, see-through mesh", zh: "渔网衣" },
+                    { en: "torn clothes, shredded fabric", zh: "撕裂的衣服" },
+                    { en: "open suit jacket, unbuttoned shirt", zh: "西装(敞开)" },
+                    { en: "white fundoshi, traditional loincloth", zh: "兜裆布 (Fundoshi)" },
+                    { en: "black leather collar, metal choker", zh: "颈圈" },
+                    { en: "black leather collar, metal choker", zh: "项圈" }
+                ],
+                isPositive: true
+            },
+            underwear: {
+                title: '内衣',
+                presets: [
+                    {en: 'jockstrap, athletic supporter, exposed buttocks', zh: '后空护裆'}, 
+                    {en: 'latex briefs, rubber shorts, tight latex, shiny latex', zh: '乳胶内裤'}, 
+                    {en: 'latex briefs, rubber shorts, tight latex, shiny latex', zh: '紧身衣'}, 
+                    {en: 'fundoshi, japanese loincloth, traditional underwear', zh: '日式兜裆布'},
+                    {en: 'thong, minimal coverage, string sides', zh: '丁字裤'},
+                    {en: 'thong, minimal coverage, string sides', zh: '最小覆盖'},
+                    {en: 'boxer briefs, snug fit, cotton fabric', zh: '平角内裤'},
+                    {en: 'boxer briefs, snug fit, cotton fabric', zh: '紧身'},
+                    {en: 'bikini briefs, low rise, colorful patterns', zh: '比基尼内裤'},
+                    {en: 'bikini briefs, low rise, colorful patterns', zh: '低腰'},
+                    {en: 'mesh underwear, see-through fabric, breathable', zh: '网眼内裤'},
+                    {en: 'mesh underwear, see-through fabric, breathable', zh: '透视'},
+                    {en: 'leather thong, studded, fetish style', zh: '皮革丁字裤'},
+                    {en: 'leather thong, studded, fetish style', zh: '铆钉'},
+                    {en: 'silk boxers, loose fit, luxurious feel', zh: '丝绸拳击短裤'},
+                    {en: 'silk boxers, loose fit, luxurious feel', zh: '宽松'},
+                    {en: 'crotchless panties, open front, easy access', zh: '开裆内裤'},
+                    {en: 'crotchless panties, open front, easy access', zh: '方便进入'},
+                    {en: 'g-string, minimal back, string design', zh: 'G弦裤'},
+                    {en: 'g-string, minimal back, string design', zh: '细绳'},
+                    {en: 'compression shorts, athletic support, tight', zh: '压缩短裤'},
+                    {en: 'compression shorts, athletic support, tight', zh: '运动支撑'},
+                    {en: 'lace underwear, delicate patterns, sensual', zh: '蕾丝内裤'},
+                    {en: 'lace underwear, delicate patterns, sensual', zh: '精致'},
+                    {en: 'bulge enhancing pouch, padded front, prominent', zh: '凸显裆部内裤'},
+                    {en: 'bulge enhancing pouch, padded front, prominent', zh: '填充'},
+                    {en: 'wet underwear, soaked fabric, clinging', zh: '湿内裤'},
+                    {en: 'wet underwear, soaked fabric, clinging', zh: '贴身'},
+                    {en: 'ripped underwear, torn fabric, rough play', zh: '破损内裤'},
+                    {en: 'ripped underwear, torn fabric, rough play', zh: '撕裂'},
+                    {en: 'neon underwear, glowing colors, party style', zh: '霓虹内裤'},
+                    {en: 'neon underwear, glowing colors, party style', zh: '发光'},
+                    {en: 'animal print briefs, leopard pattern, wild', zh: '动物纹内裤'},
+                    {en: 'animal print briefs, leopard pattern, wild', zh: '豹纹'},
+                    {en: 'metallic underwear, shiny gold, luxurious', zh: '金属内裤'},
+                    {en: 'metallic underwear, shiny gold, luxurious', zh: '金色'},
+                    {en: 'transparent underwear, clear plastic, exhibitionist', zh: '透明内裤'},
+                    {en: 'transparent underwear, clear plastic, exhibitionist', zh: '塑料'},
+                    {en: 'velvet underwear, soft texture, plush', zh: '天鹅绒内裤'},
+                    {en: 'velvet underwear, soft texture, plush', zh: '柔软'},
+                    {en: 'studded underwear, metal studs, edgy', zh: '铆钉内裤'},
+                    {en: 'studded underwear, metal studs, edgy', zh: '锋利'},
+                    {en: 'camouflage briefs, military pattern, rugged', zh: '迷彩内裤'},
+                    {en: 'camouflage briefs, military pattern, rugged', zh: '军用'},
+                    {en: 'striped boxers, colorful stripes, fun', zh: '条纹拳击裤'},
+                    {en: 'striped boxers, colorful stripes, fun', zh: '彩色'},
+                    {en: 'polka dot underwear, dotted pattern, playful', zh: '圆点内裤'},
+                    {en: 'polka dot underwear, dotted pattern, playful', zh: '俏皮'},
+                    {en: 'leather briefs, black leather, dominant', zh: '皮革平角裤'},
+                    {en: 'leather briefs, black leather, dominant', zh: '黑色'},
+                    {en: 'satin thong, smooth fabric, slippery', zh: '缎面丁字裤'},
+                    {en: 'satin thong, smooth fabric, slippery', zh: '光滑'},
+                    {en: 'fishnet underwear, net pattern, sexy', zh: '鱼网内裤'},
+                    {en: 'fishnet underwear, net pattern, sexy', zh: '网状'},
+                    {en: 'bulging jockstrap, overflowing pouch, strained', zh: '鼓胀护裆'},
+                    {en: 'bulging jockstrap, overflowing pouch, strained', zh: '溢出'},
+                    {en: 'worn out underwear, holes, faded color', zh: '破旧内裤'},
+                    {en: 'worn out underwear, holes, faded color', zh: '洞孔'},
+                    {en: 'designer underwear, branded waistband, premium', zh: '设计师内裤'},
+                    {en: 'designer underwear, branded waistband, premium', zh: '品牌'}
+                ],
+                isPositive: true
+            },
+            bdsm_gear: {
+                title: 'BDSM装备',
+                presets: [
+                    {en: 'full body leather harness, chest harness, leather straps, bdsm gear', zh: '全身皮带束具'},
+                    {en: 'leather chaps, assless chaps, cowboy boots', zh: '露臀皮套裤'},
+                    {en: 'cock ring, metal ring, vibrating ring', zh: '阴茎环'}, 
+                    {en: 'cock ring, metal ring, vibrating ring', zh: '锁精环'}, 
+                    {en: 'collar and leash, dog chain, leather collar, spiked collar', zh: '项圈'},
+                    {en: 'collar and leash, dog chain, leather collar, spiked collar', zh: '狗链'},
+                    {en: 'gag, ball gag, ring gag, tape gag, mouth stuffed', zh: '口塞'}, 
+                    {en: 'gag, ball gag, ring gag, tape gag, mouth stuffed', zh: '封口'}, 
+                    {en: 'blindfold, eye mask, sensory deprivation', zh: '眼罩'},
+                    {en: 'blindfold, eye mask, sensory deprivation', zh: '蒙眼'},
+                    {en: 'chastity cage, locked penis, locked metal device, denial', zh: '贞操锁'},
+                    {en: 'chastity cage, locked penis, locked metal device, denial', zh: '笼'},
+                    {en: 'latex gimp suit, full face mask, zipper mouth', zh: '乳胶紧身衣'},
+                    {en: 'latex gimp suit, full face mask, zipper mouth', zh: '头套'},
+                    {en: 'harness with dildo, strap-on, dominant gear', zh: '假阳具束具'},
+                    {en: 'arm binders, restrained arms, leather cuffs', zh: '手臂束缚器'},
+                    {en: 'arm binders, restrained arms, leather cuffs', zh: '皮革手铐'},
+                    {en: 'ankle cuffs, spreader bar, legs apart', zh: '脚踝铐'},
+                    {en: 'ankle cuffs, spreader bar, legs apart', zh: '扩张杆'},
+                    {en: 'nipple clamps, chain connected, weighted', zh: '乳头夹'},
+                    {en: 'nipple clamps, chain connected, weighted', zh: '链条连接'},
+                    {en: 'flogger, leather whip, multi tails', zh: '皮鞭'},
+                    {en: 'flogger, leather whip, multi tails', zh: '多尾鞭'},
+                    {en: 'paddle, spanking tool, wooden or leather', zh: '拍打桨'},
+                    {en: 'paddle, spanking tool, wooden or leather', zh: '木质或皮革'},
+                    {en: 'restraint chair, bondage furniture, strapped down', zh: '束缚椅'},
+                    {en: 'restraint chair, bondage furniture, strapped down', zh: '固定'},
+                    {en: 'sling, hanging harness, suspended position', zh: '吊环'},
+                    {en: 'sling, hanging harness, suspended position', zh: '悬挂束具'},
+                    {en: 'muzzle, dog muzzle, mouth restraint', zh: '嘴套'},
+                    {en: 'muzzle, dog muzzle, mouth restraint', zh: '狗嘴套'},
+                    {en: 'hood, full head covering, sensory isolation', zh: '头罩'},
+                    {en: 'hood, full head covering, sensory isolation', zh: '感官隔离'},
+                    {en: 'straight jacket, arms bound, mental play', zh: '拘束衣'},
+                    {en: 'straight jacket, arms bound, mental play', zh: '手臂固定'},
+                    {en: 'ball stretcher, scrotum device, tension', zh: '睾丸拉伸器'},
+                    {en: 'ball stretcher, scrotum device, tension', zh: '张力'},
+                    {en: 'humbler, ball restraint, kneeling force', zh: '屈辱器'},
+                    {en: 'humbler, ball restraint, kneeling force', zh: '跪姿强制'},
+                    {en: 'electro pads, tens unit, shock play', zh: '电极垫'},
+                    {en: 'electro pads, tens unit, shock play', zh: '电击装置'},
+                    {en: 'vacuum bed, latex sheet, immobilized', zh: '真空床'},
+                    {en: 'vacuum bed, latex sheet, immobilized', zh: '乳胶固定'},
+                    {en: 'stocks, wooden restraint, head and hands locked', zh: '枷锁'},
+                    {en: 'stocks, wooden restraint, head and hands locked', zh: '木质固定'},
+                    {en: 'cross, st andrews cross, spread eagle', zh: '十字架'},
+                    {en: 'cross, st andrews cross, spread eagle', zh: '展开固定'},
+                    {en: 'cage, metal bars, confinement', zh: '笼子'},
+                    {en: 'cage, metal bars, confinement', zh: '金属监禁'},
+                    {en: 'whip marks, red welts, post impact', zh: '鞭痕'},
+                    {en: 'whip marks, red welts, post impact', zh: '红色肿胀'},
+                    {en: 'rope suspension, aerial bondage, hanging', zh: '绳索悬挂'},
+                    {en: 'rope suspension, aerial bondage, hanging', zh: '空中束缚'},
+                    {en: 'chain restraints, metal chains, heavy duty', zh: '链条束缚'},
+                    {en: 'chain restraints, metal chains, heavy duty', zh: '金属链'},
+                    {en: 'leather cuffs, wrist and ankle, padded', zh: '皮革手铐'},
+                    {en: 'leather cuffs, wrist and ankle, padded', zh: '腕踝'},
+                    {en: 'ball crusher, scrotum press, pain device', zh: '鞭丸压碎器'},
+                    {en: 'ball crusher, scrotum press, pain device', zh: '疼痛装置'},
+                    {en: 'genital clamp, penis restraint, tight squeeze', zh: '生殖器夹'},
+                    {en: 'genital clamp, penis restraint, tight squeeze', zh: '阴茎固定'}
+                ],
+                isPositive: true
+            },
+            fetish_wear: {
+                title: '情趣服装',
+                presets: [
+                    {en: 'latex catsuit, full body coverage, shiny rubber', zh: '乳胶紧身连体衣'},
+                    {en: 'latex catsuit, full body coverage, shiny rubber', zh: '全身'},
+                    {en: 'leather pants, tight fitting, zipper front', zh: '皮革裤'},
+                    {en: 'leather pants, tight fitting, zipper front', zh: '紧身拉链'},
+                    {en: 'rubber hood, face covering, breathing holes', zh: '橡胶头罩'},
+                    {en: 'rubber hood, face covering, breathing holes', zh: '呼吸孔'},
+                    {en: 'corset, waist cincher, laces tight', zh: '紧身胸衣'},
+                    {en: 'corset, waist cincher, laces tight', zh: '腰部收紧'},
+                    {en: 'fishnet stockings, thigh highs, garter belt', zh: '鱼网袜'},
+                    {en: 'fishnet stockings, thigh highs, garter belt', zh: '大腿袜'},
+                    {en: 'fishnet stockings, thigh highs, garter belt', zh: '吊袜带'},
+                    {en: 'high heels, platform boots, stiletto', zh: '高跟鞋'},
+                    {en: 'high heels, platform boots, stiletto', zh: '平台靴'},
+                    {en: 'gloves, elbow length, leather or latex', zh: '手套'},
+                    {en: 'gloves, elbow length, leather or latex', zh: '及肘'},
+                    {en: 'gloves, elbow length, leather or latex', zh: '皮革或乳胶'},
+                    {en: 'mask, anonymous play, eye holes', zh: '面具'},
+                    {en: 'mask, anonymous play, eye holes', zh: '匿名游戏'},
+                    {en: 'puppy tail plug, animal roleplay', zh: '小狗尾巴塞'},
+                    {en: 'puppy tail plug, animal roleplay', zh: '动物扮演'},
+                    {en: 'harness vest, chest exposure, straps', zh: '束具背心'},
+                    {en: 'harness vest, chest exposure, straps', zh: '胸部暴露'},
+                    {en: 'wet look clothing, shiny vinyl, clinging', zh: '湿润外观服装'},
+                    {en: 'wet look clothing, shiny vinyl, clinging', zh: '闪亮乙烯基'},
+                    {en: 'body paint, nude illusion, artistic designs', zh: '身体彩绘'},
+                    {en: 'body paint, nude illusion, artistic designs', zh: '裸体错觉'},
+                    {en: 'feather boa, tickling accessory, sensual', zh: '羽毛围巾'},
+                    {en: 'feather boa, tickling accessory, sensual', zh: '搔痒配件'},
+                    {en: 'silk robe, loose fitting, easy removal', zh: '丝绸袍子'},
+                    {en: 'silk robe, loose fitting, easy removal', zh: '宽松易脱'},
+                    {en: 'vinyl shorts, short cut, glossy', zh: '乙烯基短裤'},
+                    {en: 'vinyl shorts, short cut, glossy', zh: '短款光亮'},
+                    {en: 'leather vest, open front, masculine', zh: '皮革背心'},
+                    {en: 'leather vest, open front, masculine', zh: '开口前襟'},
+                    {en: 'rubber apron, industrial fetish', zh: '橡胶围裙'},
+                    {en: 'rubber apron, industrial fetish', zh: '工业恋物'},
+                    {en: 'lace up boots, knee high, dominant', zh: '系带靴'},
+                    {en: 'lace up boots, knee high, dominant', zh: '及膝'},
+                    {en: 'lace up boots, knee high, dominant', zh: '支配'},
+                    {en: 'collar shirt, button up, tie loose', zh: '领衬衫'},
+                    {en: 'collar shirt, button up, tie loose', zh: '扣子'},
+                    {en: 'collar shirt, button up, tie loose', zh: '领带松'},
+                    {en: 'speedo with bulge, swim fetish', zh: '凸显泳裤'},
+                    {en: 'speedo with bulge, swim fetish', zh: '游泳恋物'},
+                    {en: 'suspender straps, shirtless, erotic', zh: '吊带裤带'},
+                    {en: 'suspender straps, shirtless, erotic', zh: '无衫色情'},
+                    {en: 'mesh top, see through, nipple exposure', zh: '网眼上衣'},
+                    {en: 'mesh top, see through, nipple exposure', zh: '透视乳头'},
+                    {en: 'vinyl jacket, zipper open, teasing', zh: '乙烯基夹克'},
+                    {en: 'vinyl jacket, zipper open, teasing', zh: '拉链开挑逗'},
+                    {en: 'leather gloves, fingerless, grip', zh: '皮革手套'},
+                    {en: 'leather gloves, fingerless, grip', zh: '无指抓握'},
+                    {en: 'satin shorts, smooth feel, luxurious', zh: '缎面短裤'},
+                    {en: 'satin shorts, smooth feel, luxurious', zh: '光滑奢华'},
+                    {en: 'feather mask, masquerade, mysterious', zh: '羽毛面具'},
+                    {en: 'feather mask, masquerade, mysterious', zh: '化装神秘'},
+                    {en: 'rubber boots, thigh high, fetish footwear', zh: '橡胶靴'},
+                    {en: 'rubber boots, thigh high, fetish footwear', zh: '大腿高恋物鞋'},
+                    {en: 'lace choker, neck accessory, submissive', zh: '蕾丝项圈'},
+                    {en: 'lace choker, neck accessory, submissive', zh: '颈部顺从'},
+                    {en: 'vinyl harness, body straps, restrictive', zh: '乙烯基束具'},
+                    {en: 'vinyl harness, body straps, restrictive', zh: '身体带限制'},
+                    {en: 'silk stockings, sheer, leg fetish', zh: '丝袜'},
+                    {en: 'silk stockings, sheer, leg fetish', zh: '透明腿恋物'},
+                    {en: 'leather codpiece, genital cover, medieval', zh: '皮革护裆'},
+                    {en: 'leather codpiece, genital cover, medieval', zh: '生殖覆盖中世纪'},
+                    {en: 'rubber singlet, wrestling style, tight', zh: '橡胶紧身衣'},
+                    {en: 'rubber singlet, wrestling style, tight', zh: '摔跤风格'}
+                ],
+                isPositive: true
+            },
+            quality: {
+                title: '画质',
+                presets: [
+                    {en: 'photorealistic, realistic, raw photo', zh: '照片级真实'}, 
+                    {en: 'cinematic lighting, movie aesthetic, volumetric lighting', zh: '电影光效'},
+                    {en: 'high detail, intricate details, hyperdetailed', zh: '高细节'}, 
+                    {en: 'high detail, intricate details, hyperdetailed', zh: '超精细'}, 
+                    {en: '8k resolution, 4k, uhd, wallpaper', zh: '8K'},
+                    {en: '8k resolution, 4k, uhd, wallpaper', zh: '4K分辨率'},
+                    {en: 'sharp focus, depth of field, bokeh', zh: '锐利焦点'}, 
+                    {en: 'sharp focus, depth of field, bokeh', zh: '景深'}, 
+                    {en: 'dramatic shadows, chiaroscuro, ray tracing', zh: '戏剧性阴影'},
+                    {en: 'moody lighting, dark atmosphere, rim light', zh: '情绪光影'}, 
+                    {en: 'moody lighting, dark atmosphere, rim light', zh: '轮廓光'}, 
+                    {en: 'high contrast, vivid colors', zh: '高对比度'},
+                    {en: 'ultra realistic, unreal engine 5 render', zh: '超真实渲染'}, 
+                    {en: 'HDR, wide dynamic range', zh: '高动态范围'},
+                    {en: 'wet skin, sweaty skin, shiny skin texture', zh: '湿润皮肤'},
+                    {en: 'wet skin, sweaty skin, shiny skin texture', zh: '汗水皮肤'},
+                    {en: 'soft focus, dreamy haze, ethereal glow', zh: '柔焦'},
+                    {en: 'soft focus, dreamy haze, ethereal glow', zh: '梦幻雾气'},
+                    {en: 'low light, neon glow, cyberpunk vibes', zh: '低光'},
+                    {en: 'low light, neon glow, cyberpunk vibes', zh: '霓虹辉光'},
+                    {en: 'golden hour lighting, warm sunset tones', zh: '黄金时段光线'},
+                    {en: 'subsurface scattering, skin glow, natural translucency', zh: '次表面散射'},
+                    {en: 'subsurface scattering, skin glow, natural translucency', zh: '皮肤发光'},
+                    {en: 'god rays, volumetric fog, atmospheric depth', zh: '神光'},
+                    {en: 'god rays, volumetric fog, atmospheric depth', zh: '体积雾'},
+                    {en: 'lens flare, sun spots, photographic effects', zh: '镜头光晕'},
+                    {en: 'lens flare, sun spots, photographic effects', zh: '太阳斑点'},
+                    {en: 'bloom effect, soft glow, overexposed highlights', zh: '绽放效果'},
+                    {en: 'bloom effect, soft glow, overexposed highlights', zh: '柔和辉光'},
+                    {en: 'caustics, light refraction, water effects', zh: '焦散'},
+                    {en: 'caustics, light refraction, water effects', zh: '光折射'},
+                    {en: 'ambient occlusion, deep shadows, realistic shading', zh: '环境遮挡'},
+                    {en: 'ambient occlusion, deep shadows, realistic shading', zh: '深影'},
+                    {en: 'motion blur, dynamic action, speed lines', zh: '运动模糊'},
+                    {en: 'motion blur, dynamic action, speed lines', zh: '动态动作'},
+                    {en: 'film grain, analog texture, vintage look', zh: '胶片颗粒'},
+                    {en: 'film grain, analog texture, vintage look', zh: '模拟纹理'},
+                    {en: 'chromatic aberration, color fringing, lens distortion', zh: '色差'},
+                    {en: 'chromatic aberration, color fringing, lens distortion', zh: '颜色边缘'},
+                    {en: 'vignette, dark edges, focused center', zh: '晕影'},
+                    {en: 'vignette, dark edges, focused center', zh: '黑暗边缘'},
+                    {en: 'anamorphic lens, wide aspect, cinematic crop', zh: '变形镜头'},
+                    {en: 'anamorphic lens, wide aspect, cinematic crop', zh: '宽屏'},
+                    {en: 'tilt shift, miniature effect, selective focus', zh: '移轴'},
+                    {en: 'tilt shift, miniature effect, selective focus', zh: '微缩效果'},
+                    {en: 'fisheye lens, curved distortion, wide angle', zh: '鱼眼镜头'},
+                    {en: 'fisheye lens, curved distortion, wide angle', zh: '曲线扭曲'},
+                    {en: 'macro detail, close up texture, fine pores', zh: '微距细节'},
+                    {en: 'macro detail, close up texture, fine pores', zh: '特写纹理'},
+                    {en: 'panoramic view, wide landscape, immersive', zh: '全景视图'},
+                    {en: 'panoramic view, wide landscape, immersive', zh: '宽景'},
+                    {en: 'infrared style, heat map colors, thermal imaging', zh: '红外风格'},
+                    {en: 'infrared style, heat map colors, thermal imaging', zh: '热图'},
+                    {en: 'x-ray view, internal structures, transparent', zh: 'X光视图'},
+                    {en: 'x-ray view, internal structures, transparent', zh: '内部结构'},
+                    { en: "close up, face focus", zh: "特写" },
+                    { en: "close up, face focus", zh: "脸部焦点" },
+                    { en: "wide angle, full scene", zh: "广角" },
+                    { en: "wide angle, full scene", zh: "全景" },
+                    { en: "low angle, looking up", zh: "低角度" },
+                    { en: "low angle, looking up", zh: "仰视" },
+                    { en: "high angle, looking down", zh: "高角度" },
+                    { en: "high angle, looking down", zh: "俯视" },
+                    { en: "over the shoulder, pov", zh: "肩上" },
+                    { en: "over the shoulder, pov", zh: "视角" },
+                    { en: "dutch angle, tilted", zh: "荷兰角" },
+                    { en: "dutch angle, tilted", zh: "倾斜" },
+                    { en: "fisheye, distorted", zh: "鱼眼" },
+                    { en: "fisheye, distorted", zh: "扭曲" },
+                    { en: "macro, extreme close", zh: "微距" },
+                    { en: "macro, extreme close", zh: "极近" },
+                    { en: "panoramic, 360 view", zh: "全景" },
+                    { en: "panoramic, 360 view", zh: "360度" },
+                    { en: "aerial view, drone shot", zh: "空中视图" },
+                    { en: "aerial view, drone shot", zh: "无人机" },
+                    { en: "worm eye view, ground level", zh: "虫眼视图" },
+                    { en: "worm eye view, ground level", zh: "地面级" },
+                    { en: "bird eye view, top down", zh: "鸟眼视图" },
+                    { en: "bird eye view, top down", zh: "顶下" },
+                    { en: "medium shot, waist up", zh: "中景" },
+                    { en: "medium shot, waist up", zh: "腰上" },
+                    { en: "long shot, full body", zh: "远景" },
+                    { en: "long shot, full body", zh: "全身" },
+                    { en: "extreme wide, establishing", zh: "极广" },
+                    { en: "extreme wide, establishing", zh: "建立" },
+                    { en: "two shot, dual subjects", zh: "双人镜头" },
+                    { en: "two shot, dual subjects", zh: "双主体" },
+                    { en: "point of view, first person", zh: "视角" },
+                    { en: "point of view, first person", zh: "第一人称" },
+                    { en: "reverse shot, reaction", zh: "反转镜头" },
+                    { en: "reverse shot, reaction", zh: "反应" },
+                    { en: "tracking shot, following", zh: "跟踪镜头" },
+                    { en: "tracking shot, following", zh: "跟随" },
+                    { en: "zoom in, approaching", zh: "放大" },
+                    { en: "zoom in, approaching", zh: "接近" },
+                    { en: "zoom out, receding", zh: "缩小" },
+                    { en: "zoom out, receding", zh: "后退" },
+                    { en: "rack focus, shifting depth", zh: "变焦" },
+                    { en: "rack focus, shifting depth", zh: "移深" },
+                    { en: "handheld, shaky cam", zh: "手持" },
+                    { en: "handheld, shaky cam", zh: "抖动" },
+                    { en: "steadicam, smooth glide", zh: "稳定器" },
+                    { en: "steadicam, smooth glide", zh: "平滑滑行" },
+                    { en: "dolly zoom, vertigo effect", zh: "推拉变焦" },
+                    { en: "dolly zoom, vertigo effect", zh: "眩晕效果" },
+                    { en: "split screen, multiple views", zh: "分屏" },
+                    { en: "split screen, multiple views", zh: "多视图" },
+                    { en: "mirror shot, reflection", zh: "镜子镜头" },
+                    { en: "mirror shot, reflection", zh: "反射" },
+                    { en: "underwater angle, submerged", zh: "水下角度" },
+                    { en: "underwater angle, submerged", zh: "淹没" },
+                    { en: "night vision, green tint", zh: "夜视" },
+                    { en: "night vision, green tint", zh: "绿调" },
+                    { en: "thermal camera, heat map", zh: "热像仪" },
+                    { en: "thermal camera, heat map", zh: "热图" },
+                    { en: "xray vision, internal view", zh: "X光视觉" },
+                    { en: "xray vision, internal view", zh: "内部视图" },
+                    { en: "slow motion capture, detailed action", zh: "慢动作捕捉" },
+                    { en: "slow motion capture, detailed action", zh: "细节动作" },
+                    { en: "time lapse, accelerated", zh: "延时摄影" },
+                    { en: "time lapse, accelerated", zh: "加速" },
+                    { en: "bullet time, matrix style", zh: "子弹时间" },
+                    { en: "bullet time, matrix style", zh: "矩阵风格" },
+                    { en: "360 rotation, orbiting", zh: "360旋转" },
+                    { en: "360 rotation, orbiting", zh: "轨道" },
+                    { en: "canted frame, off kilter", zh: "倾斜框架" },
+                    { en: "canted frame, off kilter", zh: "偏斜" }
+                ],
+                isPositive: true
+            },
+            age: {
+                title: '年龄/体型',
+                presets: [
+                    {en: 'young male, boy, shota', zh: '少年'},
+                    {en: 'young male, boy, shota', zh: '正太'}, 
+                    {en: 'adult male, man, guy', zh: '成年男性'},
+                    {en: 'twink, slim body, smooth skin', zh: '美少年'},
+                    {en: 'twink, slim body, smooth skin', zh: '清秀受'}, 
+                    {en: 'otter, hairy slim body, lean muscle', zh: '水獭型'},
+                    {en: 'otter, hairy slim body, lean muscle', zh: '精瘦毛男'}, 
+                    {en: 'cub, young chubby, hairy', zh: '小熊'}, 
+                    {en: 'bear, big muscular belly, hairy body, daddy', zh: '熊'},
+                    {en: 'bear, big muscular belly, hairy body, daddy', zh: '壮熊'},
+                    {en: 'bear, big muscular belly, hairy body, daddy', zh: '老爹'},
+                    {en: 'jock, athletic body, broad shoulders', zh: '体育生'},
+                    {en: 'jock, athletic body, broad shoulders', zh: '运动员型'}, 
+                    {en: 'hunk, bodybuilder, huge muscles, veins', zh: '猛男'},
+                    {en: 'hunk, bodybuilder, huge muscles, veins', zh: '健美型'}, 
+                    {en: 'stud, dominant top, masculine', zh: '种马'},
+                    {en: 'stud, dominant top, masculine', zh: '大猛攻'}, 
+                    {en: 'mature man, dilf, middle aged', zh: '熟男'},
+                    {en: 'mature man, dilf, middle aged', zh: '大叔'}, 
+                    {en: 'muscular body, abs, pecs, biceps', zh: '肌肉身材'},
+                    {en: 'ripped physique, low body fat, defined muscles', zh: '精壮线条'}, 
+                    {en: 'lean build, slender, skinny', zh: '纤细身材'},
+                    {en: 'chubby body, soft belly, plump', zh: '丰满体型'},
+                    {en: 'elderly man, wise appearance, silver hair', zh: '老年男性'},
+                    {en: 'average build, normal physique', zh: '平均体型'},
+                    {en: 'twunk, muscular twink, toned slim', zh: '肌肉美少年'},
+                    {en: 'twunk, muscular twink, toned slim', zh: '健美瘦'},
+                    {en: 'wolf, dominant hairy, aggressive build', zh: '狼型'},
+                    {en: 'wolf, dominant hairy, aggressive build', zh: '支配毛男'},
+                    {en: 'pup, submissive young, playful body', zh: '小狗型'},
+                    {en: 'pup, submissive young, playful body', zh: '顺从年轻'},
+                    {en: 'daddy bear, older muscular, protective', zh: '爹熊'},
+                    {en: 'daddy bear, older muscular, protective', zh: '年长肌肉'},
+                    {en: 'gym rat, vascular arms, shredded abs', zh: '健身狂'},
+                    {en: 'gym rat, vascular arms, shredded abs', zh: '血管手臂'},
+                    {en: 'power bottom, muscular ass, strong legs', zh: '力量受'},
+                    {en: 'power bottom, muscular ass, strong legs', zh: '肌肉臀'},
+                    {en: 'versatile, balanced physique, adaptable', zh: '多功能'},
+                    {en: 'versatile, balanced physique, adaptable', zh: '平衡体型'},
+                    {en: 'beefcake, massive build, powerlifter', zh: '牛肉饼'},
+                    {en: 'beefcake, massive build, powerlifter', zh: '巨大体格'},
+                    {en: 'skinny twink, fragile appearance, delicate', zh: '瘦弱美少年'},
+                    {en: 'skinny twink, fragile appearance, delicate', zh: '脆弱'},
+                    {en: 'chaser, admirer build, average hairy', zh: '追熊者'},
+                    {en: 'chaser, admirer build, average hairy', zh: '平均毛'},
+                    {en: 'bull, dominant large, intimidating', zh: '公牛型'},
+                    {en: 'bull, dominant large, intimidating', zh: '支配大'},
+                    {en: 'pig, dirty play lover, sloppy build', zh: '猪型'},
+                    {en: 'pig, dirty play lover, sloppy build', zh: '脏玩爱好者'},
+                    {en: 'leather daddy, older leather wearer', zh: '皮革爹'},
+                    {en: 'leather daddy, older leather wearer', zh: '年长皮革'},
+                    {en: 'circuit boy, party muscular, tanned', zh: '派对男孩'},
+                    {en: 'circuit boy, party muscular, tanned', zh: '肌肉晒黑'},
+                    {en: 'geek, nerdy slim, glasses wearing', zh: '极客'},
+                    {en: 'geek, nerdy slim, glasses wearing', zh: '瘦弱书呆子'}
+                ],
+                isPositive: true
+            },
+            face: {
+                title: '面部/表情',
+                presets: [
+                    {en: 'sharp jawline, chiseled face', zh: '锋利下颌线'}, 
+                    {en: 'piercing eyes, intense stare', zh: '锐利眼神'},
+                    {en: 'bushy eyebrows, thick brows', zh: '浓眉'}, 
+                    {en: 'high cheekbones', zh: '高颧骨'},
+                    {en: 'strong nose, roman nose', zh: '高挺鼻梁'}, 
+                    {en: 'clean-shaven, smooth face', zh: '无胡须'},
+                    {en: 'five o clock shadow, stubble', zh: '性感胡茬'}, 
+                    {en: 'full beard, goatee, mustache', zh: '大胡子'},
+                    {en: 'full beard, goatee, mustache', zh: '山羊胡'},
+                    {en: 'handsome face, beautiful face, bishounen', zh: '英俊'},
+                    {en: 'handsome face, beautiful face, bishounen', zh: '美型'},
+                    {en: 'lustful gaze, heart shaped pupils', zh: '欲望凝视'},
+                    {en: 'lustful gaze, heart shaped pupils', zh: '爱心眼'}, 
+                    {en: 'dominant smirk, evil smile', zh: '支配性坏笑'},
+                    {en: 'submissive gaze, looking up, blushing', zh: '顺从目光'},
+                    {en: 'submissive gaze, looking up, blushing', zh: '脸红'}, 
+                    {en: 'cum face, orgasm face, rolling eyes, tongue out', zh: '高潮脸'},
+                    {en: 'cum face, orgasm face, rolling eyes, tongue out', zh: '阿黑颜'},
+                    {en: 'ecstasy, pleasure, open mouth, drooling', zh: '狂喜'},
+                    {en: 'ecstasy, pleasure, open mouth, drooling', zh: '流口水'}, 
+                    {en: 'biting lip, holding back moans', zh: '咬唇'},
+                    {en: 'biting lip, holding back moans', zh: '忍耐'}, 
+                    {en: 'seductive smile, wink', zh: '诱惑微笑'},
+                    {en: 'painful expression, tears, crying', zh: '痛苦'},
+                    {en: 'painful expression, tears, crying', zh: '哭泣'},
+                    {en: 'painful expression, tears, crying', zh: '眼泪'},
+                    {en: 'confident grin, smug look', zh: '自信笑容'},
+                    {en: 'sleepy eyes, relaxed face', zh: '困倦表情'},
+                    {en: 'angry scowl, furrowed brows', zh: '愤怒表情'},
+                    {en: 'playful wink, cheeky smile', zh: '调皮眨眼'},
+                    {en: 'playful wink, cheeky smile', zh: '顽皮笑'},
+                    {en: 'exhausted pant, heavy breathing', zh: '疲惫喘息'},
+                    {en: 'exhausted pant, heavy breathing', zh: '沉重呼吸'},
+                    {en: 'surprised gasp, wide eyes', zh: '惊讶喘气'},
+                    {en: 'surprised gasp, wide eyes', zh: '睁大眼'},
+                    {en: 'contented sigh, closed eyes', zh: '满足叹息'},
+                    {en: 'contented sigh, closed eyes', zh: '闭眼'},
+                    {en: 'aroused flush, red cheeks', zh: '兴奋潮红'},
+                    {en: 'aroused flush, red cheeks', zh: '红脸颊'},
+                    {en: 'defiant glare, clenched jaw', zh: '挑衅瞪视'},
+                    {en: 'defiant glare, clenched jaw', zh: '咬牙'},
+                    {en: 'bashful look, averted eyes', zh: '害羞目光'},
+                    {en: 'bashful look, averted eyes', zh: '避开眼'},
+                    {en: 'intense focus, narrowed eyes', zh: '专注凝视'},
+                    {en: 'intense focus, narrowed eyes', zh: '眯眼'},
+                    {en: 'joyful laugh, open mouth smile', zh: '欢乐大笑'},
+                    {en: 'joyful laugh, open mouth smile', zh: '开口笑'},
+                    {en: 'melancholy stare, distant look', zh: '忧郁凝视'},
+                    {en: 'melancholy stare, distant look', zh: '遥远看'},
+                    {en: 'sneering contempt, raised eyebrow', zh: '嘲笑轻蔑'},
+                    {en: 'sneering contempt, raised eyebrow', zh: '扬眉'},
+                    {en: 'ecstatic moan, head thrown back', zh: '狂喜呻吟'},
+                    {en: 'ecstatic moan, head thrown back', zh: '头后仰'},
+                    {en: 'nervous bite, lip chewing', zh: '紧张咬唇'},
+                    {en: 'nervous bite, lip chewing', zh: '嚼唇'},
+                    {en: 'serene calm, neutral expression', zh: '宁静平静'},
+                    {en: 'serene calm, neutral expression', zh: '中性表情'},
+                    {en: 'furious rage, bared teeth', zh: '狂怒愤怒'},
+                    {en: 'furious rage, bared teeth', zh: '露齿'}
+                ],
+                isPositive: true
+            },
+            penis: {
+                title: '性器官/后庭',
+                presets: [
+                    {en: 'cock, penis, dick, member', zh: '鸡巴'},
+                    {en: 'cock, penis, dick, member', zh: '阴茎'}, 
+                    {en: 'huge cock, monster cock, thick cock', zh: '巨根'},
+                    {en: 'huge cock, monster cock, thick cock', zh: '粗大'},
+                    {en: 'girthy penis, thick shaft, mushroom head', zh: '粗壮'},
+                    {en: 'girthy penis, thick shaft, mushroom head', zh: '蘑菇头'}, 
+                    {en: 'veiny dick, vascular penis, pulsing veins', zh: '爆筋'},
+                    {en: 'veiny dick, vascular penis, pulsing veins', zh: '脉动'},
+                    {en: 'glans, sensitive head, shiny glans', zh: '龟头'},
+                    {en: 'glans, sensitive head, shiny glans', zh: '光亮'}, 
+                    {en: 'foreskin, hooded cock, phimosis', zh: '包皮'},
+                    {en: 'foreskin, hooded cock, phimosis', zh: '包茎'}, 
+                    {en: 'balls, testicles, sack, scrotum', zh: '睾丸'},
+                    {en: 'balls, testicles, sack, scrotum', zh: '阴囊'}, 
+                    {en: 'low hang hangers, heavy balls, huge balls', zh: '巨蛋'},
+                    {en: 'low hang hangers, heavy balls, huge balls', zh: '下垂'},
+                    {en: 'cum dripping, leaking precum, messy', zh: '滴精'},
+                    {en: 'cum dripping, leaking precum, messy', zh: '前列腺液'}, 
+                    {en: 'erect penis, hard rock, throbbing', zh: '勃起'},
+                    {en: 'erect penis, hard rock, throbbing', zh: '坚硬'}, 
+                    {en: 'uncut cock, natural penis', zh: '未割包皮'},
+                    {en: 'curved cock, upward curve', zh: '弯曲'},
+                    {en: 'curved cock, upward curve', zh: '上翘'},
+                    {en: 'anus, asshole, rosebud', zh: '肛门'},
+                    {en: 'anus, asshole, rosebud', zh: '菊花'}, 
+                    {en: 'tight hole, virgin ass', zh: '紧致'},
+                    {en: 'tight hole, virgin ass', zh: '处菊'},
+                    {en: 'gaping anus, loose hole, used hole', zh: '张开'},
+                    {en: 'gaping anus, loose hole, used hole', zh: '松弛'}, 
+                    {en: 'puckered hole, wrinkled', zh: '皱褶'},
+                    {en: 'puckered hole, wrinkled', zh: '收缩'},
+                    {en: 'rosy hole, pink anus', zh: '粉红肛穴'}, 
+                    {en: 'lubed hole, wet anus, oily', zh: '润滑'},
+                    {en: 'lubed hole, wet anus, oily', zh: '湿润'},
+                    {en: 'exposed anus, presenting ass', zh: '展示后庭'},
+                    {en: 'circumcised penis, cut cock', zh: '割包皮阴茎'},
+                    {en: 'hairy pubic area, bush', zh: '阴毛丛生'},
+                    {en: 'shaved smooth, hairless genitals', zh: '剃光'},
+                    {en: 'shaved smooth, hairless genitals', zh: '无毛'},
+                    {en: 'long shaft, extended length, deep reach', zh: '长轴'},
+                    {en: 'long shaft, extended length, deep reach', zh: '延伸长度'},
+                    {en: 'ridged penis, textured surface, bumpy', zh: '脊状阴茎'},
+                    {en: 'ridged penis, textured surface, bumpy', zh: '纹理表面'},
+                    {en: 'swollen glans, inflated head, sensitive tip', zh: '肿胀龟头'},
+                    {en: 'swollen glans, inflated head, sensitive tip', zh: '膨胀头'},
+                    {en: 'hanging foreskin, loose skin, natural drape', zh: '下垂包皮'},
+                    {en: 'hanging foreskin, loose skin, natural drape', zh: '松皮肤'},
+                    {en: 'tight scrotum, contracted balls, cold effect', zh: '紧缩阴囊'},
+                    {en: 'tight scrotum, contracted balls, cold effect', zh: '收缩蛋'},
+                    {en: 'engorged veins, bulging blood vessels, aroused', zh: '充血静脉'},
+                    {en: 'engorged veins, bulging blood vessels, aroused', zh: '鼓起血管'},
+                    {en: 'pearly precum, glistening drop, lubrication', zh: '珍珠前列腺液'},
+                    {en: 'pearly precum, glistening drop, lubrication', zh: '闪光滴'},
+                    {en: 'flaccid penis, soft dick, relaxed state', zh: '松软阴茎'},
+                    {en: 'flaccid penis, soft dick, relaxed state', zh: '放松状态'},
+                    {en: 'semi erect, half hard, growing arousal', zh: '半勃起'},
+                    {en: 'semi erect, half hard, growing arousal', zh: '半硬增长'},
+                    {en: 'twitching cock, spasming penis, involuntary', zh: '抽搐鸡巴'},
+                    {en: 'twitching cock, spasming penis, involuntary', zh: '痉挛阴茎'},
+                    {en: 'prolapsed anus, everted hole, extreme stretch', zh: '脱出肛门'},
+                    {en: 'prolapsed anus, everted hole, extreme stretch', zh: '外翻孔'},
+                    {en: 'winking anus, contracting hole, teasing', zh: '眨眼肛门'},
+                    {en: 'winking anus, contracting hole, teasing', zh: '收缩孔'},
+                    {en: 'hairy anus, rim hair, natural fuzz', zh: '毛肛门'},
+                    {en: 'hairy anus, rim hair, natural fuzz', zh: '边缘毛'},
+                    {en: 'swollen anus, post fuck, red rim', zh: '肿胀肛门'},
+                    {en: 'swollen anus, post fuck, red rim', zh: '操后红边'},
+                    {en: 'dripping anus, leaking lube, messy hole', zh: '滴水肛门'},
+                    {en: 'dripping anus, leaking lube, messy hole', zh: '漏润滑液'},
+                    {en: 'dark anus, pigmented rim, natural color', zh: '深色肛门'},
+                    {en: 'dark anus, pigmented rim, natural color', zh: '色素边'},
+                    {en: 'small penis, tiny tiny dick, micro member', zh: '小阴茎'},
+                    {en: 'small penis, tiny tiny dick, micro member', zh: '微型'},
+                    {en: 'horse cock, flared head, animalistic', zh: '马鸡巴'},
+                    {en: 'horse cock, flared head, animalistic', zh: '喇叭头'},
+                    {en: 'knotted penis, base swell, wolf like', zh: '结阴茎'},
+                    {en: 'knotted penis, base swell, wolf like', zh: '基部肿胀'},
+                    {en: 'ridged glans, coronal ridge, textured', zh: '脊龟头'},
+                    {en: 'ridged glans, coronal ridge, textured', zh: '冠状脊'},
+                    {en: 'freckled penis, spotted shaft, unique marks', zh: '雀斑阴茎'},
+                    {en: 'freckled penis, spotted shaft, unique marks', zh: '斑点轴'},
+                    {en: 'pierced penis, prince albert, jewelry', zh: '穿孔阴茎'},
+                    {en: 'pierced penis, prince albert, jewelry', zh: '王子阿尔伯特'},
+                    {en: 'tattooed penis, inked shaft, designs', zh: '纹身阴茎'},
+                    {en: 'tattooed penis, inked shaft, designs', zh: '墨轴'},
+                    {en: 'oily penis, lubed dick, shiny slick', zh: '油阴茎'},
+                    {en: 'oily penis, lubed dick, shiny slick', zh: '润滑鸡巴'},
+                    {en: 'sweaty balls, moist scrotum, glistening', zh: '汗睾丸'},
+                    {en: 'sweaty balls, moist scrotum, glistening', zh: '湿阴囊'},
+                    {en: 'asymmetrical balls, uneven hang, natural', zh: '不对称蛋'},
+                    {en: 'asymmetrical balls, uneven hang, natural', zh: '不均下垂'},
+                    {en: 'veiny balls, vascular scrotum, textured', zh: '筋蛋'},
+                    {en: 'veiny balls, vascular scrotum, textured', zh: '血管阴囊'},
+                    {en: 'puffy anus, swollen rim, aroused hole', zh: '肿肛门'},
+                    {en: 'puffy anus, swollen rim, aroused hole', zh: '肿边'},
+                    {en: 'internal anus view, cross section, deep inside', zh: '内部肛视图'},
+                    {en: 'internal anus view, cross section, deep inside', zh: '横截面'},
+                    {en: 'cum filled anus, overflowing hole, creampie', zh: '精满肛门'},
+                    {en: 'cum filled anus, overflowing hole, creampie', zh: '溢出孔'},
+                    {en: 'clenched anus, tight squeeze, resistance', zh: '紧握肛门'},
+                    {en: 'clenched anus, tight squeeze, resistance', zh: '紧挤'},
+                    {en: 'relaxed anus, open invitation, ready', zh: '放松肛门'},
+                    {en: 'relaxed anus, open invitation, ready', zh: '开放邀请'},
+                    {en: 'bruised penis, rough play marks, red', zh: '瘀伤阴茎'},
+                    {en: 'bruised penis, rough play marks, red', zh: '粗玩痕迹'},
+                    {en: 'engorged penis, fully aroused, maximum size', zh: '充血阴茎'},
+                    {en: 'engorged penis, fully aroused, maximum size', zh: '最大尺寸'},
+                    {en: 'curved anus entry, angled hole, unique', zh: '弯曲肛入口'},
+                    {en: 'curved anus entry, angled hole, unique', zh: '角度孔'},
+                    {en: 'multiple piercings, ladder piercing, decorated', zh: '多穿孔'},
+                    {en: 'multiple piercings, ladder piercing, decorated', zh: '梯子穿孔'},
+                    {en: 'stretched foreskin, pulled back, exposed', zh: '拉伸包皮'},
+                    {en: 'stretched foreskin, pulled back, exposed', zh: '拉回暴露'},
+                    {en: 'hairy balls, fuzzy scrotum, dense', zh: '毛蛋'},
+                    {en: 'hairy balls, fuzzy scrotum, dense', zh: '毛阴囊'},
+                    {en: 'smooth anus, hairless rim, clean shaven', zh: '光滑肛门'},
+                    {en: 'smooth anus, hairless rim, clean shaven', zh: '无毛边'},
+                    {en: 'pulsing anus, rhythmic contraction, alive', zh: '脉动肛门'},
+                    {en: 'pulsing anus, rhythmic contraction, alive', zh: '节奏收缩'},
+                    {en: 'dripping precum string, connected drop, viscous', zh: '滴前列腺液串'},
+                    {en: 'dripping precum string, connected drop, viscous', zh: '粘稠'},
+                    {en: 'thick cum veins, semen channels, detailed', zh: '粗精脉'},
+                    {en: 'thick cum veins, semen channels, detailed', zh: '精液通道'},
+                    {en: 'ribbed shaft, natural ridges, pleasurable', zh: '肋状轴'},
+                    {en: 'ribbed shaft, natural ridges, pleasurable', zh: '自然脊'},
+                    {en: 'bulbous head, large glans, pronounced', zh: '球状头'},
+                    {en: 'bulbous head, large glans, pronounced', zh: '大龟头'},
+                    {en: 'tapered penis, narrow tip, wide base', zh: '锥形阴茎'},
+                    {en: 'tapered penis, narrow tip, wide base', zh: '窄尖宽基'},
+                    {en: 'flared base, plug like, secure fit', zh: '喇叭基部'},
+                    {en: 'flared base, plug like, secure fit', zh: '塞状固定'},
+                    {en: 'knobbed penis, bumpy texture, stimulating', zh: '结节阴茎'},
+                    {en: 'knobbed penis, bumpy texture, stimulating', zh: '凸凹纹理'},
+                    {en: 'spiral veins, twisting vessels, unique', zh: '螺旋静脉'},
+                    {en: 'spiral veins, twisting vessels, unique', zh: '扭曲血管'},
+                    {en: 'pendulous balls, swinging sack, motion', zh: '下垂蛋'},
+                    {en: 'pendulous balls, swinging sack, motion', zh: '摇摆阴囊'},
+                    {en: 'contracted anus, puckered tight, virgin like', zh: '收缩肛门'},
+                    {en: 'contracted anus, puckered tight, virgin like', zh: '紧皱处女般'},
+                    {en: 'inflated balls, full semen, ready to burst', zh: '膨胀蛋'},
+                    {en: 'inflated balls, full semen, ready to burst', zh: '满精液'},
+                    {en: 'sensitive frenulum, underside ridge, erogenous', zh: '敏感系带'},
+                    {en: 'sensitive frenulum, underside ridge, erogenous', zh: '下侧脊'},
+                    {en: 'meaty penis, thick flesh, substantial', zh: '肉感阴茎'},
+                    {en: 'meaty penis, thick flesh, substantial', zh: '厚肉'},
+                    {en: 'protruding veins, raised surfaces, textured', zh: '突出静脉'},
+                    {en: 'protruding veins, raised surfaces, textured', zh: '凸起表面'},
+                    {en: 'moist glans, wet tip, aroused shine', zh: '湿润龟头'},
+                    {en: 'moist glans, wet tip, aroused shine', zh: '湿尖'},
+                    {en: 'stretched anus, post insertion, loose', zh: '拉伸肛门'},
+                    {en: 'stretched anus, post insertion, loose', zh: '插入后松'},
+                    {en: 'quivering penis, trembling shaft, excitement', zh: '颤抖阴茎'},
+                    {en: 'quivering penis, trembling shaft, excitement', zh: '颤轴'},
+                    {en: 'darkened glans, aroused color, deep red', zh: '变暗龟头'},
+                    {en: 'darkened glans, aroused color, deep red', zh: '深红'},
+                    {en: 'hanging penis, downward curve, relaxed', zh: '下垂阴茎'},
+                    {en: 'hanging penis, downward curve, relaxed', zh: '向下弯'},
+                    {en: 'engulfed anus, filled hole, stuffed', zh: '吞没肛门'},
+                    {en: 'engulfed anus, filled hole, stuffed', zh: '填满孔'},
+                    {en: 'ridged anus, textured rim, detailed folds', zh: '脊肛门'},
+                    {en: 'ridged anus, textured rim, detailed folds', zh: '纹理边'},
+                    {en: 'cum coated penis, sticky shaft, post ejaculation', zh: '精涂阴茎'},
+                    {en: 'cum coated penis, sticky shaft, post ejaculation', zh: '粘轴'},
+                    {en: 'swollen scrotum, enlarged sack, full', zh: '肿阴囊'},
+                    {en: 'swollen scrotum, enlarged sack, full', zh: '放大袋'},
+                    {en: 'tender anus, sensitive hole, gentle', zh: '嫩肛门'},
+                    {en: 'tender anus, sensitive hole, gentle', zh: '敏感孔'},
+                    {en: 'rigid penis, unyielding hardness, steel like', zh: '刚硬阴茎'},
+                    {en: 'rigid penis, unyielding hardness, steel like', zh: '钢铁般'},
+                    {en: 'protruding glans, exposed head, circumcised', zh: '突出龟头'},
+                    {en: 'protruding glans, exposed head, circumcised', zh: '内部暴露'},
+                    {en: 'fleshy balls, soft texture, squeezable', zh: '肉感蛋'},
+                    {en: 'fleshy balls, soft texture, squeezable', zh: '柔软纹理'},
+                    {en: 'inviting anus, open slightly, welcoming', zh: '邀请肛门'},
+                    {en: 'inviting anus, open slightly, welcoming', zh: '微开欢迎'},
+                    {en: 'throbbing veins, pulsing blood, alive', zh: '搏动静脉'},
+                    {en: 'throbbing veins, pulsing blood, alive', zh: '脉动血'},
+                    {en: 'glistening anus, lubed rim, shiny', zh: '闪光肛门'},
+                    {en: 'glistening anus, lubed rim, shiny', zh: '润边'}
                 ],
                 isPositive: true
             },
             hair: {
                 title: '头发',
                 presets: [
-                    {en: 'buzz cut', zh: '寸头'},
-                    {en: 'undercut', zh: '底层修剪'},
-                    {en: 'fade haircut', zh: '渐变发型'},
-                    {en: 'slicked back', zh: '后梳发型'},
-                    {en: 'messy hair', zh: '凌乱头发'},
-                    {en: 'long hair', zh: '长发'},
-                    {en: 'short hair', zh: '短发'},
-                    {en: 'crew cut', zh: '平头'},
-                    {en: 'spiky hair', zh: '刺猬头'},
-                    {en: 'curly hair', zh: '卷发'},
-                    {en: 'straight hair', zh: '直发'},
-                    {en: 'wavy hair', zh: '波浪发'}
+                    {en: 'short hair, buzz cut', zh: '短发'},
+                    {en: 'short hair, buzz cut', zh: '寸头'},
+                    {en: 'long hair, flowing locks', zh: '长发'},
+                    {en: 'long hair, flowing locks', zh: '飘逸'},
+                    {en: 'ponytail, tied back', zh: '马尾'},
+                    {en: 'messy hair, bedhead', zh: '凌乱发型'},
+                    {en: 'curly hair, waves', zh: '卷发'},
+                    {en: 'straight hair, sleek', zh: '直发'},
+                    {en: 'blonde hair, golden', zh: '金发'},
+                    {en: 'black hair, raven', zh: '黑发'},
+                    {en: 'red hair, fiery', zh: '红发'},
+                    {en: 'blue hair, vibrant', zh: '蓝发'},
+                    {en: 'bald, shaved head', zh: '光头'},
+                    {en: 'undercut, shaved sides', zh: '铲青发型'},
+                    {en: 'mohawk, spiked up', zh: '莫霍克'},
+                    {en: 'mohawk, spiked up', zh: '竖起'},
+                    {en: 'dreadlocks, twisted strands', zh: '脏辫'},
+                    {en: 'dreadlocks, twisted strands', zh: '扭绞'},
+                    {en: 'afro, natural curls', zh: '爆炸头'},
+                    {en: 'afro, natural curls', zh: '自然卷'},
+                    {en: 'side part, combed over', zh: '侧分'},
+                    {en: 'side part, combed over', zh: '梳过'},
+                    {en: 'top knot, bun', zh: '顶髻'},
+                    {en: 'top knot, bun', zh: '发髻'},
+                    {en: 'braids, woven hair', zh: '辫子'},
+                    {en: 'braids, woven hair', zh: '编织'},
+                    {en: 'silver hair, grey streaks', zh: '银发'},
+                    {en: 'silver hair, grey streaks', zh: '灰条纹'},
+                    {en: 'dyed hair, colorful highlights', zh: '染发'},
+                    {en: 'dyed hair, colorful highlights', zh: '彩色高光'},
+                    {en: 'wet hair, slicked back', zh: '湿发'},
+                    {en: 'wet hair, slicked back', zh: '后梳'},
+                    {en: 'spiky hair, gelled up', zh: '刺发'},
+                    {en: 'spiky hair, gelled up', zh: '胶定型'},
+                    {en: 'crew cut, military style', zh: '平头'},
+                    {en: 'crew cut, military style', zh: '军式'},
+                    {en: 'long bangs, covering eyes', zh: '长刘海'},
+                    {en: 'long bangs, covering eyes', zh: '遮眼'},
+                    {en: 'mullet, business front party back', zh: '鲻鱼头'},
+                    {en: 'mullet, business front party back', zh: '前后对比'},
+                    {en: 'cornrows, tight braids', zh: '玉米辫'},
+                    {en: 'cornrows, tight braids', zh: '紧编'},
+                    {en: 'faded sides, high top', zh: '渐变侧'},
+                    {en: 'faded sides, high top', zh: '高顶'},
+                    {en: 'pompadour, voluminous front', zh: '庞巴杜'},
+                    {en: 'pompadour, voluminous front', zh: '前体积'},
+                    {en: 'quiff, upward sweep', zh: '飞机头'},
+                    {en: 'quiff, upward sweep', zh: '向上扫'},
+                    {en: 'bowl cut, even trim', zh: '锅盖头'},
+                    {en: 'bowl cut, even trim', zh: '均匀剪'}
                 ],
                 isPositive: true
             },
-            'hair-color': {
-                title: '发色',
+            body_hair: {
+                title: '体毛',
                 presets: [
-                    {en: 'jet black', zh: '乌黑色'},
-                    {en: 'dirty blonde', zh: '脏金色'},
-                    {en: 'platinum', zh: '铂金色'},
-                    {en: 'silver fox', zh: '银狐灰'},
-                    {en: 'salt and pepper', zh: '盐椒灰'},
-                    {en: 'burgundy', zh: '酒红色'},
-                    {en: 'pastel pink', zh: '淡粉色'},
-                    {en: 'neon blue', zh: '霓虹蓝'},
-                    {en: 'fiery red', zh: '火焰红'},
-                    {en: 'bleached blonde', zh: '漂白金'},
-                    {en: 'ash brown', zh: '灰褐色'},
-                    {en: 'chestnut brown', zh: '栗褐色'},
-                    {en: 'golden blonde', zh: '金黄色'},
-                    {en: 'auburn', zh: '红褐色'},
-                    {en: 'midnight blue', zh: '午夜蓝'},
-                    {en: 'emerald green', zh: '祖母绿'}
+                    {en: 'hairy chest, treasure trail', zh: '胸毛'},
+                    {en: 'hairy chest, treasure trail', zh: '腹毛'},
+                    {en: 'smooth body, hairless', zh: '光滑无毛'},
+                    {en: 'armpit hair, bushy pits', zh: '腋毛'},
+                    {en: 'leg hair, furry legs', zh: '腿毛'},
+                    {en: 'back hair, dense', zh: '背毛'},
+                    {en: 'pubic hair, trimmed bush', zh: '阴毛'},
+                    {en: 'pubic hair, trimmed bush', zh: '修剪'},
+                    {en: 'full body hair, werewolf like', zh: '全身毛发'},
+                    {en: 'sparse hair, light fuzz', zh: '稀疏体毛'},
+                    {en: 'hairy arms, forearm fuzz', zh: '手臂毛'},
+                    {en: 'hairy arms, forearm fuzz', zh: '前臂绒毛'},
+                    {en: 'hairy thighs, dense leg coverage', zh: '大腿毛'},
+                    {en: 'hairy thighs, dense leg coverage', zh: '密集腿'},
+                    {en: 'happy trail, abdominal line', zh: '快乐小径'},
+                    {en: 'happy trail, abdominal line', zh: '腹线'},
+                    {en: 'shoulder hair, upper back fuzz', zh: '肩毛'},
+                    {en: 'shoulder hair, upper back fuzz', zh: '上背绒'},
+                    {en: 'knuckle hair, finger fuzz', zh: '指关节毛'},
+                    {en: 'knuckle hair, finger fuzz', zh: '手指绒'},
+                    {en: 'toe hair, foot fuzz', zh: '脚趾毛'},
+                    {en: 'toe hair, foot fuzz', zh: '脚绒'},
+                    {en: 'neck hair, nape fuzz', zh: '颈毛'},
+                    {en: 'neck hair, nape fuzz', zh: '后颈绒'},
+                    {en: 'ear hair, light trim', zh: '耳毛'},
+                    {en: 'ear hair, light trim', zh: '轻修'},
+                    {en: 'nose hair, minimal', zh: '鼻毛'},
+                    {en: 'nose hair, minimal', zh: '最小'},
+                    {en: 'butt hair, ass fuzz', zh: '臀毛'},
+                    {en: 'butt hair, ass fuzz', zh: '屁股绒'},
+                    {en: 'perineum hair, taint fuzz', zh: '会阴毛'},
+                    {en: 'perineum hair, taint fuzz', zh: '污点绒'},
+                    {en: 'groin hair, crotch bush', zh: '腹股沟毛'},
+                    {en: 'groin hair, crotch bush', zh: '裆丛'},
+                    {en: 'calf hair, lower leg coverage', zh: '小腿毛'},
+                    {en: 'calf hair, lower leg coverage', zh: '下腿覆盖'},
+                    {en: 'forehead hair, widow peak', zh: '额头毛'},
+                    {en: 'forehead hair, widow peak', zh: '寡妇峰'},
+                    {en: 'eyebrow connectors, unibrow', zh: '眉毛连接'},
+                    {en: 'eyebrow connectors, unibrow', zh: '一字眉'},
+                    {en: 'sideburns, mutton chops', zh: '鬓角'},
+                    {en: 'sideburns, mutton chops', zh: '羊排胡'},
+                    {en: 'mustache fuzz, upper lip hair', zh: '小胡须绒'},
+                    {en: 'mustache fuzz, upper lip hair', zh: '上唇毛'},
+                    {en: 'chin hair, goatee base', zh: '下巴毛'},
+                    {en: 'chin hair, goatee base', zh: '山羊胡基'},
+                    {en: 'full beard growth, facial coverage', zh: '全胡生长'},
+                    {en: 'full beard growth, facial coverage', zh: '面部覆盖'},
+                    {en: 'body hair patterns, swirl designs', zh: '体毛图案'},
+                    {en: 'body hair patterns, swirl designs', zh: '漩涡设计'},
+                    {en: 'sweaty hair, matted fuzz', zh: '汗毛'},
+                    {en: 'sweaty hair, matted fuzz', zh: '粘绒'},
+                    {en: 'oiled hair, shiny body fur', zh: '油毛'},
+                    {en: 'oiled hair, shiny body fur', zh: '闪亮体毛'}
                 ],
                 isPositive: true
             },
-            clothing: {
-                title: '服装',
+            accessories: {
+                title: '配件',
                 presets: [
-                    {en: 'jockstrap', zh: '护裆'},
-                    {en: 'speedo', zh: '泳裤'},
-                    {en: 'harness', zh: '束带装'},
-                    {en: 'latex briefs', zh: '乳胶内裤'},
-                    {en: 'bondage pants', zh: '束缚裤'},
-                    {en: 'leather chaps', zh: '皮套裤'},
-                    {en: 'muscle tee', zh: '肌肉背心'},
-                    {en: 'cargo jock', zh: '工装护裆'},
-                    {en: 'mesh shorts', zh: '网眼短裤'},
-                    {en: 'denim cutoff', zh: '破洞牛仔'},
-                    {en: 'tank top', zh: '背心'},
-                    {en: 'leather jacket', zh: '皮夹克'},
-                    {en: 'ripped jeans', zh: '破洞牛仔裤'},
-                    {en: 'compression shorts', zh: '压缩短裤'},
-                    {en: 'fishnet stockings', zh: '鱼网袜'},
-                    {en: 'naked', zh: '裸体'},
-                    {en: 'nude', zh: '全裸'}
+                    {en: 'earrings, studs', zh: '耳环'},
+                    {en: 'necklace, chain', zh: '项链'},
+                    {en: 'bracelets, wristbands', zh: '手镯'},
+                    {en: 'rings, finger jewelry', zh: '戒指'},
+                    {en: 'glasses, spectacles', zh: '眼镜'},
+                    {en: 'hat, cap', zh: '帽子'},
+                    {en: 'belt, leather', zh: '腰带'},
+                    {en: 'watch, wristwatch', zh: '手表'},
+                    {en: 'piercings, nipple rings', zh: '穿孔'},
+                    {en: 'piercings, nipple rings', zh: '乳环'},
+                    {en: 'tattoos, body ink', zh: '纹身'},
+                    {en: 'scarf, neck wrap', zh: '围巾'},
+                    {en: 'tie, necktie', zh: '领带'},
+                    {en: 'cufflinks, shirt accessories', zh: '袖扣'},
+                    {en: 'brooch, pin', zh: '胸针'},
+                    {en: 'anklet, ankle jewelry', zh: '脚链'},
+                    {en: 'nose ring, septum piercing', zh: '鼻环'},
+                    {en: 'nose ring, septum piercing', zh: '隔膜穿孔'},
+                    {en: 'tongue piercing, oral jewelry', zh: '舌环'},
+                    {en: 'tongue piercing, oral jewelry', zh: '口腔饰品'},
+                    {en: 'belly button ring, navel piercing', zh: '肚脐环'},
+                    {en: 'belly button ring, navel piercing', zh: '肚脐穿孔'},
+                    {en: 'wallet chain, hip accessory', zh: '钱包链'},
+                    {en: 'wallet chain, hip accessory', zh: '臀部配件'},
+                    {en: 'sunglasses, shades', zh: '太阳镜'},
+                    {en: 'beanie, knit hat', zh: '无边帽'},
+                    {en: 'beanie, knit hat', zh: '针织帽'},
+                    {en: 'fedora, brim hat', zh: '软呢帽'},
+                    {en: 'fedora, brim hat', zh: '边沿帽'},
+                    {en: 'baseball cap, sports hat', zh: '棒球帽'},
+                    {en: 'baseball cap, sports hat', zh: '运动帽'},
+                    {en: 'cowboy hat, western', zh: '牛仔帽'},
+                    {en: 'cowboy hat, western', zh: '西部'},
+                    {en: 'beret, french style', zh: '贝雷帽'},
+                    {en: 'beret, french style', zh: '法式'},
+                    {en: 'headband, sweat band', zh: '头带'},
+                    {en: 'headband, sweat band', zh: '汗带'},
+                    {en: 'hair clip, barrette', zh: '发夹'},
+                    {en: 'pendant, hanging necklace', zh: '吊坠'},
+                    {en: 'pendant, hanging necklace', zh: '挂项链'},
+                    {en: 'locket, photo inside', zh: '小盒坠'},
+                    {en: 'locket, photo inside', zh: '照片内'},
+                    {en: 'choker, tight necklace', zh: '项圈'},
+                    {en: 'choker, tight necklace', zh: '紧项链'}
                 ],
                 isPositive: true
             },
-            accessory: {
-                title: '饰品',
+            emotions: {
+                title: '情绪',
                 presets: [
-                    {en: 'cock ring', zh: '阴茎环'},
-                    {en: 'ball stretcher', zh: '睾丸扩张器'},
-                    {en: 'anal hook', zh: '肛门钩'},
-                    {en: 'nipple clamps', zh: '乳头夹'},
-                    {en: 'collar', zh: '项圈'},
-                    {en: 'leash', zh: '皮带'},
-                    {en: 'wrist cuffs', zh: '手腕铐'},
-                    {en: 'ankle cuffs', zh: '脚踝铐'},
-                    {en: 'gag', zh: '口塞'},
-                    {en: 'blindfold', zh: '眼罩'},
-                    {en: 'whip', zh: '鞭子'},
-                    {en: 'paddle', zh: '拍打器'},
-                    {en: 'chastity cage', zh: '贞操笼'},
-                    {en: 'body chain', zh: '身体链'}
+                    {en: 'happy, smiling', zh: '快乐'},
+                    {en: 'happy, smiling', zh: '微笑'},
+                    {en: 'sad, frowning', zh: '悲伤'},
+                    {en: 'sad, frowning', zh: '皱眉'},
+                    {en: 'angry, raging', zh: '愤怒'},
+                    {en: 'surprised, shocked', zh: '惊讶'},
+                    {en: 'calm, serene', zh: '平静'},
+                    {en: 'excited, energetic', zh: '兴奋'},
+                    {en: 'fearful, scared', zh: '恐惧'},
+                    {en: 'confused, puzzled', zh: '困惑'},
+                    {en: 'bored, uninterested', zh: '无聊'},
+                    {en: 'loving, affectionate', zh: '爱意'},
+                    {en: 'jealous, envious', zh: '嫉妒'},
+                    {en: 'proud, accomplished', zh: '骄傲'},
+                    {en: 'ashamed, embarrassed', zh: '羞愧'},
+                    {en: 'guilty, remorseful', zh: '内疚'},
+                    {en: 'disgusted, repulsed', zh: '厌恶'},
+                    {en: 'hopeful, optimistic', zh: '希望'},
+                    {en: 'anxious, worried', zh: '焦虑'},
+                    {en: 'relieved, eased', zh: '宽慰'},
+                    {en: 'frustrated, irritated', zh: '沮丧'},
+                    {en: 'content, satisfied', zh: '满足'},
+                    {en: 'lonely, isolated', zh: '孤独'},
+                    {en: 'grateful, thankful', zh: '感激'},
+                    {en: 'nostalgic, reminiscent', zh: '怀旧'},
+                    {en: 'curious, inquisitive', zh: '好奇'},
+                    {en: 'amused, entertained', zh: '愉悦'},
+                    {en: 'overwhelmed, stressed', zh: '压倒性'},
+                    {en: 'determined, resolute', zh: '决心'},
+                    {en: 'indifferent, apathetic', zh: '漠不关心'},
+                    {en: 'empathetic, sympathetic', zh: '同情'},
+                    {en: 'ecstatic, overjoyed', zh: '狂喜'}
                 ],
                 isPositive: true
             },
-            background: {
-                title: '场景背景',
+            positions: {
+                title: '姿势',
                 presets: [
-                    {en: 'dungeon', zh: '地牢'},
-                    {en: 'bathhouse', zh: '澡堂'},
-                    {en: 'glory hole booth', zh: '泄欲隔间'},
-                    {en: 'backroom', zh: '暗房'},
-                    {en: 'leather bar', zh: '皮革酒吧'},
-                    {en: 'cruising spot', zh: '猎艳点'},
-                    {en: 'sauna', zh: '桑拿房'},
-                    {en: 'locker room', zh: '更衣室'},
-                    {en: 'abandoned factory', zh: '废弃工厂'},
-                    {en: 'rooftop', zh: '屋顶'},
-                    {en: 'dark alley', zh: '暗巷'},
-                    {en: 'bondage club', zh: '束缚俱乐部'},
-                    {en: 'sex dungeon', zh: '性爱地牢'},
-                    {en: 'beach', zh: '海滩'},
-                    {en: 'forest', zh: '森林'},
-                    {en: 'hotel room', zh: '酒店房间'},
-                    {en: 'poolside', zh: '泳池边'},
-                    {en: 'night club', zh: '夜店'}
+                    {en: 'standing, upright', zh: '站立'},
+                    {en: 'sitting, seated', zh: '坐姿'},
+                    {en: 'kneeling, on knees', zh: '跪姿'},
+                    {en: 'lying down, supine', zh: '躺下'},
+                    {en: 'bent over, forward bend', zh: '弯腰'},
+                    {en: 'spread legs, open', zh: '分腿'},
+                    {en: 'arms raised, overhead', zh: '举臂'},
+                    {en: 'hugging, embracing', zh: '拥抱'},
+                    {en: 'jumping, leaping', zh: '跳跃'},
+                    {en: 'crouching, squatting', zh: '蹲姿'},
+                    {en: 'leaning against wall, supported', zh: '靠墙'},
+                    {en: 'leaning against wall, supported', zh: '支撑'},
+                    {en: 'cross legged, meditative', zh: '盘腿'},
+                    {en: 'cross legged, meditative', zh: '冥想'},
+                    {en: 'on all fours, crawling', zh: '四肢着地'},
+                    {en: 'on all fours, crawling', zh: '爬行'},
+                    {en: 'side lying, fetal position', zh: '侧躺'},
+                    {en: 'side lying, fetal position', zh: '胎儿位'},
+                    {en: 'arching back, bridge pose', zh: '拱背'},
+                    {en: 'arching back, bridge pose', zh: '桥姿'},
+                    {en: 'handstand, inverted', zh: '手倒立'},
+                    {en: 'handstand, inverted', zh: '倒置'},
+                    {en: 'lunging forward, attack stance', zh: '前冲'},
+                    {en: 'lunging forward, attack stance', zh: '攻击姿'},
+                    {en: 'reclining, lounging', zh: '斜倚'},
+                    {en: 'reclining, lounging', zh: '懒洋洋'},
+                    {en: 'pointing finger, directing', zh: '指指'},
+                    {en: 'pointing finger, directing', zh: '指挥'},
+                    {en: 'crossing arms, defensive', zh: '抱臂'},
+                    {en: 'crossing arms, defensive', zh: '防御'},
+                    {en: 'waving hand, greeting', zh: '挥手'},
+                    {en: 'waving hand, greeting', zh: '问候'},
+                    {en: 'bowing, respectful', zh: '鞠躬'},
+                    {en: 'bowing, respectful', zh: '尊敬'},
+                    {en: 'stretching arms, yawning', zh: '伸臂'},
+                    {en: 'stretching arms, yawning', zh: '打哈欠'},
+                    {en: 'running pose, dynamic', zh: '跑姿'},
+                    {en: 'running pose, dynamic', zh: '动态'},
+                    {en: 'dancing, twirling', zh: '跳舞'},
+                    {en: 'dancing, twirling', zh: '旋转'},
+                    {en: 'punching, fighting stance', zh: '出拳'},
+                    {en: 'punching, fighting stance', zh: '战斗姿'},
+                    {en: 'meditating, lotus position', zh: '冥想'},
+                    {en: 'meditating, lotus position', zh: '莲花位'},
+                    {en: 'climbing, gripping', zh: '攀爬'},
+                    {en: 'climbing, gripping', zh: '抓握'},
+                    {en: 'swimming pose, freestyle', zh: '游泳姿'},
+                    {en: 'swimming pose, freestyle', zh: '自由式'},
+                    {en: 'yoga downward dog, inverted v', zh: '瑜伽下犬式'},
+                    {en: 'yoga downward dog, inverted v', zh: '倒V'}
                 ],
                 isPositive: true
             },
-            quality: {
-                title: '画质风格',
+            weather: {
+                title: '天气',
                 presets: [
-                    {en: 'photorealistic', zh: '照片级真实'},
-                    {en: 'cinematic lighting', zh: '电影光效'},
-                    {en: 'high detail', zh: '高细节'},
-                    {en: '8k resolution', zh: '8K分辨率'},
-                    {en: 'sharp focus', zh: '锐利焦点'},
-                    {en: 'dramatic shadows', zh: '戏剧性阴影'},
-                    {en: 'bokeh background', zh: '背景虚化'},
-                    {en: 'vivid colors', zh: '鲜艳色彩'},
-                    {en: 'moody lighting', zh: '情绪光影'},
-                    {en: 'high contrast', zh: '高对比度'},
-                    {en: 'ultra realistic', zh: '超真实'},
-                    {en: 'HDR', zh: '高动态范围'},
-                    {en: 'ray tracing', zh: '光线追踪'},
-                    {en: 'detailed textures', zh: '细致纹理'},
-                    {en: 'immersive', zh: '沉浸式'}
+                    {en: 'sunny, clear skies', zh: '晴天'},
+                    {en: 'sunny, clear skies', zh: '晴朗'},
+                    {en: 'rainy, pouring rain', zh: '雨天'},
+                    {en: 'rainy, pouring rain', zh: '倾盆大雨'},
+                    {en: 'snowy, falling snow', zh: '雪天'},
+                    {en: 'snowy, falling snow', zh: '下雪'},
+                    {en: 'foggy, misty', zh: '雾天'},
+                    {en: 'foggy, misty', zh: '薄雾'},
+                    {en: 'cloudy, overcast', zh: '多云'},
+                    {en: 'cloudy, overcast', zh: '阴天'},
+                    {en: 'stormy, lightning', zh: '暴风雨'},
+                    {en: 'stormy, lightning', zh: '闪电'},
+                    {en: 'windy, blowing leaves', zh: '大风'},
+                    {en: 'windy, blowing leaves', zh: '吹叶'},
+                    {en: 'hailing, ice pellets', zh: '冰雹'},
+                    {en: 'hailing, ice pellets', zh: '冰粒'},
+                    {en: 'drizzling, light rain', zh: '毛毛雨'},
+                    {en: 'drizzling, light rain', zh: '小雨'},
+                    {en: 'thunderstorm, heavy rain', zh: '雷暴'},
+                    {en: 'thunderstorm, heavy rain', zh: '大雨'},
+                    {en: 'blizzard, heavy snow', zh: '暴风雪'},
+                    {en: 'blizzard, heavy snow', zh: '大雪'},
+                    {en: 'humid, steamy air', zh: '潮湿'},
+                    {en: 'humid, steamy air', zh: '蒸汽空气'},
+                    {en: 'dry, arid conditions', zh: '干燥'},
+                    {en: 'dry, arid conditions', zh: '干旱'},
+                    {en: 'muggy, sticky heat', zh: '闷热'},
+                    {en: 'muggy, sticky heat', zh: '粘热'},
+                    {en: 'freezing, icy ground', zh: '冰冻'},
+                    {en: 'freezing, icy ground', zh: '结冰地'},
+                    {en: 'balmy, mild breeze', zh: '温和'},
+                    {en: 'balmy, mild breeze', zh: '微风'},
+                    {en: 'tornado, swirling winds', zh: '龙卷风'},
+                    {en: 'tornado, swirling winds', zh: '漩涡风'},
+                    {en: 'hurricane, strong gusts', zh: '飓风'},
+                    {en: 'hurricane, strong gusts', zh: '强阵风'},
+                    {en: 'clear night, starry sky', zh: '晴夜'},
+                    {en: 'clear night, starry sky', zh: '星空'},
+                    {en: 'moonlit, soft glow', zh: '月光'},
+                    {en: 'moonlit, soft glow', zh: '柔辉'},
+                    {en: 'eclipse, darkened sky', zh: '日食'},
+                    {en: 'eclipse, darkened sky', zh: '黑暗天'},
+                    {en: 'aurora, northern lights', zh: '极光'},
+                    {en: 'aurora, northern lights', zh: '北极光'},
+                    {en: 'heatwave, scorching sun, shimmering heat haze', zh: '热浪'},
+                    {en: 'heatwave, scorching sun, shimmering heat haze', zh: '灼热阳光'},
+                    {en: 'autumn leaves falling, crisp air, golden foliage', zh: '秋叶飘落'},
+                    {en: 'autumn leaves falling, crisp air, golden foliage', zh: '清爽空气'},
+                    {en: 'spring blossoms, cherry petals drifting, fresh breeze', zh: '春樱绽放'},
+                    {en: 'spring blossoms, cherry petals drifting, fresh breeze', zh: '花瓣飘舞'},
+                    {en: 'summer heat, bright sun, cicada sounds', zh: '夏日高温'},
+                    {en: 'summer heat, bright sun, cicada sounds', zh: '蝉鸣'},
+                    {en: 'winter frost, frozen ground, breath visible', zh: '冬霜'},
+                    {en: 'winter frost, frozen ground, breath visible', zh: '可见哈气'},
+                    {en: 'dawn breaking, soft pink sky, morning dew', zh: '破晓'},
+                    {en: 'dawn breaking, soft pink sky, morning dew', zh: '粉嫩天空'},
+                    {en: 'dusk, orange-purple horizon, long shadows', zh: '黄昏'},
+                    {en: 'dusk, orange-purple horizon, long shadows', zh: '橙紫地平线'},
+                    {en: 'midnight, dark sky, moonlight only', zh: '午夜'},
+                    {en: 'midnight, dark sky, moonlight only', zh: '仅月光'},
+                    {en: 'sandstorm, blowing dust, obscured vision', zh: '沙尘暴'},
+                    {en: 'sandstorm, blowing dust, obscured vision', zh: '尘土飞扬'},
+                    {en: 'monsoon rain, heavy downpour, flooded streets', zh: '季风雨'},
+                    {en: 'monsoon rain, heavy downpour, flooded streets', zh: '洪水街头'},
+                    {en: 'foggy morning, thick mist, reduced visibility', zh: '晨雾浓厚'},
+                    {en: 'foggy morning, thick mist, reduced visibility', zh: '能见度低'},
+                    {en: 'clear starry night, milky way visible', zh: '晴朗星夜'},
+                    {en: 'clear starry night, milky way visible', zh: '银河可见'},
+                    {en: 'solar flare effects, intense light bursts', zh: '太阳耀斑'},
+                    {en: 'solar flare effects, intense light bursts', zh: '强烈光爆'},
+                    {en: 'meteor shower, streaks across sky', zh: '流星雨'},
+                    {en: 'meteor shower, streaks across sky', zh: '天空划痕'},
+                    {en: 'volcanic ash fall, grey sky, embers floating', zh: '火山灰落'},
+                    {en: 'volcanic ash fall, grey sky, embers floating', zh: '灰天火星'},
+                    {en: 'tropical storm, palm trees bending, heavy rain', zh: '热带风暴'},
+                    {en: 'tropical storm, palm trees bending, heavy rain', zh: '棕榈弯曲'},
+                    {en: 'arctic wind, blowing snow, extreme cold', zh: '极地寒风'},
+                    {en: 'arctic wind, blowing snow, extreme cold', zh: '吹雪极寒'},
+                    {en: 'desert sunset, red dunes, cooling air', zh: '沙漠落日'},
+                    {en: 'desert sunset, red dunes, cooling air', zh: '红色沙丘'},
+                    {en: 'rainbow after rain, mist in air', zh: '雨后彩虹'},
+                    {en: 'rainbow after rain, mist in air', zh: '空气薄雾'},
+                    {en: 'lightning storm at sea, dramatic flashes', zh: '海上雷暴'},
+                    {en: 'lightning storm at sea, dramatic flashes', zh: '戏剧闪电'}
                 ],
                 isPositive: true
             },
-            number: {
-                title: '人数',
+            season: {
+                title: '季节',
                 presets: [
-                    {en: 'solo male', zh: '单独男性'},
-                    {en: 'two men', zh: '两个男人'},
-                    {en: 'threesome', zh: '三人行'},
-                    {en: 'group sex', zh: '群交'},
-                    {en: 'gangbang', zh: '多人轮交'},
-                    {en: 'orgy', zh: '性爱派对'},
-                    {en: 'double penetration', zh: '双人插入'},
-                    {en: 'circle jerk', zh: '互助打飞机'},
-                    {en: 'four men', zh: '四个男人'},
-                    {en: 'pair', zh: '一对'}
+                    {en: 'spring, blooming flowers, fresh green', zh: '春天'},
+                    {en: 'spring, blooming flowers, fresh green', zh: '花开新绿'},
+                    {en: 'summer, bright sunlight, vibrant colors', zh: '夏天'},
+                    {en: 'summer, bright sunlight, vibrant colors', zh: '明亮阳光'},
+                    {en: 'autumn, falling leaves, warm oranges', zh: '秋天'},
+                    {en: 'autumn, falling leaves, warm oranges', zh: '落叶暖橙'},
+                    {en: 'winter, snow covered, cold blue tones', zh: '冬天'},
+                    {en: 'winter, snow covered, cold blue tones', zh: '雪覆冷蓝'},
+                    {en: 'cherry blossom season, pink petals everywhere', zh: '樱花季'},
+                    {en: 'cherry blossom season, pink petals everywhere', zh: '粉瓣漫天'},
+                    {en: 'golden autumn forest, crisp leaves underfoot', zh: '金秋森林'},
+                    {en: 'golden autumn forest, crisp leaves underfoot', zh: '脆叶脚下'},
+                    {en: 'midsummer beach day, intense sun', zh: '盛夏海滩'},
+                    {en: 'midsummer beach day, intense sun', zh: '烈日'},
+                    {en: 'early spring rain, wet petals, renewal', zh: '早春细雨'},
+                    {en: 'early spring rain, wet petals, renewal', zh: '湿瓣新生'},
+                    {en: 'late autumn fog, bare trees, melancholic', zh: '深秋薄雾'},
+                    {en: 'late autumn fog, bare trees, melancholic', zh: '秃树忧郁'},
+                    {en: 'deep winter night, aurora borealis', zh: '深冬夜'},
+                    {en: 'deep winter night, aurora borealis', zh: '北极光'},
+                    {en: 'tropical rainy season, lush greenery, humidity', zh: '热带雨季'},
+                    {en: 'tropical rainy season, lush greenery, humidity', zh: '郁郁葱葱'},
+                    {en: 'dry season savanna, golden grass, heat shimmer', zh: '旱季草原'},
+                    {en: 'dry season savanna, golden grass, heat shimmer', zh: '金草热浪'},
+                    {en: 'monsoon season, heavy rain, flooded fields', zh: '季风季'},
+                    {en: 'monsoon season, heavy rain, flooded fields', zh: '暴雨洪田'},
+                    {en: 'harvest season, ripe fruits, warm harvest tones', zh: '丰收季'},
+                    {en: 'harvest season, ripe fruits, warm harvest tones', zh: '熟果暖调'},
+                    {en: 'frosty morning, iced leaves, crisp air', zh: '霜晨'},
+                    {en: 'frosty morning, iced leaves, crisp air', zh: '冰叶清冽'},
+                    {en: 'heatwave summer, sweating skin, intense heat', zh: '热浪夏'},
+                    {en: 'heatwave summer, sweating skin, intense heat', zh: '汗肤酷热'},
+                    {en: 'first snow fall, pure white blanket', zh: '初雪'},
+                    {en: 'first snow fall, pure white blanket', zh: '纯白覆盖'},
+                    {en: 'blooming spring meadow, colorful wildflowers', zh: '春花草甸'},
+                    {en: 'blooming spring meadow, colorful wildflowers', zh: '彩野花'},
+                    {en: 'autumn vineyard, red leaves, grape harvest', zh: '秋葡萄园'},
+                    {en: 'autumn vineyard, red leaves, grape harvest', zh: '红叶采收'},
+                    {en: 'polar night, endless darkness, star filled', zh: '极夜'},
+                    {en: 'polar night, endless darkness, star filled', zh: '无尽黑暗'}
                 ],
                 isPositive: true
             }
         };
 
-        // Notification function
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
+        let isEditMode = false;
+        let currentPreset = null;
+        let currentTarget = 'positive';
+        let replaceMode = false;
+
+        function initCategories() {
+            const list = document.getElementById('category-list');
+            const addBtn = list.querySelector('.add-btn');
             
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 2000);
-        }
-
-        // Reset negative prompt to default
-        function resetNegative() {
-            document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
-            showNotification('已恢复默认反向提示词');
-        }
-
-        // Copy positive prompt to clipboard
-        function copyPositive() {
-            const textarea = document.getElementById('positive-prompt');
-            textarea.select();
-            document.execCommand('copy');
-            showNotification('已复制正向提示词');
-        }
-
-        // Copy negative prompt to clipboard
-        function copyNegative() {
-            const textarea = document.getElementById('negative-prompt');
-            textarea.select();
-            document.execCommand('copy');
-            showNotification('已复制反向提示词');
-        }
-
-        // Show category presets
-        function showCategory(category) {
-            // Remove active class from all category items
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.classList.remove('active');
+            Array.from(list.children).forEach(child => {
+                if (!child.classList.contains('add-btn')) list.removeChild(child);
             });
+
+            Object.keys(categories).forEach(key => {
+                const cat = categories[key];
+                const div = document.createElement('div');
+                div.className = `category-item`;
+                div.dataset.category = key;
+                div.textContent = cat.title;
+                div.onclick = () => showCategory(key);
+                list.insertBefore(div, addBtn);
+            });
+        }
+
+        function showCategory(category) {
+            document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+            const activeItem = document.querySelector(`.category-item[data-category="${category}"]`);
+            if (activeItem) activeItem.classList.add('active');
             
-            // Add active class to selected category
-            document.querySelector(`.category-item[data-category="${category}"]`).classList.add('active');
-            
-            // Generate preset display
             const presetDisplay = document.getElementById('preset-display');
             presetDisplay.innerHTML = '';
             
             const categoryData = categories[category];
             if (!categoryData) return;
             
-            // Create container for presets
             const presetContainer = document.createElement('div');
             presetContainer.className = 'preset-container active';
             
-            // Create title
+            const header = document.createElement('div');
+            header.className = 'preset-header';
             const title = document.createElement('h3');
             title.textContent = categoryData.title;
-            presetContainer.appendChild(title);
+            title.style.margin = '0';
+            header.appendChild(title);
+            presetContainer.appendChild(header);
             
-            // Create preset list
             const presetList = document.createElement('div');
             presetList.className = 'preset-list';
             
-            // Add presets to list
-            categoryData.presets.forEach(preset => {
+            categoryData.presets.forEach((preset, index) => {
                 const presetItem = document.createElement('div');
                 presetItem.className = 'preset-item';
                 presetItem.textContent = preset.zh;
-                presetItem.title = preset.en; // Show English on hover
+                presetItem.title = preset.en;
+                presetItem.dataset.en = preset.en;
+                presetItem.dataset.index = index;
+                presetItem.dataset.cat = category;
                 
-                presetItem.addEventListener('click', () => {
-                    const textarea = categoryData.isPositive 
-                        ? document.getElementById('positive-prompt') 
-                        : document.getElementById('negative-prompt');
-                    
-                    // Add comma if textarea is not empty
-                    const prefix = textarea.value.length > 0 ? ', ' : '';
-                    textarea.value += prefix + preset.en;
-                    
-                    // Update translation
-                    updateTranslation(categoryData.isPositive ? 'positive' : 'negative');
+                const star = document.createElement('span');
+                star.className = 'star';
+                star.textContent = isFavorite(category, index) ? '★' : '☆';
+                star.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(category, index, preset);
+                };
+                presetItem.appendChild(star);
+                
+                presetItem.addEventListener('click', (e) => {
+                    if (e.target.className.includes('star')) return;
+                    if (isEditMode) {
+                        openEditPresetModal(category, index);
+                    } else {
+                        currentPreset = { 
+                            en: preset.en, 
+                            zh: preset.zh, 
+                            addToBeginning: categoryData.addToBeginning || false,
+                            gameZh: preset.gameZh || null
+                        };
+                        currentTarget = categoryData.isPositive ? 'positive' : 'negative';
+                        showPresetOptions();
+                    }
                 });
                 
                 presetList.appendChild(presetItem);
             });
+
+            const addPresetBtn = document.createElement('div');
+            addPresetBtn.className = 'preset-item add-preset-btn';
+            addPresetBtn.textContent = '+ 添加更多提示词';
+            addPresetBtn.onclick = () => openAddPresetModal(category);
+            presetList.appendChild(addPresetBtn);
             
             presetContainer.appendChild(presetList);
             presetDisplay.appendChild(presetContainer);
         }
 
-        // Update translation from English to Chinese
-        function updateTranslation(type) {
-            let promptId, translationId;
-            if (type === 'positive') {
-                promptId = 'positive-prompt';
-                translationId = 'positive-translation';
+        function isFavorite(cat, idx) {
+            return categories.favorites.presets.some(p => 
+                p.cat === cat && p.idx === idx
+            );
+        }
+
+        function toggleFavorite(cat, idx, preset) {
+            const favs = categories.favorites.presets;
+            const existing = favs.findIndex(p => p.cat === cat && p.idx === idx);
+            
+            if (existing !== -1) {
+                favs.splice(existing, 1);
             } else {
-                promptId = 'negative-prompt';
-                translationId = 'negative-translation';
+                favs.push({ cat, idx, en: preset.en, zh: preset.zh });
             }
             
+            showCategory(cat);
+            if (document.querySelector('.category-item.active')?.dataset.category === 'favorites') {
+                showCategory('favorites');
+            }
+            showNotification(existing !== -1 ? '已取消收藏' : '已加入收藏');
+        }
+
+        function mergeGameAndCharacter() {
+            const pos = document.getElementById('positive-prompt');
+            let terms = pos.value.split(/,\s*/).map(t => t.trim()).filter(Boolean);
+            
+            const charTerms = [];
+            const gameTerms = [];
+            
+            terms.forEach(term => {
+                for (const cat in categories) {
+                    if (cat === 'mihoyo') {
+                        const found = categories[cat].presets.find(p => p.en === term || p.zh === term);
+                        if (found && found.gameZh) {
+                            charTerms.push({term, game: found.gameZh});
+                            return;
+                        }
+                    }
+                }
+                for (const cat in categories) {
+                    if (cat === 'game') {
+                        const found = categories[cat].presets.find(p => p.en === term || p.zh === term);
+                        if (found) {
+                            gameTerms.push(term);
+                            return;
+                        }
+                    }
+                }
+            });
+
+            if (charTerms.length > 0 && gameTerms.length > 0) {
+                charTerms.forEach(ch => {
+                    const gameMatch = gameTerms.find(g => 
+                        ch.game && (g.includes(ch.game) || ch.game.includes(g))
+                    );
+                    if (gameMatch) {
+                        const newTerm = `\( {gameMatch}的 \){ch.term.replace(/ \(.+?\)/, '')}`;
+                        terms = terms.filter(t => t !== ch.term && t !== gameMatch);
+                        terms.push(newTerm);
+                    }
+                });
+                
+                pos.value = [...new Set(terms)].join(', ');
+                updateTranslation('positive');
+            }
+        }
+
+        function showPresetOptions() {
+            document.getElementById('presetOptionModal').style.display = 'flex';
+        }
+
+        document.getElementById('addOption').onclick = () => {
+            if (currentPreset) {
+                const textareaId = currentTarget === 'positive' ? 'positive-prompt' : 'negative-prompt';
+                const textarea = document.getElementById(textareaId);
+                let parts = textarea.value.trim().split(/,\s*/).filter(p => p.trim() !== "");
+                
+                if (currentPreset.addToBeginning) {
+                    parts.unshift(currentPreset.en);
+                } else {
+                    parts.push(currentPreset.en);
+                }
+                
+                textarea.value = parts.join(', ');
+                updateTranslation(currentTarget);
+                showNotification(`已添加: ${currentPreset.zh}`);
+                
+                if (currentTarget === 'positive') {
+                    mergeGameAndCharacter();
+                }
+            }
+            closeModal('presetOptionModal');
+            currentPreset = null;
+        };
+
+        document.getElementById('replaceOption').onclick = () => {
+            replaceMode = true;
+            showReplaceWords(currentTarget);
+            closeModal('presetOptionModal');
+        };
+
+        function showReplaceWords(target) {
+            const containerId = target + '-replace-words';
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            container.style.display = 'block';
+
+            const textareaId = target + '-prompt';
+            const text = document.getElementById(textareaId).value.trim();
+            if (!text) {
+                container.innerHTML = '<p>当前提示词为空，无法替换</p>';
+                return;
+            }
+
+            const parts = text.split(/,\s*/).filter(p => p.trim() !== "");
+            parts.forEach((part, index) => {
+                const wordDiv = document.createElement('div');
+                wordDiv.className = 'replace-word';
+                let display = part;
+                
+                for (const catKey in categories) {
+                    const found = categories[catKey].presets.find(p => p.en === part.trim() || p.zh === part.trim());
+                    if (found) {
+                        display = found.zh;
+                        break;
+                    }
+                }
+                
+                wordDiv.textContent = display;
+                wordDiv.dataset.index = index;
+                wordDiv.dataset.en = part;
+                wordDiv.onclick = () => {
+                    if (currentPreset) {
+                        let parts = document.getElementById(textareaId).value.trim().split(/,\s*/).filter(p => p.trim() !== "");
+                        if (index >= 0 && index < parts.length) {
+                            parts[index] = currentPreset.en;
+                            document.getElementById(textareaId).value = parts.join(', ');
+                            updateTranslation(target);
+                            showNotification(`已替换为: ${currentPreset.zh}`);
+                            if (target === 'positive') mergeGameAndCharacter();
+                        }
+                        document.getElementById(target + '-replace-words').style.display = 'none';
+                        replaceMode = false;
+                        currentPreset = null;
+                    }
+                };
+                container.appendChild(wordDiv);
+            });
+        }
+
+        function updateTranslation(type) {
+            const promptId = type + '-prompt';
+            const transId = type + '-translation';
             const prompt = document.getElementById(promptId).value;
             let translation = '';
-            prompt.split(',').forEach(term => {
-                const trimmedTerm = term.trim();
-                if (trimmedTerm) {
-                    translation += (translationDict[trimmedTerm] || trimmedTerm) + '，';
+            
+            prompt.split(/,\s*/).forEach(term => {
+                const trimmed = term.trim();
+                if (trimmed) {
+                    let zh = trimmed;
+                    for (const catKey in categories) {
+                        const preset = categories[catKey].presets.find(p => p.en === trimmed);
+                        if (preset) {
+                            zh = preset.zh;
+                            break;
+                        }
+                    }
+                    translation += zh + '，';
                 }
             });
-            document.getElementById(translationId).value = translation.slice(0, -1); // Remove last comma or Chinese comma
+            document.getElementById(transId).value = translation.slice(0, -1);
         }
 
-        // Update prompt from Chinese to English
-        function updateFromTranslation(type) {
-            let promptId, translationId;
-            if (type === 'positive') {
-                promptId = 'positive-prompt';
-                translationId = 'positive-translation';
-            } else {
-                promptId = 'negative-prompt';
-                translationId = 'negative-translation';
+        function autoTranslateInput(e, type) {
+            const val = e.target.value;
+            let parts = val.split(/([,，]\s*)/);
+            let modified = false;
+
+            const newParts = parts.map(part => {
+                if (/[\u4e00-\u9fa5]/.test(part)) {
+                    const trimmed = part.trim();
+                    for (const catKey in categories) {
+                        const preset = categories[catKey].presets.find(p => p.zh === trimmed);
+                        if (preset) {
+                            modified = true;
+                            return preset.en;
+                        }
+                    }
+                }
+                return part;
+            });
+
+            if (modified) {
+                const cleanText = newParts.join('').replace(/，/g, ', ');
+                e.target.value = cleanText;
             }
-            
-            const translation = document.getElementById(translationId).value;
-            let prompt = '';
-            translation.split('，').forEach(term => {  // Split by Chinese comma
-                const trimmedTerm = term.trim();
-                if (trimmedTerm) {
-                    prompt += (reverseDict[trimmedTerm] || trimmedTerm) + ', ';
-                }
-            });
-            document.getElementById(promptId).value = prompt.slice(0, -2); // Remove last comma and space
+            updateTranslation(type);
         }
 
-        // Generate random prompt
-        function generateRandomPrompt() {
-            // Select random category
-            const categoryKeys = Object.keys(categories);
-            const randomCategoryKey = categoryKeys[Math.floor(Math.random() * categoryKeys.length)];
-            const randomCategory = categories[randomCategoryKey];
-            
-            // Select random preset from category
-            const randomPreset = randomCategory.presets[Math.floor(Math.random() * randomCategory.presets.length)];
-            
-            // Add to positive prompt
-            const textarea = document.getElementById('positive-prompt');
-            const prefix = textarea.value.length > 0 ? ', ' : '';
-            textarea.value += prefix + randomPreset.en;
-            
-            // Update translation
+        document.getElementById('positive-prompt').addEventListener('input', (e) => autoTranslateInput(e, 'positive'));
+        document.getElementById('negative-prompt').addEventListener('input', (e) => autoTranslateInput(e, 'negative'));
+
+        function replaceText() {
+            const from = document.getElementById('replace-from').value.trim();
+            const to = document.getElementById('replace-to').value.trim();
+            if (!from) return alert("请输入需要替换的文本");
+            if (/^[a-zA-Z\s,]+$/.test(from)) return alert("替换源必须包含中文");
+
+            ['positive', 'negative'].forEach(type => {
+                const area = document.getElementById(type + '-prompt');
+                if (area.value.includes(from)) {
+                    area.value = area.value.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), to);
+                }
+            });
+
             updateTranslation('positive');
-            
-            showNotification(`已添加随机提示词: ${randomPreset.zh}`);
+            updateTranslation('negative');
+            showNotification(`已将 "\( {from}" 替换为 " \){to}"`);
         }
 
-        // Modal functions
-        function showGenerateOptions() {
-            document.getElementById('generateModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('generateModal').style.display = 'none';
-        }
-
-        function selectOption(option) {
-            closeModal();
-            if (option === 1) {
-                window.open('https://arting.ai/cn/ai-image-generator-nsfw', '_blank');
-            } else if (option === 2) {
-                window.open('https://perchance.org/ai-text-to-image-generator', '_blank');
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('edit-toggle-btn');
+            if (isEditMode) {
+                btn.textContent = '✎ 退出编辑';
+                btn.classList.add('editing');
+                document.body.classList.add('editing-mode');
+                showNotification('进入编辑模式：点击标签可修改或删除');
+            } else {
+                btn.textContent = '✎ 进入编辑模式';
+                btn.classList.remove('editing');
+                document.body.classList.remove('editing-mode');
             }
         }
 
-        // Initialize translations
-        updateTranslation('positive');
-        updateTranslation('negative');
+        function openEditPresetModal(catKey, index) {
+            const preset = categories[catKey].presets[index];
+            document.getElementById('customModal').style.display = 'flex';
+            document.getElementById('customModalTitle').textContent = '编辑标签';
+            
+            document.getElementById('addCategoryForm').style.display = 'none';
+            document.getElementById('addPresetForm').style.display = 'none';
+            document.getElementById('editPresetForm').style.display = 'block';
 
-        // Add event listeners for translation updates (double-way)
-        document.getElementById('positive-prompt').addEventListener('input', () => updateTranslation('positive'));
-        document.getElementById('negative-prompt').addEventListener('input', () => updateTranslation('negative'));
-        document.getElementById('positive-translation').addEventListener('input', () => updateFromTranslation('positive'));
-        document.getElementById('negative-translation').addEventListener('input', () => updateFromTranslation('negative'));
+            document.getElementById('editPresetZh').value = preset.zh;
+            document.getElementById('editPresetEn').value = preset.en;
+            document.getElementById('editCatKey').value = catKey;
+            document.getElementById('editPresetIdx').value = index;
+        }
+
+        function saveEditedPreset() {
+            const catKey = document.getElementById('editCatKey').value;
+            const index = parseInt(document.getElementById('editPresetIdx').value);
+            const zh = document.getElementById('editPresetZh').value.trim();
+            const en = document.getElementById('editPresetEn').value.trim();
+
+            if (!zh || !en) return alert("内容不能为空");
+
+            categories[catKey].presets[index] = { en, zh };
+            showCategory(catKey);
+            closeModal('customModal');
+            showNotification('修改已保存！');
+        }
+
+        function deletePreset() {
+            if (!confirm("确定删除此标签？")) return;
+            const catKey = document.getElementById('editCatKey').value;
+            const index = parseInt(document.getElementById('editPresetIdx').value);
+            categories[catKey].presets.splice(index, 1);
+            showCategory(catKey);
+            closeModal('customModal');
+            showNotification('标签已删除');
+        }
+
+        function openAddCategoryModal() {
+            document.getElementById('customModal').style.display = 'flex';
+            document.getElementById('customModalTitle').textContent = '添加新分类';
+            document.getElementById('addCategoryForm').style.display = 'block';
+            document.getElementById('addPresetForm').style.display = 'none';
+            document.getElementById('editPresetForm').style.display = 'none';
+        }
+
+        function confirmAddCategory() {
+            const id = document.getElementById('newCatId').value.trim();
+            const title = document.getElementById('newCatTitle').value.trim();
+            if (!id || !title) return alert("请填写完整信息");
+            if (categories[id]) return alert("ID已存在");
+
+            categories[id] = { title, presets: [], isPositive: true };
+            initCategories();
+            showCategory(id);
+            closeModal('customModal');
+            showNotification('分类添加成功！');
+        }
+
+        function openAddPresetModal(catId) {
+            document.getElementById('customModal').style.display = 'flex';
+            document.getElementById('customModalTitle').textContent = '添加提示词';
+            document.getElementById('addCategoryForm').style.display = 'none';
+            document.getElementById('addPresetForm').style.display = 'block';
+            document.getElementById('editPresetForm').style.display = 'none';
+            document.getElementById('currentCatId').value = catId;
+        }
+
+        function confirmAddPreset() {
+            const catId = document.getElementById('currentCatId').value;
+            const zh = document.getElementById('newPresetZh').value.trim();
+            const en = document.getElementById('newPresetEn').value.trim();
+            if (!zh || !en) return alert("请填写完整信息");
+
+            categories[catId].presets.push({ en, zh });
+            showCategory(catId);
+            closeModal('customModal');
+            showNotification('提示词添加成功！');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 2500);
+        }
+
+        function copyPositive() {
+            document.getElementById('positive-prompt').select();
+            document.execCommand('copy');
+            showNotification('已复制正向提示词');
+        }
+
+        function clearPositive() {
+            document.getElementById('positive-prompt').value = '';
+            document.getElementById('positive-replace-words').style.display = 'none';
+            updateTranslation('positive');
+        }
+
+        function copyNegative() {
+            document.getElementById('negative-prompt').select();
+            document.execCommand('copy');
+            showNotification('已复制反向提示词');
+        }
+
+        function resetNegative() {
+            document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
+            document.getElementById('negative-replace-words').style.display = 'none';
+            updateTranslation('negative');
+            showNotification('已恢复默认反向提示词');
+        }
+
+        function clearNegative() {
+            document.getElementById('negative-prompt').value = '';
+            document.getElementById('negative-replace-words').style.display = 'none';
+            updateTranslation('negative');
+        }
+
+        function generateRandomPrompt() {
+            const keys = Object.keys(categories).filter(k => k !== 'favorites');
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const cat = categories[randomKey];
+            const randomPreset = cat.presets[Math.floor(Math.random() * cat.presets.length)];
+            const textarea = document.getElementById('positive-prompt');
+            let parts = textarea.value.trim().split(/,\s*/).filter(p => p.trim() !== "");
+            parts.push(randomPreset.en);
+            textarea.value = parts.join(', ');
+            updateTranslation('positive');
+            showNotification(`已随机添加: ${randomPreset.zh}`);
+            mergeGameAndCharacter();
+        }
+
+        function showGenerateOptions() { document.getElementById('generateModal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function selectOption(option) {
+            closeModal('generateModal');
+            if (option === 1) window.open('https://arting.ai/cn/ai-image-generator-nsfw', '_blank');
+            else if (option === 2) window.open('https://perchance.org/ai-text-to-image-generator', '_blank');
+        }
+
+        document.getElementById('positive-prompt').value = '';
+        resetNegative();
+        initCategories();
+        showCategory('mihoyo');
     </script>
 </body>
 </html>
