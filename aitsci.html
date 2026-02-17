@@ -79,9 +79,11 @@
             color: rgba(224, 187, 255, 0.5);
         }
 
-        .search-category-filter {
-            width: 140px;
-            padding: 12px 16px;
+        .category-filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
             border: 2px solid rgba(155, 93, 229, 0.4);
             border-radius: 12px;
             background: rgba(58, 0, 102, 0.6);
@@ -89,11 +91,157 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 130px;
+            justify-content: space-between;
         }
 
-        .search-category-filter:focus {
-            outline: none;
+        .category-filter-btn:hover {
             border-color: #d896ff;
+            background: rgba(77, 0, 153, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(155, 93, 229, 0.3);
+        }
+
+        .filter-arrow {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .category-filter-btn.active .filter-arrow {
+            transform: rotate(180deg);
+        }
+
+        .category-filter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .category-filter-modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .category-filter-modal-content {
+            background: linear-gradient(135deg, rgba(58, 0, 102, 0.98), rgba(77, 0, 153, 0.98));
+            border: 2px solid rgba(155, 93, 229, 0.5);
+            border-radius: 20px;
+            padding: 24px;
+            min-width: 320px;
+            max-width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .category-filter-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0bbff;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(155, 93, 229, 0.3);
+        }
+
+        .category-filter-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            margin: 8px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(77, 0, 153, 0.3);
+            border: 1px solid transparent;
+        }
+
+        .category-filter-option:hover {
+            background: rgba(106, 0, 204, 0.5);
+            border-color: rgba(199, 125, 255, 0.3);
+            transform: translateX(4px);
+        }
+
+        .category-filter-option.selected {
+            background: rgba(155, 93, 229, 0.4);
+            border-color: #9b5de5;
+        }
+
+        .category-filter-option-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(155, 93, 229, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            font-size: 12px;
+        }
+
+        .category-filter-option.selected .category-filter-option-icon {
+            background: #9b5de5;
+        }
+
+        .category-filter-option-text {
+            color: #e0bbff;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .category-filter-option-check {
+            color: #ff85ff;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .category-filter-option.selected .category-filter-option-check {
+            opacity: 1;
+        }
+
+        .category-filter-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(155, 93, 229, 0.2);
+            border-radius: 50%;
+            color: #e0bbff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-filter-close:hover {
+            background: rgba(255, 64, 129, 0.3);
+            transform: rotate(90deg);
         }
 
         .search-results {
@@ -289,6 +437,82 @@
         
         .tag-text {
             font-size: 14px;
+            position: relative;
+            cursor: help;
+        }
+        
+        .tag-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(58, 0, 102, 0.98), rgba(77, 0, 153, 0.98));
+            border: 2px solid rgba(155, 93, 229, 0.5);
+            border-radius: 12px;
+            padding: 12px 16px;
+            min-width: 200px;
+            max-width: 280px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            animation: tooltipFadeIn 0.2s ease;
+        }
+
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .tag-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(77, 0, 153, 0.98);
+        }
+
+        .tag-tooltip-title {
+            font-weight: 600;
+            color: #ff85ff;
+            font-size: 13px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(155, 93, 229, 0.3);
+        }
+
+        .tag-tooltip-content {
+            color: #e0bbff;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .tag-tooltip-en {
+            color: rgba(224, 187, 255, 0.7);
+            font-size: 11px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(155, 93, 229, 0.2);
+        }
+
+        .tag-text:hover .tag-tooltip,
+        .tag-text:active .tag-tooltip {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .tag-tooltip {
+                min-width: 180px;
+                max-width: 240px;
+                padding: 10px 14px;
+            }
         }
         
         .tag-weight {
@@ -319,13 +543,33 @@
             background-color: rgba(45, 0, 85, 0.7);
             color: #d896ff;
             font-size: 14px;
+            margin-bottom: 16px;
         }
         
         .button-group {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-top: 20px;
+            margin-bottom: 0;
             flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .button-group button {
+            flex: 1;
+            min-width: 150px;
+            max-width: 250px;
+        }
+        
+        .tip-hint {
+            text-align: center;
+            color: rgba(224, 187, 255, 0.6);
+            font-size: 12px;
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(77, 0, 153, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(155, 93, 229, 0.2);
         }
         
         button {
@@ -1164,15 +1408,17 @@
      <button id="v14" onclick="copyPositive()">复制正向提示词</button> 
      <button id="v15" onclick="clearPositive()">清空正向</button> 
     </div> 
+    <div class="tip-hint">💡 移动端用户可长按提示词查看解释</div> 
    </div> 
    <div id="v16" class="section"> 
     <h2 id="v17"> 提示词分类 <button id="edit-toggle-btn" class="secondary" style="max-width: 140px; margin-left: 10px; font-size: 12px; padding: 4px 10px;" onclick="toggleEditMode()">✎ 进入编辑模式</button> </h2> 
     <div class="search-wrapper">
      <div class="search-container">
       <input type="text" id="search-input" class="search-input" placeholder="搜索提示词（支持中英文）..." autocomplete="off">
-      <select id="search-category-filter" class="search-category-filter" onchange="handleSearch(document.getElementById('search-input').value)">
-       <option value="">全部分类</option>
-      </select>
+      <button type="button" id="category-filter-btn" class="category-filter-btn" onclick="openCategoryFilterModal()">
+       <span id="current-category-label">全部分类</span>
+       <span class="filter-arrow">▼</span>
+      </button>
       <div id="search-results" class="search-results"></div>
      </div>
     </div>
@@ -1196,10 +1442,17 @@
      <button id="v24" onclick="resetNegative()">恢复默认</button> 
      <button id="v25" onclick="clearNegative()">清空反向</button> 
     </div> 
+    <div class="tip-hint">💡 移动端用户可长按提示词查看解释</div> 
    </div> 
    <div id="v26" class="footer-buttons"> 
     <button id="v27" onclick="showGenerateOptions()">跳转生成图片</button> 
    </div> 
+  </div> 
+  <div id="category-filter-modal" class="category-filter-modal" onclick="closeCategoryFilterModal(event)">
+   <div class="category-filter-modal-content" onclick="event.stopPropagation()">
+    <div class="category-filter-modal-title">选择分类</div>
+    <div id="category-filter-options"></div>
+   </div>
   </div> 
   <div class="modal" id="generateModal"> 
    <div id="v28" class="modal-content"> 
@@ -1231,6 +1484,10 @@
      <div id="v43" class="form-group"> 
       <label id="v44">分类名称 (显示文字)</label> 
       <input type="text" id="newCatTitle" placeholder="我的自定义分类"> 
+     </div> 
+     <div id="v43b" class="form-group"> 
+      <label id="v44b">分类图标 (表情符号或FontAwesome图标代码)</label> 
+      <input type="text" id="newCatIcon" placeholder="例如: 🎨 或 fa-star"> 
      </div> 
      <div id="v45" class="modal-buttons"> 
       <button id="v46" class="modal-button modal-confirm" onclick="confirmAddCategory()">添加分类</button> 
@@ -2500,7 +2757,7 @@
         isPositive: true
     },
     underwear: {
-        title: '内衣',
+        title: '贴身衣物',
         presets: [
             {en: 'jockstrap', zh: '护裆带'},
             {en: 'athletic supporter', zh: '运动护裆'},
@@ -3276,17 +3533,88 @@
         ],
         isPositive: true
     },
-    gender: {
-        title: '性别特征',
+    beast_features: {
+        title: '兽耳尾巴',
         presets: [
-            {en: 'male', zh: '男性'},
-            {en: 'female', zh: '女性'},
-            {en: 'masc', zh: '男性化'},
-            {en: 'femme', zh: '女性化'},
-            {en: 'androgynous', zh: '中性'},
-            {en: 'shemale', zh: '人妖'},
-            {en: 'futanari', zh: '扶他'},
-            {en: 'cock herm', zh: '雌雄同体'}
+            {en: 'cat ears', zh: '猫耳朵'},
+            {en: 'fluffy cat ears', zh: '毛茸茸的猫耳朵'},
+            {en: 'perked cat ears', zh: '竖立的猫耳朵'},
+            {en: 'folded cat ears', zh: '折耳'},
+            {en: 'fox ears', zh: '狐狸耳朵'},
+            {en: 'bushy fox ears', zh: '浓密的狐狸耳朵'},
+            {en: 'pointed fox ears', zh: '尖尖的狐狸耳朵'},
+            {en: 'wolf ears', zh: '狼耳朵'},
+            {en: 'alert wolf ears', zh: '警觉的狼耳朵'},
+            {en: 'tattered wolf ears', zh: '破损的狼耳朵'},
+            {en: 'bunny ears', zh: '兔耳朵'},
+            {en: 'long bunny ears', zh: '长长的兔耳朵'},
+            {en: 'drooping bunny ears', zh: '下垂的兔耳朵'},
+            {en: 'bear ears', zh: '熊耳朵'},
+            {en: 'round bear ears', zh: '圆圆的熊耳朵'},
+            {en: 'mouse ears', zh: '鼠耳朵'},
+            {en: 'small mouse ears', zh: '小小的鼠耳朵'},
+            {en: 'deer antlers', zh: '鹿角'},
+            {en: 'branching antlers', zh: '分叉的鹿角'},
+            {en: 'reindeer antlers', zh: '驯鹿角'},
+            {en: 'unicorn horn', zh: '独角'},
+            {en: 'spiraled unicorn horn', zh: '螺旋独角'},
+            {en: 'glowing unicorn horn', zh: '发光的独角'},
+            {en: 'ram horns', zh: '羊角'},
+            {en: 'curled ram horns', zh: '卷曲的羊角'},
+            {en: 'goat beard', zh: '山羊胡'},
+            {en: 'bird wings', zh: '鸟翅膀'},
+            {en: 'angel wings', zh: '天使翅膀'},
+            {en: 'feathered wings', zh: '羽毛翅膀'},
+            {en: 'swan wings', zh: '天鹅翅膀'},
+            {en: 'bat wings', zh: '蝙蝠翅膀'},
+            {en: 'dark bat wings', zh: '黑暗蝙蝠翅膀'},
+            {en: 'butterfly wings', zh: '蝴蝶翅膀'},
+            {en: 'colorful butterfly wings', zh: '彩色蝴蝶翅膀'},
+            {en: 'dragon wings', zh: '龙翅膀'},
+            {en: 'majestic dragon wings', zh: '威武的龙翅膀'},
+            {en: 'scaly dragon wings', zh: '鳞片龙翅膀'},
+            {en: 'cat tail', zh: '猫尾巴'},
+            {en: 'fluffy cat tail', zh: '毛茸茸的猫尾巴'},
+            {en: 'curled cat tail', zh: '卷曲的猫尾巴'},
+            {en: 'bushy fox tail', zh: '蓬松的狐狸尾巴'},
+            {en: 'multi-colored fox tail', zh: '多色狐狸尾巴'},
+            {en: 'wolf tail', zh: '狼尾巴'},
+            {en: 'drooping wolf tail', zh: '下垂的狼尾巴'},
+            {en: 'rabbit tail', zh: '兔尾巴'},
+            {en: 'cotton-ball rabbit tail', zh: '棉花球般的兔尾巴'},
+            {en: 'short bunny tail', zh: '短短的兔尾巴'},
+            {en: 'squirrel tail', zh: '松鼠尾巴'},
+            {en: 'fluffy squirrel tail', zh: '毛茸茸的松鼠尾巴'},
+            {en: 'mermaid tail', zh: '人鱼尾巴'},
+            {en: 'shimmering mermaid tail', zh: '闪光的人鱼尾巴'},
+            {en: 'scale-covered mermaid tail', zh: '鳞片覆盖的人鱼尾巴'},
+            {en: 'fish tail', zh: '鱼尾巴'},
+            {en: 'flowing fish tail', zh: '飘逸的鱼尾巴'},
+            {en: 'colorful fish tail', zh: '彩色鱼尾巴'},
+            {en: 'snake tail', zh: '蛇尾巴'},
+            {en: 'coiling snake tail', zh: '盘绕的蛇尾巴'},
+            {en: 'patterned snake tail', zh: '花纹蛇尾巴'},
+            {en: 'dragon tail', zh: '龙尾巴'},
+            {en: 'scaly dragon tail', zh: '鳞片龙尾巴'},
+            {en: 'spiked dragon tail', zh: '带刺的龙尾巴'},
+            {en: 'lizard tail', zh: '蜥蜴尾巴'},
+            {en: 'regenerating lizard tail', zh: '再生的蜥蜴尾巴'},
+            {en: 'colorful lizard tail', zh: '彩色蜥蜴尾巴'},
+            {en: 'fur tuft', zh: '毛簇'},
+            {en: 'ear fluff', zh: '耳毛'},
+            {en: 'cheek fluff', zh: '脸颊绒毛'},
+            {en: 'neck fluff', zh: '颈毛'},
+            {en: 'wing feathers', zh: '翅羽'},
+            {en: 'tail feathers', zh: '尾羽'},
+            {en: ' Peacock feathers', zh: '孔雀羽毛'},
+            {en: 'iridescent feathers', zh: '彩虹色羽毛'},
+            {en: 'fin', zh: '鳍'},
+            {en: 'dorsal fin', zh: '背鳍'},
+            {en: 'pectoral fin', zh: '胸鳍'},
+            {en: 'gills', zh: '鳃'},
+            {en: 'tentacles', zh: '触手'},
+            {en: 'soft tentacles', zh: '柔软的触手'},
+            {en: 'colorful tentacles', zh: '彩色触手'}
         ],
         isPositive: true
     },
@@ -3603,6 +3931,8 @@
 
         // 初始化函数
         function initApp() {
+            // 首先加载保存的自定义数据
+            loadCustomData();
             // 初始化分类列表
             initCategories();
             // 恢复默认反向提示词
@@ -3897,7 +4227,20 @@
             
             const text = document.createElement('span');
             text.className = 'tag-text';
+            
+            // 先添加文本内容
             text.textContent = en;
+            
+            // 添加解释tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tag-tooltip';
+            tooltip.innerHTML = `
+                <div class="tag-tooltip-title">提示词解释</div>
+                <div class="tag-tooltip-content">${zh}</div>
+                <div class="tag-tooltip-en">${en}</div>
+            `;
+            text.appendChild(tooltip);
+            
             tag.appendChild(text);
             
             const weightSpan = document.createElement('span');
@@ -4183,6 +4526,7 @@
             if (!zh || !en) return showNotification("内容不能为空");
 
             categories[catKey].presets[index] = { en, zh };
+            saveCustomData();
             showCategory(catKey);
             closeModal('customModal');
             showNotification('修改已保存！');
@@ -4194,9 +4538,23 @@
             const catKey = document.getElementById('editCatKey').value;
             const index = parseInt(document.getElementById('editPresetIdx').value);
             categories[catKey].presets.splice(index, 1);
+            saveCustomData();
             showCategory(catKey);
             closeModal('customModal');
             showNotification('标签已删除');
+        }
+
+        // 删除分类
+        function deleteCategory() {
+            if (!confirm("确定删除此分类？该分类下的所有提示词都将被删除！")) return;
+            const catKey = document.getElementById('editCatKey').value;
+            if (categories[catKey]) {
+                delete categories[catKey];
+                saveCustomData();
+                initCategories();
+                closeModal('customModal');
+                showNotification('分类已删除');
+            }
         }
 
         // 打开添加分类模态
@@ -4219,17 +4577,116 @@
             document.getElementById('editPresetForm').style.display = 'none';
         }
 
+        // 数据持久化存储键名
+        const STORAGE_KEYS = {
+            CUSTOM_CATEGORIES: 'aiPrompt_customCategories',
+            CUSTOM_PRESETS: 'aiPrompt_customPresets',
+            CUSTOM_SETTINGS: 'aiPrompt_customSettings'
+        };
+
+        // 保存数据到localStorage
+        function saveDataToStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+                return true;
+            } catch (error) {
+                console.error('保存数据失败:', error);
+                return false;
+            }
+        }
+
+        // 从localStorage加载数据
+        function loadDataFromStorage(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                return null;
+            }
+        }
+
+        // 保存自定义分类和提示词
+        function saveCustomData() {
+            const customCategories = {};
+            const customPresets = {};
+            
+            // 保存自定义分类
+            Object.keys(categories).forEach(key => {
+                if (key !== 'favorites' && key !== 'style' && key !== 'mihoyo' && key !== 'scene' && 
+                    key !== 'action' && key !== 'play' && key !== 'underwear' && key !== 'body' && 
+                    key !== 'gender' && key !== 'penis' && key !== 'hair' && key !== 'accessories' && 
+                    key !== 'positions' && key !== 'weather') {
+                    customCategories[key] = categories[key];
+                }
+            });
+            
+            // 保存每个分类的提示词
+            Object.keys(categories).forEach(key => {
+                if (categories[key].presets) {
+                    customPresets[key] = categories[key].presets;
+                }
+            });
+            
+            saveDataToStorage(STORAGE_KEYS.CUSTOM_CATEGORIES, customCategories);
+            saveDataToStorage(STORAGE_KEYS.CUSTOM_PRESETS, customPresets);
+        }
+
+        // 加载自定义数据
+        function loadCustomData() {
+            try {
+                const customCategories = loadDataFromStorage(STORAGE_KEYS.CUSTOM_CATEGORIES);
+                const customPresets = loadDataFromStorage(STORAGE_KEYS.CUSTOM_PRESETS);
+                
+                // 合并自定义分类（包括图标）
+                if (customCategories) {
+                    Object.keys(customCategories).forEach(key => {
+                        if (!categories[key]) {
+                            categories[key] = customCategories[key];
+                            // 加载自定义图标
+                            if (customCategories[key].icon) {
+                                categoryIcons[key] = customCategories[key].icon;
+                            }
+                        }
+                    });
+                }
+                
+                // 合并自定义提示词
+                if (customPresets) {
+                    Object.keys(customPresets).forEach(key => {
+                        if (categories[key]) {
+                            categories[key].presets = customPresets[key];
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('加载自定义数据失败:', error);
+            }
+        }
+
         // 确认添加分类
         function confirmAddCategory() {
             const id = document.getElementById('newCatId').value.trim();
             const title = document.getElementById('newCatTitle').value.trim();
+            const icon = document.getElementById('newCatIcon').value.trim() || '📁';
             if (!id || !title) return showNotification("请填写完整信息");
             if (categories[id]) return showNotification("ID已存在");
 
-            categories[id] = { title, presets: [], isPositive: true };
+            categories[id] = { title, presets: [], isPositive: true, icon: icon };
+            saveCustomData();
             initCategories();
+            
+            // 更新分类图标映射
+            categoryIcons[id] = icon;
+            
             showCategory(id);
             closeModal('customModal');
+            
+            // 清空输入框
+            document.getElementById('newCatId').value = '';
+            document.getElementById('newCatTitle').value = '';
+            document.getElementById('newCatIcon').value = '';
+            
             showNotification('分类添加成功！');
         }
 
@@ -4262,6 +4719,7 @@
             if (!zh || !en) return showNotification("请填写完整信息");
 
             categories[catId].presets.push({ en, zh });
+            saveCustomData();
             showCategory(catId);
             closeModal('customModal');
             showNotification('提示词添加成功！');
@@ -4275,18 +4733,112 @@
             setTimeout(() => notification.classList.remove('show'), 2500);
         }
 
+        // 当前选中的分类
+        let selectedSearchCategory = '';
+
         // 初始化搜索分类筛选
         function initSearchCategoryFilter() {
-            const filter = document.getElementById('search-category-filter');
-            if (!filter) return;
+            // 不再使用下拉框，改为按钮触发弹窗
+        }
+
+        // 打开分类选择弹窗
+        function openCategoryFilterModal() {
+            const modal = document.getElementById('category-filter-modal');
+            const optionsContainer = document.getElementById('category-filter-options');
             
+            optionsContainer.innerHTML = '';
+            
+            // 添加"全部分类"选项
+            const allOption = createCategoryOption('', '全部分类', '🎯');
+            if (selectedSearchCategory === '') {
+                allOption.classList.add('selected');
+            }
+            optionsContainer.appendChild(allOption);
+            
+            // 添加所有分类选项
             Object.keys(categories).forEach(key => {
                 if (key === 'favorites') return;
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = categories[key].title;
-                filter.appendChild(option);
+                const option = createCategoryOption(key, categories[key].title, getCategoryIcon(key));
+                if (selectedSearchCategory === key) {
+                    option.classList.add('selected');
+                }
+                optionsContainer.appendChild(option);
             });
+            
+            modal.classList.add('show');
+        }
+
+        // 创建分类选项元素
+        function createCategoryOption(key, title, icon) {
+            const option = document.createElement('div');
+            option.className = 'category-filter-option';
+            option.dataset.category = key;
+            option.onclick = () => selectSearchCategory(key, title);
+            
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'category-filter-option-icon';
+            iconSpan.textContent = icon;
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'category-filter-option-text';
+            textSpan.textContent = title;
+            
+            const checkSpan = document.createElement('span');
+            checkSpan.className = 'category-filter-option-check';
+            checkSpan.textContent = '✓';
+            
+            option.appendChild(iconSpan);
+            option.appendChild(textSpan);
+            option.appendChild(checkSpan);
+            
+            return option;
+        }
+
+        // 分类图标映射（存储自定义分类的图标）
+        const categoryIcons = {};
+
+        // 获取分类图标
+        function getCategoryIcon(key) {
+            // 先检查自定义图标
+            if (categoryIcons[key]) {
+                return categoryIcons[key];
+            }
+            
+            const icons = {
+                'style': '🎨',
+                'mihoyo': '🎮',
+                'scene': '🏠',
+                'action': '⚡',
+                'play': '🎭',
+                'underwear': '👗',
+                'body': '💪',
+                'beast_features': '🐾',
+                'penis': '🔴',
+                'hair': '💇',
+                'accessories': '💎',
+                'positions': '🧘',
+                'weather': '🌤️'
+            };
+            return icons[key] || '📁';
+        }
+
+        // 选择搜索分类
+        function selectSearchCategory(key, title) {
+            selectedSearchCategory = key;
+            document.getElementById('current-category-label').textContent = title;
+            closeCategoryFilterModal();
+            
+            const searchInput = document.getElementById('search-input');
+            if (searchInput && searchInput.value.trim()) {
+                handleSearch(searchInput.value);
+            }
+        }
+
+        // 关闭分类选择弹窗
+        function closeCategoryFilterModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('category-filter-modal');
+            modal.classList.remove('show');
         }
 
         // 高亮搜索关键词
@@ -4299,7 +4851,6 @@
         // 完善的搜索功能
         function handleSearch(query) {
             const searchResults = document.getElementById('search-results');
-            const categoryFilter = document.getElementById('search-category-filter');
             
             if (!searchResults) return;
             
@@ -4311,9 +4862,8 @@
             
             const results = [];
             const lowerQuery = query.toLowerCase();
-            const selectedCategory = categoryFilter ? categoryFilter.value : '';
             
-            const categoriesToSearch = selectedCategory ? { [selectedCategory]: categories[selectedCategory] } : categories;
+            const categoriesToSearch = selectedSearchCategory ? { [selectedSearchCategory]: categories[selectedSearchCategory] } : categories;
             
             Object.keys(categoriesToSearch).forEach(catKey => {
                 if (catKey === 'favorites') return;
