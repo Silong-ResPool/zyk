@@ -45,6 +45,152 @@
             align-items: center;
             margin-bottom: 20px;
         }
+
+        .search-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid rgba(155, 93, 229, 0.4);
+            border-radius: 12px;
+            background: rgba(58, 0, 102, 0.6);
+            color: #e0bbff;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #d896ff;
+            box-shadow: 0 0 20px rgba(199, 125, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .search-input::placeholder {
+            color: rgba(224, 187, 255, 0.5);
+        }
+
+        .search-category-filter {
+            width: 140px;
+            padding: 12px 16px;
+            border: 2px solid rgba(155, 93, 229, 0.4);
+            border-radius: 12px;
+            background: rgba(58, 0, 102, 0.6);
+            color: #e0bbff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-category-filter:focus {
+            outline: none;
+            border-color: #d896ff;
+        }
+
+        .search-results {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: rgba(58, 0, 102, 0.98);
+            border: 2px solid rgba(155, 93, 229, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 6px 0;
+            background: rgba(77, 0, 153, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .search-result-item:hover {
+            background: rgba(106, 0, 204, 0.7);
+            transform: translateX(4px);
+            border-color: rgba(199, 125, 255, 0.5);
+        }
+
+        .search-result-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .search-result-zh {
+            color: #e0bbff;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .search-result-zh .highlight {
+            background: rgba(255, 133, 255, 0.3);
+            color: #ff85ff;
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .search-result-en {
+            color: rgba(224, 187, 255, 0.7);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .search-result-en .highlight {
+            background: rgba(255, 133, 255, 0.2);
+            color: #ffb3ff;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .search-result-cat {
+            background: rgba(255, 64, 129, 0.3);
+            color: #ff85ff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 12px;
+        }
+
+        .search-no-results {
+            text-align: center;
+            color: rgba(224, 187, 255, 0.6);
+            padding: 30px 20px;
+            font-size: 14px;
+        }
+
+        .search-no-results-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
         
         h3 {
             font-size: 1.2rem;
@@ -74,12 +220,12 @@
         }
         
         .section {
-            margin-bottom: 32px;
-            padding: 24px;
-            border-radius: 16px;
-            background: rgba(58, 0, 102, 0.2);
-            border: 1px solid rgba(155, 93, 229, 0.2);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            margin-bottom: 36px;
+            padding: 28px;
+            border-radius: 18px;
+            background: rgba(58, 0, 102, 0.25);
+            border: 1px solid rgba(155, 93, 229, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -177,8 +323,8 @@
         
         .button-group {
             display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
         
@@ -186,16 +332,16 @@
             background: linear-gradient(135deg, #9b5de5, #6a00cc);
             color: #fff;
             border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 14px 24px;
+            border-radius: 14px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex: 1;
-            min-width: 120px;
-            max-width: 160px;
+            min-width: 130px;
+            max-width: 180px;
             box-shadow: 0 4px 16px rgba(155, 93, 229, 0.3);
             white-space: nowrap;
             position: relative;
@@ -277,15 +423,15 @@
         .category-list {
             display: flex;
             overflow-x: auto;
-            gap: 12px;
-            padding: 15px;
+            gap: 14px;
+            padding: 18px;
             scrollbar-width: thin;
             scrollbar-color: #9b5de5 #3a0066;
             align-items: center;
-            background: rgba(58, 0, 102, 0.4);
-            border-radius: 12px;
-            border: 1px solid rgba(155, 93, 229, 0.3);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(58, 0, 102, 0.45);
+            border-radius: 16px;
+            border: 1px solid rgba(155, 93, 229, 0.35);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
         }
         
         .category-list::-webkit-scrollbar {
@@ -497,6 +643,34 @@
         }
         .preset-item.add-preset-btn::before { content: "+ "; }
         
+        .preset-item.pinned {
+            border-left: 4px solid #ff9800;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.9), rgba(77, 0, 153, 0.9));
+        }
+        
+        .preset-item.recommended {
+            border: 2px solid #ff9800;
+            box-shadow: 0 0 15px rgba(255, 152, 0, 0.3);
+        }
+        
+        .preset-item.pinned::before {
+            content: "📌 ";
+            margin-right: 8px;
+        }
+        
+        .star {
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            color: #ffd700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        .star:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+        
         .footer-buttons {
             display: flex;
             justify-content: center;
@@ -679,41 +853,93 @@
             box-shadow: 0 0 15px #ff85ff;
         }
         
-        /* 响应式设计 */
+        /* 桌面端样式 */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+                padding: 40px;
+            }
+            
+            .section {
+                padding: 24px;
+                margin-bottom: 28px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .prompt-container {
+                min-height: 140px;
+                padding: 20px;
+            }
+            
+            .preset-container {
+                padding: 24px;
+            }
+            
+            .preset-item {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+            
+            .search-input {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+            
+            .button-group {
+                gap: 16px;
+            }
+            
+            button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+        }
+
+        /* 平板样式 */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 8px;
             }
             
             .container {
-                padding: 20px;
+                padding: 15px;
                 border-radius: 12px;
             }
             
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 8px;
             }
             
             .section {
-                padding: 15px;
-                margin-bottom: 20px;
+                padding: 12px;
+                margin-bottom: 15px;
             }
             
             .button-group {
                 flex-direction: column;
+                gap: 8px;
             }
             
             button {
                 min-width: 100%;
                 max-width: none;
+                padding: 10px 16px;
+                font-size: 13px;
             }
             
             .prompt-container {
-                min-height: 100px;
-                padding: 10px;
+                min-height: 80px;
+                padding: 8px;
             }
             
             .category-list {
@@ -727,7 +953,7 @@
             }
             
             .preset-container {
-                padding: 15px;
+                padding: 12px;
             }
             
             .preset-item {
@@ -736,8 +962,31 @@
             }
             
             .modal-content {
-                padding: 25px;
+                padding: 20px;
                 border-radius: 15px;
+                margin: 10px;
+            }
+            
+            .search-input {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .search-result-item {
+                padding: 10px 12px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            
+            .search-result-en {
+                margin-left: 0;
+                margin-top: 4px;
+            }
+            
+            .search-result-cat {
+                font-size: 10px;
+                padding: 3px 8px;
             }
         }
         
@@ -912,13 +1161,21 @@
      <button id="v11" class="replace-btn" onclick="replaceText()">确认替换</button> 
     </div> 
     <div id="v12" class="button-group"> 
-     <button id="v13" onclick="generateRandomPrompt()">随机生成</button> 
      <button id="v14" onclick="copyPositive()">复制正向提示词</button> 
      <button id="v15" onclick="clearPositive()">清空正向</button> 
     </div> 
    </div> 
    <div id="v16" class="section"> 
     <h2 id="v17"> 提示词分类 <button id="edit-toggle-btn" class="secondary" style="max-width: 140px; margin-left: 10px; font-size: 12px; padding: 4px 10px;" onclick="toggleEditMode()">✎ 进入编辑模式</button> </h2> 
+    <div class="search-wrapper">
+     <div class="search-container">
+      <input type="text" id="search-input" class="search-input" placeholder="搜索提示词（支持中英文）..." autocomplete="off">
+      <select id="search-category-filter" class="search-category-filter" onchange="handleSearch(document.getElementById('search-input').value)">
+       <option value="">全部分类</option>
+      </select>
+      <div id="search-results" class="search-results"></div>
+     </div>
+    </div>
     <div id="v18" class="category-selector"> 
      <div class="category-list" id="category-list"> 
       <div id="v19" class="category-item add-btn" onclick="openAddCategoryModal()">
@@ -1035,9 +1292,10 @@
   </div> 
   <script>
         // 常量定义
-        const WEIGHT_STEP = 0.01; // 权重调整步长
-        const MIN_WEIGHT = -10; // 最小权重
-        const MAX_WEIGHT = 10; // 最大权重
+        const WEIGHT_STEP_PLUS = 0.01; // 权重增加步长
+        const WEIGHT_STEP_MINUS = 0.01; // 权重减少步长
+        const MIN_WEIGHT = -1; // 最小权重
+        const MAX_WEIGHT = 1.5; // 最大权重
 
         // 数据结构
         let categories = {
@@ -1049,6 +1307,8 @@
     style: {
         title: '画风',
         presets: [
+            {en: 'masterpiece, best quality, high resolution, semi-thick paint style, semi-realistic anime style, hyper-realistic digital painting, cinematic lighting, high contrast, sharp edges, soft shadows, balanced composition, depth of field, color harmony, expressive line art, natural expressions, anatomical precision, brush strokes, realistic lighting, texture variations, flawless quality, microscopic skin texture, lifelike fabric folds, dynamic pose, muscle tension, HDR 10K, 8K textures, subsurface scattering, skin translucency, shadow mapping, bokeh, multi-layered lighting, sharp rendering', zh: '半写实半动漫风', isRecommended: true, isPinned: true, isReadOnly: true, tags: ['32']},
+            {en: 'masterpiece, best quality, high resolution, colorful anime style, manga illustration, vibrant colors, detailed line work, cel shading, expressive animation, high contrast, sharp edges, soft shadows, balanced composition, depth of field, color harmony, expressive line art, natural expressions, anatomical precision, seamless integration, realistic light, pixel details, texture variations, flawless quality, dynamic pose, muscle tension, HDR 10K, 8K textures, 16-bit color, subsurface scattering, skin translucency, shadow mapping, bokeh, multi-layered light, sharp rendering', zh: '动漫风', isRecommended: true, isPinned: true, isReadOnly: true, tags: ['21']},
             {en: 'masterpiece', zh: '杰作'},
             {en: 'best quality', zh: '最佳质量'},
             {en: 'ultra detailed', zh: '超详细'},
@@ -1058,7 +1318,7 @@
             {en: 'soft organic uneven lineart', zh: '柔和有机不均线条'},
             {en: 'gentle imperfections', zh: '温和缺陷'},
             {en: 'warm intimate low-saturation tones', zh: '温暖亲密低饱和色调'},
-            {en: 'authentic traditional cel shading', zh: '真实传统赛璐璐着色'},
+{en: 'authentic traditional cel shading', zh: '真实传统赛璐璐着色'},
             {en: 'faint natural gradients', zh: '微弱自然渐变'},
             {en: 'micro speckles', zh: '微小斑点'},
             {en: 'genuine hand-painted warmth', zh: '真实手绘温暖'},
@@ -1383,7 +1643,7 @@
             {en: 'steamy atmosphere', zh: '蒸汽氛围'},
             {en: 'tiled walls', zh: '瓷砖墙'},
             {en: 'wooden benches', zh: '木长凳'},
-            {en: 'naked men', zh: '裸男'},
+            {en: 'male figure', zh: '男性人物'},
             {en: 'foggy air', zh: '雾气空气'},
             {en: 'hot water pools', zh: '热水池'},
             {en: 'bathroom', zh: '浴室'},
@@ -2990,11 +3250,50 @@
             {en: 'ecstatic', zh: '狂喜'},
         ],
         isPositive: true
-            },
-            penis: {
-                title: '性器官/后庭',
-                presets: [
-                    {en: 'cock', zh: '鸡巴'},
+    },
+    body: {
+        title: '身体特征',
+        presets: [
+            {en: 'full body', zh: '全身'},
+            {en: 'slim body', zh: '纤细身材'},
+            {en: 'hairy body', zh: '多毛身体'},
+            {en: 'athletic body', zh: '运动员体型'},
+            {en: 'bodybuilder', zh: '健美选手'},
+            {en: 'muscular body', zh: '肌肉身材'},
+            {en: 'low body fat', zh: '低体脂'},
+            {en: 'chubby body', zh: '丰满体型'},
+            {en: 'smooth body', zh: '光滑身体'},
+            {en: 'full body hair', zh: '全身浓毛'},
+            {en: 'oiled body', zh: '油亮身体'},
+            {en: 'body ink', zh: '身体纹身'},
+            {en: 'body paint', zh: '身体彩绘'},
+            {en: 'artistic body paint', zh: '艺术身体彩绘'},
+            {en: 'full body leather harness', zh: '全身皮革束具'},
+            {en: 'full body latex', zh: '全身乳胶装'},
+            {en: 'leather body harness', zh: '皮革身体束具'},
+            {en: 'body strap harness', zh: '身体带束具'},
+            {en: 'nude illusion paint', zh: '裸体错觉彩绘'}
+        ],
+        isPositive: true
+    },
+    gender: {
+        title: '性别特征',
+        presets: [
+            {en: 'male', zh: '男性'},
+            {en: 'female', zh: '女性'},
+            {en: 'masc', zh: '男性化'},
+            {en: 'femme', zh: '女性化'},
+            {en: 'androgynous', zh: '中性'},
+            {en: 'shemale', zh: '人妖'},
+            {en: 'futanari', zh: '扶他'},
+            {en: 'cock herm', zh: '雌雄同体'}
+        ],
+        isPositive: true
+    },
+    penis: {
+        title: '男性特征',
+        presets: [
+            {en: 'cock', zh: '肉茎'},
             {en: 'penis', zh: '阴茎'},
             {en: 'dick', zh: '屌'},
             {en: 'member', zh: '肉棒'},
@@ -3379,7 +3678,26 @@
                 // 创建文档片段来批量添加元素
                 const fragment = document.createDocumentFragment();
                 
+                // 分离置顶和非置顶的提示词
+                const pinnedPresets = [];
+                const normalPresets = [];
+                
                 categoryData.presets.forEach((preset, index) => {
+                    if (preset.isPinned || isFavorite(category, index)) {
+                        pinnedPresets.push({ preset, index });
+                    } else {
+                        normalPresets.push({ preset, index });
+                    }
+                });
+                
+                // 先添加置顶的提示词
+                pinnedPresets.forEach(({ preset, index }) => {
+                    const presetItem = createPresetItem(category, preset, index);
+                    fragment.appendChild(presetItem);
+                });
+                
+                // 再添加普通提示词
+                normalPresets.forEach(({ preset, index }) => {
                     const presetItem = createPresetItem(category, preset, index);
                     fragment.appendChild(presetItem);
                 });
@@ -3402,24 +3720,77 @@
         function createPresetItem(category, preset, index) {
             const presetItem = document.createElement('div');
             presetItem.className = 'preset-item';
-            presetItem.textContent = preset.zh;
-            presetItem.title = preset.en;
+            if (preset.isPinned) {
+                presetItem.classList.add('pinned');
+            }
+            if (preset.isRecommended) {
+                presetItem.classList.add('recommended');
+            }
             presetItem.dataset.en = preset.en;
             presetItem.dataset.index = index;
             presetItem.dataset.cat = category;
             
-            const star = document.createElement('span');
-            star.className = 'star';
-            star.textContent = isFavorite(category, index) ? '★' : '☆';
-            star.onclick = (e) => {
-                e.stopPropagation();
-                toggleFavorite(category, index, preset);
-            };
-            presetItem.appendChild(star);
+            const contentWrapper = document.createElement('div');
+            contentWrapper.style.display = 'flex';
+            contentWrapper.style.alignItems = 'center';
+            contentWrapper.style.gap = '6px';
+            contentWrapper.style.flexGrow = '1';
+            
+            const textSpan = document.createElement('span');
+            textSpan.textContent = preset.zh;
+            textSpan.title = preset.en;
+            contentWrapper.appendChild(textSpan);
+            
+            if (preset.tags && preset.tags.length > 0) {
+                const tagsContainer = document.createElement('div');
+                tagsContainer.style.display = 'flex';
+                tagsContainer.style.gap = '4px';
+                tagsContainer.style.marginLeft = '8px';
+                preset.tags.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.style.fontSize = '10px';
+                    tagSpan.style.padding = '2px 6px';
+                    tagSpan.style.borderRadius = '8px';
+                    tagSpan.style.backgroundColor = 'rgba(255, 152, 0, 0.3)';
+                    tagSpan.style.color = '#ff9800';
+                    tagSpan.textContent = tag;
+                    tagsContainer.appendChild(tagSpan);
+                });
+                contentWrapper.appendChild(tagsContainer);
+            }
+            
+            presetItem.appendChild(contentWrapper);
+            
+            const rightContainer = document.createElement('div');
+            rightContainer.style.display = 'flex';
+            rightContainer.style.alignItems = 'center';
+            rightContainer.style.gap = '4px';
+            
+            if (preset.isRecommended) {
+                const recommendLabel = document.createElement('span');
+                recommendLabel.style.fontSize = '12px';
+                recommendLabel.style.color = '#ff9800';
+                recommendLabel.style.fontWeight = 'bold';
+                recommendLabel.textContent = '推荐';
+                rightContainer.appendChild(recommendLabel);
+            }
+            
+            if (!preset.isReadOnly) {
+                const star = document.createElement('span');
+                star.className = 'star';
+                star.textContent = isFavorite(category, index) ? '★' : '☆';
+                star.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(category, index, preset);
+                };
+                rightContainer.appendChild(star);
+            }
+            
+            presetItem.appendChild(rightContainer);
             
             presetItem.addEventListener('click', (e) => {
                 if (e.target.classList.contains('star')) return;
-                if (isEditMode) {
+                if (isEditMode && !preset.isReadOnly) {
                     openEditPresetModal(category, index);
                 } else {
                     handlePresetClick(category, preset);
@@ -3439,7 +3810,10 @@
                     gameZh: preset.gameZh || null
                 };
                 currentTarget = categories[category].isPositive ? 'positive' : 'negative';
-                showPresetOptions();
+                // 直接添加到正向输入框，默认无权重值
+                addTagToPrompt(currentTarget, currentPreset.en, currentPreset.zh, null, currentPreset.addToBeginning);
+                showNotification(`已添加: ${currentPreset.zh}`);
+                currentPreset = null;
             } catch (error) {
                 console.error('处理预设点击失败:', error);
             }
@@ -3495,7 +3869,7 @@
         }
 
         // 添加tag到容器
-        function addTagToPrompt(type, en, zh, weight = 1.0, addToBeginning = false) {
+        function addTagToPrompt(type, en, zh, weight = null, addToBeginning = false) {
             try {
                 const container = document.getElementById(type + '-prompt');
                 const tag = createTagElement(en, zh, weight);
@@ -3504,7 +3878,7 @@
                 } else {
                     container.appendChild(tag);
                 }
-                promptTags[type].push({en, zh, weight});
+                promptTags[type].push({en, zh, weight: weight !== null ? weight : null});
                 updatePromptValue(type);
                 updateTranslation(type);
                 if (type === 'positive') mergeGameAndCharacter();
@@ -3519,8 +3893,7 @@
             tag.className = 'tag';
             tag.dataset.en = en;
             tag.dataset.zh = zh;
-            const defaultWeight = 1.0;
-            tag.dataset.weight = (weight || defaultWeight).toFixed(2);
+            tag.dataset.weight = weight !== null ? weight.toFixed(2) : 'null';
             
             const text = document.createElement('span');
             text.className = 'tag-text';
@@ -3529,7 +3902,11 @@
             
             const weightSpan = document.createElement('span');
             weightSpan.className = 'tag-weight';
-            weightSpan.textContent = `:${(weight || defaultWeight).toFixed(2)}`;
+            if (weight !== null) {
+                weightSpan.textContent = `:${weight.toFixed(2)}`;
+            } else {
+                weightSpan.textContent = '';
+            }
             tag.appendChild(weightSpan);
             
             const controls = document.createElement('div');
@@ -3540,7 +3917,7 @@
             plus.textContent = '+';
             plus.onclick = (e) => {
                 e.stopPropagation();
-                adjustWeight(tag, WEIGHT_STEP);
+                adjustWeight(tag, WEIGHT_STEP_PLUS, true);
             };
             controls.appendChild(plus);
             
@@ -3549,7 +3926,7 @@
             minus.textContent = '-';
             minus.onclick = (e) => {
                 e.stopPropagation();
-                adjustWeight(tag, -WEIGHT_STEP);
+                adjustWeight(tag, -WEIGHT_STEP_MINUS, false);
             };
             controls.appendChild(minus);
             
@@ -3574,11 +3951,25 @@
         }
 
         // 调整权重
-        function adjustWeight(tag, delta) {
+        function adjustWeight(tag, delta, isPlus) {
             try {
-                let weight = parseFloat(tag.dataset.weight);
-                weight = Math.round((weight + delta) * 100) / 100;
-                weight = Math.max(MIN_WEIGHT, Math.min(MAX_WEIGHT, weight));
+                let weight = tag.dataset.weight === 'null' ? null : parseFloat(tag.dataset.weight);
+                
+                if (weight === null) {
+                    // 无权重状态
+                    if (isPlus) {
+                        // 点击+，从1开始
+                        weight = 1;
+                    } else {
+                        // 点击-，从-0.99开始（即使用递减步长的负数）
+                        weight = -WEIGHT_STEP_MINUS;
+                    }
+                } else {
+                    // 有权重状态，按delta调整
+                    weight = Math.round((weight + delta) * 100) / 100;
+                    weight = Math.max(MIN_WEIGHT, Math.min(MAX_WEIGHT, weight));
+                }
+                
                 tag.dataset.weight = weight.toFixed(2);
                 tag.querySelector('.tag-weight').textContent = `:${weight.toFixed(2)}`;
                 updatePromptTagsFromDOM('positive');
@@ -3607,13 +3998,19 @@
             promptTags[type] = Array.from(container.children).map(tag => ({
                 en: tag.dataset.en,
                 zh: tag.dataset.zh,
-                weight: parseFloat(tag.dataset.weight)
+                weight: tag.dataset.weight === 'null' ? null : parseFloat(tag.dataset.weight)
             }));
         }
 
         // 更新隐藏的价值 (生成最终提示词字符串)
         function updatePromptValue(type) {
-            const str = promptTags[type].map(tag => `(${tag.en}:${tag.weight.toFixed(2)})`).join(', ');
+            const str = promptTags[type].map(tag => {
+                if (tag.weight !== null && tag.weight !== undefined) {
+                    return `(${tag.en}:${tag.weight.toFixed(2)})`;
+                } else {
+                    return tag.en;
+                }
+            }).join(', ');
             console.log('Generated prompt:', str);
         }
 
@@ -3878,9 +4275,159 @@
             setTimeout(() => notification.classList.remove('show'), 2500);
         }
 
+        // 初始化搜索分类筛选
+        function initSearchCategoryFilter() {
+            const filter = document.getElementById('search-category-filter');
+            if (!filter) return;
+            
+            Object.keys(categories).forEach(key => {
+                if (key === 'favorites') return;
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = categories[key].title;
+                filter.appendChild(option);
+            });
+        }
+
+        // 高亮搜索关键词
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // 完善的搜索功能
+        function handleSearch(query) {
+            const searchResults = document.getElementById('search-results');
+            const categoryFilter = document.getElementById('search-category-filter');
+            
+            if (!searchResults) return;
+            
+            if (!query.trim()) {
+                searchResults.classList.remove('show');
+                searchResults.innerHTML = '';
+                return;
+            }
+            
+            const results = [];
+            const lowerQuery = query.toLowerCase();
+            const selectedCategory = categoryFilter ? categoryFilter.value : '';
+            
+            const categoriesToSearch = selectedCategory ? { [selectedCategory]: categories[selectedCategory] } : categories;
+            
+            Object.keys(categoriesToSearch).forEach(catKey => {
+                if (catKey === 'favorites') return;
+                
+                const category = categoriesToSearch[catKey];
+                category.presets.forEach(preset => {
+                    const enMatch = preset.en.toLowerCase().includes(lowerQuery);
+                    const zhMatch = preset.zh.toLowerCase().includes(lowerQuery);
+                    
+                    if (enMatch || zhMatch) {
+                        results.push({
+                            ...preset,
+                            category: category.title,
+                            catKey: catKey,
+                            matchType: enMatch && zhMatch ? 'both' : (enMatch ? 'en' : 'zh')
+                        });
+                    }
+                });
+            });
+            
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = `
+                    <div class="search-no-results">
+                        <div class="search-no-results-icon">🔍</div>
+                        <div>未找到匹配的提示词</div>
+                        <div style="margin-top: 8px; font-size: 12px; opacity: 0.7;">请尝试其他关键词或选择不同分类</div>
+                    </div>
+                `;
+            } else {
+                results.slice(0, 30).forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item';
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'search-result-content';
+                    
+                    const zhSpan = document.createElement('span');
+                    zhSpan.className = 'search-result-zh';
+                    zhSpan.innerHTML = highlightText(result.zh, query);
+                    contentDiv.appendChild(zhSpan);
+                    
+                    const enSpan = document.createElement('span');
+                    enSpan.className = 'search-result-en';
+                    enSpan.innerHTML = highlightText(result.en, query);
+                    contentDiv.appendChild(enSpan);
+                    
+                    item.appendChild(contentDiv);
+                    
+                    const catSpan = document.createElement('span');
+                    catSpan.className = 'search-result-cat';
+                    catSpan.textContent = result.category;
+                    item.appendChild(catSpan);
+                    
+                    item.onclick = () => {
+                        addTagToPrompt('positive', result.en, result.zh, null, false);
+                        showNotification(`已添加: ${result.zh}`);
+                        document.getElementById('search-input').value = '';
+                        searchResults.classList.remove('show');
+                    };
+                    
+                    searchResults.appendChild(item);
+                });
+                
+                if (results.length > 30) {
+                    const moreDiv = document.createElement('div');
+                    moreDiv.className = 'search-no-results';
+                    moreDiv.textContent = `还有 ${results.length - 30} 个结果，请缩小搜索范围...`;
+                    searchResults.appendChild(moreDiv);
+                }
+            }
+            
+            searchResults.classList.add('show');
+        }
+
+        // 搜索框获得焦点时初始化分类筛选
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('focus', function() {
+                    initSearchCategoryFilter();
+                });
+                
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        handleSearch(this.value);
+                    }, 150);
+                });
+            }
+            
+            document.addEventListener('click', function(e) {
+                const searchContainer = document.querySelector('.search-container');
+                const searchResults = document.getElementById('search-results');
+                
+                if (searchContainer && !searchContainer.contains(e.target)) {
+                    if (searchResults) {
+                        searchResults.classList.remove('show');
+                    }
+                }
+            });
+        });
+
         // 复制正向提示词
         function copyPositive() {
-            const str = promptTags.positive.map(tag => `(${tag.en}:${tag.weight.toFixed(2)})`).join(', ');
+            const str = promptTags.positive.map(tag => {
+                if (tag.weight !== null && tag.weight !== undefined) {
+                    return `(${tag.en}:${tag.weight.toFixed(2)})`;
+                } else {
+                    return tag.en;
+                }
+            }).join(', ');
             navigator.clipboard.writeText(str).then(() => showNotification('已复制正向提示词'));
         }
 
@@ -3913,16 +4460,6 @@
             document.getElementById('negative-prompt').value = '';
             document.getElementById('negative-replace-words').style.display = 'none';
             updateTranslation('negative');
-        }
-
-        // 随机生成提示
-        function generateRandomPrompt() {
-            const keys = Object.keys(categories).filter(k => k !== 'favorites');
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            const cat = categories[randomKey];
-            const randomPreset = cat.presets[Math.floor(Math.random() * cat.presets.length)];
-            addTagToPrompt('positive', randomPreset.en, randomPreset.zh);
-            showNotification(`已随机添加: ${randomPreset.zh}`);
         }
 
         // 显示生成选项
