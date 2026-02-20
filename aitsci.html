@@ -1,3 +1,5 @@
+
+
 <html lang="zh-CN">
  <head> 
   <meta charset="UTF-8"> 
@@ -546,11 +548,49 @@
             color: #ff4081;
         }
         
+        .tag-swap-btn {
+            color: #ff9800;
+            font-size: 14px;
+        }
+        
+        .tag-swap-btn:hover {
+            color: #ffb74d;
+        }
+        
+        .tag.swap-source {
+            background-color: #ff9800;
+            border: 2px solid #ffb74d;
+            animation: swapPulse 1s infinite;
+        }
+        
+        @keyframes swapPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
         .tag-text-part {
             display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            flex: 1;
+        }
+        
+        .tag-zh {
+            font-size: 14px;
+            color: #ff85ff;
+            font-weight: 500;
+        }
+        
+        .tag-en {
+            font-size: 11px;
+            color: rgba(224, 187, 255, 0.6);
+        }
+        
+        .tag-weight {
+            font-size: 12px;
+            color: #4caf50;
+            margin-left: 4px;
         }
         
         .tag-controls {
@@ -3688,7 +3728,19 @@
             {en: 'full body latex', zh: '全身乳胶装'},
             {en: 'leather body harness', zh: '皮革身体束具'},
             {en: 'body strap harness', zh: '身体带束具'},
-            {en: 'nude illusion paint', zh: '裸体错觉彩绘'}
+            {en: 'nude illusion paint', zh: '裸体错觉彩绘'},
+            {en: 'big pecs', zh: '大胸肌'},
+            {en: 'defined pectorals', zh: '健壮胸肌'},
+            {en: 'slim waist', zh: '细腰'},
+            {en: 'narrow waist', zh: '窄腰'},
+            {en: 'big buttocks', zh: '大臀部'},
+            {en: 'large ass', zh: '大屁股'},
+            {en: 'shapely butt', zh: '丰满臀部'},
+            {en: 'beautiful back', zh: '美背'},
+            {en: 'defined back', zh: '清晰背部'},
+            {en: 'six pack abs', zh: '腹肌'},
+            {en: 'defined abs', zh: '分明腹肌'},
+            {en: 'toned stomach', zh: '紧实腹部'}
         ],
         isPositive: true
     },
@@ -4037,6 +4089,15 @@
             {en: 'leaning against wall', zh: '靠墙'},
             {en: 'squatting', zh: '蹲姿'},
             {en: 'reclining', zh: '斜倚'},
+            {en: 'doggy style', zh: '后入式'},
+            {en: 'missionary', zh: '正面体位'},
+            {en: 'cowgirl', zh: '上位体位'},
+            {en: 'reverse cowgirl', zh: '背对上位'},
+            {en: 'spooning', zh: '侧拥式'},
+            {en: '69 position', zh: '相互口交式'},
+            {en: 'standing doggy', zh: '站立后入'},
+            {en: 'legs on shoulders', zh: '双腿搭肩'},
+            {en: 'anal doggy', zh: '后入肛交'}
         ],
         isPositive: true
     },
@@ -4412,23 +4473,30 @@
             tag.dataset.weight = weight !== null ? weight.toFixed(2) : 'null';
             tag.dataset.explanation = explanation || zh;
             
-            // 上部分：文本内容
+            // 上部分：中文内容
             const textPart = document.createElement('div');
             textPart.className = 'tag-text-part';
             
-            const text = document.createElement('span');
-            text.className = 'tag-text';
-            text.textContent = en;
+            const zhText = document.createElement('span');
+            zhText.className = 'tag-zh';
+            zhText.textContent = zh;
             
+            const enText = document.createElement('span');
+            enText.className = 'tag-en';
+            enText.textContent = en;
+            
+            textPart.appendChild(zhText);
+            textPart.appendChild(enText);
+            
+            tag.appendChild(textPart);
+            
+            // 权重显示
             const weightSpan = document.createElement('span');
             weightSpan.className = 'tag-weight';
             if (weight !== null) {
                 weightSpan.textContent = `:${weight.toFixed(2)}`;
             }
-            textPart.appendChild(text);
-            textPart.appendChild(weightSpan);
-            
-            tag.appendChild(textPart);
+            tag.appendChild(weightSpan);
             
             // 下部分：操作按钮组（水平排列）
             const controls = document.createElement('div');
@@ -4464,9 +4532,97 @@
             };
             controls.appendChild(remove);
             
+            // 添加更换按钮
+            const swap = document.createElement('button');
+            swap.className = 'tag-btn tag-swap-btn';
+            swap.innerHTML = '⇄';
+            swap.title = '更换位置';
+            swap.onclick = (e) => {
+                e.stopPropagation();
+                handleSwapClick(tag);
+            };
+            controls.appendChild(swap);
+            
             tag.appendChild(controls);
             
             return tag;
+        }
+
+        // 更换功能变量
+        let swapSourceTag = null;
+
+        // 处理更换按钮点击
+        function handleSwapClick(tag) {
+            if (!swapSourceTag) {
+                // 第一次点击，选择源气泡
+                swapSourceTag = tag;
+                tag.classList.add('swap-source');
+                showNotification('请点击另一个气泡进行位置更换');
+            } else if (swapSourceTag === tag) {
+                // 点击同一个，取消选择
+                swapSourceTag.classList.remove('swap-source');
+                swapSourceTag = null;
+                showNotification('已取消更换');
+            } else {
+                // 交换两个气泡的位置
+                swapTags(swapSourceTag, tag);
+                swapSourceTag.classList.remove('swap-source');
+                swapSourceTag = null;
+            }
+        }
+
+        // 交换两个气泡
+        function swapTags(tag1, tag2) {
+            const container = document.getElementById('positive-prompt');
+            const type = 'positive';
+            
+            // 获取两个标签的索引
+            const tags = Array.from(container.querySelectorAll('.tag'));
+            const index1 = tags.indexOf(tag1);
+            const index2 = tags.indexOf(tag2);
+            
+            if (index1 === -1 || index2 === -1) {
+                showNotification('更换失败');
+                return;
+            }
+            
+            // 交换数据
+            const tempEn = tag1.dataset.en;
+            const tempZh = tag1.dataset.zh;
+            const tempWeight = tag1.dataset.weight;
+            const tempExplanation = tag1.dataset.explanation;
+            
+            tag1.dataset.en = tag2.dataset.en;
+            tag1.dataset.zh = tag2.dataset.zh;
+            tag1.dataset.weight = tag2.dataset.weight;
+            tag1.dataset.explanation = tag2.dataset.explanation;
+            
+            tag2.dataset.en = tempEn;
+            tag2.dataset.zh = tempZh;
+            tag2.dataset.weight = tempWeight;
+            tag2.dataset.explanation = tempExplanation;
+            
+            // 更新显示内容
+            updateTagDisplay(tag1);
+            updateTagDisplay(tag2);
+            
+            // 更新数据
+            updatePromptTagsFromDOM(type);
+            showNotification('已交换位置');
+        }
+
+        // 更新气泡显示
+        function updateTagDisplay(tag) {
+            const zhEl = tag.querySelector('.tag-zh');
+            const enEl = tag.querySelector('.tag-en');
+            const weightEl = tag.querySelector('.tag-weight');
+            
+            if (zhEl) zhEl.textContent = tag.dataset.zh;
+            if (enEl) enEl.textContent = tag.dataset.en;
+            if (weightEl) {
+                const weight = tag.dataset.weight;
+                weightEl.textContent = weight !== 'null' ? `:${parseFloat(weight).toFixed(2)}` : '';
+            }
         }
 
         // 生成提示词解释
