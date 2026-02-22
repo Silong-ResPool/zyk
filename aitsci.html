@@ -1,6 +1,7 @@
 
 
 
+
 <html lang="zh-CN">
  <head> 
   <meta charset="UTF-8"> 
@@ -1999,6 +2000,44 @@
             }
         }
         
+        /* 教程内容样式 */
+        .tutorial-content {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .tutorial-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(106, 0, 204, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #9c27b0;
+        }
+        
+        .tutorial-section h3 {
+            color: #d896ff;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .tutorial-section p {
+            color: #e0bbff;
+            margin: 10px 0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .tutorial-section p strong {
+            color: #ff69b4;
+            font-weight: 600;
+        }
+        
+        .tutorial-section p:last-child {
+            margin-bottom: 0;
+        }
+        
         .modal-option h3 {
             color: #d896ff;
             margin-bottom: 8px;
@@ -2396,9 +2435,9 @@
     <div id="v12" class="button-group"> 
      <button id="v14" onclick="copyPositive()">复制正向提示词</button> 
      <button id="v14-1" onclick="openAssociationModal()">关联</button>
+     <button id="v14-2" onclick="openTutorialModal()">教程</button>
      <button id="v15" onclick="clearPositive()">清空正向</button> 
     </div> 
-    <div class="tip-hint">💡 移动端用户可长按提示词查看解释</div> 
    </div> 
    <div id="v16" class="section"> 
     <h2 id="v17"> 提示词分类 <button id="edit-toggle-btn" class="secondary" style="max-width: 140px; margin-left: 10px; font-size: 12px; padding: 4px 10px;" onclick="toggleEditMode()">✎ 进入编辑模式</button> </h2> 
@@ -2433,7 +2472,6 @@
      <button id="v25" onclick="clearNegative()">清空反向</button> 
      <button id="v26a" onclick="revertAllPresets()">全部恢复</button> 
     </div> 
-    <div class="tip-hint">💡 移动端用户可长按提示词查看解释</div> 
    </div> 
    <div id="v26" class="footer-buttons"> 
     <button id="v27" onclick="showGenerateOptions()">跳转生成图片</button> 
@@ -2714,6 +2752,90 @@
     <div class="modal-buttons"> 
      <button class="modal-button modal-confirm" onclick="confirmSelectedWords()">确认</button> 
      <button class="modal-button modal-cancel" onclick="closeModal('associationWordModal')">取消</button> 
+    </div> 
+   </div> 
+  </div>
+  <!-- 教程弹窗 -->
+  <div class="modal" id="tutorialModal"> 
+   <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;"> 
+    <h2 class="modal-title">使用教程</h2> 
+    <div class="tutorial-content">
+        <div class="tutorial-section">
+            <h3>一、基础概念</h3>
+            <p><strong>什么是提示词？</strong></p>
+            <p>提示词（Prompt）是用于向AI图像生成器描述你想要生成的图像内容的文字指令。通过精心设计的提示词，可以让AI生成符合你预期的图像。</p>
+            <p><strong>正向提示词 vs 反向提示词</strong></p>
+            <p>• 正向提示词：描述你希望出现在图像中的内容</p>
+            <p>• 反向提示词：描述你不希望出现在图像中的内容（用于排除不需要的元素）</p>
+        </div>
+        <div class="tutorial-section">
+            <h3>二、操作步骤</h3>
+            <p><strong>步骤1：选择提示词</strong></p>
+            <p>在提示词分类区域，点击你需要的提示词按钮。提示词会自动添加到正向提示词输入框中。</p>
+            <p><strong>步骤2：使用关联功能</strong></p>
+            <p>点击"关联"按钮，可以快速组合多个提示词，创建复杂的场景描述。关联功能包括：</p>
+            <p>• 衣服颜色关联：将衣服与颜色组合</p>
+            <p>• 头发颜色关联：将发型与颜色组合</p>
+            <p>• 角色动作关联：设置角色之间的互动</p>
+            <p>• 身体特征关联：为角色添加身体特征</p>
+            <p>• 肤色关联：选择角色的肤色</p>
+            <p>• 人物关联：设置攻受关系和动作</p>
+            <p>• 自定义功能：自定义年龄、颜色、肤色和互动动作</p>
+            <p><strong>步骤3：编辑提示词</strong></p>
+            <p>你可以直接在输入框中编辑提示词，添加、删除或修改内容。</p>
+            <p><strong>步骤4：复制提示词</strong></p>
+            <p>点击"复制正向提示词"或"复制反向提示词"按钮，将提示词复制到剪贴板。</p>
+            <p><strong>步骤5：生成图像</strong></p>
+            <p>点击"跳转生成图片"按钮，选择你喜欢的AI图像生成平台，粘贴提示词并生成图像。</p>
+        </div>
+        <div class="tutorial-section">
+            <h3>三、权重调整</h3>
+            <p>提示词的权重决定了AI对该提示词的重视程度。权重越高，该提示词在图像中的表现越明显。</p>
+            <p><strong>调整方法：</strong></p>
+            <p>• 点击提示词标签，可以增加或减少权重（0.1-2.0）</p>
+            <p>• 权重1.0为默认值，大于1.0增强效果，小于1.0减弱效果</p>
+            <p>• 例如：(handsome:1.2) 表示将"帅气"的权重设为1.2</p>
+        </div>
+        <div class="tutorial-section">
+            <h3>四、自定义分类和提示词</h3>
+            <p><strong>添加自定义分类：</strong></p>
+            <p>1. 点击"添加分类"按钮</p>
+            <p>2. 输入分类ID（英文，如：my_style）</p>
+            <p>3. 输入分类名称（显示文字）</p>
+            <p>4. 选择分类图标（表情符号或FontAwesome图标代码）</p>
+            <p>5. 点击"添加分类"完成</p>
+            <p><strong>添加自定义提示词：</strong></p>
+            <p>1. 点击分类右上角的"+"按钮</p>
+            <p>2. 输入按钮标题（显示在按钮上的文字）</p>
+            <p>3. 输入英文提示词（AI识别的内容）</p>
+            <p>4. 输入中文解释（便于理解）</p>
+            <p>5. 点击"添加提示词"完成</p>
+        </div>
+        <div class="tutorial-section">
+            <h3>五、常见问题及解决方案</h3>
+            <p><strong>Q：生成的图像不符合预期怎么办？</strong></p>
+            <p>A：尝试调整提示词的权重，或添加更详细的描述。也可以使用反向提示词排除不需要的元素。</p>
+            <p><strong>Q：如何生成特定风格的图像？</strong></p>
+            <p>A：在提示词中添加风格相关的词汇，如"anime style"（动漫风格）、"realistic"（写实风格）等。</p>
+            <p><strong>Q：提示词太多怎么管理？</strong></p>
+            <p>A：使用自定义分类功能，将常用的提示词整理到不同的分类中，方便快速选择。</p>
+            <p><strong>Q：如何保存我的提示词配置？</strong></p>
+            <p>A：系统会自动保存你的自定义分类和提示词到本地存储，下次打开时会自动加载。</p>
+        </div>
+        <div class="tutorial-section">
+            <h3>六、高级技巧</h3>
+            <p><strong>1. 提示词顺序</strong></p>
+            <p>将重要的提示词放在前面，AI会优先处理前面的内容。</p>
+            <p><strong>2. 使用逗号分隔</strong></p>
+            <p>使用英文逗号分隔不同的提示词，使结构更清晰。</p>
+            <p><strong>3. 组合使用</strong></p>
+            <p>灵活使用关联功能，组合多个提示词创建复杂的场景。</p>
+            <p><strong>4. 实验探索</strong></p>
+            <p>多尝试不同的提示词组合，探索AI的生成能力。</p>
+        </div>
+    </div>
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="closeModal('tutorialModal')">我知道了</button> 
     </div> 
    </div> 
   </div> 
@@ -7013,7 +7135,11 @@
                 { id: 'character_body', title: '身体特征关联', desc: '将角色与身体特征进行关联' },
                 { id: 'skin_color', title: '肤色关联', desc: '选择角色的肤色' },
                 { id: 'role_relation', title: '人物关联', desc: '设置人物攻受关系和动作' },
-                { id: 'from_category', title: '自定义', desc: '自定义添加词汇并选择分类关联' }
+                { id: 'custom_age', title: '自定义年龄', desc: '自定义角色年龄并关联' },
+                { id: 'custom_color', title: '自定义颜色', desc: '自定义颜色并关联到服饰或物品' },
+                { id: 'custom_skin', title: '自定义肤色', desc: '自定义肤色并关联到角色' },
+                { id: 'custom_action', title: '自定义互动', desc: '自定义角色互动动作' },
+                { id: 'from_category', title: '自定义词汇', desc: '自定义添加词汇并选择分类关联' }
             ]);
             
             options.forEach(opt => {
@@ -7295,6 +7421,139 @@
                         </div>
                     `;
                     break;
+                case 'custom_age':
+                    title = '自定义年龄';
+                    html = `
+                        <div class="association-section">
+                            <h4>预设年龄</h4>
+                            <div class="association-items">
+                                <div class="association-item" onclick="selectAgePreset('1岁')">1岁</div>
+                                <div class="association-item" onclick="selectAgePreset('1到25岁')">1到25岁</div>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>自定义年龄</h4>
+                            <input type="text" id="customAgeInput" placeholder="输入年龄，如：25岁" style="width: 100%; padding: 10px; border: 1px solid rgba(224, 187, 255, 0.3); border-radius: 8px; background: rgba(30, 20, 40, 0.8); color: #e0bbff;">
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="customAgeResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'custom_color':
+                    title = '自定义颜色';
+                    html = `
+                        <div class="association-section">
+                            <h4>预设颜色</h4>
+                            <div class="color-grid">
+                                <div class="color-option" onclick="selectColor('red')">red</div>
+                                <div class="color-option" onclick="selectColor('orange')">orange</div>
+                                <div class="color-option" onclick="selectColor('yellow')">yellow</div>
+                                <div class="color-option" onclick="selectColor('green')">green</div>
+                                <div class="color-option" onclick="selectColor('blue')">blue</div>
+                                <div class="color-option" onclick="selectColor('indigo')">indigo</div>
+                                <div class="color-option" onclick="selectColor('purple')">purple</div>
+                                <div class="color-option" onclick="selectColor('black')">black</div>
+                                <div class="color-option" onclick="selectColor('white')">white</div>
+                                <div class="color-option" onclick="selectColor('pink')">pink</div>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>自定义颜色(英文)</h4>
+                            <input type="text" id="customColorInput" placeholder="输入颜色，如：silver" style="width: 100%; padding: 10px; border: 1px solid rgba(224, 187, 255, 0.3); border-radius: 8px; background: rgba(30, 20, 40, 0.8); color: #e0bbff;">
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="customColorResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'custom_skin':
+                    title = '自定义肤色';
+                    html = `
+                        <div class="association-section">
+                            <h4>预设肤色</h4>
+                            <div class="skin-color-grid">
+                                <div class="skin-color-option" onclick="selectSkinColor('pale')">
+                                    <div class="skin-color-preview" style="background-color: #fce4d4;"></div>
+                                    <span>白色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('light')">
+                                    <div class="skin-color-preview" style="background-color: #f5d0b0;"></div>
+                                    <span>淡色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('medium')">
+                                    <div class="skin-color-preview" style="background-color: #c68642;"></div>
+                                    <span>黄色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('tan')">
+                                    <div class="skin-color-preview" style="background-color: #8d5524;"></div>
+                                    <span>古铜色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('brown')">
+                                    <div class="skin-color-preview" style="background-color: #5c3a21;"></div>
+                                    <span>棕色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('dark')">
+                                    <div class="skin-color-preview" style="background-color: #3b2219;"></div>
+                                    <span>黑色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('olive')">
+                                    <div class="skin-color-preview" style="background-color: #a08060;"></div>
+                                    <span>橄榄色</span>
+                                </div>
+                                <div class="skin-color-option" onclick="selectSkinColor('beige')">
+                                    <div class="skin-color-preview" style="background-color: #e8d4b8;"></div>
+                                    <span>米色</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>自定义肤色(英文)</h4>
+                            <input type="text" id="customSkinColorInput" placeholder="输入肤色，如：tan" style="width: 100%; padding: 10px; border: 1px solid rgba(224, 187, 255, 0.3); border-radius: 8px; background: rgba(30, 20, 40, 0.8); color: #e0bbff;">
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="customSkinResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'custom_action':
+                    title = '自定义互动';
+                    html = `
+                        <div class="association-section">
+                            <h4>互动模式</h4>
+                            <div class="association-items">
+                                <div class="association-item" onclick="showTwoPersonMode()">二人互动</div>
+                                <div class="association-item" onclick="showMultiPersonMode()">多人互动</div>
+                            </div>
+                        </div>
+                        <div id="twoPersonMode" style="display:none;">
+                            <div class="association-section">
+                                <h4>选择角色</h4>
+                                <div class="association-items" id="person1Items"></div>
+                                <div class="association-items" id="person2Items"></div>
+                            </div>
+                            <div class="association-section">
+                                <h4>选择动作</h4>
+                                <div class="association-items" id="customActionItems"></div>
+                            </div>
+                        </div>
+                        <div id="multiPersonMode" style="display:none;">
+                            <div class="association-section">
+                                <h4>添加人物</h4>
+                                <button class="select-from-category-btn" onclick="addPerson()">添加人物</button>
+                                <div id="personList"></div>
+                            </div>
+                            <div class="association-section">
+                                <h4>添加动作</h4>
+                                <button class="select-from-category-btn" onclick="addAction()">添加动作</button>
+                                <div id="actionList"></div>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="customActionResult">无</span>
+                        </div>
+                    `;
+                    break;
             }
             
             titleEl.textContent = title;
@@ -7330,6 +7589,18 @@
                     break;
                 case 'role_relation':
                     loadRoleRelation();
+                    break;
+                case 'custom_age':
+                    loadCustomAge();
+                    break;
+                case 'custom_color':
+                    loadCustomColor();
+                    break;
+                case 'custom_skin':
+                    loadCustomSkin();
+                    break;
+                case 'custom_action':
+                    loadCustomAction();
                     break;
             }
         }
@@ -7541,7 +7812,6 @@
                 {en: 'hugging', zh: '拥抱', category: 'action'},
                 {en: 'holding hands', zh: '牵手', category: 'action'},
                 {en: 'anal sex', zh: '肛交', category: 'action'},
-                {en: 'vaginal sex', zh: '阴道性交', category: 'action'},
                 {en: 'blowjob', zh: '口交', category: 'action'},
                 {en: 'handjob', zh: '手交', category: 'action'}
             ];
@@ -7880,7 +8150,7 @@
                 {en: 'kissing', zh: '接吻'}, {en: 'hugging', zh: '拥抱'}, {en: 'holding hands', zh: '牵手'},
                 {en: 'back hug', zh: '背后拥抱'}, {en: 'frontal hug', zh: '正面拥抱'}, {en: 'shoulder hug', zh: '肩并肩拥抱'},
                 {en: 'handjob', zh: '手交'}, {en: 'blowjob', zh: '口交'}, {en: 'anal sex', zh: '肛交'},
-                {en: 'vaginal sex', zh: '阴道性交'}, {en: 'mutual masturbation', zh: '相互自慰'},
+                {en: 'mutual masturbation', zh: '相互自慰'},
                 {en: 'foot job', zh: '足交'}, {en: 'thigh job', zh: '腿交'}
             ];
             
@@ -8317,6 +8587,10 @@
             const skinResult = document.getElementById('skinColorResult');
             const associationResult = document.getElementById('associationResult');
             const roleRelationResult = document.getElementById('roleRelationResult');
+            const customAgeResult = document.getElementById('customAgeResult');
+            const customColorResult = document.getElementById('customColorResult');
+            const customSkinResult = document.getElementById('customSkinResult');
+            const customActionResult = document.getElementById('customActionResult');
             
             if (clothesResult && clothesResult.dataset.en) {
                 const parts = clothesResult.dataset.en.split('_');
@@ -8341,6 +8615,18 @@
             } else if (roleRelationResult && roleRelationResult.dataset.en) {
                 enText = roleRelationResult.dataset.en;
                 zhText = roleRelationResult.dataset.zh;
+            } else if (customAgeResult && customAgeResult.dataset.en) {
+                enText = customAgeResult.dataset.en;
+                zhText = customAgeResult.textContent;
+            } else if (customColorResult && customColorResult.dataset.en) {
+                enText = customColorResult.dataset.en;
+                zhText = customColorResult.textContent;
+            } else if (customSkinResult && customSkinResult.dataset.en) {
+                enText = customSkinResult.dataset.en;
+                zhText = customSkinResult.textContent;
+            } else if (customActionResult && customActionResult.dataset.en) {
+                enText = customActionResult.dataset.en;
+                zhText = customActionResult.textContent;
             }
             
             if (enText && zhText) {
@@ -8802,7 +9088,7 @@
 
         // 恢复默认反向
         function resetNegative() {
-            document.getElementById('negative-prompt').value = 'female, feminine, breasts, vagina, vulva, ovaries, uterus, cervix, wrinkles, age spots, body hair, pubic hair, deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic pregnancy, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
+            document.getElementById('negative-prompt').value = 'deformed, mutated, malformed, disproportionate, extra limbs, asymmetric, distorted, bad proportions, plastic texture, clothing, background, text, watermark, old, elderly, extra fingers, mutated hands, extra penises, fused testicles, malformed penis, poorly drawn hands, poorly drawn face, ugly, bad anatomy, cloned face, skinny, double torso, extra arms, mangled fingers, missing lips, distorted face, extra legs, bifurcated penis, misplaced penis, deformed genitalia, asymmetric scrotum, misplaced organs, dislocated joints, internal organs exposed, organ displacement, abdominal organs in thorax, pelvic organs in abdomen, heart outside chest, liver on left side, spleen on right side, reversed kidneys, intestines protruding, stomach displacement, ectopic tissue, supernumerary organs, accessory spleen, additional heart, duplicated intestines, accessory lungs, fused organs, atrophied organs, hypoplastic lungs, hypertrophic heart, swollen glands, misshapen head, asymmetrical eyes, uneven ears, crooked nose, deviated septum, cleft palate, harelip, jaw misalignment, scoliosis, kyphosis, lordosis, twisted spine, pectus excavatum, pectus carinatum, limb deformities, unilateral atrophy, leg length discrepancy, clubfoot, bowlegs, knock knees, valgus deformity, varus deformity, joint dislocation, hyperextended joints, contracted joints, muscle asymmetry, unilateral hypertrophy, muscle wasting, skin defects, premature aging, sagging skin, stretch marks, cellulite, keloid scars, birthmarks, hemangiomas, vascular malformations, lipomas, skin tags, moles, warts, cysts, abscesses, boils, rashes, hives, psoriasis, eczema, vitiligo, albinism, hyperpigmentation, hypopigmentation, cyanosis, erythema, hematoma, ulcers, pressure sores, gangrene, necrosis, amputated limbs, congenital amputations, supernumerary nipples, accessory breasts, polymastia, gynecomastia, hirsutism, alopecia, patchy hair, non-standard human anatomy, non-adult male anatomy, misplaced arms, duplicated arms, misplaced legs, duplicated legs, missing fingers, fused fingers, extra toes, missing toes, fused toes, abnormal arm attachment, distorted body proportions, twisted shoulders, exaggerated waist-hip ratio, abnormal limb length, dislocated joints, unnatural muscle bulges, non-physiological muscle attachments, floating body parts, disconnected body parts, fused body parts, missing limbs, forked penis, odd-shaped penis, missing penis, misplaced anus, deformed anus, incorrect sexual pose, imperfect sexual depiction';
             document.getElementById('negative-replace-words').style.display = 'none';
             updateTranslation('negative');
             showNotification('已恢复默认反向提示词');
@@ -9025,6 +9311,99 @@
                 showNotification('已添加多人互动');
             }
             closeModal('actionCustomModal');
+        }
+
+        // 自定义年龄功能
+        let pendingCustomAge = { en: '', zh: '' };
+
+        function loadCustomAge() {
+            const resultEl = document.getElementById('customAgeResult');
+            if (resultEl && pendingCustomAge.zh) {
+                resultEl.textContent = pendingCustomAge.zh;
+                resultEl.dataset.en = pendingCustomAge.en;
+            }
+        }
+
+        function selectAgePreset(age) {
+            pendingCustomAge = { en: age + ' years old', zh: age };
+            const resultEl = document.getElementById('customAgeResult');
+            if (resultEl) {
+                resultEl.textContent = pendingCustomAge.zh;
+                resultEl.dataset.en = pendingCustomAge.en;
+            }
+        }
+
+        // 自定义颜色功能
+        let pendingCustomColor = { en: '', zh: '' };
+
+        function loadCustomColor() {
+            const resultEl = document.getElementById('customColorResult');
+            if (resultEl && pendingCustomColor.zh) {
+                resultEl.textContent = pendingCustomColor.zh;
+                resultEl.dataset.en = pendingCustomColor.en;
+            }
+        }
+
+        function selectColor(color) {
+            pendingCustomColor = { en: color, zh: color };
+            const resultEl = document.getElementById('customColorResult');
+            if (resultEl) {
+                resultEl.textContent = pendingCustomColor.zh;
+                resultEl.dataset.en = pendingCustomColor.en;
+            }
+        }
+
+        // 自定义肤色功能
+        let pendingCustomSkin = { en: '', zh: '' };
+
+        function loadCustomSkin() {
+            const resultEl = document.getElementById('customSkinResult');
+            if (resultEl && pendingCustomSkin.zh) {
+                resultEl.textContent = pendingCustomSkin.zh;
+                resultEl.dataset.en = pendingCustomSkin.en;
+            }
+        }
+
+        function selectSkinColor(color) {
+            pendingCustomSkin = { en: color + ' skin', zh: color + '皮肤' };
+            const resultEl = document.getElementById('customSkinResult');
+            if (resultEl) {
+                resultEl.textContent = pendingCustomSkin.zh;
+                resultEl.dataset.en = pendingCustomSkin.en;
+            }
+        }
+
+        // 自定义互动功能
+        let pendingCustomAction = { en: '', zh: '' };
+
+        function loadCustomAction() {
+            const resultEl = document.getElementById('customActionResult');
+            if (resultEl && pendingCustomAction.zh) {
+                resultEl.textContent = pendingCustomAction.zh;
+                resultEl.dataset.en = pendingCustomAction.en;
+            }
+        }
+
+        function showTwoPersonMode() {
+            document.getElementById('twoPersonMode').style.display = 'block';
+            document.getElementById('multiPersonMode').style.display = 'none';
+        }
+
+        function showMultiPersonMode() {
+            document.getElementById('twoPersonMode').style.display = 'none';
+            document.getElementById('multiPersonMode').style.display = 'block';
+        }
+
+        // 打开教程弹窗
+        function openTutorialModal() {
+            const modal = document.getElementById('tutorialModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
         }
 
         // 调用初始化
