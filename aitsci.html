@@ -1,5 +1,6 @@
 
 
+
 <html lang="zh-CN">
  <head> 
   <meta charset="UTF-8"> 
@@ -436,12 +437,12 @@
         
         .tag:hover {
             background-color: rgba(155, 93, 229, 0.5);
-            transform: scale(1.05);
         }
         
         .tag.selected {
-            background-color: #d896ff;
-            color: #2a004f;
+            background-color: rgba(255, 133, 255, 0.4);
+            border: 2px solid #ff85ff;
+            box-shadow: 0 0 10px rgba(255, 133, 255, 0.5);
         }
         
         .tag-text {
@@ -549,7 +550,7 @@
         }
         
         .tag-swap-btn {
-            color: #ff9800;
+            color: #ff85ff;
             font-size: 14px;
         }
         
@@ -558,7 +559,7 @@
         }
         
         .tag.swap-source {
-            background-color: #ff9800;
+            background-color: #ff85ff;
             border: 2px solid #ffb74d;
             animation: swapPulse 1s infinite;
         }
@@ -889,15 +890,15 @@
         }
         
         .category-item.add-btn {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
+            background: linear-gradient(135deg, #ff85ff, #ff0aff);
             color: white;
             font-weight: bold;
-            border-color: #ff9800;
+            border-color: #ff85ff;
         }
 
         .category-item.add-btn:hover {
-            background: linear-gradient(135deg, #f57c00, #e65100);
-            box-shadow: 0 6px 16px rgba(255, 152, 0, 0.5);
+            background: linear-gradient(135deg, #ff0aff, #d900d9);
+            box-shadow: 0 6px 16px rgba(255, 133, 255, 0.5);
             border-color: #fff;
         }
         
@@ -1046,16 +1047,26 @@
         .preset-item.add-preset-btn::before { content: "+ "; }
         
         .preset-item.pinned {
-            border-left: 4px solid #ff9800;
+            border-left: 4px solid #ff85ff;
             background: linear-gradient(135deg, rgba(106, 0, 204, 0.9), rgba(77, 0, 153, 0.9));
         }
         
         .preset-item.recommended {
-            border: 2px solid #ff9800;
-            box-shadow: 0 0 15px rgba(255, 152, 0, 0.3);
+            border: 2px solid #ff85ff;
+            box-shadow: 0 0 15px rgba(255, 133, 255, 0.3);
         }
         
         .preset-item.pinned::before {
+            content: "📌 ";
+            margin-right: 8px;
+        }
+        
+        .preset-item.custom-preset {
+            border-left: 4px solid #ff85ff;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.9), rgba(77, 0, 153, 0.9));
+        }
+        
+        .preset-item.custom-preset::before {
             content: "📌 ";
             margin-right: 8px;
         }
@@ -1203,6 +1214,791 @@
             box-shadow: 0 5px 15px rgba(155, 93, 229, 0.5);
         }
         
+        .preset-option {
+            background: linear-gradient(to right, #6a00cc, #4d0099);
+            border: 1px solid #ff85ff;
+            border-radius: 10px;
+            padding: 12px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #e0bbff;
+        }
+        
+        .preset-option:hover {
+            background: linear-gradient(to right, #ff85ff, #ff0aff);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .color-option {
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border: 2px solid transparent;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: #ff85ff;
+        }
+        
+        .color-option[onclick*="red"] { background-color: #ff4444; color: white; }
+        .color-option[onclick*="orange"] { background-color: #ff9e80; color: white; }
+        .color-option[onclick*="yellow"] { background-color: #ffeb3b; color: black; }
+        .color-option[onclick*="green"] { background-color: #4caf50; color: white; }
+        .color-option[onclick*="blue"] { background-color: #2196f3; color: white; }
+        .color-option[onclick*="indigo"] { background-color: #3f51b5; color: white; }
+        .color-option[onclick*="purple"] { background-color: #9c27b0; color: white; }
+        .color-option[onclick*="black"] { background-color: #212121; color: white; }
+        .color-option[onclick*="white"] { background-color: #f5f5f5; color: black; border: 1px solid #ccc; }
+        .color-option[onclick*="pink"] { background-color: #e91e63; color: white; }
+        
+        .skin-color-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .skin-color-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .skin-color-option:hover {
+            transform: scale(1.1);
+            background: rgba(155, 93, 229, 0.2);
+        }
+        
+        .skin-color-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #9b5de5;
+            margin-bottom: 8px;
+        }
+        
+        .skin-color-option span {
+            color: #e0bbff;
+            font-size: 14px;
+        }
+        
+        .association-option {
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.8), rgba(77, 0, 153, 0.8));
+            border: 2px solid #9c27b0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .association-option:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.9), rgba(106, 0, 204, 0.9));
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .association-section {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(106, 0, 204, 0.2);
+            border-radius: 8px;
+        }
+        
+        .association-section h4 {
+            color: #d896ff;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .association-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .association-item {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.7), rgba(77, 0, 153, 0.7));
+            border: 1px solid #9c27b0;
+            border-radius: 20px;
+            color: #e0bbff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .association-item:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(106, 0, 204, 0.8));
+            transform: scale(1.05);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .color-grid .color-option {
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .color-grid .color-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .skin-color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        .skin-color-grid .skin-color-option {
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .skin-color-grid .skin-color-option:hover {
+            transform: scale(1.05);
+            border-color: #ff85ff;
+        }
+        
+        .skin-color-grid .skin-color-option span {
+            color: #333;
+            font-size: 12px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        .association-result {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 133, 255, 0.1);
+            border: 1px solid #ff85ff;
+            border-radius: 8px;
+            color: #ff85ff;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .interaction-mode {
+            margin-bottom: 15px;
+        }
+        
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            border: 2px solid #9c27b0;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.7), rgba(77, 0, 153, 0.7));
+            color: #e0bbff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .mode-btn:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(106, 0, 204, 0.8));
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #9c27b0, #6a00c8);
+            color: white;
+            border-color: #ff85ff;
+            box-shadow: 0 0 15px rgba(255, 133, 255, 0.4);
+        }
+        
+        .select-from-category-btn {
+            margin: 5px;
+            padding: 8px 16px;
+            background: rgba(156, 39, 176, 0.3);
+            border: 1px dashed #9c27b0;
+            color: #d896ff;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .select-from-category-btn:hover {
+            background: rgba(156, 39, 176, 0.5);
+            border-color: #ff85ff;
+        }
+        
+        .multi-person-list, .multi-action-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            min-height: 40px;
+        }
+        
+        .add-person-btn, .add-action-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.8), rgba(77, 0, 153, 0.8));
+            border: 2px solid #9c27b0;
+            color: #e0bbff;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .add-person-btn:hover, .add-action-btn:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.9), rgba(106, 0, 204, 0.9));
+            transform: scale(1.05);
+        }
+        
+        .selected-item-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, rgba(255, 133, 255, 0.2), rgba(255, 133, 255, 0.1));
+            border: 1px solid #ff85ff;
+            border-radius: 15px;
+            color: #ff85ff;
+            font-size: 13px;
+            margin: 4px;
+        }
+        
+        .selected-item-tag .remove-tag {
+            margin-left: 8px;
+            cursor: pointer;
+            color: #ff85ff;
+            font-weight: bold;
+        }
+        
+        .selected-item-tag .remove-tag:hover {
+            color: #ff0aff;
+        }
+        
+        .selected-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(106, 0, 204, 0.2);
+            border-radius: 8px;
+            min-height: 40px;
+        }
+        
+        .category-select-item {
+            padding: 12px 20px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, rgba(106, 0, 204, 0.7), rgba(77, 0, 153, 0.7));
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            color: #e0bbff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .category-select-item:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(106, 0, 204, 0.8));
+            transform: scale(1.02);
+        }
+        
+        .preset-select-item {
+            padding: 10px 16px;
+            margin: 6px 0;
+            background: rgba(106, 0, 204, 0.5);
+            border: 1px solid rgba(156, 39, 176, 0.5);
+            border-radius: 20px;
+            color: #d896ff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .preset-select-item:hover {
+            background: rgba(156, 39, 176, 0.6);
+            transform: scale(1.02);
+        }
+        
+        .selected-tag-display {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(255, 133, 255, 0.1);
+            border: 1px solid #ff85ff;
+            border-radius: 8px;
+            color: #ff85ff;
+            font-size: 16px;
+            text-align: center;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .selected-tag-option {
+            border-color: #ff85ff !important;
+            box-shadow: 0 0 15px rgba(255, 133, 255, 0.3);
+        }
+        
+        /* 关联词选择面板样式 */
+        .association-word-panel {
+            margin: 15px 0;
+        }
+        
+        .search-box {
+            margin-bottom: 15px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            background: rgba(106, 0, 204, 0.3);
+            color: #e0bbff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .search-box input::placeholder {
+            color: rgba(224, 187, 255, 0.5);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff85ff;
+            box-shadow: 0 0 10px rgba(255, 133, 255, 0.3);
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            border: 1px solid #9c27b0;
+            background: rgba(106, 0, 204, 0.5);
+            color: #d896ff;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        
+        .category-tab:hover {
+            background: rgba(156, 39, 176, 0.6);
+        }
+        
+        .category-tab.active {
+            background: linear-gradient(135deg, #9c27b0, #6a00c8);
+            color: white;
+            border-color: #ff85ff;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(106, 0, 204, 0.2);
+            border-radius: 8px;
+        }
+        
+        .word-item {
+            padding: 8px 14px;
+            background: rgba(106, 0, 204, 0.5);
+            border: 1px solid rgba(156, 39, 176, 0.5);
+            border-radius: 20px;
+            color: #d896ff;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        
+        .word-item:hover {
+            background: rgba(156, 39, 176, 0.6);
+            transform: scale(1.02);
+        }
+        
+        .word-item.selected {
+            background: linear-gradient(135deg, rgba(255, 133, 255, 0.3), rgba(255, 10, 255, 0.2));
+            border-color: #ff85ff;
+            color: #ff85ff;
+        }
+        
+        /* 关键词管理区域样式 */
+        .keyword-manager {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(106, 0, 204, 0.15);
+            border-radius: 12px;
+        }
+        
+        .keyword-manager-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .keyword-manager-header h4 {
+            color: #d896ff;
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .add-keyword-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #9c27b0, #6a00c8);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        
+        .add-keyword-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .remove-keyword-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(255, 0, 100, 0.3);
+            color: #ff6b6b;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-keyword-btn:hover {
+            background: rgba(255, 0, 100, 0.5);
+            transform: scale(1.1);
+        }
+        
+        .apply-keyword-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff85ff, #ff0aff);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .apply-keyword-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255, 133, 255, 0.5);
+        }
+        
+        /* 自定义输入区域样式 */
+        .custom-input-section {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(106, 0, 204, 0.15);
+            border-radius: 8px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .input-row input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            background: rgba(106, 0, 204, 0.3);
+            color: #e0bbff;
+            font-size: 14px;
+        }
+        
+        .input-row input::placeholder {
+            color: rgba(224, 187, 255, 0.5);
+        }
+        
+        .input-row input:focus {
+            outline: none;
+            border-color: #ff85ff;
+        }
+        
+        .category-select-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .category-select-row select {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            background: rgba(106, 0, 204, 0.3);
+            color: #e0bbff;
+            font-size: 14px;
+        }
+        
+        .category-select-row select:focus {
+            outline: none;
+            border-color: #ff85ff;
+        }
+        
+        .add-custom-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #9c27b0, #6a00c8);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .add-custom-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .add-custom-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .custom-words-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(106, 0, 204, 0.15);
+            border-radius: 8px;
+        }
+        
+        .custom-word-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: rgba(106, 0, 204, 0.3);
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .custom-word-item .word-info {
+            flex: 1;
+        }
+        
+        .custom-word-item .word-en {
+            color: #ff85ff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .custom-word-item .word-zh {
+            color: #d896ff;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .custom-word-item .word-category {
+            display: inline-block;
+            padding: 2px 8px;
+            margin-left: 8px;
+            background: rgba(156, 39, 176, 0.5);
+            border-radius: 4px;
+            font-size: 11px;
+            color: #e0bbff;
+        }
+        
+        .custom-word-item .remove-word-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: rgba(255, 0, 100, 0.3);
+            color: #ff6b6b;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-word-item .remove-word-btn:hover {
+            background: rgba(255, 0, 100, 0.5);
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 767px) {
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .category-select-row {
+                flex-direction: column;
+            }
+            
+            .custom-word-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .custom-word-item .remove-word-btn {
+                align-self: flex-end;
+            }
+        }
+        
+        /* 人物关联面板样式 */
+        .role-relation-panel {
+            margin: 15px 0;
+        }
+        
+        .role-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(106, 0, 204, 0.15);
+            border-radius: 12px;
+        }
+        
+        .role-section h4 {
+            color: #d896ff;
+            margin: 0 0 12px 0;
+            font-size: 15px;
+        }
+        
+        .role-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .role-tab {
+            padding: 8px 16px;
+            border: 1px solid #9c27b0;
+            background: rgba(106, 0, 204, 0.3);
+            color: #d896ff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        
+        .role-tab.active {
+            background: linear-gradient(135deg, #9c27b0, #6a00c8);
+            color: white;
+        }
+        
+        .role-tab.attacker {
+            border-color: #ff6b6b;
+        }
+        
+        .role-tab.receiver {
+            border-color: #4fc3f7;
+        }
+        
+        .role-tab.attacker.active {
+            background: linear-gradient(135deg, #ff6b6b, #e53935);
+        }
+        
+        .role-tab.receiver.active {
+            background: linear-gradient(135deg, #4fc3f7, #0288d1);
+        }
+        
+        .role-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 767px) {
+            .modal-content {
+                max-width: 95% !important;
+                margin: 10px;
+            }
+            
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .category-tab {
+                white-space: nowrap;
+            }
+            
+            .keyword-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .remove-keyword-btn {
+                align-self: flex-end;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .modal-content {
+                max-width: 80% !important;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .modal-content {
+                max-width: 700px !important;
+            }
+        }
+        
         .modal-option h3 {
             color: #d896ff;
             margin-bottom: 8px;
@@ -1217,7 +2013,8 @@
         
         .modal-buttons {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            justify-content: center;
             gap: 15px;
             margin-top: 20px;
         }
@@ -1249,11 +2046,11 @@
         }
         
         .modal-reset {
-            background-color: #ff9800;
+            background-color: #ff85ff;
             color: white;
         }
         .modal-reset:hover {
-            background-color: #ffb74d;
+            background-color: #ff0aff;
         }
         
         .modal-revert {
@@ -1582,7 +2379,7 @@
  <body id="v1"> 
   <div id="v2" class="container"> 
    <h1 id="v3"> AI提示词生成器 <button id="v4" class="video-btn" onclick="window.open('https://silong-respool.github.io/zyk/spjc2778.mp4', '_blank')">视频教程</button> </h1> 
-   <p id="v5" class="warning">警告：请先输入或使用默认的反向提示词，否则生成的男性图片可能会出现女性生殖器！本版本已优化关键词，移除可能的负面引导词。</p> 
+   <p id="v5" class="warning">警告：请先输入或使用默认的反向提示词，确保生成图片的质量。</p> 
    <div id="v6" class="section"> 
     <h2 id="v7">正向提示词</h2> 
     <div id="positive-prompt" class="prompt-container" contenteditable="true"></div> 
@@ -1598,6 +2395,7 @@
     </div> 
     <div id="v12" class="button-group"> 
      <button id="v14" onclick="copyPositive()">复制正向提示词</button> 
+     <button id="v14-1" onclick="openAssociationModal()">关联</button>
      <button id="v15" onclick="clearPositive()">清空正向</button> 
     </div> 
     <div class="tip-hint">💡 移动端用户可长按提示词查看解释</div> 
@@ -1743,6 +2541,200 @@
     </div> 
    </div> 
   </div> 
+  <!-- 年龄自定义弹窗 -->
+  <div class="modal" id="ageCustomModal"> 
+   <div class="modal-content"> 
+    <h2 class="modal-title">自定义年龄</h2> 
+    <div class="modal-options"> 
+     <div class="preset-option" onclick="selectAgePreset('1岁')">1岁</div>
+     <div class="preset-option" onclick="selectAgePreset('1到25岁')">1到25岁</div>
+    </div> 
+    <div class="form-group"> 
+     <label>自定义年龄</label> 
+     <input type="text" id="customAgeInput" placeholder="输入年龄，如：25岁">
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="applyCustomAge()">应用</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('ageCustomModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 颜色自定义弹窗 -->
+  <div class="modal" id="colorCustomModal"> 
+   <div class="modal-content"> 
+    <h2 class="modal-title">自定义颜色</h2> 
+    <div class="color-options"> 
+     <div class="color-option" onclick="selectColor('red')">red</div>
+     <div class="color-option" onclick="selectColor('orange')">orange</div>
+     <div class="color-option" onclick="selectColor('yellow')">yellow</div>
+     <div class="color-option" onclick="selectColor('green')">green</div>
+     <div class="color-option" onclick="selectColor('blue')">blue</div>
+     <div class="color-option" onclick="selectColor('indigo')">indigo</div>
+     <div class="color-option" onclick="selectColor('purple')">purple</div>
+     <div class="color-option" onclick="selectColor('black')">black</div>
+     <div class="color-option" onclick="selectColor('white')">white</div>
+     <div class="color-option" onclick="selectColor('pink')">pink</div>
+    </div> 
+    <div class="form-group"> 
+     <label>自定义颜色(英文)</label> 
+     <input type="text" id="customColorInput" placeholder="输入颜色，如：silver">
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="applyCustomColor()">应用</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('colorCustomModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 肤色自定义弹窗 -->
+  <div class="modal" id="skinColorModal"> 
+   <div class="modal-content"> 
+    <h2 class="modal-title">选择肤色</h2> 
+    <div class="skin-color-options"> 
+     <div class="skin-color-option" onclick="selectSkinColor('pale')">
+      <div class="skin-color-preview" style="background-color: #fce4d4;"></div>
+      <span>白色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('light')">
+      <div class="skin-color-preview" style="background-color: #f5d0b0;"></div>
+      <span>淡色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('medium')">
+      <div class="skin-color-preview" style="background-color: #c68642;"></div>
+      <span>黄色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('tan')">
+      <div class="skin-color-preview" style="background-color: #8d5524;"></div>
+      <span>古铜色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('brown')">
+      <div class="skin-color-preview" style="background-color: #5c3a21;"></div>
+      <span>棕色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('dark')">
+      <div class="skin-color-preview" style="background-color: #3b2219;"></div>
+      <span>黑色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('olive')">
+      <div class="skin-color-preview" style="background-color: #a08060;"></div>
+      <span>橄榄色</span>
+     </div>
+     <div class="skin-color-option" onclick="selectSkinColor('beige')">
+      <div class="skin-color-preview" style="background-color: #e8d4b8;"></div>
+      <span>米色</span>
+     </div>
+    </div> 
+    <div class="form-group"> 
+     <label>自定义肤色(英文)</label> 
+     <input type="text" id="customSkinColorInput" placeholder="输入肤色，如：tan">
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="applyCustomSkinColor()">应用</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('skinColorModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 动作自定义弹窗 -->
+  <div class="modal" id="actionCustomModal"> 
+   <div class="modal-content"> 
+    <h2 class="modal-title">自定义互动</h2> 
+    <div class="modal-options"> 
+     <div class="modal-option" onclick="showTwoPersonMode()">
+       <h3>二人互动</h3>
+     </div> 
+     <div class="modal-option" onclick="showMultiPersonMode()">
+       <h3>多人互动</h3>
+     </div> 
+    </div> 
+    <div id="twoPersonMode" style="display:none;"> 
+     <div class="form-group"> 
+      <button class="modal-button" onclick="selectPerson1()">选择角色一</button>
+      <button class="modal-button" onclick="selectPerson2()">选择角色二</button>
+     </div> 
+     <div class="form-group"> 
+      <button class="modal-button" onclick="selectAction()">选择动作</button>
+     </div> 
+    </div> 
+    <div id="multiPersonMode" style="display:none;"> 
+     <div class="form-group"> 
+      <button class="modal-button" onclick="addPerson()">添加人物</button>
+     </div> 
+     <div id="personList"></div> 
+     <div class="form-group"> 
+      <button class="modal-button" onclick="addAction()">添加动作</button>
+     </div> 
+     <div id="actionList"></div> 
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="applyCustomAction()">应用</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('actionCustomModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 关联主弹窗 -->
+  <div class="modal" id="associationModal"> 
+   <div class="modal-content" style="max-width: 600px; max-height: 90vh; overflow-y: auto;"> 
+    <h2 class="modal-title">关联功能</h2> 
+    <div class="modal-options" id="associationOptions">
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-cancel" onclick="closeModal('associationModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 关联详情弹窗 - 增强版 -->
+  <div class="modal" id="associationDetailModal"> 
+   <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;"> 
+    <h2 class="modal-title" id="associationDetailTitle">关联详情</h2> 
+    <div class="modal-options" id="associationDetailContent">
+    </div> 
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="applyAssociation()">应用</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('associationDetailModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 关联词选择弹窗 -->
+  <div class="modal" id="associationWordModal"> 
+   <div class="modal-content" style="max-width: 600px; max-height: 80vh;"> 
+    <h2 class="modal-title">选择关联词</h2> 
+    <div class="association-word-panel">
+        <div class="search-box">
+            <input type="text" id="associationWordSearch" placeholder="搜索关联词..." oninput="filterAssociationWords()">
+        </div>
+        <div class="category-tabs" id="wordCategoryTabs">
+            <button class="category-tab active" data-category="all" onclick="switchWordCategory('all')">全部</button>
+            <button class="category-tab" data-category="role" onclick="switchWordCategory('role')">角色</button>
+            <button class="category-tab" data-category="item" onclick="switchWordCategory('item')">物品</button>
+            <button class="category-tab" data-category="color" onclick="switchWordCategory('color')">颜色</button>
+            <button class="category-tab" data-category="action" onclick="switchWordCategory('action')">动作</button>
+        </div>
+        <div class="word-list" id="associationWordList" style="max-height: 250px; overflow-y: auto;">
+        </div>
+    </div>
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-confirm" onclick="confirmSelectedWords()">确认</button> 
+     <button class="modal-button modal-cancel" onclick="closeModal('associationWordModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
+  <!-- 分类选择弹窗 -->
+  <div class="modal" id="categorySelectModal"> 
+   <div class="modal-content"> 
+    <h2 class="modal-title">从分类选择</h2> 
+    <div id="categorySelectStep">
+        <div class="modal-options" id="categorySelectList" style="max-height: 400px; overflow-y: auto;">
+        </div> 
+    </div>
+    <div id="presetSelectStep" style="display:none">
+        <button class="modal-button" onclick="backToCategoryList()" style="margin-bottom: 10px;">← 返回分类列表</button>
+        <div class="modal-options" id="presetSelectList" style="max-height: 400px; overflow-y: auto;">
+        </div> 
+    </div>
+    <div class="modal-buttons"> 
+     <button class="modal-button modal-cancel" onclick="closeModal('categorySelectModal')">取消</button> 
+    </div> 
+   </div> 
+  </div> 
   <div class="notification" id="notification">
     已复制提示词！ 
   </div> 
@@ -1836,7 +2828,6 @@
             {en: 'soft vhs tracking lines', zh: '柔和VHS跟踪线'},
             {en: 'gentle chromatic noise', zh: '温和色噪'},
             {en: 'muted yet warm natural color palette', zh: '柔和温暖自然调色板'},
-            {en: 'authentic sailor moon era atmosphere', zh: '真实美少女战士时代氛围'},
             {en: 'hand-drawn charm', zh: '手绘魅力'},
             {en: 'faint analog grain overlay', zh: '微弱模拟颗粒叠加'},
             {en: 'no modern digital crispness', zh: '无现代数字清晰'},
@@ -2319,6 +3310,7 @@
     action: {
         title: '动作',
         presets: [
+            {en: 'custom_action', zh: '自定义互动', isCustom: true},
             { en: 'flesh colored tentacles', 'zh': '肉色触手' },
             { en: 'slimy tentacles', 'zh': '黏滑触手' },
             { en: 'tentacle insertion', 'zh': '触手插入' },
@@ -2768,6 +3760,7 @@
     clothing_general: {
         title: '普通服装',
         presets: [
+            {en: 'custom_clothes_color', zh: '自定义衣服颜色', isCustom: true},
             {en: 'suit and tie', zh: '西装领带'},
             {en: 'formal wear', zh: '正式着装'},
             {en: 'business suit', zh: '商务西装'},
@@ -3505,6 +4498,7 @@
             age: {
                 title: '年龄/体型',
                 presets: [
+            {en: 'custom_age', zh: '自定义年龄', isCustom: true},
             {en: 'young male', zh: '年轻男性'},
             {en: 'boy', zh: '男孩'},
             {en: 'shota', zh: '正太'},
@@ -3710,6 +4704,7 @@
     body: {
         title: '身体特征',
         presets: [
+            {en: 'custom_skin_color', zh: '自定义肤色', isCustom: true},
             {en: 'full body', zh: '全身'},
             {en: 'slim body', zh: '纤细身材'},
             {en: 'hairy body', zh: '多毛身体'},
@@ -3796,9 +4791,6 @@
             {en: 'short bunny tail', zh: '短短的兔尾巴'},
             {en: 'squirrel tail', zh: '松鼠尾巴'},
             {en: 'fluffy squirrel tail', zh: '毛茸茸的松鼠尾巴'},
-            {en: 'mermaid tail', zh: '人鱼尾巴'},
-            {en: 'shimmering mermaid tail', zh: '闪光的人鱼尾巴'},
-            {en: 'scale-covered mermaid tail', zh: '鳞片覆盖的人鱼尾巴'},
             {en: 'fish tail', zh: '鱼尾巴'},
             {en: 'flowing fish tail', zh: '飘逸的鱼尾巴'},
             {en: 'colorful fish tail', zh: '彩色鱼尾巴'},
@@ -3868,7 +4860,7 @@
             {en: 'asshole', zh: '屁眼'},
             {en: 'rosebud', zh: '菊蕾'},
             {en: 'tight hole', zh: '紧穴'},
-            {en: 'virgin ass', zh: '处女菊'},
+            {en: 'unpenetrated ass', zh: '未开发菊'},
             {en: 'gaping anus', zh: '张开肛门'},
             {en: 'loose hole', zh: '松弛穴'},
             {en: 'used hole', zh: '被操松穴'},
@@ -3949,6 +4941,7 @@
     hair: {
         title: '头发',
         presets: [
+            {en: 'custom_hair_color', zh: '自定义发色', isCustom: true},
             {en: 'short hair', zh: '短发'},
             {en: 'buzz cut', zh: '寸头'},
             {en: 'long hair', zh: '长发'},
@@ -4091,8 +5084,6 @@
             {en: 'reclining', zh: '斜倚'},
             {en: 'doggy style', zh: '后入式'},
             {en: 'missionary', zh: '正面体位'},
-            {en: 'cowgirl', zh: '上位体位'},
-            {en: 'reverse cowgirl', zh: '背对上位'},
             {en: 'spooning', zh: '侧拥式'},
             {en: '69 position', zh: '相互口交式'},
             {en: 'standing doggy', zh: '站立后入'},
@@ -4157,7 +5148,7 @@
             // 恢复默认反向提示词
             resetNegative();
             // 默认显示米哈游分类
-            showCategory('mihoyo');
+            showCategory('style');
             // 初始化正向提示词容器
             initPromptContainer('positive');
             // 添加事件监听
@@ -4232,7 +5223,7 @@
                 const normalPresets = [];
                 
                 categoryData.presets.forEach((preset, index) => {
-                    if (preset.isPinned || isFavorite(category, index)) {
+                    if (preset.isPinned || preset.isCustom || isFavorite(category, index)) {
                         pinnedPresets.push({ preset, index });
                     } else {
                         normalPresets.push({ preset, index });
@@ -4275,9 +5266,27 @@
             if (preset.isRecommended) {
                 presetItem.classList.add('recommended');
             }
+            if (preset.isCustom) {
+                presetItem.classList.add('custom-preset');
+            }
             presetItem.dataset.en = preset.en;
             presetItem.dataset.index = index;
             presetItem.dataset.cat = category;
+            
+            // 如果是自定义选项，点击打开对应弹窗
+            if (preset.isCustom) {
+                presetItem.onclick = function() {
+                    if (preset.en === 'custom_age') {
+                        openAgeCustomModal();
+                    } else if (preset.en === 'custom_hair_color' || preset.en === 'custom_clothes_color') {
+                        openColorCustomModal();
+                    } else if (preset.en === 'custom_skin_color') {
+                        openSkinColorModal();
+                    } else if (preset.en === 'custom_action') {
+                        openActionCustomModal();
+                    }
+                };
+            }
             
             const contentWrapper = document.createElement('div');
             contentWrapper.style.display = 'flex';
@@ -4300,8 +5309,8 @@
                     tagSpan.style.fontSize = '10px';
                     tagSpan.style.padding = '2px 6px';
                     tagSpan.style.borderRadius = '8px';
-                    tagSpan.style.backgroundColor = 'rgba(255, 152, 0, 0.3)';
-                    tagSpan.style.color = '#ff9800';
+                    tagSpan.style.backgroundColor = 'rgba(255, 133, 255, 0.3)';
+                    tagSpan.style.color = '#ff85ff';
                     tagSpan.textContent = tag;
                     tagsContainer.appendChild(tagSpan);
                 });
@@ -4320,7 +5329,7 @@
             if (preset.isRecommended) {
                 const recommendLabel = document.createElement('span');
                 recommendLabel.style.fontSize = '12px';
-                recommendLabel.style.color = '#ff9800';
+                recommendLabel.style.color = '#ff85ff';
                 recommendLabel.style.fontWeight = 'bold';
                 recommendLabel.textContent = '推荐';
                 rightContainer.appendChild(recommendLabel);
@@ -4472,6 +5481,12 @@
             tag.dataset.zh = zh;
             tag.dataset.weight = weight !== null ? weight.toFixed(2) : 'null';
             tag.dataset.explanation = explanation || zh;
+            
+            // 点击标签时切换选中状态
+            tag.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON') return; // 如果点击的是按钮，不处理选中
+                this.classList.toggle('selected');
+            });
             
             // 上部分：中文内容
             const textPart = document.createElement('div');
@@ -4791,7 +5806,6 @@
                 'symmetrical face': '对称面孔，完美对称的面部',
                 'detailed face': '详细面部，精细的面部特征',
                 'perfect face': '完美面孔，理想化的面部',
-                'loli': '洛丽塔风格的可爱小女孩',
                 'shota': '正太，可爱的小男孩',
                 'masculine': '男性化，阳刚的气质',
                 'androgynous': '中性，模糊性别特征',
@@ -4820,13 +5834,10 @@
                 
                 // 服装相关
                 'school uniform': '校服，学生装，日本学生制服',
-                'maid': '女仆装，女仆角色的经典装扮',
-                'maid outfit': '女仆装，详细的女仆服装描述',
                 'swimsuit': '泳装，游泳或海滩服装',
                 'bikini': '比基尼，三点式泳装',
                 'underwear': '内衣，贴身衣物',
                 'panties': '内裤，下身贴身衣物',
-                'bra': '文胸，上身内衣',
                 'lingerie': '性感内衣，蕾丝精致内衣',
                 'dress': '连衣裙，完整的裙装',
                 'skirt': '裙子，下半身服装',
@@ -5951,6 +6962,1415 @@
             document.getElementById('editPresetForm').style.display = 'none';
         }
 
+        // 打开关联弹窗
+        let selectedTagForAssociation = null;
+        
+        function openAssociationModal() {
+            // 检查正向输入框中是否有选中的标签
+            selectedTagForAssociation = null;
+            const selectedTagEl = document.querySelector('.tag.selected');
+            if (selectedTagEl) {
+                selectedTagForAssociation = {
+                    en: selectedTagEl.dataset.en,
+                    zh: selectedTagEl.dataset.zh
+                };
+            }
+            
+            const modal = document.getElementById('associationModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+            
+            renderAssociationOptions();
+        }
+
+        // 渲染关联选项
+        function renderAssociationOptions() {
+            const container = document.getElementById('associationOptions');
+            container.innerHTML = '';
+            
+            let options = [];
+            
+            // 如果有选中的标签，添加"关联选中标签"选项
+            if (selectedTagForAssociation) {
+                options.push({ 
+                    id: 'selected_tag', 
+                    title: '关联选中标签', 
+                    desc: `已选择: ${selectedTagForAssociation.zh || selectedTagForAssociation.en}`,
+                    isSelected: true
+                });
+            }
+            
+            // 添加其他关联选项
+            options = options.concat([
+                { id: 'clothes_color', title: '衣服颜色关联', desc: '将衣服与颜色进行关联' },
+                { id: 'hair_color', title: '头发颜色关联', desc: '将头发颜色与颜色进行关联' },
+                { id: 'character_action', title: '角色动作关联', desc: '将角色与动作进行关联' },
+                { id: 'character_body', title: '身体特征关联', desc: '将角色与身体特征进行关联' },
+                { id: 'skin_color', title: '肤色关联', desc: '选择角色的肤色' },
+                { id: 'role_relation', title: '人物关联', desc: '设置人物攻受关系和动作' },
+                { id: 'from_category', title: '自定义', desc: '自定义添加词汇并选择分类关联' }
+            ]);
+            
+            options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'modal-option association-option' + (opt.isSelected ? ' selected-tag-option' : '');
+                btn.onclick = () => openAssociationDetail(opt.id);
+                btn.innerHTML = `
+                    <h3>${opt.title}</h3>
+                    <p>${opt.desc}</p>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // 打开关联详情弹窗
+        function openAssociationDetail(type) {
+            const detailModal = document.getElementById('associationDetailModal');
+            const modalContent = detailModal.querySelector('.modal-content');
+            detailModal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+            
+            renderAssociationDetail(type);
+        }
+
+        // 渲染关联详情
+        function renderAssociationDetail(type) {
+            const titleEl = document.getElementById('associationDetailTitle');
+            const contentEl = document.getElementById('associationDetailContent');
+            
+            let title = '';
+            let html = '';
+            
+            switch(type) {
+                case 'clothes_color':
+                    title = '衣服颜色关联';
+                    html = `
+                        <div class="association-section">
+                            <h4>选择衣服类型</h4>
+                            <div class="association-items" id="clothesItems"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('clothes')">从分类选择衣服</button>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>选择颜色</h4>
+                            <div class="color-grid" id="colorGrid"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('color')">从分类选择颜色</button>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="clothesColorResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'hair_color':
+                    title = '头发颜色关联';
+                    html = `
+                        <div class="association-section">
+                            <h4>选择发型</h4>
+                            <div class="association-items" id="hairItems"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('hair')">从分类选择发型</button>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>选择颜色</h4>
+                            <div class="color-grid" id="colorGrid"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('color')">从分类选择颜色</button>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="hairColorResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'character_action':
+                    title = '角色动作关联';
+                    html = `
+                        <div class="interaction-mode">
+                            <div class="mode-toggle">
+                                <button class="mode-btn active" onclick="setInteractionMode('single')">单人模式</button>
+                                <button class="mode-btn" onclick="setInteractionMode('double')">双人模式</button>
+                                <button class="mode-btn" onclick="setInteractionMode('multi')">多人模式</button>
+                            </div>
+                        </div>
+                        <div id="singleModeContent">
+                            <div class="association-section">
+                                <h4>选择角色</h4>
+                                <div class="association-items" id="characterItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('character1')">从分类选择角色</button>
+                                </div>
+                            </div>
+                            <div class="association-section">
+                                <h4>选择动作</h4>
+                                <div class="association-items" id="actionItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('action')">从分类选择动作</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="doubleModeContent" style="display:none">
+                            <div class="association-section">
+                                <h4>选择角色一</h4>
+                                <div class="association-items" id="character1Items"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('character1')">从分类选择角色一</button>
+                                </div>
+                            </div>
+                            <div class="association-section">
+                                <h4>选择角色二</h4>
+                                <div class="association-items" id="character2Items"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('character2')">从分类选择角色二</button>
+                                </div>
+                            </div>
+                            <div class="association-section">
+                                <h4>选择互动动作</h4>
+                                <div class="association-items" id="interactionItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('interaction')">从分类选择动作</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="multiModeContent" style="display:none">
+                            <div class="association-section">
+                                <h4>添加角色</h4>
+                                <div class="multi-person-list" id="multiPersonList"></div>
+                                <button class="add-person-btn" onclick="addMultiPerson()">+ 添加角色</button>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('multiCharacter')">从分类选择角色</button>
+                                </div>
+                            </div>
+                            <div class="association-section">
+                                <h4>添加互动动作</h4>
+                                <div class="multi-action-list" id="multiActionList"></div>
+                                <button class="add-action-btn" onclick="addMultiAction()">+ 添加动作</button>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('multiAction')">从分类选择动作</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="characterActionResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'character_body':
+                    title = '身体特征关联';
+                    html = `
+                        <div class="association-section">
+                            <h4>选择角色</h4>
+                            <div class="association-items" id="characterItems"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('character1')">从分类选择角色</button>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>选择身体特征</h4>
+                            <div class="association-items" id="bodyFeatureItems"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('bodyFeature')">从分类选择特征</button>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="characterBodyResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'selected_tag':
+                    title = '关联选中标签';
+                    html = `
+                        <div class="association-section">
+                            <h4>已选择的标签</h4>
+                            <div class="selected-tag-display">
+                                <span>${selectedTagForAssociation ? (selectedTagForAssociation.zh || selectedTagForAssociation.en) : '无'}</span>
+                            </div>
+                        </div>
+                        <div class="association-section">
+                            <h4>选择关联词</h4>
+                            <div class="association-items" id="associationWordItems"></div>
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button class="select-from-category-btn" onclick="openCategorySelector('associationWord')">从分类选择关联词</button>
+                            </div>
+                        </div>
+                        <div class="association-result">
+                            <span>关联结果: </span><span id="associationResult">无</span>
+                        </div>
+                    `;
+                    break;
+                case 'from_category':
+                    title = '自定义';
+                    html = `
+                        <div class="keyword-manager">
+                            <div class="keyword-manager-header">
+                                <h4>自定义词汇</h4>
+                            </div>
+                            <div class="custom-input-section">
+                                <div class="input-row">
+                                    <input type="text" id="customEnInput" placeholder="英文提示词 (如: handsome)" 
+                                        oninput="validateCustomInput()">
+                                    <input type="text" id="customZhInput" placeholder="中文说明 (如: 帅气)" 
+                                        oninput="validateCustomInput()">
+                                </div>
+                                <div class="category-select-row">
+                                    <select id="customCategorySelect" onchange="validateCustomInput()">
+                                        <option value="">选择分类</option>
+                                        <option value="role">角色</option>
+                                        <option value="item">物品</option>
+                                        <option value="color">颜色</option>
+                                        <option value="action">动作</option>
+                                        <option value="feature">特征</option>
+                                        <option value="clothing">服装</option>
+                                        <option value="pose">姿势</option>
+                                        <option value="scene">场景</option>
+                                    </select>
+                                    <button class="add-custom-btn" onclick="addCustomWord()" id="addCustomBtn" disabled>添加</button>
+                                </div>
+                            </div>
+                            <div class="custom-words-list" id="customWordsList">
+                            </div>
+                            <div class="association-section" style="margin-top: 15px;">
+                                <h4>选择关联词</h4>
+                                <div class="selected-words" id="selectedWords"></div>
+                            </div>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <button class="select-from-category-btn" onclick="openWordSelector()">从分类选择关联词</button>
+                            </div>
+                            <button class="apply-keyword-btn" onclick="applyCustomAssociation()">应用</button>
+                        </div>
+                    `;
+                    break;
+                case 'role_relation':
+                    title = '人物关联';
+                    html = `
+                        <div class="role-relation-panel">
+                            <div class="role-section">
+                                <h4>选择"攻"（插入方）</h4>
+                                <div class="role-items" id="attackerItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('attacker')">从分类选择攻</button>
+                                </div>
+                            </div>
+                            <div class="role-section">
+                                <h4>选择"受"（被插入方）</h4>
+                                <div class="role-items" id="receiverItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('receiver')">从分类选择受</button>
+                                </div>
+                            </div>
+                            <div class="role-section">
+                                <h4>选择动作</h4>
+                                <div class="role-items" id="roleActionItems"></div>
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <button class="select-from-category-btn" onclick="openCategorySelector('roleAction')">从分类选择动作</button>
+                                </div>
+                            </div>
+                            <div class="association-result">
+                                <span>关联结果: </span><span id="roleRelationResult">无</span>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'skin_color':
+                    title = '肤色关联';
+                    html = `
+                        <div class="association-section">
+                            <h4>选择肤色</h4>
+                            <div class="color-grid skin-color-grid" id="skinColorGrid"></div>
+                        </div>
+                        <div class="association-result">
+                            <span>已选择: </span><span id="skinColorResult">无</span>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            titleEl.textContent = title;
+            contentEl.innerHTML = html;
+            
+            // 加载对应的数据
+            setTimeout(() => loadAssociationData(type), 0);
+        }
+
+        // 加载关联数据
+        function loadAssociationData(type) {
+            switch(type) {
+                case 'clothes_color':
+                    loadClothesColorData();
+                    break;
+                case 'hair_color':
+                    loadHairColorData();
+                    break;
+                case 'character_action':
+                    loadCharacterActionData();
+                    break;
+                case 'character_body':
+                    loadCharacterBodyData();
+                    break;
+                case 'skin_color':
+                    loadSkinColorData();
+                    break;
+                case 'selected_tag':
+                    loadSelectedTagAssociation();
+                    break;
+                case 'from_category':
+                    loadKeywordManager();
+                    break;
+                case 'role_relation':
+                    loadRoleRelation();
+                    break;
+            }
+        }
+
+        // 加载选中标签关联功能
+        let selectedAssociationWord = { en: '', zh: '' };
+        
+        function loadSelectedTagAssociation() {
+            const container = document.getElementById('associationWordItems');
+            const commonWords = [
+                {en: 'wearing', zh: '穿着'}, {en: 'with', zh: '有着'}, {en: 'holding', zh: '持有'},
+                {en: 'near', zh: '附近'}, {en: 'beside', zh: '旁边'}, {en: 'behind', zh: '在...后面'},
+                {en: 'in front of', zh: '在...前面'}, {en: 'inside', zh: '在...里面'},
+                {en: 'standing', zh: '站立'}, {en: 'sitting', zh: '坐着'}, {en: 'lying', zh: '躺着'}
+            ];
+            
+            if (container) {
+                container.innerHTML = commonWords.map(item => 
+                    `<div class="association-item" onclick="selectAssociationWord('${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+        }
+        
+        function selectAssociationWord(en, zh) {
+            selectedAssociationWord = { en, zh };
+            updateAssociationResult();
+        }
+        
+        function updateAssociationResult() {
+            const resultEl = document.getElementById('associationResult');
+            if (selectedTagForAssociation && selectedAssociationWord.zh) {
+                const resultZh = selectedTagForAssociation.zh + selectedAssociationWord.zh;
+                const resultEn = selectedTagForAssociation.en + ', ' + selectedAssociationWord.en;
+                resultEl.textContent = resultZh;
+                resultEl.dataset.en = resultEn;
+                resultEl.dataset.zh = resultZh;
+            } else {
+                resultEl.textContent = '无';
+            }
+        }
+        
+        // 关键词管理功能
+        let keywordItems = [];
+        let selectedAssociationWords = [];
+        let currentWordSelectorType = '';
+        let customWords = [];
+        
+        function loadKeywordManager() {
+            renderCustomWordsList();
+        }
+        
+        function validateCustomInput() {
+            const enInput = document.getElementById('customEnInput');
+            const zhInput = document.getElementById('customZhInput');
+            const categorySelect = document.getElementById('customCategorySelect');
+            const addBtn = document.getElementById('addCustomBtn');
+            
+            const isValid = enInput.value.trim() && zhInput.value.trim() && categorySelect.value;
+            addBtn.disabled = !isValid;
+        }
+        
+        function addCustomWord() {
+            const enInput = document.getElementById('customEnInput');
+            const zhInput = document.getElementById('customZhInput');
+            const categorySelect = document.getElementById('customCategorySelect');
+            
+            const en = enInput.value.trim();
+            const zh = zhInput.value.trim();
+            const category = categorySelect.value;
+            
+            if (!en || !zh || !category) {
+                showNotification('请填写完整信息');
+                return;
+            }
+            
+            const categoryNames = {
+                'role': '角色',
+                'item': '物品',
+                'color': '颜色',
+                'action': '动作',
+                'feature': '特征',
+                'clothing': '服装',
+                'pose': '姿势',
+                'scene': '场景'
+            };
+            
+            const newWord = {
+                id: Date.now(),
+                en,
+                zh,
+                category,
+                categoryName: categoryNames[category] || category
+            };
+            
+            customWords.push(newWord);
+            renderCustomWordsList();
+            
+            enInput.value = '';
+            zhInput.value = '';
+            categorySelect.value = '';
+            validateCustomInput();
+            
+            showNotification('添加成功！');
+        }
+        
+        function removeCustomWord(id) {
+            customWords = customWords.filter(w => w.id !== id);
+            renderCustomWordsList();
+        }
+        
+        function renderCustomWordsList() {
+            const listContainer = document.getElementById('customWordsList');
+            if (!listContainer) return;
+            
+            if (customWords.length === 0) {
+                listContainer.innerHTML = '<div style="color: rgba(224, 187, 255, 0.5); text-align: center; padding: 20px;">暂无自定义词汇</div>';
+                return;
+            }
+            
+            listContainer.innerHTML = customWords.map(word => `
+                <div class="custom-word-item">
+                    <div class="word-info">
+                        <div class="word-en">${word.en} <span class="word-category">${word.categoryName}</span></div>
+                        <div class="word-zh">${word.zh}</div>
+                    </div>
+                    <button class="remove-word-btn" onclick="removeCustomWord(${word.id})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        function openWordSelector() {
+            currentWordSelectorType = 'keyword';
+            const modal = document.getElementById('associationWordModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+            
+            renderWordList();
+        }
+        
+        function renderWordList(filter = '', category = 'all') {
+            const listContainer = document.getElementById('associationWordList');
+            if (!listContainer) return;
+            
+            const allWords = getAssociationWords();
+            let filteredWords = allWords;
+            
+            if (filter) {
+                filteredWords = filteredWords.filter(w => 
+                    w.zh.includes(filter) || w.en.toLowerCase().includes(filter.toLowerCase())
+                );
+            }
+            
+            if (category !== 'all') {
+                filteredWords = filteredWords.filter(w => w.category === category);
+            }
+            
+            listContainer.innerHTML = filteredWords.map(word => `
+                <div class="word-item ${selectedAssociationWords.some(w => w.en === word.en) ? 'selected' : ''}" 
+                    onclick="toggleWordSelection('${word.en}', '${word.zh}', '${word.category}')">
+                    ${word.zh}
+                </div>
+            `).join('');
+        }
+        
+        function getAssociationWords() {
+            return [
+                // 角色
+                {en: 'boy', zh: '男孩', category: 'role'},
+                {en: 'young man', zh: '青年男性', category: 'role'},
+                {en: 'adult man', zh: '成年男性', category: 'role'},
+                {en: 'elderly man', zh: '老年男性', category: 'role'},
+                {en: 'shota', zh: '正太', category: 'role'},
+                {en: 'male student', zh: '男学生', category: 'role'},
+                {en: 'teacher', zh: '老师', category: 'role'},
+                {en: 'doctor', zh: '医生', category: 'role'},
+                {en: 'police', zh: '警察', category: 'role'},
+                // 物品
+                {en: 'clothes', zh: '衣服', category: 'item'},
+                {en: 'underwear', zh: '内衣', category: 'item'},
+                {en: 'pants', zh: '裤子', category: 'item'},
+                {en: 'shirt', zh: '衬衫', category: 'item'},
+                {en: 'shoes', zh: '鞋子', category: 'item'},
+                {en: 'hat', zh: '帽子', category: 'item'},
+                {en: 'glasses', zh: '眼镜', category: 'item'},
+                {en: 'bag', zh: '包', category: 'item'},
+                // 颜色
+                {en: 'red', zh: '红色', category: 'color'},
+                {en: 'blue', zh: '蓝色', category: 'color'},
+                {en: 'green', zh: '绿色', category: 'color'},
+                {en: 'yellow', zh: '黄色', category: 'color'},
+                {en: 'purple', zh: '紫色', category: 'color'},
+                {en: 'pink', zh: '粉色', category: 'color'},
+                {en: 'black', zh: '黑色', category: 'color'},
+                {en: 'white', zh: '白色', category: 'color'},
+                {en: 'brown', zh: '棕色', category: 'color'},
+                {en: 'blonde', zh: '金色', category: 'color'},
+                // 动作
+                {en: 'standing', zh: '站立', category: 'action'},
+                {en: 'sitting', zh: '坐着', category: 'action'},
+                {en: 'lying', zh: '躺着', category: 'action'},
+                {en: 'walking', zh: '行走', category: 'action'},
+                {en: 'running', zh: '跑步', category: 'action'},
+                {en: 'kissing', zh: '接吻', category: 'action'},
+                {en: 'hugging', zh: '拥抱', category: 'action'},
+                {en: 'holding hands', zh: '牵手', category: 'action'},
+                {en: 'anal sex', zh: '肛交', category: 'action'},
+                {en: 'vaginal sex', zh: '阴道性交', category: 'action'},
+                {en: 'blowjob', zh: '口交', category: 'action'},
+                {en: 'handjob', zh: '手交', category: 'action'}
+            ];
+        }
+        
+        function toggleWordSelection(en, zh, category) {
+            const index = selectedAssociationWords.findIndex(w => w.en === en);
+            if (index > -1) {
+                selectedAssociationWords.splice(index, 1);
+            } else {
+                selectedAssociationWords.push({ en, zh, category });
+            }
+            renderWordList(
+                document.getElementById('associationWordSearch')?.value || '',
+                document.querySelector('.category-tab.active')?.dataset.category || 'all'
+            );
+        }
+        
+        function filterAssociationWords() {
+            const filter = document.getElementById('associationWordSearch')?.value || '';
+            const category = document.querySelector('.category-tab.active')?.dataset.category || 'all';
+            renderWordList(filter, category);
+        }
+        
+        function switchWordCategory(category) {
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`)?.classList.add('active');
+            filterAssociationWords();
+        }
+        
+        function confirmSelectedWords() {
+            const selectedContainer = document.getElementById('selectedWords');
+            if (selectedContainer) {
+                selectedContainer.innerHTML = selectedAssociationWords.map(word => `
+                    <div class="selected-item-tag">
+                        ${word.zh}
+                        <span class="remove-tag" onclick="removeSelectedWord('${word.en}')">×</span>
+                    </div>
+                `).join('');
+            }
+            closeModal('associationWordModal');
+        }
+        
+        function removeSelectedWord(en) {
+            selectedAssociationWords = selectedAssociationWords.filter(w => w.en !== en);
+            confirmSelectedWords();
+        }
+        
+        function applyCustomAssociation() {
+            const customWordList = [...customWords];
+            const associationWords = [...selectedAssociationWords];
+            
+            if (customWordList.length === 0 && associationWords.length === 0) {
+                showNotification('请添加自定义词汇或选择关联词');
+                return;
+            }
+            
+            let enText = '';
+            let zhText = '';
+            
+            const customEnValues = customWordList.map(w => w.en);
+            const customZhValues = customWordList.map(w => w.zh);
+            const associationEnValues = associationWords.map(w => w.en);
+            const associationZhValues = associationWords.map(w => w.zh);
+            
+            const colorWord = associationWords.find(w => w.category === 'color');
+            const itemWord = associationWords.find(w => w.category === 'item');
+            
+            if (colorWord && itemWord) {
+                enText = `${colorWord.en}_${itemWord.en}`;
+                zhText = `${colorWord.zh}的${itemWord.zh}`;
+                if (customEnValues.length > 0) {
+                    enText = customEnValues.join(', ') + ', ' + enText;
+                    zhText = customZhValues.join('和') + zhText;
+                }
+            } else if (customEnValues.length > 0 && associationEnValues.length > 0) {
+                enText = customEnValues.join(', ') + ', ' + associationEnValues.join(', ');
+                zhText = customZhValues.join('和') + associationZhValues.join('');
+            } else if (customEnValues.length > 0) {
+                enText = customEnValues.join(', ');
+                zhText = customZhValues.join('和');
+            } else if (associationEnValues.length > 0) {
+                enText = associationEnValues.join(', ');
+                zhText = associationZhValues.join('和');
+            }
+            
+            if (enText && zhText) {
+                addTagToPrompt('positive', enText, zhText);
+                closeModal('associationDetailModal');
+                closeModal('associationModal');
+                
+                customWords = [];
+                selectedAssociationWords = [];
+                showNotification('应用成功！');
+            }
+        }
+        
+        // 人物关联功能
+        let roleRelationData = {
+            attacker: { en: '', zh: '' },
+            receiver: { en: '', zh: '' },
+            action: { en: '', zh: '' }
+        };
+        
+        function loadRoleRelation() {
+            renderRoleItems();
+        }
+        
+        function renderRoleItems() {
+            const attackerContainer = document.getElementById('attackerItems');
+            const receiverContainer = document.getElementById('receiverItems');
+            const actionContainer = document.getElementById('roleActionItems');
+            
+            const roles = getRoleOptions();
+            const actions = getActionOptions();
+            
+            if (attackerContainer) {
+                attackerContainer.innerHTML = roles.map(r => `
+                    <div class="association-item ${roleRelationData.attacker.en === r.en ? 'selected' : ''}" 
+                        onclick="selectRole('attacker', '${r.en}', '${r.zh}')">${r.zh}</div>
+                `).join('');
+            }
+            
+            if (receiverContainer) {
+                receiverContainer.innerHTML = roles.map(r => `
+                    <div class="association-item ${roleRelationData.receiver.en === r.en ? 'selected' : ''}" 
+                        onclick="selectRole('receiver', '${r.en}', '${r.zh}')">${r.zh}</div>
+                `).join('');
+            }
+            
+            if (actionContainer) {
+                actionContainer.innerHTML = actions.map(a => `
+                    <div class="association-item ${roleRelationData.action.en === a.en ? 'selected' : ''}" 
+                        onclick="selectRoleAction('${a.en}', '${a.zh}')">${a.zh}</div>
+                `).join('');
+            }
+        }
+        
+        function getRoleOptions() {
+            return [
+                {en: 'boy', zh: '男孩'}, {en: 'young man', zh: '青年男性'},
+                {en: 'adult man', zh: '成年男性'}, {en: 'shota', zh: '正太'},
+                {en: 'male student', zh: '男学生'}
+            ];
+        }
+        
+        function getActionOptions() {
+            return [
+                {en: 'anal sex', zh: '肛交'},
+                {en: 'blowjob', zh: '口交'}, {en: 'handjob', zh: '手交'},
+                {en: 'foot job', zh: '足交'}, {en: 'thigh job', zh: '腿交'},
+                {en: 'mutual masturbation', zh: '相互自慰'}, {en: 'foreplay', zh: '前戏'}
+            ];
+        }
+        
+        function selectRole(type, en, zh) {
+            roleRelationData[type] = { en, zh };
+            updateRoleRelationResult();
+            renderRoleItems();
+        }
+        
+        function selectRoleAction(en, zh) {
+            roleRelationData.action = { en, zh };
+            updateRoleRelationResult();
+            renderRoleItems();
+        }
+        
+        function updateRoleRelationResult() {
+            const resultEl = document.getElementById('roleRelationResult');
+            if (!resultEl) return;
+            
+            if (roleRelationData.attacker.zh || roleRelationData.receiver.zh || roleRelationData.action.zh) {
+                const parts = [];
+                if (roleRelationData.attacker.zh) parts.push(roleRelationData.attacker.zh);
+                if (roleRelationData.receiver.zh) parts.push(roleRelationData.receiver.zh);
+                
+                let zhText = '';
+                if (roleRelationData.action.zh) {
+                    zhText = parts.join('和') + '在' + roleRelationData.action.zh;
+                } else {
+                    zhText = parts.join('和');
+                }
+                
+                const enParts = [];
+                if (roleRelationData.attacker.en) enParts.push(roleRelationData.attacker.en);
+                if (roleRelationData.receiver.en) enParts.push(roleRelationData.receiver.en);
+                const enText = roleRelationData.action.en 
+                    ? enParts.join(', ') + ', ' + roleRelationData.action.en 
+                    : enParts.join(', ');
+                
+                resultEl.textContent = zhText;
+                resultEl.dataset.en = enText;
+                resultEl.dataset.zh = zhText;
+            } else {
+                resultEl.textContent = '无';
+                resultEl.dataset.en = '';
+            }
+        }
+
+        // 衣服颜色数据
+        function loadClothesColorData() {
+            const clothesData = [
+                {en: 'shirt', zh: '衬衫'}, {en: 'pants', zh: '裤子'}, {en: 'dress', zh: '连衣裙'},
+                {en: 'skirt', zh: '裙子'}, {en: 'jacket', zh: '夹克'}, {en: 'coat', zh: '外套'},
+                {en: 'underwear', zh: '内衣'}, {en: 'socks', zh: '袜子'}, {en: 'shoes', zh: '鞋子'},
+                {en: 'hat', zh: '帽子'}, {en: 'gloves', zh: '手套'}, {en: 'scarf', zh: '围巾'}
+            ];
+            
+            const colorData = [
+                {en: 'red', zh: '红色'}, {en: 'orange', zh: '橙色'}, {en: 'yellow', zh: '黄色'},
+                {en: 'green', zh: '绿色'}, {en: 'blue', zh: '蓝色'}, {en: 'purple', zh: '紫色'},
+                {en: 'pink', zh: '粉色'}, {en: 'white', zh: '白色'}, {en: 'black', zh: '黑色'},
+                {en: 'brown', zh: '棕色'}, {en: 'gray', zh: '灰色'}, {en: 'gold', zh: '金色'}
+            ];
+            
+            const clothesContainer = document.getElementById('clothesItems');
+            const colorContainer = document.getElementById('colorGrid');
+            
+            clothesContainer.innerHTML = clothesData.map(item => 
+                `<div class="association-item" onclick="selectClothes('${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+            
+            colorContainer.innerHTML = colorData.map(item => 
+                `<div class="color-option" onclick="selectClothesColor('${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+        }
+
+        let selectedClothes = { en: '', zh: '' };
+        let selectedClothesColor = { en: '', zh: '' };
+
+        function selectClothes(en, zh) {
+            selectedClothes = { en, zh };
+            updateClothesColorResult();
+        }
+
+        function selectClothesColor(en, zh) {
+            selectedClothesColor = { en, zh };
+            updateClothesColorResult();
+        }
+
+        function updateClothesColorResult() {
+            const resultEl = document.getElementById('clothesColorResult');
+            if (selectedClothes.zh) {
+                if (selectedClothesColor.zh) {
+                    resultEl.textContent = `${selectedClothesColor.zh}的${selectedClothes.zh}`;
+                    resultEl.dataset.en = `${selectedClothesColor.en}_${selectedClothes.en}`;
+                } else {
+                    resultEl.textContent = selectedClothes.zh;
+                    resultEl.dataset.en = selectedClothes.en;
+                }
+            } else if (selectedClothesColor.zh) {
+                resultEl.textContent = selectedClothesColor.zh;
+                resultEl.dataset.en = selectedClothesColor.en;
+            } else {
+                resultEl.textContent = '无';
+                resultEl.dataset.en = '';
+            }
+        }
+
+        // 头发颜色数据
+        function loadHairColorData() {
+            const hairData = [
+                {en: 'long hair', zh: '长发'}, {en: 'short hair', zh: '短发'}, {en: 'curly hair', zh: '卷发'},
+                {en: 'straight hair', zh: '直发'}, {en: 'ponytail', zh: '马尾'}, {en: 'braid', zh: '辫子'},
+                {en: 'bob cut', zh: '波波头'}, {en: 'mohawk', zh: '莫西干'}
+            ];
+            
+            const colorData = [
+                {en: 'black', zh: '黑色'}, {en: 'brown', zh: '棕色'}, {en: 'blonde', zh: '金色'},
+                {en: 'red', zh: '红色'}, {en: 'blue', zh: '蓝色'}, {en: 'green', zh: '绿色'},
+                {en: 'purple', zh: '紫色'}, {en: 'pink', zh: '粉色'}, {en: 'white', zh: '白色'},
+                {en: 'silver', zh: '银色'}, {en: 'orange', zh: '橙色'}, {en: 'gray', zh: '灰色'}
+            ];
+            
+            const hairContainer = document.getElementById('hairItems');
+            const colorContainer = document.getElementById('colorGrid');
+            
+            hairContainer.innerHTML = hairData.map(item => 
+                `<div class="association-item" onclick="selectHair('${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+            
+            colorContainer.innerHTML = colorData.map(item => 
+                `<div class="color-option" onclick="selectHairColor('${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+        }
+
+        let selectedHair = { en: '', zh: '' };
+        let selectedHairColor = { en: '', zh: '' };
+
+        function selectHair(en, zh) {
+            selectedHair = { en, zh };
+            updateHairColorResult();
+        }
+
+        function selectHairColor(en, zh) {
+            selectedHairColor = { en, zh };
+            updateHairColorResult();
+        }
+
+        function updateHairColorResult() {
+            const resultEl = document.getElementById('hairColorResult');
+            if (selectedHair.zh) {
+                if (selectedHairColor.zh) {
+                    resultEl.textContent = `${selectedHairColor.zh}的${selectedHair.zh}`;
+                    resultEl.dataset.en = `${selectedHairColor.en}_${selectedHair.en}`;
+                } else {
+                    resultEl.textContent = selectedHair.zh;
+                    resultEl.dataset.en = selectedHair.en;
+                }
+            } else if (selectedHairColor.zh) {
+                resultEl.textContent = selectedHairColor.zh;
+                resultEl.dataset.en = selectedHairColor.en;
+            } else {
+                resultEl.textContent = '无';
+                resultEl.dataset.en = '';
+            }
+        }
+
+        // 角色动作数据
+        function loadCharacterActionData() {
+            // 加载预设角色和动作
+            const characterData = [
+                {en: 'boy', zh: '男孩'}, {en: 'young man', zh: '青年男性'}, {en: 'adult man', zh: '成年男性'},
+                {en: 'elderly man', zh: '老年男性'}, {en: 'shota', zh: '正太'}, {en: 'male child', zh: '小男孩'}
+            ];
+            
+            const actionData = [
+                {en: 'standing', zh: '站立'}, {en: 'sitting', zh: '坐着'}, {en: 'lying', zh: '躺着'},
+                {en: 'walking', zh: '行走'}, {en: 'running', zh: '跑步'}, {en: 'jumping', zh: '跳跃'},
+                {en: 'kneeling', zh: '跪着'}, {en: 'crouching', zh: '蹲着'}
+            ];
+            
+            const interactionData = [
+                {en: 'kissing', zh: '接吻'}, {en: 'hugging', zh: '拥抱'}, {en: 'holding hands', zh: '牵手'},
+                {en: 'back hug', zh: '背后拥抱'}, {en: 'frontal hug', zh: '正面拥抱'}, {en: 'shoulder hug', zh: '肩并肩拥抱'},
+                {en: 'handjob', zh: '手交'}, {en: 'blowjob', zh: '口交'}, {en: 'anal sex', zh: '肛交'},
+                {en: 'vaginal sex', zh: '阴道性交'}, {en: 'mutual masturbation', zh: '相互自慰'},
+                {en: 'foot job', zh: '足交'}, {en: 'thigh job', zh: '腿交'}
+            ];
+            
+            // 初始化默认数据到容器
+            const charContainer = document.getElementById('characterItems');
+            const actionContainer = document.getElementById('actionItems');
+            const char1Container = document.getElementById('character1Items');
+            const char2Container = document.getElementById('character2Items');
+            const interactionContainer = document.getElementById('interactionItems');
+            
+            if (charContainer) {
+                charContainer.innerHTML = characterData.map(item => 
+                    `<div class="association-item" onclick="selectCharacterAction('character', '${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+            
+            if (actionContainer) {
+                actionContainer.innerHTML = actionData.map(item => 
+                    `<div class="association-item" onclick="selectCharacterAction('action', '${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+            
+            if (char1Container) {
+                char1Container.innerHTML = characterData.map(item => 
+                    `<div class="association-item" onclick="selectCharacterAction('character1', '${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+            
+            if (char2Container) {
+                char2Container.innerHTML = characterData.map(item => 
+                    `<div class="association-item" onclick="selectCharacterAction('character2', '${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+            
+            if (interactionContainer) {
+                interactionContainer.innerHTML = interactionData.map(item => 
+                    `<div class="association-item" onclick="selectCharacterAction('interaction', '${item.en}', '${item.zh}')">${item.zh}</div>`
+                ).join('');
+            }
+        }
+
+        let currentInteractionMode = 'single';
+        let selectedCharacterAction = { 
+            character: { en: '', zh: '' }, 
+            action: { en: '', zh: '' },
+            character1: { en: '', zh: '' },
+            character2: { en: '', zh: '' },
+            interaction: { en: '', zh: '' },
+            multiPersons: [],
+            multiActions: []
+        };
+
+        function setInteractionMode(mode) {
+            currentInteractionMode = mode;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 显示对应内容
+            document.getElementById('singleModeContent').style.display = mode === 'single' ? 'block' : 'none';
+            document.getElementById('doubleModeContent').style.display = mode === 'double' ? 'block' : 'none';
+            document.getElementById('multiModeContent').style.display = mode === 'multi' ? 'block' : 'none';
+            
+            // 重新加载数据
+            loadCharacterActionData();
+        }
+
+        function selectCharacterAction(type, en, zh) {
+            if (currentInteractionMode === 'single') {
+                if (type === 'character') {
+                    selectedCharacterAction.character = { en, zh };
+                } else if (type === 'action') {
+                    selectedCharacterAction.action = { en, zh };
+                }
+            } else if (currentInteractionMode === 'double') {
+                if (type === 'character1') {
+                    selectedCharacterAction.character1 = { en, zh };
+                } else if (type === 'character2') {
+                    selectedCharacterAction.character2 = { en, zh };
+                } else if (type === 'interaction') {
+                    selectedCharacterAction.interaction = { en, zh };
+                }
+            }
+            updateCharacterActionResult();
+        }
+
+        function addMultiPerson() {
+            openCategorySelector('multiPerson');
+        }
+
+        function addMultiAction() {
+            openCategorySelector('multiAction');
+        }
+
+        function addSelectedPerson(en, zh) {
+            selectedCharacterAction.multiPersons.push({ en, zh });
+            renderMultiPersons();
+            closeModal('categorySelectModal');
+        }
+
+        function addSelectedAction(en, zh) {
+            selectedCharacterAction.multiActions.push({ en, zh });
+            renderMultiActions();
+            closeModal('categorySelectModal');
+        }
+
+        function renderMultiPersons() {
+            const container = document.getElementById('multiPersonList');
+            if (container) {
+                container.innerHTML = selectedCharacterAction.multiPersons.map((p, idx) => 
+                    `<div class="selected-item-tag">
+                        ${p.zh}
+                        <span class="remove-tag" onclick="removeMultiPerson(${idx})">×</span>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        function renderMultiActions() {
+            const container = document.getElementById('multiActionList');
+            if (container) {
+                container.innerHTML = selectedCharacterAction.multiActions.map((a, idx) => 
+                    `<div class="selected-item-tag">
+                        ${a.zh}
+                        <span class="remove-tag" onclick="removeMultiAction(${idx})">×</span>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        function removeMultiPerson(idx) {
+            selectedCharacterAction.multiPersons.splice(idx, 1);
+            renderMultiPersons();
+        }
+
+        function removeMultiAction(idx) {
+            selectedCharacterAction.multiActions.splice(idx, 1);
+            renderMultiActions();
+        }
+
+        function updateCharacterActionResult() {
+            const resultEl = document.getElementById('characterActionResult');
+            if (!resultEl) return;
+            
+            let text = '';
+            let enText = '';
+            
+            if (currentInteractionMode === 'single') {
+                if (selectedCharacterAction.character.zh) {
+                    if (selectedCharacterAction.action.zh) {
+                        text = `${selectedCharacterAction.character.zh}在${selectedCharacterAction.action.zh}`;
+                        enText = `${selectedCharacterAction.character.en},${selectedCharacterAction.action.en}`;
+                    } else {
+                        text = selectedCharacterAction.character.zh;
+                        enText = selectedCharacterAction.character.en;
+                    }
+                } else if (selectedCharacterAction.action.zh) {
+                    text = selectedCharacterAction.action.zh;
+                    enText = selectedCharacterAction.action.en;
+                }
+            } else if (currentInteractionMode === 'double') {
+                if (selectedCharacterAction.character1.zh || selectedCharacterAction.character2.zh || selectedCharacterAction.interaction.zh) {
+                    const parts = [];
+                    if (selectedCharacterAction.character1.zh) parts.push(selectedCharacterAction.character1.zh);
+                    if (selectedCharacterAction.character2.zh) parts.push(selectedCharacterAction.character2.zh);
+                    if (selectedCharacterAction.interaction.zh) {
+                        text = parts.join('和') + '在' + selectedCharacterAction.interaction.zh;
+                    } else {
+                        text = parts.join('和');
+                    }
+                    
+                    const enParts = [];
+                    if (selectedCharacterAction.character1.en) enParts.push(selectedCharacterAction.character1.en);
+                    if (selectedCharacterAction.character2.en) enParts.push(selectedCharacterAction.character2.en);
+                    if (selectedCharacterAction.interaction.en) enParts.push(selectedCharacterAction.interaction.en);
+                    enText = enParts.join(',');
+                }
+            } else if (currentInteractionMode === 'multi') {
+                if (selectedCharacterAction.multiPersons.length > 0 || selectedCharacterAction.multiActions.length > 0) {
+                    const personNames = selectedCharacterAction.multiPersons.map(p => p.zh).join('、');
+                    const actionNames = selectedCharacterAction.multiActions.map(a => a.zh).join('，');
+                    if (personNames && actionNames) {
+                        text = `${personNames}在${actionNames}`;
+                    } else if (personNames) {
+                        text = personNames;
+                    } else if (actionNames) {
+                        text = actionNames;
+                    }
+                    enText = selectedCharacterAction.multiPersons.map(p => p.en).join(',') + '|' + selectedCharacterAction.multiActions.map(a => a.en).join(',');
+                }
+            }
+            
+            if (text) {
+                resultEl.textContent = text;
+                resultEl.dataset.en = enText;
+            } else {
+                resultEl.textContent = '无';
+                resultEl.dataset.en = '';
+            }
+        }
+
+        let currentSelectorType = '';
+
+        function openCategorySelector(type) {
+            currentSelectorType = type;
+            const modal = document.getElementById('categorySelectModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+            
+            renderCategoryList();
+        }
+
+        function renderCategoryList() {
+            const container = document.getElementById('categorySelectList');
+            container.innerHTML = '';
+            
+            Object.keys(categories).forEach(key => {
+                if (key === 'favorites') return;
+                const cat = categories[key];
+                const item = document.createElement('div');
+                item.className = 'category-select-item';
+                item.innerHTML = `<span>${cat.title}</span>`;
+                item.onclick = () => selectCategoryForAssociation(key);
+                container.appendChild(item);
+            });
+        }
+
+        function selectCategoryForAssociation(catKey) {
+            const cat = categories[catKey];
+            const container = document.getElementById('presetSelectList');
+            container.innerHTML = '';
+            
+            cat.presets.forEach(preset => {
+                const item = document.createElement('div');
+                item.className = 'preset-select-item';
+                item.innerHTML = `<span>${preset.zh || preset.en}</span>`;
+                item.onclick = () => selectPresetForAssociation(preset);
+                container.appendChild(item);
+            });
+            
+            document.getElementById('categorySelectStep').style.display = 'none';
+            document.getElementById('presetSelectStep').style.display = 'block';
+        }
+
+        function selectPresetForAssociation(preset) {
+            const en = preset.en;
+            const zh = preset.zh || en;
+            
+            if (currentSelectorType === 'character1' || currentSelectorType === 'character') {
+                selectedCharacterAction.character1 = { en, zh };
+                if (currentInteractionMode === 'single') {
+                    selectedCharacterAction.character = { en, zh };
+                }
+            } else if (currentSelectorType === 'character2') {
+                selectedCharacterAction.character2 = { en, zh };
+            } else if (currentSelectorType === 'action' || currentSelectorType === 'interaction') {
+                selectedCharacterAction.interaction = { en, zh };
+                if (currentInteractionMode === 'single') {
+                    selectedCharacterAction.action = { en, zh };
+                }
+            } else if (currentSelectorType === 'multiPerson') {
+                addSelectedPerson(en, zh);
+                return;
+            } else if (currentSelectorType === 'multiAction') {
+                addSelectedAction(en, zh);
+                return;
+            } else if (currentSelectorType === 'associationWord') {
+                selectAssociationWord(en, zh);
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            } else if (currentSelectorType === 'firstWord') {
+                setFirstWord(en, zh);
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            } else if (currentSelectorType === 'secondWord') {
+                setSecondWord(en, zh);
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            } else if (currentSelectorType === 'clothes') {
+                selectClothes(en, zh);
+            } else if (currentSelectorType === 'color') {
+                if (document.getElementById('clothesItems')) {
+                    selectClothesColor(en, zh);
+                } else if (document.getElementById('hairItems')) {
+                    selectHairColor(en, zh);
+                }
+            } else if (currentSelectorType === 'hair') {
+                selectHair(en, zh);
+            } else if (currentSelectorType === 'bodyFeature') {
+                selectCharacterBody('body', en, zh);
+            } else if (currentSelectorType === 'attacker') {
+                roleRelationData.attacker = { en, zh };
+                updateRoleRelationResult();
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            } else if (currentSelectorType === 'receiver') {
+                roleRelationData.receiver = { en, zh };
+                updateRoleRelationResult();
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            } else if (currentSelectorType === 'roleAction') {
+                roleRelationData.action = { en, zh };
+                updateRoleRelationResult();
+                closeModal('categorySelectModal');
+                document.getElementById('categorySelectStep').style.display = 'block';
+                document.getElementById('presetSelectStep').style.display = 'none';
+                return;
+            }
+            
+            updateCharacterActionResult();
+            closeModal('categorySelectModal');
+            document.getElementById('categorySelectStep').style.display = 'block';
+            document.getElementById('presetSelectStep').style.display = 'none';
+        }
+
+        function backToCategoryList() {
+            document.getElementById('categorySelectStep').style.display = 'block';
+            document.getElementById('presetSelectStep').style.display = 'none';
+        }
+
+        // 身体特征数据
+        function loadCharacterBodyData() {
+            const characterData = [
+                {en: 'boy', zh: '男孩'}, {en: 'young man', zh: '青年男性'}, {en: 'adult man', zh: '成年男性'},
+                {en: 'elderly man', zh: '老年男性'}, {en: 'shota', zh: '正太'}, {en: 'male child', zh: '小男孩'}
+            ];
+            
+            const bodyData = [
+                {en: 'muscle', zh: '肌肉'}, {en: 'abs', zh: '腹肌'}, {en: 'broad shoulders', zh: '宽肩'},
+                {en: 'narrow waist', zh: '细腰'}, {en: 'big butt', zh: '大臀部'}, {en: 'beauty back', zh: '美背'},
+                {en: 'tanlines', zh: '晒痕'}, {en: 'freckles', zh: '雀斑'}, {en: 'scar', zh: '疤痕'}
+            ];
+            
+            const charContainer = document.getElementById('characterItems');
+            const bodyContainer = document.getElementById('bodyFeatureItems');
+            
+            charContainer.innerHTML = characterData.map(item => 
+                `<div class="association-item" onclick="selectCharacterBody('character', '${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+            
+            bodyContainer.innerHTML = bodyData.map(item => 
+                `<div class="association-item" onclick="selectCharacterBody('body', '${item.en}', '${item.zh}')">${item.zh}</div>`
+            ).join('');
+        }
+
+        let selectedCharacterBody = { character: { en: '', zh: '' }, body: { en: '', zh: '' } };
+
+        function selectCharacterBody(type, en, zh) {
+            if (type === 'character') {
+                selectedCharacterBody.character = { en, zh };
+            } else {
+                selectedCharacterBody.body = { en, zh };
+            }
+            updateCharacterBodyResult();
+        }
+
+        function updateCharacterBodyResult() {
+            const resultEl = document.getElementById('characterBodyResult');
+            if (selectedCharacterBody.character.zh) {
+                if (selectedCharacterBody.body.zh) {
+                    resultEl.textContent = `${selectedCharacterBody.character.zh}有着${selectedCharacterBody.body.zh}`;
+                    resultEl.dataset.en = `${selectedCharacterBody.character.en},${selectedCharacterBody.body.en}`;
+                } else {
+                    resultEl.textContent = selectedCharacterBody.character.zh;
+                    resultEl.dataset.en = selectedCharacterBody.character.en;
+                }
+            } else if (selectedCharacterBody.body.zh) {
+                resultEl.textContent = selectedCharacterBody.body.zh;
+                resultEl.dataset.en = selectedCharacterBody.body.en;
+            } else {
+                resultEl.textContent = '无';
+                resultEl.dataset.en = '';
+            }
+        }
+
+        // 肤色数据
+        function loadSkinColorData() {
+            const skinData = [
+                {en: 'white skin', zh: '白色皮肤', color: '#FFFDD0'},
+                {en: 'yellow skin', zh: '黄色皮肤', color: '#F5D0A9'},
+                {en: 'tan skin', zh: '古铜色皮肤', color: '#D2B48C'},
+                {en: 'brown skin', zh: '棕色皮肤', color: '#8D5524'},
+                {en: 'black skin', zh: '黑色皮肤', color: '#3D2314'},
+                {en: 'pale skin', zh: '苍白皮肤', color: '#FAEBD7'},
+                {en: 'rosy skin', zh: '红润皮肤', color: '#FFCCCC'},
+                {en: 'olive skin', zh: '橄榄色皮肤', color: '#808000'}
+            ];
+            
+            const container = document.getElementById('skinColorGrid');
+            container.innerHTML = skinData.map(item => 
+                `<div class="skin-color-option" onclick="selectSkinColor('${item.en}', '${item.zh}', '${item.color}')" style="background-color: ${item.color}">
+                    <span>${item.zh}</span>
+                </div>`
+            ).join('');
+        }
+
+        let selectedSkinColor = { en: '', zh: '' };
+
+        function selectSkinColor(en, zh, color) {
+            selectedSkinColor = { en, zh, color };
+            const resultEl = document.getElementById('skinColorResult');
+            resultEl.textContent = zh;
+            resultEl.dataset.en = en;
+        }
+
+        // 应用关联结果到正向提示词
+        function applyAssociation() {
+            let enText = '';
+            let zhText = '';
+            
+            // 检查哪个结果被选中
+            const clothesResult = document.getElementById('clothesColorResult');
+            const hairResult = document.getElementById('hairColorResult');
+            const charActionResult = document.getElementById('characterActionResult');
+            const charBodyResult = document.getElementById('characterBodyResult');
+            const skinResult = document.getElementById('skinColorResult');
+            const associationResult = document.getElementById('associationResult');
+            const roleRelationResult = document.getElementById('roleRelationResult');
+            
+            if (clothesResult && clothesResult.dataset.en) {
+                const parts = clothesResult.dataset.en.split('_');
+                enText = parts[1] + ', ' + parts[0];
+                zhText = clothesResult.textContent;
+            } else if (hairResult && hairResult.dataset.en) {
+                const parts = hairResult.dataset.en.split('_');
+                enText = parts[1] + ', ' + parts[0] + '_hair';
+                zhText = hairResult.textContent;
+            } else if (charActionResult && charActionResult.dataset.en) {
+                enText = charActionResult.dataset.en;
+                zhText = charActionResult.textContent;
+            } else if (charBodyResult && charBodyResult.dataset.en) {
+                enText = charBodyResult.dataset.en;
+                zhText = charBodyResult.textContent;
+            } else if (skinResult && skinResult.dataset.en) {
+                enText = skinResult.dataset.en;
+                zhText = skinResult.textContent;
+            } else if (associationResult && associationResult.dataset.en) {
+                enText = associationResult.dataset.en;
+                zhText = associationResult.dataset.zh;
+            } else if (roleRelationResult && roleRelationResult.dataset.en) {
+                enText = roleRelationResult.dataset.en;
+                zhText = roleRelationResult.dataset.zh;
+            }
+            
+            if (enText && zhText) {
+                addTagToPrompt('positive', enText, zhText);
+                
+                // 如果有关联的选中标签，移除旧的并添加新的
+                if (selectedTagForAssociation) {
+                    const selectedEl = document.querySelector('.tag.selected');
+                    if (selectedEl) {
+                        selectedEl.remove();
+                        // 从promptTags中移除
+                        const index = promptTags.positive.findIndex(t => t.en === selectedEl.dataset.en);
+                        if (index > -1) {
+                            promptTags.positive.splice(index, 1);
+                            updatePromptValue('positive');
+                            updateTranslation('positive');
+                        }
+                    }
+                }
+                
+                closeModal('associationDetailModal');
+                closeModal('associationModal');
+                
+                // 清除选中状态
+                selectedTagForAssociation = null;
+            } else {
+                showNotification('请先选择关联内容');
+            }
+        }
+
         // 数据持久化存储键名
         const STORAGE_KEYS = {
             CUSTOM_CATEGORIES: 'aiPrompt_customCategories',
@@ -6435,6 +8855,176 @@
             closeModal('generateModal');
             if (option === 1) window.open('https://arting.ai/cn/ai-image-generator-nsfw', '_blank');
             else if (option === 2) window.open('https://perchance.org/ai-text-to-image-generator', '_blank');
+        }
+
+        // 年龄自定义功能
+        let pendingAge = '';
+        
+        function openAgeCustomModal() {
+            const modal = document.getElementById('ageCustomModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+        }
+        
+        function selectAgePreset(age) {
+            pendingAge = age;
+            showNotification('请点击关联人物');
+            closeModal('ageCustomModal');
+        }
+        
+        function applyCustomAge() {
+            const input = document.getElementById('customAgeInput').value.trim();
+            const pattern = /^\d+岁$/;
+            if (!pattern.test(input)) {
+                showNotification('请输入正确的格式，如：25岁');
+                return;
+            }
+            pendingAge = input;
+            showNotification('请点击关联人物');
+            closeModal('ageCustomModal');
+        }
+
+        // 颜色自定义功能
+        let pendingColor = '';
+        let pendingColorType = '';
+        
+        function openColorCustomModal() {
+            const modal = document.getElementById('colorCustomModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+        }
+        
+        function selectColor(color) {
+            pendingColor = color;
+            showNotification('请点击相关服饰或物品颜色进行关联');
+            closeModal('colorCustomModal');
+        }
+        
+        function applyCustomColor() {
+            const input = document.getElementById('customColorInput').value.trim();
+            if (!input) {
+                showNotification('请输入颜色');
+                return;
+            }
+            pendingColor = input;
+            showNotification('请点击相关服饰或物品颜色进行关联');
+            closeModal('colorCustomModal');
+        }
+
+        // 肤色自定义功能
+        let pendingSkinColor = '';
+        
+        function openSkinColorModal() {
+            const modal = document.getElementById('skinColorModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+        }
+        
+        function selectSkinColor(color) {
+            pendingSkinColor = color;
+            showNotification('已选择肤色: ' + color);
+            closeModal('skinColorModal');
+        }
+        
+        function applyCustomSkinColor() {
+            const input = document.getElementById('customSkinColorInput').value.trim();
+            if (!input) {
+                showNotification('请输入肤色');
+                return;
+            }
+            pendingSkinColor = input;
+            showNotification('已选择肤色: ' + input);
+            closeModal('skinColorModal');
+        }
+
+        // 动作自定义功能
+        let actionMode = '';
+        let person1 = '';
+        let person2 = '';
+        let selectedAction = '';
+        let personList = [];
+        let actionList = [];
+        
+        function openActionCustomModal() {
+            const modal = document.getElementById('actionCustomModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modal.style.display = 'flex';
+            document.getElementById('twoPersonMode').style.display = 'none';
+            document.getElementById('multiPersonMode').style.display = 'none';
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            void modalContent.offsetWidth;
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+        }
+        
+        function showTwoPersonMode() {
+            actionMode = 'twoPerson';
+            document.getElementById('twoPersonMode').style.display = 'block';
+            document.getElementById('multiPersonMode').style.display = 'none';
+        }
+        
+        function showMultiPersonMode() {
+            actionMode = 'multiPerson';
+            document.getElementById('twoPersonMode').style.display = 'none';
+            document.getElementById('multiPersonMode').style.display = 'block';
+        }
+        
+        function selectPerson1() {
+            person1 = '';
+            showNotification('请到角色分类选择角色');
+            closeModal('actionCustomModal');
+        }
+        
+        function selectPerson2() {
+            person2 = '';
+            showNotification('请到角色分类选择角色');
+            closeModal('actionCustomModal');
+        }
+        
+        function selectAction() {
+            selectedAction = '';
+            showNotification('请选择动作');
+        }
+        
+        function addPerson() {
+            showNotification('请到角色分类选择角色');
+        }
+        
+        function addAction() {
+            showNotification('请选择动作');
+        }
+        
+        function applyCustomAction() {
+            if (actionMode === 'twoPerson') {
+                if (!person1 || !person2 || !selectedAction) {
+                    showNotification('请完成所有选择');
+                    return;
+                }
+                showNotification('已添加互动：' + person1 + selectedAction + person2);
+            } else {
+                if (personList.length < 2) {
+                    showNotification('请至少添加两个人物');
+                    return;
+                }
+                showNotification('已添加多人互动');
+            }
+            closeModal('actionCustomModal');
         }
 
         // 调用初始化
