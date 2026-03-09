@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>就此别过 · 一段时光的落幕</title>
+    <style>
+        /* ----- 重置 & 基础 ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a0a12;
+            font-family: 'Inter', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #eaeef2;
+            line-height: 1.8;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            /* 深邃的渐变背景，带有微弱的紫色调 */
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(45, 30, 60, 0.6) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(20, 30, 70, 0.7) 0%, transparent 45%),
+                linear-gradient(145deg, #0b0b17 0%, #151528 100%);
+            background-attachment: fixed;
+        }
+
+        /* 优雅的噪点纹理 (极轻微) */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMTUiIC8+PC9zdmc+');
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 45px 40px;
+            background: rgba(18, 18, 30, 0.6);
+            backdrop-filter: blur(14px) brightness(1.1);
+            -webkit-backdrop-filter: blur(14px) brightness(1.1);
+            border-radius: 36px;
+            border: 1px solid rgba(220, 220, 255, 0.1);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+                0 0 30px rgba(100, 120, 240, 0.2);
+            position: relative;
+            z-index: 2;
+            transition: box-shadow 0.5s ease;
+        }
+
+        .container:hover {
+            box-shadow: 
+                0 30px 60px -12px #000,
+                0 0 0 1px rgba(210, 210, 255, 0.15) inset,
+                0 0 45px rgba(130, 140, 250, 0.25);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 36px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 20, 40, 0.6);
+            word-break: break-word;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 25px;
+            font-family: 'Times New Roman', 'Songti SC', serif;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            font-size: 16.5px;
+            opacity: 0.92;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transition: opacity 0.2s;
+        }
+
+        .section:hover {
+            opacity: 1;
+        }
+
+        .thanks {
+            color: #b8d6ff;
+            font-weight: 500;
+            background: linear-gradient(90deg, rgba(140, 180, 255, 0.1) 0%, transparent 80%);
+            padding: 8px 16px;
+            border-radius: 12px;
+            margin-left: -16px;
+            padding-left: 16px;
+            border-left: 3px solid #6080d0;
+        }
+
+        .sad {
+            color: #ffc1cc;
+            font-style: italic;
+            background: linear-gradient(90deg, rgba(255, 140, 160, 0.06) 0%, transparent 80%);
+            padding: 8px 16px;
+            border-radius: 12px;
+            margin-left: -16px;
+            padding-left: 16px;
+            border-left: 3px solid #ff96aa;
+        }
+
+        .heart {
+            color: #ffb3c6;
+            font-weight: 450;
+            position: relative;
+            padding-left: 26px;
+        }
+
+        .heart::before {
+            content: "❤️";
+            position: absolute;
+            left: -2px;
+            top: -2px;
+            font-size: 18px;
+            filter: drop-shadow(0 0 6px #ff99aa);
+            opacity: 0.9;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), rgba(200, 220, 255, 0.3), rgba(255, 255, 255, 0.15), transparent);
+            margin: 35px 0 30px;
+        }
+
+        .end {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 15px;
+            opacity: 0.6;
+            letter-spacing: 1.5px;
+            font-variant: small-caps;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 30px;
+            color: #a9b7d4;
+        }
+
+        /* 优雅的引用装饰 */
+        .section:first-of-type {
+            margin-top: 5px;
+        }
+
+        /* 保证所有文字清晰可见 */
+        .section br {
+            content: '';
+            display: block;
+            margin: 6px 0;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 500px) {
+            .container {
+                padding: 30px 22px;
+                border-radius: 28px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .section {
+                font-size: 15px;
+            }
+        }
+
+        /* 隐形的播放器 —— 彻底隐藏原生UI */
+        #bgMusic {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0.001;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+    <!-- 保留原始注释：徐佳莹《到此为止》原唱 背景音乐 -->
+</head>
+<body>
+    <!-- 背景音乐：完全隐藏，无任何控件 -->
+    <audio id="bgMusic" preload="auto" loop hidden>
+        <!-- ⚠️ 请将下面的链接替换为您找到的有效MP3直链 ⚠️ -->
+        <source src="https://music.163.com/song/media/outer/url?id=526081111.mp3" type="audio/mpeg">
+        <!-- 如果上面的链接失效，JS会尝试切换到备用音乐 -->
+    </audio>
+
+    <div class="container">
+        <h1>就此别过 · 从此不再出现</h1>
+
+        <div class="section">
+            从2020年到今天，这条路我走了很久很久。<br>
+            从一点点收集资源，到一点点搭建网站，再到无偿分享、尽力帮助每一个需要的人。<br>
+            我以为真心可以换来真心，以为分享能带来温暖，可最后换来的，却是无尽的消耗与伤害。
+        </div>
+
+        <div class="section">
+            这些年里，我做过太多太多为别人开心的事，<br>
+            做过太多太多为人着想的事，<br>
+            做过太多连我自己都不知道，究竟是怎么坚持下来的事。
+        </div>
+
+        <div class="section sad">
+            我从来没有想过伤害谁，也从来没有亏欠过谁。<br>
+            我本身并没有错，可为什么，偏偏会有人这样对我？<br>
+            被误解、被攻击、被黑粉不断折磨，我已经撑不下去了。
+        </div>
+
+        <div class="section">
+            如今，我正式宣布退网，<br>
+            从此不再回到大众视野，不再出现，不再更新，不再回应。
+        </div>
+
+        <hr>
+
+        <div class="section thanks">
+            但在离开之前，我必须认认真真、郑重地感谢：<br>
+            一路以来，始终支持我的粉丝宝贝们。<br>
+            谢谢你们的陪伴、信任、鼓励与温柔。<br>
+            也谢谢你们曾和我一起，提供资源、守护内容、互相温暖。
+        </div>
+
+        <div class="section heart">
+            是你们，让我在无数个疲惫的夜晚，还愿意再坚持一下。<br>
+            是你们，让我相信，这个世界上真的有善意。
+        </div>
+
+        <div class="section">
+            这个页面，是留给大家最后的念想。<br>
+            看过，记住，就够了。
+        </div>
+
+        <div class="section sad">
+            我真的累了，<br>
+            余生，我只想安安静静，不再被打扰。
+        </div>
+
+        <div class="end">
+            2020–至今 · 一段时光 · 就此落幕
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const music = document.getElementById('bgMusic');
+            if (!music) return;
+
+            // 初始音量 30% 柔和
+            music.volume = 0.3;
+
+            // 预加载
+            music.load();
+
+            // 错误处理：如果主链接失效，尝试备用链接（这里可以换成您自己找到的有效链接）
+            music.addEventListener('error', function onError(e) {
+                // 防止反复切换
+                if (music.src.includes('soundhelix') || music.src.includes('pixabay')) return;
+
+                console.warn('原音乐链接可能不可用，尝试备用音乐（纯音乐）');
+                // 使用一个稳定的免费背景音乐 (SoundHelix 示例)，保证可播放
+                // 如果您有徐佳莹的有效链接，请替换这里
+                music.src = 'https://silong-respool.github.io/zyk/到此为止.mp3';
+                music.load();
+
+                music.play().catch(e => {
+                    // 静默失败，等待手势
+                });
+
+                music.removeEventListener('error', onError);
+            });
+
+            // ---- 增强自动播放策略 ----
+            // 不仅监听 click，还监听 touchstart 和 scroll（滑动页面）
+            function attemptAutoPlay() {
+                music.play()
+                    .then(() => {
+                        // 成功播放，移除所有手势监听
+                        document.removeEventListener('click', playHandler);
+                        document.removeEventListener('touchstart', playHandler);
+                        document.removeEventListener('scroll', playHandler);
+                    })
+                    .catch(() => {
+                        // 自动播放失败，监听用户手势
+                        document.addEventListener('click', playHandler);
+                        document.addEventListener('touchstart', playHandler, { passive: true });
+                        document.addEventListener('scroll', playHandler, { passive: true });
+                    });
+            }
+
+            // 用户手势触发播放
+            function playHandler() {
+                music.play()
+                    .then(() => {
+                        document.removeEventListener('click', playHandler);
+                        document.removeEventListener('touchstart', playHandler);
+                        document.removeEventListener('scroll', playHandler);
+                    })
+                    .catch(err => {
+                        console.warn('播放失败，请稍后重试', err);
+                    });
+            }
+
+            // 页面加载完成后执行自动播放尝试
+            window.addEventListener('load', function() {
+                music.volume = 0.3;
+                attemptAutoPlay();
+            });
+
+            // 如果页面已经可见，立即尝试（增强可靠性）
+            if (document.readyState === 'complete') {
+                music.volume = 0.3;
+                attemptAutoPlay();
+            } else {
+                window.addEventListener('load', function() {
+                    music.volume = 0.3;
+                    attemptAutoPlay();
+                });
+            }
+        })();
+    </script>
+
+    <!-- 附加微小说明：页面一切从简，仅保留文字与氛围，音乐播放器无UI -->
+</body>
+</html>
