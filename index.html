@@ -155,11 +155,6 @@
             color: #a9b7d4;
         }
 
-        /* 优雅的引用装饰 */
-        .section:first-of-type {
-            margin-top: 5px;
-        }
-
         /* 保证所有文字清晰可见 */
         .section br {
             content: '';
@@ -194,11 +189,12 @@
     <!-- 保留原始注释：徐佳莹《到此为止》原唱 背景音乐 -->
 </head>
 <body>
-    <!-- 背景音乐：完全隐藏，无任何控件 -->
+    <!-- 背景音乐：完全隐藏，无任何控件，使用您仓库中的两个地址（网易云+备用） -->
     <audio id="bgMusic" preload="auto" loop hidden>
-        <!-- ⚠️ 请将下面的链接替换为您找到的有效MP3直链 ⚠️ -->
+        <!-- 您的原地址1：网易云外链 -->
         <source src="https://music.163.com/song/media/outer/url?id=526081111.mp3" type="audio/mpeg">
-        <!-- 如果上面的链接失效，JS会尝试切换到备用音乐 -->
+        <!-- 您的原地址2：GitHub仓库备用 -->
+        <source src="https://silong-respool.github.io/zyk/到此为止.mp3" type="audio/mpeg">
     </audio>
 
     <div class="container">
@@ -264,77 +260,54 @@
             // 初始音量 30% 柔和
             music.volume = 0.3;
 
-            // 预加载
-            music.load();
-
-            // 错误处理：如果主链接失效，尝试备用链接（这里可以换成您自己找到的有效链接）
-            music.addEventListener('error', function onError(e) {
-                // 防止反复切换
-                if (music.src.includes('soundhelix') || music.src.includes('pixabay')) return;
-
-                console.warn('原音乐链接可能不可用，尝试备用音乐（纯音乐）');
-                // 使用一个稳定的免费背景音乐 (SoundHelix 示例)，保证可播放
-                // 如果您有徐佳莹的有效链接，请替换这里
-                music.src = 'https://silong-respool.github.io/zyk/到此为止.mp3';
-                music.load();
-
-                music.play().catch(e => {
-                    // 静默失败，等待手势
-                });
-
-                music.removeEventListener('error', onError);
-            });
-
-            // ---- 增强自动播放策略 ----
-            // 不仅监听 click，还监听 touchstart 和 scroll（滑动页面）
-            function attemptAutoPlay() {
-                music.play()
-                    .then(() => {
-                        // 成功播放，移除所有手势监听
-                        document.removeEventListener('click', playHandler);
-                        document.removeEventListener('touchstart', playHandler);
-                        document.removeEventListener('scroll', playHandler);
-                    })
-                    .catch(() => {
-                        // 自动播放失败，监听用户手势
-                        document.addEventListener('click', playHandler);
-                        document.addEventListener('touchstart', playHandler, { passive: true });
-                        document.addEventListener('scroll', playHandler, { passive: true });
-                    });
+            // ----- 手势播放（核心：用户首次点击/触摸时播放背景音乐，不换源）-----
+            function playMusic() {
+                if (music.paused) {
+                    music.play()
+                        .then(() => {
+                            // 播放成功后移除监听，避免重复触发
+                            document.removeEventListener('click', playHandler);
+                            document.removeEventListener('touchstart', playHandler);
+                        })
+                        .catch(err => {
+                            // 播放失败（比如用户未交互），保留监听等待下次手势
+                            console.log('等待用户交互后播放', err);
+                        });
+                } else {
+                    // 已经在播放，移除监听
+                    document.removeEventListener('click', playHandler);
+                    document.removeEventListener('touchstart', playHandler);
+                }
             }
 
-            // 用户手势触发播放
             function playHandler() {
-                music.play()
-                    .then(() => {
-                        document.removeEventListener('click', playHandler);
-                        document.removeEventListener('touchstart', playHandler);
-                        document.removeEventListener('scroll', playHandler);
-                    })
-                    .catch(err => {
-                        console.warn('播放失败，请稍后重试', err);
-                    });
+                playMusic();
             }
 
-            // 页面加载完成后执行自动播放尝试
-            window.addEventListener('load', function() {
-                music.volume = 0.3;
-                attemptAutoPlay();
+            // 绑定手势事件（点击和触摸）
+            document.addEventListener('click', playHandler);
+            document.addEventListener('touchstart', playHandler, { passive: true });
+
+            // 如果音乐因为某些原因暂停（非用户主动），可以重新绑定手势
+            music.addEventListener('pause', function() {
+                if (music.currentTime > 0 && !music.ended) {
+                    document.addEventListener('click', playHandler);
+                    document.addEventListener('touchstart', playHandler);
+                }
             });
 
-            // 如果页面已经可见，立即尝试（增强可靠性）
-            if (document.readyState === 'complete') {
-                music.volume = 0.3;
-                attemptAutoPlay();
-            } else {
-                window.addEventListener('load', function() {
-                    music.volume = 0.3;
-                    attemptAutoPlay();
-                });
-            }
+            // 处理页面可见性变化：当用户切回页面时，如果音乐已暂停且曾播放过，重新绑定手势
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && music.paused && music.currentTime > 0) {
+                    document.addEventListener('click', playHandler);
+                    document.addEventListener('touchstart', playHandler);
+                }
+            });
+
+            // 预加载提示（可选）：音乐源由浏览器自动按顺序尝试，无需额外代码
         })();
     </script>
 
-    <!-- 附加微小说明：页面一切从简，仅保留文字与氛围，音乐播放器无UI -->
+    <!-- 附加说明：音乐地址已完全恢复为您原来的两个链接，仅优化了播放控制，确保背景播放无界面 -->
 </body>
 </html>
