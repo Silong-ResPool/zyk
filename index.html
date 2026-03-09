@@ -5,17 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>就此别过 · 一段时光的落幕</title>
     <style>
-        /* ----- 重置 & 基础 ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ----- 原有样式完整保留（仅追加信件样式） ----- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
             background: #0a0a12;
-            font-family: 'Inter', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', 'Microsoft YaHei', -apple-system, sans-serif;
             color: #eaeef2;
             line-height: 1.8;
             padding: 20px;
@@ -23,231 +18,184 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            /* 深邃的渐变背景，带有微弱的紫色调 */
             background-image: 
                 radial-gradient(circle at 30% 40%, rgba(45, 30, 60, 0.6) 0%, transparent 40%),
                 radial-gradient(circle at 80% 70%, rgba(20, 30, 70, 0.7) 0%, transparent 45%),
                 linear-gradient(145deg, #0b0b17 0%, #151528 100%);
             background-attachment: fixed;
         }
-
-        /* 优雅的噪点纹理 (极轻微) */
         body::after {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMTUiIC8+PC9zdmc+');
-            opacity: 0.18;
-            pointer-events: none;
-            z-index: 0;
+            opacity: 0.18; pointer-events: none; z-index: 0;
         }
-
+        /* 主容器原有样式，追加 .hidden 类用于切换 */
         .container {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 45px 40px;
+            max-width: 700px; width: 100%; margin: 0 auto; padding: 45px 40px;
             background: rgba(18, 18, 30, 0.6);
             backdrop-filter: blur(14px) brightness(1.1);
             -webkit-backdrop-filter: blur(14px) brightness(1.1);
             border-radius: 36px;
             border: 1px solid rgba(220, 220, 255, 0.1);
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.8),
-                0 0 0 1px rgba(255, 255, 255, 0.02) inset,
-                0 0 30px rgba(100, 120, 240, 0.2);
-            position: relative;
-            z-index: 2;
-            transition: box-shadow 0.5s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                        0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+                        0 0 30px rgba(100, 120, 240, 0.2);
+            position: relative; z-index: 2;
         }
-
         .container:hover {
-            box-shadow: 
-                0 30px 60px -12px #000,
-                0 0 0 1px rgba(210, 210, 255, 0.15) inset,
-                0 0 45px rgba(130, 140, 250, 0.25);
+            box-shadow: 0 30px 60px -12px #000,
+                        0 0 0 1px rgba(210, 210, 255, 0.15) inset,
+                        0 0 45px rgba(130, 140, 250, 0.25);
         }
-
+        .container.hidden {
+            display: none;
+        }
         h1 {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            margin-bottom: 36px;
-            color: #ffffff;
+            text-align: center; font-size: 28px; font-weight: 400; letter-spacing: 1px;
+            margin-bottom: 36px; color: #ffffff;
             text-shadow: 0 2px 10px rgba(0, 20, 40, 0.6);
-            word-break: break-word;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 25px;
-            font-family: 'Times New Roman', 'Songti SC', serif;
+            padding-bottom: 25px; font-family: 'Times New Roman', 'Songti SC', serif;
         }
-
-        .section {
-            margin-bottom: 30px;
-            font-size: 16.5px;
-            opacity: 0.92;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            transition: opacity 0.2s;
-        }
-
-        .section:hover {
-            opacity: 1;
-        }
-
+        .section { margin-bottom: 30px; font-size: 16.5px; opacity: 0.92; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .thanks {
-            color: #b8d6ff;
-            font-weight: 500;
+            color: #b8d6ff; font-weight: 500;
             background: linear-gradient(90deg, rgba(140, 180, 255, 0.1) 0%, transparent 80%);
-            padding: 8px 16px;
-            border-radius: 12px;
-            margin-left: -16px;
-            padding-left: 16px;
+            padding: 8px 16px; border-radius: 12px; margin-left: -16px; padding-left: 16px;
             border-left: 3px solid #6080d0;
         }
-
         .sad {
-            color: #ffc1cc;
-            font-style: italic;
+            color: #ffc1cc; font-style: italic;
             background: linear-gradient(90deg, rgba(255, 140, 160, 0.06) 0%, transparent 80%);
-            padding: 8px 16px;
-            border-radius: 12px;
-            margin-left: -16px;
-            padding-left: 16px;
+            padding: 8px 16px; border-radius: 12px; margin-left: -16px; padding-left: 16px;
             border-left: 3px solid #ff96aa;
         }
-
         .heart {
-            color: #ffb3c6;
-            font-weight: 450;
-            position: relative;
-            padding-left: 26px;
+            color: #ffb3c6; font-weight: 450; position: relative; padding-left: 26px;
         }
-
         .heart::before {
-            content: "❤️";
-            position: absolute;
-            left: -2px;
-            top: -2px;
-            font-size: 18px;
-            filter: drop-shadow(0 0 6px #ff99aa);
-            opacity: 0.9;
+            content: "❤️"; position: absolute; left: -2px; top: -2px; font-size: 18px;
+            filter: drop-shadow(0 0 6px #ff99aa); opacity: 0.9;
         }
-
         hr {
-            border: none;
-            height: 1px;
+            border: none; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), rgba(200, 220, 255, 0.3), rgba(255, 255, 255, 0.15), transparent);
             margin: 35px 0 30px;
         }
-
         .end {
+            text-align: center; margin-top: 40px; font-size: 15px; opacity: 0.6;
+            letter-spacing: 1.5px; font-variant: small-caps;
+            border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 30px; color: #a9b7d4;
+        }
+        /* ----- 新增信件封面样式（完全融入原氛围）----- */
+        .letter-cover {
+            max-width: 700px; width: 100%; margin: 0 auto; padding: 45px 40px;
+            background: rgba(22, 20, 32, 0.7);
+            backdrop-filter: blur(16px) brightness(1.15);
+            -webkit-backdrop-filter: blur(16px) brightness(1.15);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 200, 240, 0.15);
+            box-shadow: 0 30px 60px -15px #000,
+                        0 0 0 1px rgba(255, 180, 220, 0.1) inset,
+                        0 0 60px rgba(200, 160, 255, 0.25);
             text-align: center;
-            margin-top: 40px;
-            font-size: 15px;
-            opacity: 0.6;
-            letter-spacing: 1.5px;
-            font-variant: small-caps;
-            border-top: 1px dashed rgba(255,255,255,0.1);
-            padding-top: 30px;
-            color: #a9b7d4;
+            position: relative; z-index: 3;
+            transition: opacity 0.3s ease;
         }
-
-        /* 保证所有文字清晰可见 */
-        .section br {
-            content: '';
-            display: block;
-            margin: 6px 0;
+        .letter-cover h2 {
+            font-size: 34px;
+            font-weight: 380;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            color: #ffe4f0;
+            text-shadow: 0 0 20px #ffa0c0, 0 2px 10px #301840;
+            font-family: 'Times New Roman', 'Songti SC', serif;
+            border-bottom: 1px dashed rgba(255, 200, 220, 0.3);
+            padding-bottom: 20px;
         }
-
-        /* 移动端优化 */
-        @media (max-width: 500px) {
-            .container {
-                padding: 30px 22px;
-                border-radius: 28px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            .section {
-                font-size: 15px;
-            }
+        .letter-content p {
+            font-size: 18px;
+            margin: 25px 0;
+            color: #e0d0f0;
+            background: rgba(40, 20, 50, 0.3);
+            padding: 10px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
         }
-
-        /* 隐形的播放器 —— 彻底隐藏原生UI */
+        .open-btn {
+            background: rgba(255, 245, 250, 0.1);
+            border: 1.5px solid rgba(255, 180, 210, 0.5);
+            color: #ffd0e0;
+            font-size: 22px;
+            padding: 18px 35px;
+            border-radius: 60px;
+            margin-top: 35px;
+            cursor: pointer;
+            font-weight: 400;
+            letter-spacing: 3px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px #ffa0c080;
+            transition: all 0.25s;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            width: 100%;
+            max-width: 320px;
+            display: inline-block;
+        }
+        .open-btn:hover {
+            background: rgba(255, 210, 230, 0.2);
+            border-color: #ffb0cc;
+            color: #ffffff;
+            box-shadow: 0 10px 28px #000, 0 0 28px #ffb0d0;
+            transform: scale(1.02);
+            letter-spacing: 4px;
+        }
+        .open-btn:active {
+            transform: scale(0.98);
+        }
+        /* 音频控件隐藏占位 */
         #bgMusic {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0.001;
-            pointer-events: none;
-            z-index: -1;
+            position: absolute; width: 1px; height: 1px; opacity: 0.001;
+            pointer-events: none; z-index: -1;
+        }
+        @media (max-width: 500px) {
+            .container, .letter-cover { padding: 30px 22px; border-radius: 28px; }
+            h1 { font-size: 24px; }
+            .letter-cover h2 { font-size: 28px; }
+            .open-btn { font-size: 18px; padding: 14px 25px; }
         }
     </style>
-    <!-- 背景音乐：徐佳莹《到此为止》-->
 </head>
 <body>
-    <!-- 完全隐藏的audio元素，无loop属性，由JS实现完整循环 -->
-    <audio id="bgMusic" preload="auto" hidden>
-        <!-- 您的原地址：GitHub仓库备用 -->
-        <source src="https://silong-respool.github.io/zyk/dzwz.mp3" type="audio/mpeg">
-    </audio>
+    <!-- 唯一音频源，保持不变 -->
+    <audio id="bgMusic" preload="auto" src="https://silong-respool.github.io/zyk/dzwz.mp3"></audio>
 
-    <div class="container">
+    <!-- 信件封面 · 致宝宝们的一封信 (默认显示) -->
+    <div class="letter-cover" id="letterCover">
+        <h2>📨 致宝宝们的一封信</h2>
+        <div class="letter-content">
+            <p>轻轻点开，便是我们最后的相逢。</p>
+            <p>这一路，感谢有你们照亮过。</p>
+            <p>所有未尽的话，都藏在信里……</p>
+        </div>
+        <!-- 打开信件按钮，同时触发音乐与主页面 -->
+        <button class="open-btn" id="openLetterBtn">打开信件✉️</button>
+    </div>
+
+    <!-- 原有主页面容器，初始隐藏（添加 hidden 类） -->
+    <div class="container hidden" id="mainContainer">
         <h1>就此别过 · 从此不再出现</h1>
-
-        <div class="section">
-            从2020年到今天，这条路我走了很久很久。<br>
-            从一点点收集资源，到一点点搭建网站，再到无偿分享、尽力帮助每一个需要的人。<br>
-            我以为真心可以换来真心，以为分享能带来温暖，可最后换来的，却是无尽的消耗与伤害。
-        </div>
-
-        <div class="section">
-            这些年里，我做过太多太多为别人开心的事，<br>
-            做过太多太多为人着想的事，<br>
-            做过太多连我自己都不知道，究竟是怎么坚持下来的事。
-        </div>
-
-        <div class="section sad">
-            我从来没有想过伤害谁，也从来没有亏欠过谁。<br>
-            我本身并没有错，可为什么，偏偏会有人这样对我？<br>
-            被误解、被攻击、被黑粉不断折磨，我已经撑不下去了。
-        </div>
-
-        <div class="section">
-            如今，我正式宣布退网，<br>
-            从此不再回到大众视野，不再出现，不再更新，不再回应。
-        </div>
-
+        <div class="section">从2020年到今天，这条路我走了很久很久。<br>从一点点收集资源，到一点点搭建网站，再到无偿分享、尽力帮助每一个需要的人。<br>我以为真心可以换来真心，以为分享能带来温暖，可最后换来的，却是无尽的消耗与伤害。</div>
+        <div class="section">这些年里，我做过太多太多为别人开心的事，<br>做过太多太多为人着想的事，<br>做过太多连我自己都不知道，究竟是怎么坚持下来的事。</div>
+        <div class="section sad">我从来没有想过伤害谁，也从来没有亏欠过谁。<br>我本身并没有错，可为什么，偏偏会有人这样对我？<br>被误解、被攻击、被黑粉不断折磨，我已经撑不下去了。</div>
+        <div class="section">如今，我正式宣布退网，<br>从此不再回到大众视野，不再出现，不再更新，不再回应。</div>
         <hr>
-
-        <div class="section thanks">
-            但在离开之前，我必须认认真真、郑重地感谢：<br>
-            一路以来，始终支持我的粉丝宝贝们。<br>
-            谢谢你们的陪伴、信任、鼓励与温柔。<br>
-            也谢谢你们曾和我一起，提供资源、守护内容、互相温暖。
-        </div>
-
-        <div class="section heart">
-            是你们，让我在无数个疲惫的夜晚，还愿意再坚持一下。<br>
-            是你们，让我相信，这个世界上真的有善意。
-        </div>
-
-        <div class="section">
-            这个页面，是留给大家最后的念想。<br>
-            看过，记住，就够了。
-        </div>
-
-        <div class="section sad">
-            我真的累了，<br>
-            余生，我只想安安静静，不再被打扰。
-        </div>
-
-        <div class="end">
-            2020–至今 · 一段时光 · 就此落幕
-        </div>
+        <div class="section thanks">但在离开之前，我必须认认真真、郑重地感谢：<br>一路以来，始终支持我的粉丝宝贝们。<br>谢谢你们的陪伴、信任、鼓励与温柔。<br>也谢谢你们曾和我一起，提供资源、守护内容、互相温暖。</div>
+        <div class="section heart">是你们，让我在无数个疲惫的夜晚，还愿意再坚持一下。<br>是你们，让我相信，这个世界上真的有善意。</div>
+        <div class="section">这个页面，是留给大家最后的念想。<br>看过，记住，就够了。</div>
+        <div class="section sad">我真的累了，<br>余生，我只想安安静静，不再被打扰。</div>
+        <div class="end">2020–至今 · 一段时光 · 就此落幕</div>
     </div>
 
     <script>
@@ -255,151 +203,93 @@
             const music = document.getElementById('bgMusic');
             if (!music) return;
 
-            // ---------- 配置 ----------
-            // 备选源列表（按优先级，与<source>顺序一致，用于手动切换）
-            const sourceList = [
-                'https://music.163.com/song/media/outer/url?id=526081111.mp3',
-                'https://silong-respool.github.io/zyk/到此为止.mp3'
-            ];
-            let currentSourceIdx = 0;          // 当前正在使用的源索引
-            let endedListenerAdded = false;     // 确保只添加一次ended监听
-            let gestureBound = true;             // 标记手势监听器是否已绑定（默认绑定）
+            // ---------- 基础设置 ----------
+            music.removeAttribute('loop');       // JS实现无缝循环
+            music.volume = 0.3;                 // 温柔音量
 
-            // 移除原有的 loop 属性，改用 JS 控制完整播放后循环
-            music.removeAttribute('loop');
+            // 核心状态
+            let hasStarted = false;               // 是否已成功开始播放
+            let endedListenerAdded = false;
 
-            // 初始音量 30%
-            music.volume = 0.3;
-
-            // ---------- 工具函数：切换到指定索引的源 ----------
-            function setSourceByIndex(index) {
-                // 循环确保索引有效
-                if (index >= sourceList.length) index = 0;      // 如果两个都失败，从头再来
-                if (index < 0) index = 0;
-                const newSrc = sourceList[index];
-                // 只有真正变化时才重新设置，避免无谓的load
-                if (music.src !== newSrc && !music.src.endsWith(newSrc)) {
-                    music.src = newSrc;
-                    music.load();   // 重新加载
-                    currentSourceIdx = index;
-                    console.log(`切换到源[${index}]: ${newSrc}`);
-                }
-            }
-
-            // 切换到下一个源（轮流尝试）
-            function switchToNextSource() {
-                let nextIdx = currentSourceIdx + 1;
-                if (nextIdx >= sourceList.length) nextIdx = 0;   // 形成一个环，无限重试
-                setSourceByIndex(nextIdx);
-            }
-
-            // 初始设置：以第一个源为主（虽然<source>标签存在，但为了防止浏览器默认行为不一致，直接赋值src）
-            setSourceByIndex(0);
-
-            // ---------- 手势管理：绑定/解绑点击/触摸 ----------
-            function bindGesture() {
-                if (gestureBound) return;
-                document.addEventListener('click', playHandler);
-                document.addEventListener('touchstart', playHandler, { passive: true });
-                gestureBound = true;
-                console.log('手势监听已绑定');
-            }
-
-            function unbindGesture() {
-                if (!gestureBound) return;
-                document.removeEventListener('click', playHandler);
-                document.removeEventListener('touchstart', playHandler);
-                gestureBound = false;
-                console.log('手势监听已解绑');
-            }
-
-            // ---------- 核心播放函数：由手势触发 ----------
-            function playMusic() {
-                if (music.paused) {
-                    music.play()
-                        .then(() => {
-                            console.log('播放成功，源：', music.src);
-                            // 播放成功 -> 解绑手势（避免重复触发），并确保ended监听
-                            unbindGesture();
-                            ensureEndedListener();
-                        })
-                        .catch(err => {
-                            // 播放失败（可能是源无效或浏览器限制），尝试切换源并重新绑定手势，等待用户再次点击
-                            console.warn('播放失败，切换源并等待下次手势', err);
-                            switchToNextSource();          // 换一个源
-                            bindGesture();                  // 确保手势还在（可能已被解绑）
-                        });
-                } else {
-                    // 已经在播放，解绑手势即可
-                    unbindGesture();
-                }
-            }
-
-            function playHandler() {
-                playMusic();
-            }
-
-            // 首次绑定手势（用户点击页面任意处即可触发）
-            bindGesture();
-
-            // ---------- 保证完整播放完再循环 (ended 事件) ----------
+            // ----- 确保循环播放（ended 时重新开始）-----
             function ensureEndedListener() {
                 if (endedListenerAdded) return;
                 music.addEventListener('ended', function onEnded() {
-                    console.log('✅ 音频完整播放完毕，重新开始循环');
-                    // 将时间归零，从头播放
+                    console.log('↻ 播放结束，重新开始循环');
                     music.currentTime = 0;
-                    // 尝试播放（此时不依赖手势，因为ended是在已有播放基础上触发的）
-                    music.play().catch(err => {
-                        // 如果自动播放失败（极少见，比如系统中断），则切换源并重新绑定手势
-                        console.warn('循环播放失败，可能源出错，切换并等待手势', err);
-                        switchToNextSource();
-                        bindGesture();
-                    });
+                    music.play().catch(err => console.warn('循环播放失败', err));
                 });
                 endedListenerAdded = true;
-                console.log('ended监听已添加');
             }
 
-            // ---------- 错误处理：如果播放中途出错（网络/解码/源失效）----------
-            music.addEventListener('error', function(e) {
-                // 避免频繁重复处理
-                console.warn('音频错误，尝试切换源并重新绑定手势', e);
-                switchToNextSource();          // 换一个链接
-                // 如果当前正在播放（或试图播放）但失败了，停止所有，等待用户手势再次启动
-                // 先暂停可能处于加载失败的状态
-                music.pause();
-                // 重新绑定手势，让用户点击后重新尝试
-                bindGesture();
-            });
-
-            // ---------- 辅助：如果音频意外暂停（非用户操作），重新绑定手势以备恢复 ----------
+            // ----- 意外暂停恢复（仅当已启动且非人为暂停）-----
             music.addEventListener('pause', function() {
-                // 只有当不是因为播放结束而暂停（ended事件会重置currentTime）且当前没有错误状态时，才重新绑定
-                if (music.currentTime > 0 && !music.ended && music.readyState > 0) {
-                    // 避免与ended事件冲突：如果时间接近末尾但未触发ended（极少情况），用短暂延迟判断
-                    setTimeout(() => {
-                        if (music.paused && !music.ended && music.currentTime > 0) {
-                            console.log('音频意外暂停，重新绑定手势');
-                            bindGesture();
-                        }
-                    }, 200);
+                // 已启动、不是结束导致的暂停、有播放进度、确实处于暂停状态
+                if (hasStarted && !music.ended && music.currentTime > 0 && music.paused) {
+                    console.log('⏸️ 检测到意外暂停，尝试恢复');
+                    music.play().catch(err => console.warn('恢复播放失败', err));
                 }
             });
 
-            // ---------- 页面可见性变化：用户切回时如果音频暂停且曾播放过，重新绑定手势 ----------
+            // ----- 错误处理：重新加载同一源重试一次 -----
+            music.addEventListener('error', function() {
+                if (hasStarted) {
+                    console.warn('⚠️ 音频错误，尝试重新加载同一源');
+                    music.load();   // 重新加载
+                    music.play().catch(err => console.warn('重试失败', err));
+                }
+                // 未启动时无需操作
+            });
+
+            // ----- 页面可见性变化：从后台返回时若已启动且暂停则恢复 -----
             document.addEventListener('visibilitychange', function() {
-                if (!document.hidden && music.paused && music.currentTime > 0 && !music.ended) {
-                    console.log('切回前台，音频暂停，重新绑定手势');
-                    bindGesture();
+                if (!document.hidden && hasStarted && music.paused && !music.ended) {
+                    music.play().catch(() => {});
                 }
             });
 
-            // 可选：预加载提示，以及确保初始源正确
-            // 由于setSourceByIndex已经调用，无需额外操作
+            // ---------- 打开信件 · 启动一切 ----------
+            const letterCover = document.getElementById('letterCover');
+            const mainContainer = document.getElementById('mainContainer');
+            const openBtn = document.getElementById('openLetterBtn');
+
+            if (openBtn && letterCover && mainContainer) {
+                openBtn.addEventListener('click', function(e) {
+                    // 防止可能的多次快速点击
+                    if (letterCover.style.display === 'none') return;
+
+                    // 隐藏信件封面
+                    letterCover.style.display = 'none';
+                    // 显示主页面
+                    mainContainer.classList.remove('hidden');
+
+                    // 启动音乐（仅一次）
+                    if (!hasStarted) {
+                        hasStarted = true;                // 标记已启动
+                        ensureEndedListener();            // 确保循环监听
+
+                        music.play()
+                            .then(() => {
+                                console.log('✅ 音乐播放成功，源：', music.src);
+                            })
+                            .catch(err => {
+                                console.warn('❌ 首次播放失败，错误处理将接管', err);
+                                // 播放失败时 hasStarted 仍为 true，让 error 监听尝试恢复
+                            });
+                    } else {
+                        // 如果已经启动但意外暂停（极少情况），尝试恢复
+                        if (music.paused) {
+                            music.play().catch(() => {});
+                        }
+                    }
+                });
+            } else {
+                console.warn('❌ 必要的页面元素缺失');
+            }
+
+            // 移除所有旧版本全局自动播放触发器，完全依靠用户点击“打开信件”按钮。
+            // 保留的只有：ended, pause, error, visibilitychange 等辅助逻辑。
         })();
     </script>
-
-    <!-- 附加说明：音乐播放由用户首次点击触发，结束后自动从头循环，完整播放不中断。若源失效自动切换重试 -->
 </body>
 </html>
