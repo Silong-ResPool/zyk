@@ -186,11 +186,11 @@
             z-index: -1;
         }
     </style>
-    <!-- 保留原始注释：徐佳莹《到此为止》原唱 背景音乐 -->
+    <!-- 背景音乐：徐佳莹《到此为止》-->
 </head>
 <body>
-    <!-- 背景音乐：完全隐藏，无任何控件，使用您仓库中的两个地址（网易云+备用） -->
-    <audio id="bgMusic" preload="auto" loop hidden>
+    <!-- 完全隐藏的audio元素，无loop属性，由JS实现完整循环 -->
+    <audio id="bgMusic" preload="auto" hidden>
         <!-- 您的原地址1：网易云外链 -->
         <source src="https://music.163.com/song/media/outer/url?id=526081111.mp3" type="audio/mpeg">
         <!-- 您的原地址2：GitHub仓库备用 -->
@@ -257,26 +257,83 @@
             const music = document.getElementById('bgMusic');
             if (!music) return;
 
-            // 初始音量 30% 柔和
+            // ---------- 配置 ----------
+            // 备选源列表（按优先级，与<source>顺序一致，用于手动切换）
+            const sourceList = [
+                'https://music.163.com/song/media/outer/url?id=526081111.mp3',
+                'https://silong-respool.github.io/zyk/到此为止.mp3'
+            ];
+            let currentSourceIdx = 0;          // 当前正在使用的源索引
+            let endedListenerAdded = false;     // 确保只添加一次ended监听
+            let gestureBound = true;             // 标记手势监听器是否已绑定（默认绑定）
+
+            // 移除原有的 loop 属性，改用 JS 控制完整播放后循环
+            music.removeAttribute('loop');
+
+            // 初始音量 30%
             music.volume = 0.3;
 
-            // ----- 手势播放（核心：用户首次点击/触摸时播放背景音乐，不换源）-----
+            // ---------- 工具函数：切换到指定索引的源 ----------
+            function setSourceByIndex(index) {
+                // 循环确保索引有效
+                if (index >= sourceList.length) index = 0;      // 如果两个都失败，从头再来
+                if (index < 0) index = 0;
+                const newSrc = sourceList[index];
+                // 只有真正变化时才重新设置，避免无谓的load
+                if (music.src !== newSrc && !music.src.endsWith(newSrc)) {
+                    music.src = newSrc;
+                    music.load();   // 重新加载
+                    currentSourceIdx = index;
+                    console.log(`切换到源[${index}]: ${newSrc}`);
+                }
+            }
+
+            // 切换到下一个源（轮流尝试）
+            function switchToNextSource() {
+                let nextIdx = currentSourceIdx + 1;
+                if (nextIdx >= sourceList.length) nextIdx = 0;   // 形成一个环，无限重试
+                setSourceByIndex(nextIdx);
+            }
+
+            // 初始设置：以第一个源为主（虽然<source>标签存在，但为了防止浏览器默认行为不一致，直接赋值src）
+            setSourceByIndex(0);
+
+            // ---------- 手势管理：绑定/解绑点击/触摸 ----------
+            function bindGesture() {
+                if (gestureBound) return;
+                document.addEventListener('click', playHandler);
+                document.addEventListener('touchstart', playHandler, { passive: true });
+                gestureBound = true;
+                console.log('手势监听已绑定');
+            }
+
+            function unbindGesture() {
+                if (!gestureBound) return;
+                document.removeEventListener('click', playHandler);
+                document.removeEventListener('touchstart', playHandler);
+                gestureBound = false;
+                console.log('手势监听已解绑');
+            }
+
+            // ---------- 核心播放函数：由手势触发 ----------
             function playMusic() {
                 if (music.paused) {
                     music.play()
                         .then(() => {
-                            // 播放成功后移除监听，避免重复触发
-                            document.removeEventListener('click', playHandler);
-                            document.removeEventListener('touchstart', playHandler);
+                            console.log('播放成功，源：', music.src);
+                            // 播放成功 -> 解绑手势（避免重复触发），并确保ended监听
+                            unbindGesture();
+                            ensureEndedListener();
                         })
                         .catch(err => {
-                            // 播放失败（比如用户未交互），保留监听等待下次手势
-                            console.log('等待用户交互后播放', err);
+                            // 播放失败（可能是源无效或浏览器限制），尝试切换源并重新绑定手势，等待用户再次点击
+                            console.warn('播放失败，切换源并等待下次手势', err);
+                            switchToNextSource();          // 换一个源
+                            bindGesture();                  // 确保手势还在（可能已被解绑）
                         });
                 } else {
-                    // 已经在播放，移除监听
-                    document.removeEventListener('click', playHandler);
-                    document.removeEventListener('touchstart', playHandler);
+                    // 已经在播放，解绑手势即可
+                    unbindGesture();
                 }
             }
 
@@ -284,30 +341,67 @@
                 playMusic();
             }
 
-            // 绑定手势事件（点击和触摸）
-            document.addEventListener('click', playHandler);
-            document.addEventListener('touchstart', playHandler, { passive: true });
+            // 首次绑定手势（用户点击页面任意处即可触发）
+            bindGesture();
 
-            // 如果音乐因为某些原因暂停（非用户主动），可以重新绑定手势
+            // ---------- 保证完整播放完再循环 (ended 事件) ----------
+            function ensureEndedListener() {
+                if (endedListenerAdded) return;
+                music.addEventListener('ended', function onEnded() {
+                    console.log('✅ 音频完整播放完毕，重新开始循环');
+                    // 将时间归零，从头播放
+                    music.currentTime = 0;
+                    // 尝试播放（此时不依赖手势，因为ended是在已有播放基础上触发的）
+                    music.play().catch(err => {
+                        // 如果自动播放失败（极少见，比如系统中断），则切换源并重新绑定手势
+                        console.warn('循环播放失败，可能源出错，切换并等待手势', err);
+                        switchToNextSource();
+                        bindGesture();
+                    });
+                });
+                endedListenerAdded = true;
+                console.log('ended监听已添加');
+            }
+
+            // ---------- 错误处理：如果播放中途出错（网络/解码/源失效）----------
+            music.addEventListener('error', function(e) {
+                // 避免频繁重复处理
+                console.warn('音频错误，尝试切换源并重新绑定手势', e);
+                switchToNextSource();          // 换一个链接
+                // 如果当前正在播放（或试图播放）但失败了，停止所有，等待用户手势再次启动
+                // 先暂停可能处于加载失败的状态
+                music.pause();
+                // 重新绑定手势，让用户点击后重新尝试
+                bindGesture();
+            });
+
+            // ---------- 辅助：如果音频意外暂停（非用户操作），重新绑定手势以备恢复 ----------
             music.addEventListener('pause', function() {
-                if (music.currentTime > 0 && !music.ended) {
-                    document.addEventListener('click', playHandler);
-                    document.addEventListener('touchstart', playHandler);
+                // 只有当不是因为播放结束而暂停（ended事件会重置currentTime）且当前没有错误状态时，才重新绑定
+                if (music.currentTime > 0 && !music.ended && music.readyState > 0) {
+                    // 避免与ended事件冲突：如果时间接近末尾但未触发ended（极少情况），用短暂延迟判断
+                    setTimeout(() => {
+                        if (music.paused && !music.ended && music.currentTime > 0) {
+                            console.log('音频意外暂停，重新绑定手势');
+                            bindGesture();
+                        }
+                    }, 200);
                 }
             });
 
-            // 处理页面可见性变化：当用户切回页面时，如果音乐已暂停且曾播放过，重新绑定手势
+            // ---------- 页面可见性变化：用户切回时如果音频暂停且曾播放过，重新绑定手势 ----------
             document.addEventListener('visibilitychange', function() {
-                if (!document.hidden && music.paused && music.currentTime > 0) {
-                    document.addEventListener('click', playHandler);
-                    document.addEventListener('touchstart', playHandler);
+                if (!document.hidden && music.paused && music.currentTime > 0 && !music.ended) {
+                    console.log('切回前台，音频暂停，重新绑定手势');
+                    bindGesture();
                 }
             });
 
-            // 预加载提示（可选）：音乐源由浏览器自动按顺序尝试，无需额外代码
+            // 可选：预加载提示，以及确保初始源正确
+            // 由于setSourceByIndex已经调用，无需额外操作
         })();
     </script>
 
-    <!-- 附加说明：音乐地址已完全恢复为您原来的两个链接，仅优化了播放控制，确保背景播放无界面 -->
+    <!-- 附加说明：音乐播放由用户首次点击触发，结束后自动从头循环，完整播放不中断。若源失效自动切换重试 -->
 </body>
 </html>
