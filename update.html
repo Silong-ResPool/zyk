@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>版本更新</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background: linear-gradient(180deg, #10002B 0%, #240046 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 顶部栏 */
+        .header {
+            padding: 20px 16px;
+            text-align: center;
+            background: rgba(123, 44, 191, 0.15);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 78, 221, 0.2);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #C77DFF, #9D4EDD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 主容器 */
+        .container {
+            padding: 24px 16px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 版本信息卡片 */
+        .version-card {
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(157, 78, 221, 0.3);
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .version-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #C77DFF, #7B2CBF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .version-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #E0AAFF;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 下载按钮 */
+        .download-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #7B2CBF, #9D4EDD);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123, 44, 191, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 更新日志区域 */
+        .log-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 日志分类 */
+        .log-category {
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #C77DFF;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .log-list {
+            padding-left: 22px;
+        }
+
+        .log-item {
+            font-size: 14px;
+            color: #E0AAFF;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* 历史版本折叠 */
+        .history-section {
+            background: rgba(123, 44, 191, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .history-header {
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .history-header span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .history-header .arrow {
+            transition: transform 0.3s ease;
+            color: #C77DFF;
+        }
+
+        .history-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 16px;
+        }
+
+        .history-content.show {
+            max-height: 1000px;
+            padding-bottom: 16px;
+        }
+
+        .history-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(157, 78, 221, 0.1);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-version {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-version .time {
+            font-size: 12px;
+            color: #C77DFF;
+            font-weight: normal;
+        }
+
+        .history-desc {
+            font-size: 13px;
+            color: #E0AAFF;
+            line-height: 1.5;
+        }
+
+        /* 底部提示 */
+        .footer {
+            text-align: center;
+            padding: 20px 16px 40px;
+            font-size: 12px;
+            color: #9D4EDD;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>版本更新</h1>
+    </div>
+
+    <div class="container">
+        <!-- 最新版本信息 -->
+        <div class="version-card">
+            <div class="version-badge">最新版本</div>
+            <div class="version-number">7.0.0</div>
+            <div class="version-meta">
+                <div class="meta-item">📅 2026-03-14</div>
+                <div class="meta-item">📦 12.5MB</div>
+            </div>
+            <button class="download-btn" onclick="window.open('你的APK下载链接', '_blank')">
+                立即下载更新
+            </button>
+        </div>
+
+        <!-- 更新日志 -->
+        <div class="log-section">
+            <div class="section-title">📝 本次更新内容</div>
+
+            <div class="log-category">
+                <div class="category-title">✨ 新增功能</div>
+                <ul class="log-list">
+                    <li class="log-item">新增资源嗅探功能，支持捕获页面内图片、视频、音频等资源，一键下载保存</li>
+                    <li class="log-item">新增自定义广告屏蔽功能，支持点击元素一键添加屏蔽规则</li>
+                    <li class="log-item">新增夜间模式，支持页面一键反色，夜间浏览更护眼</li>
+                    <li class="log-item">新增页面收藏功能，可快速保存常用页面</li>
+                    <li class="log-item">新增浏览器UA自定义功能，支持一键切换PC/移动端标识</li>
+                </ul>
+            </div>
+
+            <div class="log-category">
+                <div class="category-title">🔧 体验优化</div>
+                <ul class="log-list">
+                    <li class="log-item">优化加速器节点连接稳定性，提升海外线路访问速度</li>
+                    <li class="log-item">优化WebView页面加载性能，减少卡顿与白屏时间</li>
+                    <li class="log-item">优化全屏视频播放体验，支持自动横屏与沉浸模式</li>
+                    <li class="log-item">优化半透明UI界面，适配不同屏幕尺寸与系统版本</li>
+                    <li class="log-item">优化本地资源加载逻辑，提升内置页面打开速度</li>
+                </ul>
+            </div>
+
+            <div class="log-category">
+                <div class="category-title">🐛 问题修复</div>
+                <ul class="log-list">
+                    <li class="log-item">修复部分机型悬浮窗权限申请异常的问题</li>
+                    <li class="log-item">修复Android 14系统WebView兼容性问题</li>
+                    <li class="log-item">修复页面加载失败后无法正常刷新的问题</li>
+                    <li class="log-item">修复夜间模式下图片显示异常的问题</li>
+                    <li class="log-item">修复部分网站视频无法全屏播放的问题</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 历史版本 -->
+        <div class="history-section">
+            <div class="history-header" onclick="toggleHistory()">
+                <span>📜 历史版本</span>
+                <span class="arrow" id="historyArrow">▼</span>
+            </div>
+            <div class="history-content" id="historyContent">
+                <div class="history-item">
+                    <div class="history-version">
+                        v6.2.0
+                        <span class="time">2026-02-20</span>
+                    </div>
+                    <div class="history-desc">
+                        优化了代理配置功能，修复了部分页面加载异常的问题，提升了应用整体稳定性。
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-version">
+                        v6.1.0
+                        <span class="time">2026-01-15</span>
+                    </div>
+                    <div class="history-desc">
+                        新增页面缩放调节功能，优化了浏览历史记录管理，修复了已知的崩溃问题。
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-version">
+                        v6.0.0
+                        <span class="time">2025-12-30</span>
+                    </div>
+                    <div class="history-desc">
+                        全新UI界面改版，升级了内核版本，优化了网络请求逻辑，提升了页面加载速度。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        安装包为APK格式，下载完成后请手动安装更新
+    </div>
+
+    <script>
+        // 历史版本折叠切换
+        function toggleHistory() {
+            const content = document.getElementById('historyContent');
+            const arrow = document.getElementById('historyArrow');
+            content.classList.toggle('show');
+            arrow.style.transform = content.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0)';
+        }
+    </script>
+</body>
+</html>

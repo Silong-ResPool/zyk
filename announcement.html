@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>应用公告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background: linear-gradient(180deg, #10002B 0%, #240046 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 顶部栏 */
+        .header {
+            padding: 20px 16px;
+            text-align: center;
+            background: rgba(123, 44, 191, 0.15);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 78, 221, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: linear-gradient(90deg, #C77DFF, #9D4EDD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 公告容器 */
+        .container {
+            padding: 20px 16px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 公告卡片 */
+        .notice-card {
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .notice-card:hover {
+            border-color: rgba(199, 125, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 公告标题 */
+        .notice-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notice-title::before {
+            content: "📢";
+            font-size: 16px;
+        }
+
+        /* 公告时间 */
+        .notice-time {
+            font-size: 12px;
+            color: #C77DFF;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        /* 公告内容 */
+        .notice-content {
+            font-size: 14px;
+            color: #E0AAFF;
+            line-height: 1.8;
+            word-break: break-word;
+        }
+
+        .notice-content p {
+            margin-bottom: 10px;
+        }
+
+        .notice-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 置顶标签 */
+        .tag-top {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.8);
+            color: #FFFFFF;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .tag-new {
+            display: inline-block;
+            background: rgba(157, 78, 221, 0.8);
+            color: #FFFFFF;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        /* 底部提示 */
+        .footer {
+            text-align: center;
+            padding: 20px 16px 40px;
+            font-size: 12px;
+            color: #9D4EDD;
+            opacity: 0.7;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #9D4EDD;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>应用公告</h1>
+    </div>
+
+    <div class="container">
+        <!-- 置顶公告 -->
+        <div class="notice-card">
+            <div class="notice-title">
+                重要通知：应用功能更新说明
+                <span class="tag-top">置顶</span>
+            </div>
+            <div class="notice-time">2026-03-10 12:00</div>
+            <div class="notice-content">
+                <p>各位用户大家好，本次应用更新带来了全新的资源嗅探、广告屏蔽功能，优化了页面加载速度与加速器节点稳定性。</p>
+                <p>请大家及时更新至最新版本，体验更流畅的服务。如有使用问题，可通过应用内反馈渠道联系我们。</p>
+                <p>感谢大家的支持与理解！</p>
+            </div>
+        </div>
+
+        <!-- 普通公告 -->
+        <div class="notice-card">
+            <div class="notice-title">
+                节点维护完成通知
+                <span class="tag-new">最新</span>
+            </div>
+            <div class="notice-time">2026-03-08 18:30</div>
+            <div class="notice-content">
+                <p>加速器节点已完成维护优化，提升了海外线路的连接速度与稳定性，解决了部分地区连接超时的问题。</p>
+                <p>如仍有连接异常，请尝试切换节点或重启应用。</p>
+            </div>
+        </div>
+
+        <div class="notice-card">
+            <div class="notice-title">
+                资源嗅探功能上线公告
+            </div>
+            <div class="notice-time">2026-03-01 09:00</div>
+            <div class="notice-content">
+                <p>应用新增资源嗅探功能，开启悬浮窗后可自动捕获页面内的图片、视频、音频等资源，支持一键下载保存。</p>
+                <p>使用前请开启悬浮窗权限，权限开启后重启应用即可生效。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        最终解释权归应用官方所有
+    </div>
+</body>
+</html>
