@@ -10,29 +10,39 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
-<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
+<!-- 本地 Ruffle 加载配置（适配 assets/www 目录） -->
 <script>
-window.RufflePlayerConfig = {
-    quality: "high",
-    wmode: "opaque",
-    allowScriptAccess: "sameDomain",
-    frameRate: 60,
-    renderMode: "canvas",
-    preferHardware: true,
-    contextMode: "lost",
-    preserveDrawingBuffer: true,
-    forceRedraw: false,
-    backgroundColor: "#0A001A",
-    letterbox: "off",
-    scale: "showAll",
-    forceScale: false,
-    autoplay: true,
-    unmuteOverlay: "hidden",
-    warnOnUnsupportedContent: false,
-    contextMenu: false,
-    splashScreen: false
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+// 核心路径配置（关键：指向本地 assets 目录）
+publicPath: "./",
+// 渲染与性能
+quality: "high",
+renderMode: "webgpu", // 优先 WebGPU， fallback 到 canvas
+preferHardware: true,
+frameRate: 60,
+backgroundColor: "#0A001A",
+// 交互与显示
+wmode: "opaque",
+allowScriptAccess: "sameDomain",
+letterbox: "off",
+scale: "showAll",
+forceScale: false,
+preserveDrawingBuffer: true,
+forceRedraw: false,
+contextMode: "lost",
+// 自动播放与体验
+autoplay: "on",
+unmuteOverlay: "always",
+warnOnUnsupportedContent: false,
+contextMenu: false,
+splashScreen: false
 };
+</script>
+
+<!-- 远程 Ruffle CDN 加载（如果本地 assets 缺失则降级到 CDN） -->
+<script src="https://unpkg.com/@ruffle-rs/ruffle">
 </script>
 <style>
 :root {
@@ -11160,6 +11170,17 @@ initGameConsole();
 
 // 页面卸载前保存滚动位置
 window.addEventListener('beforeunload', saveScrollPosition);
+
+// 在这里插入 Ruffle 配置代码 ↓
+<script>
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+publicPath: "./",
+autoplay: "on",
+unmuteOverlay: "always"
+};
+</script>
+
 </script>
 </body>
 </html>
