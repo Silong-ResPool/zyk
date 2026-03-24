@@ -1,13 +1,16 @@
 <update>
-    <version>1.0</version>
+    <version>7.0.3</version>
     
-    <log>✨ 新增资源嗅探功能
-✨ 新增广告屏蔽
-✨ 新增夜间模式
-🔧 优化网络速度
-🔧 优化界面流畅度
-🐛 修复已知bug</log>
+    <log>🔄 舍弃原版网页加载拉取
+🔄 更换为更稳定的本地拉取
+🔄 采用JAVA代码编译安装包版本
+✨ 新增顶部拉直功能
+✨ 新增实时拉取最新内容
+✨ 新增游戏盒子拉取最新游戏
+✨ 新增底部导航栏：返回键、刷新键、设置键
+✨ 新增设置弹窗及内部功能
+🔧 优化整体加载与体验
+🐛 修复已知问题</log>
     
-    <!-- ↓↓↓ 这里只需要改成你的 APK 下载地址 ↓↓↓ -->
-    <url>https://你的下载地址.apk</url>
+    <url>https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.3.apk</url>
 </update>
