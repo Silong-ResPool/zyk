@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最近更新游戏</title>
+    <style>
+        /* 这里可以留空，样式由主页面继承 */
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .game-item-left span {
+            font-size: 0.95rem;
+            color: var(--text-color, #fff);
+        }
+        .game-item-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-icon {
+            font-size: 0.85rem;
+            color: #4CAF50;
+        }
+        .edit-btn {
+            background: none;
+            border: none;
+            color: var(--text-color, #fff);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 空链接模板游戏1 -->
+    <div class="game-item" data-url="yxwj/【新游戏1文件名】.swf" data-builtin="true">
+        <div class="game-item-left"><span>《【新游戏1标题】》</span></div>
+        <div class="game-item-right">
+            <span class="status-icon">已缓存</span>
+            <button class="edit-btn" onclick="openEditModal(event, this)">⋮</button>
+        </div>
+    </div>
+
+    <!-- 空链接模板游戏2（可复制多个） -->
+    <div class="game-item" data-url="yxwj/【新游戏2文件名】.swf" data-builtin="true">
+        <div class="game-item-left"><span>《【新游戏2标题】》</span></div>
+        <div class="game-item-right">
+            <span class="status-icon">已缓存</span>
+            <button class="edit-btn" onclick="openEditModal(event, this)">⋮</button>
+        </div>
+    </div>
+</body>
+</html>
