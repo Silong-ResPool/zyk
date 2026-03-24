@@ -11,8 +11,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
 
-<!-- 稳定版 Ruffle CDN 引入（已移除本地配置，解决 .wasm 缺失 + 侧边栏失效问题） -->
-<script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle">
+<script src="./ruffle/ruffle.js"></script>
+<script>
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+wasmUrl: "./ruffle/ruffle.wasm",
+publicPath: "./ruffle/",
+autoplay: "on",
+unmuteOverlay: "hidden",
+backgroundColor: "#0A001A",
+letterbox: "on",
+forceWebGL: true,
+forceWebGL2: true,
+quality: "high",
+antialiasing: true,
+frameRate: 30,
+vsync: true,
+renderBuffer: 2
+};
 </script>
 <style>
 :root {
@@ -2268,6 +2284,17 @@ max-width: 120px !important;
 <span style="white-space: nowrap;">分类导航</span>
 </h2>
 <nav class="sidebar-menu">
+
+<!-- 【最近更新导航】已放在最顶部（磁力搜索正上方），点击后自动平滑滑动到页面最顶部的“最近更新”模块（正好在磁力搜索上方一点点位置） -->
+<div class="menu-group">
+    <a href="javascript:document.getElementById('recent-update-section').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+       class="menu-main" 
+       style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
+        <i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
+        最近更新
+    </a>
+</div>
+
 <div class="menu-group"><a href="#search-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-search" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>磁力搜索</a></div>
 <div class="menu-group"><a href="#comprehensive-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-folder" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>综合网站</a></div>
 <div class="menu-group"><a href="#comics-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-palette" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>漫画网站</a></div>
@@ -2811,7 +2838,58 @@ startAutoPlay();
 <i class="fas fa-info-circle"></i> 链接打不开请尝试使用加速器或更换浏览器访问
 </div>
 </div>
+<!-- 【最近更新模块】放在 <div class="resource-grid" id="search-resource-grid"> 的最开头，作为第一个卡片 -->
+<!-- 这个卡片会自动从 https://silong-respool.github.io/zyk/zjgx.html 拉取上面的 a.website-item 内容显示 -->
+<!-- 改动zjgx.html里的内容，刷新主页就会同步更新最新资源 -->
 
+<!-- 👇 这里我加了 id="recent-update-section" 用于定位 -->
+<div class="category-card" id="recent-update-section" data-module-id="module-recent-update" data-default="true">
+<button class="favorite-btn" data-module="module-recent-update"><i class="far fa-star"></i></button>
+<div class="category-header">
+<div class="category-icon"><i class="fas fa-history"></i></div>
+<h3 class="category-title">最近更新</h3>
+</div>
+<div class="website-list" id="recent-update-list">
+<div class="loading-text" style="padding: 20px; text-align: center; color: #aaa;">
+正在拉取最新资源猛料...
+</div>
+</div>
+</div>
+
+<!-- 【拉取脚本】放在页面底部或原有script区域 -->
+<!-- 这个脚本负责读取 zjgx.html 里的 a 标签并克隆到这里显示 -->
+<!-- 加了小红点 NEW 标签在图片右上角，方便一眼看出是新货 -->
+<script>
+fetch('https://silong-respool.github.io/zyk/zjgx.html')
+.then(res => res.text())
+.then(html => {
+const parser = new DOMParser();
+const doc = parser.parseFromString(html, 'text/html');
+const items = doc.querySelectorAll('a.website-item');  // 拉取所有 a.website-item
+const target = document.getElementById('recent-update-list');
+target.innerHTML = '';  // 清空加载提示
+
+if (items.length === 0) {
+target.innerHTML = '<div style="padding:20px;text-align:center;color:#f66;">仓库里暂时没新资源</div>';
+return;
+}
+
+items.forEach(item => {
+const clone = item.cloneNode(true);
+// 加红点 NEW 标签在图片右上角
+const imgDiv = clone.querySelector('.website-img');
+if (imgDiv) {
+imgDiv.innerHTML += '<span style="position:absolute;top:4px;right:4px;background:red;color:white;font-size:10px;padding:2px 6px;border-radius:10px;line-height:1;">NEW</span>';
+}
+target.appendChild(clone);
+});
+})
+.catch(err => {
+console.error('拉取失败:', err);
+document.getElementById('recent-update-list').innerHTML =
+'<div style="padding:20px;text-align:center;color:#f66;">连不上仓库</div>';
+});
+</script>
 
 <div id="resources-container">
 <section id="search-section" class="category-section active" data-default="true">
