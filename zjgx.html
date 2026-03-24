@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>最近更新资源 - 巳泷专属仓库</title>
+    <title>最近更新资源 - 巳泷专属磁力仓库（纯无审核男同色情）</title>
     <!-- 独立 zjgx.html 单文件，直接覆盖上传即可，主页面侧边栏和磁力资源区都会自动拉取显示 -->
     <style>
         body { margin:0; padding:0; background:#111; font-family:Arial,sans-serif; }
@@ -91,5 +91,29 @@
 
 <!-- 【结束】 - 侧边栏点击“最近更新”就会跳到这个拉取的内容区，所有网站中国直达无审核，随时加新条目放最上面即可 -->
 
+<script>
+    // 巳泷的跳转控制逻辑
+    document.querySelectorAll('.website-item').forEach(item =&gt; {
+        item.addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止立即跳转
+            const targetUrl = this.getAttribute('href');
+            const overlay = document.getElementById('loading-overlay');
+            
+            // 显示加载动画
+            overlay.style.display = 'flex';
+            
+            // 模拟“欲望加载”过程
+            setTimeout(() =&gt; {
+                window.location.href = targetUrl;
+            }, 1500); // 1.5秒后执行跳转
+        });
+    });
+
+    // 随机色块，让UI更有“迷幻感”
+    const colors = ['#7B4F9D', '#4b2c63', '#9b59b6', '#8e44ad', '#2c3e50'];
+    document.querySelectorAll('.website-img').forEach(img =&gt; {
+        img.style.background = `linear-gradient(135deg, ${colors[Math.floor(Math.random()*colors.length)]}, #000)`;
+    });
+</script>
 </body>
 </html>
