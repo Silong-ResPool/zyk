@@ -2287,12 +2287,12 @@ max-width: 120px !important;
 
 <!-- 【最近更新导航】已放在最顶部（磁力搜索正上方），点击后自动平滑滑动到页面最顶部的“最近更新”模块（正好在磁力搜索上方一点点位置） -->
 <div class="menu-group">
-    <a href="javascript:document.getElementById('recent-update-section').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-       class="menu-main" 
-       style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
-        <i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
-        最近更新
-    </a>
+<a href="javascript:document.getElementById('recent-update-section').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+class="menu-main"
+style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
+<i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
+最近更新
+</a>
 </div>
 
 <div class="menu-group"><a href="#search-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-search" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>磁力搜索</a></div>
@@ -2348,10 +2348,10 @@ max-width: 120px !important;
 <div id="gameContainer"></div>
 </div>
 <div class="controls">
-<button class="btn" id="menuBtn">☰ 游戏表</button>
-<button class="btn" id="addBtn">✚ 手动加</button>
-<button class="btn" id="refreshBtn">↻ 刷新页</button>
-<button class="btn" id="fullscreenBtn">⛶ 开全屏</button>
+<button class="btn" id="menuBtn">☰ 游戏</button>
+<button class="btn" id="addBtn">✚ 添加</button>
+<button class="btn" id="refreshBtn">↻ 刷新</button>
+<button class="btn" id="fullscreenBtn">⛶ 全屏</button>
 </div>
 </div>
 </div>
@@ -2360,6 +2360,16 @@ max-width: 120px !important;
 <div class="modal-content">
 <div class="modal-header">游戏库♂</div>
 <div class="game-list" id="gameList">
+
+<!-- 最近更新（紫罗兰框 + 白色文字版 + 标题居中）-->
+<div style="padding: 8px 12px; font-weight: bold; font-size: 1rem; color: var(--text-color); text-align: center;">更新检查❤</div>
+<div id="recent-games" style="margin-bottom: 12px; border: 1px solid #9c27b0; border-radius: 12px; overflow: hidden; background: rgba(156, 39, 176, 0.1);">
+  <div class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
+    正在拉取最新游戏...
+  </div>
+</div>
+
+<!-- 下面是你原来的所有游戏，不动 -->
 <div class="game-item" data-url="yxwj/yx-1.swf" data-builtin="true">
 <div class="game-item-left"><span>《Snow Basch Game》</span></div>
 <div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
@@ -2495,6 +2505,30 @@ max-width: 120px !important;
 </div>
 </div>
 
+<!-- 拉取最近更新游戏 -->
+<script>
+fetch('https://silong-respool.github.io/zyk/yxgx.html')
+  .then(res => res.text())
+  .then(html => {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const items = div.querySelectorAll('.game-item');
+    const target = document.getElementById('recent-games');
+    target.innerHTML = ''; // 清空加载提示
+
+    if (items.length === 0) {
+      target.innerHTML = '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+      return;
+    }
+
+    items.forEach(i => target.appendChild(i.cloneNode(true)));
+  })
+  .catch(err => {
+    console.error('拉取失败:', err);
+    document.getElementById('recent-games').innerHTML =
+      '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+  });
+</script>
 
 <div class="internal-modal" id="actionModal">
 <div class="modal-content" style="max-width: 400px;">
