@@ -2361,10 +2361,10 @@ style="display:flex; align-items:center; padding:12px 15px; color:var(--text-col
 <div class="modal-header">游戏库♂</div>
 <div class="game-list" id="gameList">
 
-<!-- 最近更新（紫罗兰框 + 白色文字版 + 标题居中）-->
-<div style="padding: 8px 12px; font-weight: bold; font-size: 1rem; color: var(--text-color); text-align: center;">更新检查❤</div>
-<div id="recent-games" style="margin-bottom: 12px; border: 1px solid #9c27b0; border-radius: 12px; overflow: hidden; background: rgba(156, 39, 176, 0.1);">
-  <div class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
+<!-- 最近更新（暗紫罗兰框 + 白色文字版 + 标题居中 + 成功后隐藏框）-->
+<div id="update-title" style="padding: 8px 12px; font-weight: bold; font-size: 1rem; color: var(--text-color); text-align: center;">更新检查❤</div>
+<div id="recent-games-wrapper" style="margin-bottom: 12px; border: 1px solid #7a1fa2; border-radius: 12px; overflow: hidden; background: rgba(102, 31, 153, 0.15);">
+  <div id="recent-games" class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
     正在拉取最新游戏...
   </div>
 </div>
@@ -2513,18 +2513,39 @@ fetch('https://silong-respool.github.io/zyk/yxgx.html')
     const div = document.createElement('div');
     div.innerHTML = html;
     const items = div.querySelectorAll('.game-item');
+    const wrapper = document.getElementById('recent-games-wrapper');
     const target = document.getElementById('recent-games');
+    const title = document.getElementById('update-title');
     target.innerHTML = ''; // 清空加载提示
+
+    // 替换标题文本
+    title.textContent = '已拉取最新内容';
 
     if (items.length === 0) {
       target.innerHTML = '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
       return;
     }
 
+    // 拉取成功：移除框样式，让新游戏和下方列表融为一体
+    wrapper.style.border = 'none';
+    wrapper.style.background = 'transparent';
+    wrapper.style.borderRadius = '0';
+    target.style.padding = '0';
+    target.style.textAlign = 'left';
+
     items.forEach(i => target.appendChild(i.cloneNode(true)));
+
+    // 添加底部分隔线
+    const divider = document.createElement('div');
+    divider.style.height = '1px';
+    divider.style.background = 'rgba(122, 31, 162, 0.3)';
+    divider.style.margin = '12px 0';
+    wrapper.appendChild(divider);
   })
   .catch(err => {
     console.error('拉取失败:', err);
+    const title = document.getElementById('update-title');
+    title.textContent = '已拉取最新内容';
     document.getElementById('recent-games').innerHTML =
       '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
   });
