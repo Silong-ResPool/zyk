@@ -1889,6 +1889,9 @@ max-width: 120px !important;
 </div>
 </div>
 </div>
+
+<!-- ================== 搜索功能开始 ================== -->
+
 <div id="search-options-modal" class="modal">
 <div class="modal-content">
 <span class="close" aria-label="关闭">&times;</span>
@@ -1899,15 +1902,89 @@ max-width: 120px !important;
 <div class="search-engine-options">
 <div class="search-engine-option" data-type="site">
 <i class="fas fa-home"></i>
-<div>站内搜索</div>
+<div>本站</div>
 </div>
-<div class="search-engine-option" data-type="yandex">
-<i class="fab fa-yandex"></i>
-<div>俄罗斯搜索</div>
+<div class="search-engine-option" data-type="yandex-web">
+<i class="fas fa-globe"></i>
+<div>俄罗斯网页</div>
+</div>
+<div class="search-engine-option" data-type="yandex-img">
+<i class="fas fa-image"></i>
+<div>俄罗斯图像</div>
+</div>
+<div class="search-engine-option" data-type="yandex-video">
+<i class="fas fa-video"></i>
+<div>俄罗斯视频</div>
 </div>
 </div>
 </div>
 </div>
+
+
+<script>
+// 搜索功能
+function setupSearch() {
+  const searchBtn = document.getElementById('site-search-btn');
+  if (!searchBtn) return;
+
+  searchBtn.addEventListener('click', function() {
+    const query = document.getElementById('site-search').value.trim().toLowerCase();
+    if (query) {
+      document.getElementById('search-options-modal').style.display = 'block';
+    }
+  });
+
+  document.querySelectorAll('.search-engine-option').forEach(option => {
+    option.addEventListener('click', function() {
+      const query = document.getElementById('site-search').value.trim();
+      if (!query) return;
+
+      const type = this.dataset.type;
+      let url;
+
+      if (type === 'site') {
+        const results = searchSite(query);
+        if (results.length > 0) {
+          const firstResult = results[0];
+          firstResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          highlightResults(results);
+        } else {
+          showMessage('未找到匹配结果', 'warning');
+        }
+        document.getElementById('search-options-modal').style.display = 'none';
+        return;
+      } else if (type === 'yandex-web') {
+        url = `https://yandex.com/search?text=${encodeURIComponent(query)}&cc=ru`;
+      } else if (type === 'yandex-img') {
+        url = `https://yandex.com/images/search?text=${encodeURIComponent(query)}&cc=ru`;
+      } else if (type === 'yandex-video') {
+        url = `https://yandex.com/video/search?text=${encodeURIComponent(query)}&cc=ru`;
+      }
+
+      if (url) {
+        showLoader();
+        setTimeout(() => {
+          window.open(url, '_blank');
+          hideLoader();
+        }, 500);
+      }
+
+      document.getElementById('search-options-modal').style.display = 'none';
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.search-box') && !e.target.closest('.modal-content')) {
+      const modal = document.getElementById('search-options-modal');
+      if (modal) modal.style.display = 'none';
+    }
+  });
+}
+
+</script>
+
+<!-- ================== 搜索功能结束 ================== -->
+
 <div id="filter-modal" class="modal">
 <div class="modal-content">
 <span class="close" aria-label="关闭">&times;</span>
@@ -2905,7 +2982,7 @@ startAutoPlay();
 <div id="resources-container">
 <section id="search-section" class="category-section active" data-default="true">
 <div class="section-header">
-<h2 class="section-title">最近更新</h2>
+<h2 class="section-title">最近更新【AI拉取】</h2>
 </div>
 
 <!-- 【最近更新模块】放在 <div class="resource-grid" id="search-resource-grid"> 的最开头，作为第一个卡片 -->
@@ -2917,7 +2994,7 @@ startAutoPlay();
 <button class="favorite-btn" data-module="module-recent-update"><i class="far fa-star"></i></button>
 <div class="category-header">
 <div class="category-icon"><i class="fas fa-history"></i></div>
-<h3 class="category-title">最近更新【AI拉取】</h3>
+<h3 class="category-title">最近更新</h3>
 </div>
 <div class="website-list" id="recent-update-list">
 <div class="loading-text" style="padding: 20px; text-align: center; color: #aaa;">
@@ -9319,52 +9396,6 @@ function showSuccessMessage(message) {
 showMessage(message, 'success');
 }
 
-// 搜索功能
-function setupSearch() {
-const searchBtn = document.getElementById('site-search-btn');
-if (!searchBtn) return;
-
-searchBtn.addEventListener('click', function() {
-const query = document.getElementById('site-search').value.trim().toLowerCase();
-if (query) {
-document.getElementById('search-options-modal').style.display = 'block';
-}
-});
-
-document.querySelectorAll('.search-engine-option').forEach(option => {
-option.addEventListener('click', function() {
-const query = document.getElementById('site-search').value.trim();
-if (!query) return;
-
-const type = this.dataset.type;
-if (type === 'site') {
-const results = searchSite(query);
-if (results.length > 0) {
-const firstResult = results[0];
-firstResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-highlightResults(results);
-} else {
-showMessage('未找到匹配结果', 'warning');
-}
-} else {
-let engineUrl = 'https://yandex.com/search?text=';
-showLoader();
-setTimeout(() => {
-window.open(engineUrl + encodeURIComponent(query), '_blank');
-hideLoader();
-}, 500);
-}
-document.getElementById('search-options-modal').style.display = 'none';
-});
-});
-
-document.addEventListener('click', function(e) {
-if (!e.target.closest('.search-box') && !e.target.closest('.modal-content')) {
-const modal = document.getElementById('search-options-modal');
-if (modal) modal.style.display = 'none';
-}
-});
-}
 
 function searchSite(query) {
 const results = [];
