@@ -1,16 +1,12 @@
 <update>
-    <version>7.0.3</version>
+    <version>7.0.4</version>
     
-    <log>🔄 舍弃原版网页加载拉取
-🔄 更换为更稳定的本地拉取
-🔄 采用JAVA代码编译安装包版本
-✨ 新增顶部拉直功能
-✨ 新增实时拉取最新内容
-✨ 新增游戏盒子拉取最新游戏
-✨ 新增底部导航栏：返回键、刷新键、设置键
-✨ 新增设置弹窗及内部功能
-🔧 优化整体加载与体验
+    <log>📱 适配平板设备
+🎮 侧边栏游戏盒子新增部分小游戏
+✨ 新增详情页功能
+🌐 网页需在详情页内点击前往网站
+🔧 优化细节体验
 🐛 修复已知问题</log>
     
-    <url>https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.3.apk</url>
+    <url>https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk</url>
 </update>
