@@ -121,6 +121,25 @@
             font-weight: 500;
         }
 
+        .download-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: linear-gradient(90deg, #9D4EDD, #C77DFF);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
         .footer {
             text-align: center;
             padding: 20px 16px 40px;
@@ -152,29 +171,41 @@
     </div>
 
     <div class="container">
+        <!-- 置顶：v7.0.4 最新公告 -->
         <div class="notice-card">
             <div class="notice-title">
-                巳泷资源库 v7.0.3 正式更新
+                巳泷资源库 v7.0.4 正式更新
                 <span class="tag-top">置顶</span>
             </div>
-            <div class="notice-time">2026-03-25 12:00</div>
+            <div class="notice-time">2026-03-28 12:00</div>
             <div class="notice-content">
-                <p>巳泷资源库已更新至 v7.0.3，舍弃原版网页加载拉取，更换为更稳定的本地拉取，采用 JAVA 代码编译安装包版本。</p>
-                <p>新增顶部拉直功能、实时拉取最新内容、游戏盒子拉取最新游戏。</p>
-                <p>新增底部导航栏：返回键、刷新键、设置键，以及设置弹窗内完整功能。</p>
-                <p>更多细节与优化，请到软件内查看体验。</p>
+                <p>📱 适配平板设备</p>
+                <p>🎮 侧边栏游戏盒子新增部分小游戏</p>
+                <p>✨ 新增详情页功能</p>
+                <p>🌐 网页需在详情页内点击前往网站</p>
+                <p>🔧 优化细节体验</p>
+                <p>🐛 修复已知问题</p>
+                <a href="https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk" class="download-btn">
+                    点击下载最新版本
+                </a>
             </div>
         </div>
 
+        <!-- 历史：v7.0.3 公告 -->
         <div class="notice-card">
             <div class="notice-title">
-                关于加载方式重大调整
-                <span class="tag-new">最新</span>
+                巳泷资源库 v7.0.3 正式更新
+                <span class="tag-new">历史</span>
             </div>
-            <div class="notice-time">2026-03-25 11:30</div>
+            <div class="notice-time">2026-03-25 12:00</div>
             <div class="notice-content">
-                <p>本次版本彻底移除网页拉取逻辑，全面改用本地加载 + 实时拉取双模式，大幅提升稳定性与加载速度。</p>
-                <p>旧版本将逐步停止支持，请尽快更新至 v7.0.3 以保证正常使用。</p>
+                <p>🔄 舍弃原版网页加载拉取，更换为更稳定的本地拉取</p>
+                <p>🔄 采用JAVA代码编译安装包版本</p>
+                <p>✨ 新增顶部拉直、实时拉取最新内容、游戏盒子拉取最新游戏</p>
+                <p>✨ 新增底部导航栏：返回、刷新、设置键</p>
+                <p>✨ 新增设置弹窗及内部功能</p>
+                <p>🔧 优化整体加载与体验</p>
+                <p>🐛 修复已知问题</p>
             </div>
         </div>
     </div>
