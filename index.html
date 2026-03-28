@@ -3038,6 +3038,190 @@ document.getElementById('recent-update-list').innerHTML =
 });
 </script>
 
+<!-- ============================================== -->
+<!-- 详情弹窗结构 & 全部功能逻辑 开始 -->
+<!-- ============================================== -->
+
+<div class="modal" id="modal" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+">
+  <div class="modal-content" style="
+    background: linear-gradient(135deg, #1e1a2f 0%, #2a1e3c 100%);
+    width: 90%;
+    max-width: 520px;
+    height: 720px;
+    max-height: 85vh;
+    border-radius: 32px;
+    padding: 0;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(123, 79, 157, 0.3);
+    color: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  ">
+    <div style="height:4px;background:linear-gradient(90deg,#c084fc,#a855f7,#7c3aed);width:100%;flex-shrink:0;"></div>
+    <span id="close" style="position:absolute;right:20px;top:20px;font-size:28px;cursor:pointer;color:rgba(255,255,255,0.7);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1);z-index:10;line-height:1;">&times;</span>
+
+    <div style="padding:32px 28px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0;">
+      <div id="modalImg" style="background:#7B4F9D;width:80px;height:80px;border-radius:24px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px;color:white;">𓂺</div>
+      <h3 id="modalTitle" style="margin:0;font-size:26px;font-weight:700;background:linear-gradient(135deg,#fff,#e9d5ff);-webkit-background-clip:text;background-clip:text;color:transparent;"></h3>
+    </div>
+
+    <div style="flex:1;padding:24px 28px;overflow-y:auto;">
+      <div style="background:rgba(255,255,255,0.05);border-radius:20px;padding:16px 20px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+          <span style="font-size:20px;">🔗</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">网址</div>
+            <span id="modalUrlText" style="font-size:14px;word-break:break-all;color:#d9d2e9;"></span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+          <span style="font-size:20px;">📝</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">简介</div>
+            <span id="modalDesc" style="font-size:15px;line-height:1.5;color:#f0eaff;"></span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+          <span style="font-size:20px;">✨</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">特点</div>
+            <span id="modalFeatures" style="font-size:14px;line-height:1.5;color:#e2d6ff;"></span>
+          </div>
+        </div>
+
+        <div id="passwordBox" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:13px; color:#c4b5fd;">资源解锁密码</div>
+            <button id="copyPwdBtn" style="padding:4px 10px; font-size:12px; background:#7B4F9D; color:#fff; border:none; border-radius:6px; cursor:pointer;">复制密码</button>
+          </div>
+          <div style="margin-top:6px; font-size:14px; color:#e2d6ff;" id="modalPassword"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:0 28px 28px;flex-shrink:0;">
+      <button id="goToWebsite" style="background:linear-gradient(105deg,#7c3aed 0%,#a855f7 100%);color:#fff;border:none;border-radius:60px;padding:14px 24px;font-size:16px;font-weight:600;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(124,58,237,0.4);">
+        🌐 前往网站
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 复制提示 -->
+<div id="copyToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:9999;display:none;white-space:pre-line;"></div>
+
+<style>
+@keyframes modalSlideIn{from{opacity:0;transform:scale(0.96) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-content{animation:modalSlideIn 0.35s cubic-bezier(0.2,0.9,0.4,1.1) forwards;}
+#close:hover{background:rgba(255,255,255,0.25);color:white;transform:rotate(90deg);}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('modal');
+  const closeBtn = document.getElementById('close');
+  const goBtn = document.getElementById('goToWebsite');
+  const copyPwdBtn = document.getElementById('copyPwdBtn');
+  const passwordBox = document.getElementById('passwordBox');
+  const modalPassword = document.getElementById('modalPassword');
+  const modalUrlText = document.getElementById('modalUrlText');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalFeatures = document.getElementById('modalFeatures');
+  const modalImg = document.getElementById('modalImg');
+  const copyToast = document.getElementById('copyToast');
+
+  let currentWebsiteUrl = '';
+  let currentPassword = '';
+
+  window.openDetailModal = function(title, url, desc, features, color, password) {
+    currentWebsiteUrl = url;
+    currentPassword = password;
+    modalTitle.innerText = title;
+    modalUrlText.innerText = url;
+    modalDesc.innerText = desc;
+    modalFeatures.innerText = (features||'').replaceAll('|',' · ');
+    modalImg.style.backgroundColor = color || '#7B4F9D';
+
+    if (password) {
+      passwordBox.style.display = 'block';
+      modalPassword.innerText = password;
+    } else {
+      passwordBox.style.display = 'none';
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => e.target === modal && closeModal());
+
+  copyPwdBtn.addEventListener('click', () => {
+    if (!currentPassword) return;
+    navigator.clipboard.writeText(currentPassword).then(() => {
+      copyToast.textContent = `复制成功！
+该密码用于网页下载资源解锁
+密码: ${currentPassword}`;
+      copyToast.style.display = 'block';
+      setTimeout(() => copyToast.style.display = 'none', 2600);
+    });
+  });
+
+  goBtn.addEventListener('click', () => {
+    if (!currentWebsiteUrl) return;
+    if (typeof addToHistory === 'function') addToHistory(currentWebsiteUrl, modalTitle.innerText);
+    if (typeof saveScrollPosition === 'function') saveScrollPosition();
+    try { history.pushState({scrollPos: window.pageYOffset}, '', window.location.href); } catch(e){}
+    if (typeof showLoader === 'function') showLoader();
+    setTimeout(() => { window.location.href = currentWebsiteUrl; }, 500);
+  });
+
+  function setupWebsiteClickHandlers() {
+    document.querySelectorAll('.website-item').forEach(item => {
+      if (item.dataset.modalBound) return;
+      item.dataset.modalBound = 'true';
+      item.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) return;
+        e.preventDefault();
+        const url = this.dataset.url;
+        const title = this.dataset.title || this.querySelector('.website-name')?.textContent || '未知';
+        const desc = this.dataset.desc || '';
+        const features = this.dataset.features || '';
+        const color = this.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
+        const password = this.dataset.password || '';
+        openDetailModal(title, url, desc, features, color, password);
+      });
+    });
+  }
+
+  setupWebsiteClickHandlers();
+  new MutationObserver(() => setupWebsiteClickHandlers())
+    .observe(document.body, { childList: true, subtree: true });
+});
+</script>
+<!-- ============================================== -->
+<!-- 详情弹窗结构 & 全部功能逻辑 结束 -->
+<!-- ============================================== -->
+
 <div id="resources-container">
 <section id="search-section" class="category-section active" data-default="true">
 <div class="section-header">
@@ -3355,6 +3539,7 @@ data-problems="">
 <a href="https://www.penhuol.com/" class="website-item" data-keywords="喷火龙"
 data-title="喷火龙" data-url="https://www.penhuol.com/"
 data-desc="综合性资源下载平台，提供各类资源的下载服务"
+data-password="要了啤酒喝拖把"
 data-features="资源丰富多样|下载速度稳定|分类清晰明确|持续更新维护"
 data-problems="">
 <div class="website-img" style="background-color: #7B4F9D;">喷火龙</div>
@@ -9811,42 +9996,6 @@ messageEl.textContent = `您确定要删除${type} "${name}" 吗？`;
 document.getElementById('delete-confirm-modal').style.display = 'block';
 }
 
-// 网站点击处理
-function setupWebsiteClickHandlers() {
-document.querySelectorAll('.website-item').forEach(item => {
-item.addEventListener('click', function(e) {
-if (e.target.closest('.favorite-btn')) return;
-e.preventDefault();
-const url = this.dataset.url;
-const title = this.querySelector('.website-name')?.textContent || this.querySelector('.website-img')?.textContent || '未知';
-
-if (url) {
-addToHistory(url, title);
-saveScrollPosition();
-history.pushState({scrollPos: window.pageYOffset}, '', window.location.href);
-showLoader();
-setTimeout(() => {
-window.location.href = url;
-}, 500);
-}
-});
-});
-}
-
-// 加载动画
-function showLoader() {
-const loader = document.getElementById('loader');
-if (loader) {
-loader.classList.add('active');
-}
-}
-
-function hideLoader() {
-const loader = document.getElementById('loader');
-if (loader) {
-loader.classList.remove('active');
-}
-}
 
 // 模态框管理
 function setupModals() {
