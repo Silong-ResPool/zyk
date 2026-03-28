@@ -1922,7 +1922,11 @@ max-width: 120px !important;
 
 
 <script>
-// 搜索功能
+// ==================== 搜索功能模块 ====================
+
+/**
+ * 设置搜索功能
+ */
 function setupSearch() {
   const searchBtn = document.getElementById('site-search-btn');
   if (!searchBtn) return;
@@ -3039,7 +3043,7 @@ document.getElementById('recent-update-list').innerHTML =
 </script>
 
 <!-- ============================================== -->
-<!-- 详情弹窗结构 & 全部功能逻辑 开始 -->
+<!-- 详情弹窗（仅监听主内容卡片 · 侧边栏完全安全） -->
 <!-- ============================================== -->
 
 <div class="modal" id="modal" style="
@@ -3120,7 +3124,6 @@ document.getElementById('recent-update-list').innerHTML =
   </div>
 </div>
 
-<!-- 复制提示 -->
 <div id="copyToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:9999;display:none;white-space:pre-line;"></div>
 
 <style>
@@ -3130,96 +3133,88 @@ document.getElementById('recent-update-list').innerHTML =
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const modal = document.getElementById('modal');
-  const closeBtn = document.getElementById('close');
-  const goBtn = document.getElementById('goToWebsite');
-  const copyPwdBtn = document.getElementById('copyPwdBtn');
-  const passwordBox = document.getElementById('passwordBox');
-  const modalPassword = document.getElementById('modalPassword');
-  const modalUrlText = document.getElementById('modalUrlText');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDesc = document.getElementById('modalDesc');
-  const modalFeatures = document.getElementById('modalFeatures');
-  const modalImg = document.getElementById('modalImg');
-  const copyToast = document.getElementById('copyToast');
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('close');
+const goBtn = document.getElementById('goToWebsite');
+const copyPwdBtn = document.getElementById('copyPwdBtn');
+const passwordBox = document.getElementById('passwordBox');
+const modalPassword = document.getElementById('modalPassword');
+const modalUrlText = document.getElementById('modalUrlText');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalFeatures = document.getElementById('modalFeatures');
+const modalImg = document.getElementById('modalImg');
+const copyToast = document.getElementById('copyToast');
 
-  let currentWebsiteUrl = '';
-  let currentPassword = '';
+let currentWebsiteUrl = '';
+let currentPassword = '';
 
-  window.openDetailModal = function(title, url, desc, features, color, password) {
-    currentWebsiteUrl = url;
-    currentPassword = password;
-    modalTitle.innerText = title;
-    modalUrlText.innerText = url;
-    modalDesc.innerText = desc;
-    modalFeatures.innerText = (features||'').replaceAll('|',' · ');
-    modalImg.style.backgroundColor = color || '#7B4F9D';
+window.openDetailModal = function(title, url, desc, features, color, password) {
+  currentWebsiteUrl = url;
+  currentPassword = password;
+  modalTitle.innerText = title;
+  modalUrlText.innerText = url;
+  modalDesc.innerText = desc;
+  modalFeatures.innerText = (features||'').replaceAll('|',' · ');
+  modalImg.style.backgroundColor = color || '#7B4F9D';
+  passwordBox.style.display = password ? 'block' : 'none';
+  modalPassword.innerText = password || '';
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
 
-    if (password) {
-      passwordBox.style.display = 'block';
-      modalPassword.innerText = password;
-    } else {
-      passwordBox.style.display = 'none';
-    }
+function closeModal() {
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
 
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  };
+closeBtn.onclick = closeModal;
+modal.onclick = e => e.target === modal && closeModal();
 
-  function closeModal() {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => e.target === modal && closeModal());
-
-  copyPwdBtn.addEventListener('click', () => {
-    if (!currentPassword) return;
-    navigator.clipboard.writeText(currentPassword).then(() => {
-      copyToast.textContent = `复制成功！
+copyPwdBtn.onclick = () => {
+  if (!currentPassword) return;
+  navigator.clipboard.writeText(currentPassword).then(() => {
+    copyToast.textContent = `复制成功！
 该密码用于网页下载资源解锁
 密码: ${currentPassword}`;
-      copyToast.style.display = 'block';
-      setTimeout(() => copyToast.style.display = 'none', 2600);
-    });
+    copyToast.style.display = 'block';
+    setTimeout(() => copyToast.style.display = 'none', 2600);
   });
+};
 
-  goBtn.addEventListener('click', () => {
-    if (!currentWebsiteUrl) return;
-    if (typeof addToHistory === 'function') addToHistory(currentWebsiteUrl, modalTitle.innerText);
-    if (typeof saveScrollPosition === 'function') saveScrollPosition();
-    try { history.pushState({scrollPos: window.pageYOffset}, '', window.location.href); } catch(e){}
-    if (typeof showLoader === 'function') showLoader();
-    setTimeout(() => { window.location.href = currentWebsiteUrl; }, 500);
+goBtn.onclick = () => {
+  if (!currentWebsiteUrl) return;
+  location.href = currentWebsiteUrl;
+};
+
+// ==============================================
+// 只监听主内容，完全不碰侧边栏（安全版）
+// ==============================================
+document.addEventListener('DOMContentLoaded', () => {
+  const mainContent = document.querySelector('.layout-body');
+  if (!mainContent) return;
+
+  mainContent.addEventListener('click', (e) => {
+    const card = e.target.closest('.website-item');
+    if (!card) return;
+
+    const isSidebar = card.closest('.sidebar');
+    if (isSidebar) return; // 侧边栏直接跳过
+
+    e.preventDefault();
+    const url = card.dataset.url;
+    const title = card.dataset.title || card.querySelector('.website-name')?.textContent || '未知';
+    const desc = card.dataset.desc || '';
+    const features = card.dataset.features || '';
+    const color = card.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
+    const password = card.dataset.password || '';
+
+    openDetailModal(title, url, desc, features, color, password);
   });
-
-  function setupWebsiteClickHandlers() {
-    document.querySelectorAll('.website-item').forEach(item => {
-      if (item.dataset.modalBound) return;
-      item.dataset.modalBound = 'true';
-      item.addEventListener('click', function(e) {
-        if (e.target.closest('.favorite-btn')) return;
-        e.preventDefault();
-        const url = this.dataset.url;
-        const title = this.dataset.title || this.querySelector('.website-name')?.textContent || '未知';
-        const desc = this.dataset.desc || '';
-        const features = this.dataset.features || '';
-        const color = this.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
-        const password = this.dataset.password || '';
-        openDetailModal(title, url, desc, features, color, password);
-      });
-    });
-  }
-
-  setupWebsiteClickHandlers();
-  new MutationObserver(() => setupWebsiteClickHandlers())
-    .observe(document.body, { childList: true, subtree: true });
 });
 </script>
 <!-- ============================================== -->
-<!-- 详情弹窗结构 & 全部功能逻辑 结束 -->
+<!-- 详情弹窗 结束 -->
 <!-- ============================================== -->
 
 <div id="resources-container">
@@ -9582,18 +9577,31 @@ showMessage(message, 'success');
 }
 
 
+/**
+ * 搜索网站功能（性能优化版）
+ */
 function searchSite(query) {
 const results = [];
 const searchItems = document.querySelectorAll('.website-item');
+
+// 缓存查询结果，避免重复计算
+if (window.searchCache && window.searchCache.query === query) {
+return window.searchCache.results;
+}
+
 searchItems.forEach(item => {
-const nameEl = item.querySelector('.website-name');
-const name = nameEl ? nameEl.textContent.toLowerCase() : item.querySelector('.website-img').textContent.toLowerCase();
-const desc = item.querySelector('.website-desc')?.textContent.toLowerCase() || '';
+// 使用缓存的数据属性，避免重复DOM查询
+const name = (item.dataset.searchName || '').toLowerCase();
+const desc = (item.dataset.searchDesc || '').toLowerCase();
 const keywords = (item.dataset.keywords || '').toLowerCase();
+
 if (name.includes(query) || desc.includes(query) || keywords.includes(query)) {
 results.push(item);
 }
 });
+
+// 缓存搜索结果
+window.searchCache = { query, results };
 return results;
 }
 
@@ -9605,7 +9613,11 @@ setTimeout(() => item.classList.remove('highlight'), 2000);
 });
 }
 
-// 收藏功能
+// ==================== 收藏功能模块 ====================
+
+/**
+ * 设置收藏功能
+ */
 function setupFavorites() {
 document.querySelectorAll('.favorite-btn').forEach(btn => {
 btn.addEventListener('click', function(e) {
@@ -9698,6 +9710,11 @@ const historyJson = localStorage.getItem(STORAGE_KEYS.HISTORY);
 return historyJson ? JSON.parse(historyJson) : [];
 }
 
+// ==================== 历史记录功能模块 ====================
+
+/**
+ * 设置历史记录功能
+ */
 function setupHistory() {
 const historyBtn = document.getElementById('history-btn');
 if (historyBtn) {
@@ -9739,7 +9756,11 @@ container.appendChild(historyItem);
 document.getElementById('history-modal').style.display = 'block';
 }
 
-// 管理功能
+// ==================== 管理功能模块 ====================
+
+/**
+ * 设置管理功能
+ */
 function setupManagement() {
 const manageBtn = document.getElementById('manage-btn');
 if (manageBtn) {
@@ -9996,8 +10017,11 @@ messageEl.textContent = `您确定要删除${type} "${name}" 吗？`;
 document.getElementById('delete-confirm-modal').style.display = 'block';
 }
 
+// ==================== 模态框管理功能模块 ====================
 
-// 模态框管理
+/**
+ * 设置模态框管理功能
+ */
 function setupModals() {
 const modals = [
 'add-category', 'add-module', 'add-website', 'search-options', 'filter',
@@ -10055,7 +10079,11 @@ select.appendChild(option);
 });
 }
 
-// 图片上传
+// ==================== 图片上传功能模块 ====================
+
+/**
+ * 设置图片上传功能
+ */
 function setupImageUploads() {
 const websiteImageUpload = document.getElementById('website-image-upload');
 if (websiteImageUpload) {
@@ -10136,7 +10164,68 @@ reader.readAsDataURL(file);
 });
 }
 
-// 编辑按钮
+// ==================== 加载器功能模块 ====================
+
+/**
+ * 显示加载动画
+ */
+function showLoader() {
+const loader = document.querySelector('.loader-container');
+if (loader) {
+loader.classList.add('active');
+}
+}
+
+/**
+ * 隐藏加载动画
+ */
+function hideLoader() {
+const loader = document.querySelector('.loader-container');
+if (loader) {
+loader.classList.remove('active');
+}
+}
+
+// ==================== 网站点击处理功能模块 ====================
+
+/**
+ * 设置网站点击处理功能
+ */
+function setupWebsiteClickHandlers() {
+// 使用事件委托优化性能，避免为每个元素单独绑定事件
+const mainContent = document.getElementById('main-content');
+if (!mainContent) return;
+
+mainContent.addEventListener('click', function(e) {
+const websiteItem = e.target.closest('.website-item');
+if (!websiteItem) return;
+
+e.preventDefault();
+const url = websiteItem.dataset.url;
+const title = websiteItem.dataset.name || websiteItem.dataset.title;
+
+if (url) {
+// 添加到历史记录
+if (typeof addToHistory === 'function') {
+addToHistory(url, title);
+}
+
+// 显示加载动画
+showLoader();
+
+// 延迟跳转以显示加载动画
+setTimeout(() => {
+window.location.href = url;
+}, 500);
+}
+});
+}
+
+// ==================== 编辑按钮功能模块 ====================
+
+/**
+ * 设置编辑按钮功能
+ */
 function setupEditButtons() {
 document.querySelectorAll('.edit-btn').forEach(btn => {
 const form = btn.previousElementSibling;
@@ -10369,7 +10458,11 @@ portraitPreview.style.display = 'block';
 }
 }
 
-// 自定义设置功能
+// ==================== 自定义设置功能模块 ====================
+
+/**
+ * 设置自定义设置功能
+ */
 function setupCustomization() {
 const applyBtn = document.getElementById('apply-bg');
 const resetBtn = document.getElementById('reset-bg');
@@ -10523,7 +10616,11 @@ else if (b < 0) b = 0;
 return (usePound ? "#" : "") + (b | (g << 8) | (r << 16)).toString(16).padStart(6, '0');
 }
 
-// 筛选功能
+// ==================== 筛选功能模块 ====================
+
+/**
+ * 设置筛选功能
+ */
 function setupFilter() {
 const filterBtn = document.getElementById('filter-btn');
 if (filterBtn) {
@@ -10604,23 +10701,60 @@ window.addEventListener('load', function() {
 setTimeout(restoreScrollPosition, 100);
 });
 
-// 侧边栏功能
-function setupSidebar() {
+// ==================== 侧边栏功能模块 ====================
+
+/**
+ * 初始化侧边栏响应式布局
+ */
+function initSidebar() {
+const sidebar = document.getElementById('sidebar');
+if (!sidebar) return;
+
+// 根据屏幕宽度设置侧边栏状态
+if (window.innerWidth > 768) {
+sidebar.classList.add('active');
+} else {
+sidebar.classList.remove('active');
+}
+
+// 响应式布局调整
+window.addEventListener('resize', function() {
+if (window.innerWidth > 768) {
+sidebar.classList.add('active');
+} else {
+sidebar.classList.remove('active');
+}
+});
+}
+
+/**
+ * 设置侧边栏切换功能
+ */
+function setupSidebarToggle() {
 const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 
-menuBtn.replaceWith(menuBtn.cloneNode(true));
-const newMenuBtn = document.getElementById('menu-btn');
+if (!menuBtn || !sidebar) return;
 
-newMenuBtn.addEventListener('click', function(e) {
+// 移除可能存在的旧事件监听器
+const newMenuBtn = menuBtn.cloneNode(true);
+menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
+
+// 重新绑定点击事件
+document.getElementById('menu-btn').addEventListener('click', function(e) {
 e.stopPropagation();
 sidebar.classList.toggle('active');
 });
 }
 
-function setupBlankCloseSidebar() {
+/**
+ * 设置点击空白处关闭侧边栏
+ */
+function setupSidebarCloseOnClickOutside() {
 const sidebar = document.getElementById('sidebar');
 const menuBtn = document.getElementById('menu-btn');
+
+if (!sidebar || !menuBtn) return;
 
 document.addEventListener('click', function(e) {
 const isClickOutside = !sidebar.contains(e.target) && !menuBtn.contains(e.target);
@@ -10630,23 +10764,11 @@ sidebar.classList.remove('active');
 });
 }
 
-function initSidebar() {
-const sidebar = document.getElementById('sidebar');
-if (window.innerWidth > 768) {
-sidebar.classList.add('active');
-} else {
-sidebar.classList.remove('active');
-}
-window.onresize = function() {
-if (window.innerWidth > 768) {
-sidebar.classList.add('active');
-} else {
-sidebar.classList.remove('active');
-}
-};
-}
+// ==================== 音乐播放器功能模块 ====================
 
-// 音乐播放器功能
+/**
+ * 初始化音乐播放器
+ */
 function initMusicBox() {
 const fixedPlaylists = [
 {
@@ -10987,30 +11109,24 @@ return colors[Math.floor(Math.random() * colors.length)];
 }
 }
 
-// 事件处理程序设置
+// ==================== 事件处理程序设置 ====================
+
+/**
+ * 设置所有事件处理程序
+ */
 function setupEventHandlers() {
-setupWebsiteClickHandlers();
-setupFavorites();
-initFavoriteButtons();
-setupFilter();
-updateCategorySelects();
-setupManagement();
-setupScroll();
+// 侧边栏功能
 initSidebar();
-setupSidebar();
-setupBlankCloseSidebar();
-}
+setupSidebarToggle();
+setupSidebarCloseOnClickOutside();
 
-// 主初始化函数
-function init() {
-initSidebar();
-setupSidebar();
-setupBlankCloseSidebar();
-
-setupSearch();
+// 数据管理功能
 setupFavorites();
 setupHistory();
 setupManagement();
+
+// 交互功能
+setupSearch();
 setupWebsiteClickHandlers();
 setupModals();
 setupImageUploads();
@@ -11019,11 +11135,44 @@ setupCustomization();
 setupFilter();
 setupScroll();
 
+// 初始化组件
 initFavoriteButtons();
+updateCategorySelects();
+}
 
+// ==================== 主初始化函数 ====================
+
+/**
+ * 主初始化函数
+ */
+function init() {
+// 初始化侧边栏功能
+initSidebar();
+setupSidebarToggle();
+setupSidebarCloseOnClickOutside();
+
+// 初始化数据管理功能
+setupFavorites();
+setupHistory();
+setupManagement();
+
+// 初始化交互功能
+setupSearch();
+setupWebsiteClickHandlers();
+setupModals();
+setupImageUploads();
+setupEditButtons();
+setupCustomization();
+setupFilter();
+setupScroll();
+
+// 初始化组件
+initFavoriteButtons();
+updateCategorySelects();
+
+// 加载用户数据
 loadUserItems();
 loadCustomSettings();
-updateCategorySelects();
 
 restoreScrollPosition();
 
