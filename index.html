@@ -1925,64 +1925,64 @@ max-width: 120px !important;
 // ==================== 搜索功能模块 ====================
 
 /**
- * 设置搜索功能
- */
+* 设置搜索功能
+*/
 function setupSearch() {
-  const searchBtn = document.getElementById('site-search-btn');
-  if (!searchBtn) return;
+const searchBtn = document.getElementById('site-search-btn');
+if (!searchBtn) return;
 
-  searchBtn.addEventListener('click', function() {
-    const query = document.getElementById('site-search').value.trim().toLowerCase();
-    if (query) {
-      document.getElementById('search-options-modal').style.display = 'block';
-    }
-  });
+searchBtn.addEventListener('click', function() {
+const query = document.getElementById('site-search').value.trim().toLowerCase();
+if (query) {
+document.getElementById('search-options-modal').style.display = 'block';
+}
+});
 
-  document.querySelectorAll('.search-engine-option').forEach(option => {
-    option.addEventListener('click', function() {
-      const query = document.getElementById('site-search').value.trim();
-      if (!query) return;
+document.querySelectorAll('.search-engine-option').forEach(option => {
+option.addEventListener('click', function() {
+const query = document.getElementById('site-search').value.trim();
+if (!query) return;
 
-      const type = this.dataset.type;
-      let url;
+const type = this.dataset.type;
+let url;
 
-      if (type === 'site') {
-        const results = searchSite(query);
-        if (results.length > 0) {
-          const firstResult = results[0];
-          firstResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          highlightResults(results);
-        } else {
-          showMessage('未找到匹配结果', 'warning');
-        }
-        document.getElementById('search-options-modal').style.display = 'none';
-        return;
-      } else if (type === 'yandex-web') {
-        url = `https://yandex.com/search?text=${encodeURIComponent(query)}&cc=ru`;
-      } else if (type === 'yandex-img') {
-        url = `https://yandex.com/images/search?text=${encodeURIComponent(query)}&cc=ru`;
-      } else if (type === 'yandex-video') {
-        url = `https://yandex.com/video/search?text=${encodeURIComponent(query)}&cc=ru`;
-      }
+if (type === 'site') {
+const results = searchSite(query);
+if (results.length > 0) {
+const firstResult = results[0];
+firstResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+highlightResults(results);
+} else {
+showMessage('未找到匹配结果', 'warning');
+}
+document.getElementById('search-options-modal').style.display = 'none';
+return;
+} else if (type === 'yandex-web') {
+url = `https://yandex.com/search?text=${encodeURIComponent(query)}&cc=ru`;
+} else if (type === 'yandex-img') {
+url = `https://yandex.com/images/search?text=${encodeURIComponent(query)}&cc=ru`;
+} else if (type === 'yandex-video') {
+url = `https://yandex.com/video/search?text=${encodeURIComponent(query)}&cc=ru`;
+}
 
-      if (url) {
-        showLoader();
-        setTimeout(() => {
-          window.open(url, '_blank');
-          hideLoader();
-        }, 500);
-      }
+if (url) {
+showLoader();
+setTimeout(() => {
+window.open(url, '_blank');
+hideLoader();
+}, 500);
+}
 
-      document.getElementById('search-options-modal').style.display = 'none';
-    });
-  });
+document.getElementById('search-options-modal').style.display = 'none';
+});
+});
 
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.search-box') && !e.target.closest('.modal-content')) {
-      const modal = document.getElementById('search-options-modal');
-      if (modal) modal.style.display = 'none';
-    }
-  });
+document.addEventListener('click', function(e) {
+if (!e.target.closest('.search-box') && !e.target.closest('.modal-content')) {
+const modal = document.getElementById('search-options-modal');
+if (modal) modal.style.display = 'none';
+}
+});
 }
 
 </script>
@@ -2456,9 +2456,9 @@ style="display:flex; align-items:center; padding:12px 15px; color:var(--text-col
 <!-- 最近更新（暗紫罗兰框 + 白色文字版 + 标题居中 + 成功后隐藏框）-->
 <div id="update-title" style="padding: 8px 12px; font-weight: bold; font-size: 1rem; color: var(--text-color); text-align: center;">更新检查❤</div>
 <div id="recent-games-wrapper" style="margin-bottom: 12px; border: 1px solid #7a1fa2; border-radius: 12px; overflow: hidden; background: rgba(102, 31, 153, 0.15);">
-  <div id="recent-games" class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
-    正在拉取最新游戏...
-  </div>
+<div id="recent-games" class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
+正在拉取最新游戏...
+</div>
 </div>
 
 <!-- 下面是你原来的所有游戏，不动 -->
@@ -2599,48 +2599,48 @@ style="display:flex; align-items:center; padding:12px 15px; color:var(--text-col
 
 <!-- 拉取最近更新游戏 -->
 <script>
-fetch('https://silong-respool.github.io/zyk/yxgx.html')
-  .then(res => res.text())
-  .then(html => {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    const items = div.querySelectorAll('.game-item');
-    const wrapper = document.getElementById('recent-games-wrapper');
-    const target = document.getElementById('recent-games');
-    const title = document.getElementById('update-title');
-    target.innerHTML = ''; // 清空加载提示
+fetch('https://silong-respool.github.io/gay/yxgx.html')
+.then(res => res.text())
+.then(html => {
+const div = document.createElement('div');
+div.innerHTML = html;
+const items = div.querySelectorAll('.game-item');
+const wrapper = document.getElementById('recent-games-wrapper');
+const target = document.getElementById('recent-games');
+const title = document.getElementById('update-title');
+target.innerHTML = ''; // 清空加载提示
 
-    // 替换标题文本
-    title.textContent = '已拉取最新内容';
+// 替换标题文本
+title.textContent = '已拉取最新内容';
 
-    if (items.length === 0) {
-      target.innerHTML = '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
-      return;
-    }
+if (items.length === 0) {
+target.innerHTML = '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+return;
+}
 
-    // 拉取成功：移除框样式，让新游戏和下方列表融为一体
-    wrapper.style.border = 'none';
-    wrapper.style.background = 'transparent';
-    wrapper.style.borderRadius = '0';
-    target.style.padding = '0';
-    target.style.textAlign = 'left';
+// 拉取成功：移除框样式，让新游戏和下方列表融为一体
+wrapper.style.border = 'none';
+wrapper.style.background = 'transparent';
+wrapper.style.borderRadius = '0';
+target.style.padding = '0';
+target.style.textAlign = 'left';
 
-    items.forEach(i => target.appendChild(i.cloneNode(true)));
+items.forEach(i => target.appendChild(i.cloneNode(true)));
 
-    // 添加底部分隔线
-    const divider = document.createElement('div');
-    divider.style.height = '1px';
-    divider.style.background = 'rgba(122, 31, 162, 0.3)';
-    divider.style.margin = '12px 0';
-    wrapper.appendChild(divider);
-  })
-  .catch(err => {
-    console.error('拉取失败:', err);
-    const title = document.getElementById('update-title');
-    title.textContent = '已拉取最新内容';
-    document.getElementById('recent-games').innerHTML =
-      '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
-  });
+// 添加底部分隔线
+const divider = document.createElement('div');
+divider.style.height = '1px';
+divider.style.background = 'rgba(122, 31, 162, 0.3)';
+divider.style.margin = '12px 0';
+wrapper.appendChild(divider);
+})
+.catch(err => {
+console.error('拉取失败:', err);
+const title = document.getElementById('update-title');
+title.textContent = '已拉取最新内容';
+document.getElementById('recent-games').innerHTML =
+'<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+});
 </script>
 
 <div class="internal-modal" id="actionModal">
@@ -2968,7 +2968,7 @@ startAutoPlay();
 <a href="https://poipiku.com/12082901/" class="grid-btn" target="_blank">相册集</a>
 <a href="https://0d56.hfjkzxan.xyz/" class="grid-btn" target="_blank">搜同网</a>
 <a href="https://zx52q.vvvypik.cc/" class="grid-btn" target="_blank">男同网</a>
-<a href="https://silong-respool.github.io/zyk/aitsci.html" class="grid-btn" target="_blank">AI绘图</a>
+<a href="https://silong-respool.github.io/gay/aitsci.html" class="grid-btn" target="_blank">AI绘图</a>
 <a href="https://voidchat.org/v/silong-Baoku" class="grid-btn" target="_blank">聊天室</a>
 <a href="https://link.3ceng.cn/view/d30a5c7e" class="grid-btn" target="_blank">AI聊天</a>
 <a href="https://noodlemagazine.com/new-video" class="grid-btn" target="_blank">R18搜索</a>
@@ -2990,7 +2990,7 @@ startAutoPlay();
 </div>
 
 <!-- 【最近更新模块】放在 <div class="resource-grid" id="search-resource-grid"> 的最开头，作为第一个卡片 -->
-<!-- 这个卡片会自动从 https://silong-respool.github.io/zyk/zjgx.html 拉取上面的 a.website-item 内容显示 -->
+<!-- 这个卡片会自动从 https://silong-respool.github.io/gay/zjgx.html 拉取上面的 a.website-item 内容显示 -->
 <!-- 改动zjgx.html里的内容，刷新主页就会同步更新最新资源 -->
 
 <!-- 👇 这里我加了 id="recent-update-section" 用于定位 -->
@@ -3011,7 +3011,7 @@ startAutoPlay();
 <!-- 这个脚本负责读取 zjgx.html 里的 a 标签并克隆到这里显示 -->
 <!-- 加了小红点 NEW 标签在图片右上角，方便一眼看出是新货 -->
 <script>
-fetch('https://silong-respool.github.io/zyk/zjgx.html')
+fetch('https://silong-respool.github.io/gay/zjgx.html')
 .then(res => res.text())
 .then(html => {
 const parser = new DOMParser();
@@ -3047,81 +3047,81 @@ document.getElementById('recent-update-list').innerHTML =
 <!-- ============================================== -->
 
 <div class="modal" id="modal" style="
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.75);
+backdrop-filter: blur(8px);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 999;
 ">
-  <div class="modal-content" style="
-    background: linear-gradient(135deg, #1e1a2f 0%, #2a1e3c 100%);
-    width: 90%;
-    max-width: 520px;
-    height: 720px;
-    max-height: 85vh;
-    border-radius: 32px;
-    padding: 0;
-    position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(123, 79, 157, 0.3);
-    color: #fff;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  ">
-    <div style="height:4px;background:linear-gradient(90deg,#c084fc,#a855f7,#7c3aed);width:100%;flex-shrink:0;"></div>
-    <span id="close" style="position:absolute;right:20px;top:20px;font-size:28px;cursor:pointer;color:rgba(255,255,255,0.7);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1);z-index:10;line-height:1;">&times;</span>
+<div class="modal-content" style="
+background: linear-gradient(135deg, #1e1a2f 0%, #2a1e3c 100%);
+width: 90%;
+max-width: 520px;
+height: 720px;
+max-height: 85vh;
+border-radius: 32px;
+padding: 0;
+position: relative;
+box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(123, 79, 157, 0.3);
+color: #fff;
+overflow: hidden;
+display: flex;
+flex-direction: column;
+">
+<div style="height:4px;background:linear-gradient(90deg,#c084fc,#a855f7,#7c3aed);width:100%;flex-shrink:0;"></div>
+<span id="close" style="position:absolute;right:20px;top:20px;font-size:28px;cursor:pointer;color:rgba(255,255,255,0.7);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1);z-index:10;line-height:1;">&times;</span>
 
-    <div style="padding:32px 28px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0;">
-      <div id="modalImg" style="background:#7B4F9D;width:80px;height:80px;border-radius:24px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px;color:white;">𓂺</div>
-      <h3 id="modalTitle" style="margin:0;font-size:26px;font-weight:700;background:linear-gradient(135deg,#fff,#e9d5ff);-webkit-background-clip:text;background-clip:text;color:transparent;"></h3>
-    </div>
+<div style="padding:32px 28px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0;">
+<div id="modalImg" style="background:#7B4F9D;width:80px;height:80px;border-radius:24px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px;color:white;">𓂺</div>
+<h3 id="modalTitle" style="margin:0;font-size:26px;font-weight:700;background:linear-gradient(135deg,#fff,#e9d5ff);-webkit-background-clip:text;background-clip:text;color:transparent;"></h3>
+</div>
 
-    <div style="flex:1;padding:24px 28px;overflow-y:auto;">
-      <div style="background:rgba(255,255,255,0.05);border-radius:20px;padding:16px 20px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
-          <span style="font-size:20px;">🔗</span>
-          <div style="flex:1;">
-            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">网址</div>
-            <span id="modalUrlText" style="font-size:14px;word-break:break-all;color:#d9d2e9;"></span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
-          <span style="font-size:20px;">📝</span>
-          <div style="flex:1;">
-            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">简介</div>
-            <span id="modalDesc" style="font-size:15px;line-height:1.5;color:#f0eaff;"></span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
-          <span style="font-size:20px;">✨</span>
-          <div style="flex:1;">
-            <div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">特点</div>
-            <span id="modalFeatures" style="font-size:14px;line-height:1.5;color:#e2d6ff;"></span>
-          </div>
-        </div>
+<div style="flex:1;padding:24px 28px;overflow-y:auto;">
+<div style="background:rgba(255,255,255,0.05);border-radius:20px;padding:16px 20px;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+<span style="font-size:20px;">🔗</span>
+<div style="flex:1;">
+<div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">网址</div>
+<span id="modalUrlText" style="font-size:14px;word-break:break-all;color:#d9d2e9;"></span>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+<span style="font-size:20px;">📝</span>
+<div style="flex:1;">
+<div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">简介</div>
+<span id="modalDesc" style="font-size:15px;line-height:1.5;color:#f0eaff;"></span>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;">
+<span style="font-size:20px;">✨</span>
+<div style="flex:1;">
+<div style="font-size:13px;color:#c4b5fd;margin-bottom:4px;">特点</div>
+<span id="modalFeatures" style="font-size:14px;line-height:1.5;color:#e2d6ff;"></span>
+</div>
+</div>
 
-        <div id="passwordBox" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
-          <div style="display:flex; align-items:center; justify-content:space-between;">
-            <div style="font-size:13px; color:#c4b5fd;">资源解锁密码</div>
-            <button id="copyPwdBtn" style="padding:4px 10px; font-size:12px; background:#7B4F9D; color:#fff; border:none; border-radius:6px; cursor:pointer;">复制密码</button>
-          </div>
-          <div style="margin-top:6px; font-size:14px; color:#e2d6ff;" id="modalPassword"></div>
-        </div>
-      </div>
-    </div>
+<div id="passwordBox" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
+<div style="display:flex; align-items:center; justify-content:space-between;">
+<div style="font-size:13px; color:#c4b5fd;">资源解锁密码</div>
+<button id="copyPwdBtn" style="padding:4px 10px; font-size:12px; background:#7B4F9D; color:#fff; border:none; border-radius:6px; cursor:pointer;">复制密码</button>
+</div>
+<div style="margin-top:6px; font-size:14px; color:#e2d6ff;" id="modalPassword"></div>
+</div>
+</div>
+</div>
 
-    <div style="padding:0 28px 28px;flex-shrink:0;">
-      <button id="goToWebsite" style="background:linear-gradient(105deg,#7c3aed 0%,#a855f7 100%);color:#fff;border:none;border-radius:60px;padding:14px 24px;font-size:16px;font-weight:600;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(124,58,237,0.4);">
-        🌐 前往网站
-      </button>
-    </div>
-  </div>
+<div style="padding:0 28px 28px;flex-shrink:0;">
+<button id="goToWebsite" style="background:linear-gradient(105deg,#7c3aed 0%,#a855f7 100%);color:#fff;border:none;border-radius:60px;padding:14px 24px;font-size:16px;font-weight:600;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(124,58,237,0.4);">
+🌐 前往网站
+</button>
+</div>
+</div>
 </div>
 
 <div id="copyToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:9999;display:none;white-space:pre-line;"></div>
@@ -3150,67 +3150,67 @@ let currentWebsiteUrl = '';
 let currentPassword = '';
 
 window.openDetailModal = function(title, url, desc, features, color, password) {
-  currentWebsiteUrl = url;
-  currentPassword = password;
-  modalTitle.innerText = title;
-  modalUrlText.innerText = url;
-  modalDesc.innerText = desc;
-  modalFeatures.innerText = (features||'').replaceAll('|',' · ');
-  modalImg.style.backgroundColor = color || '#7B4F9D';
-  passwordBox.style.display = password ? 'block' : 'none';
-  modalPassword.innerText = password || '';
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+currentWebsiteUrl = url;
+currentPassword = password;
+modalTitle.innerText = title;
+modalUrlText.innerText = url;
+modalDesc.innerText = desc;
+modalFeatures.innerText = (features||'').replaceAll('|',' · ');
+modalImg.style.backgroundColor = color || '#7B4F9D';
+passwordBox.style.display = password ? 'block' : 'none';
+modalPassword.innerText = password || '';
+modal.style.display = 'flex';
+document.body.style.overflow = 'hidden';
 };
 
 function closeModal() {
-  modal.style.display = 'none';
-  document.body.style.overflow = '';
+modal.style.display = 'none';
+document.body.style.overflow = '';
 }
 
 closeBtn.onclick = closeModal;
 modal.onclick = e => e.target === modal && closeModal();
 
 copyPwdBtn.onclick = () => {
-  if (!currentPassword) return;
-  navigator.clipboard.writeText(currentPassword).then(() => {
-    copyToast.textContent = `复制成功！
+if (!currentPassword) return;
+navigator.clipboard.writeText(currentPassword).then(() => {
+copyToast.textContent = `复制成功！
 该密码用于网页下载资源解锁
 密码: ${currentPassword}`;
-    copyToast.style.display = 'block';
-    setTimeout(() => copyToast.style.display = 'none', 2600);
-  });
+copyToast.style.display = 'block';
+setTimeout(() => copyToast.style.display = 'none', 2600);
+});
 };
 
 goBtn.onclick = () => {
-  if (!currentWebsiteUrl) return;
-  location.href = currentWebsiteUrl;
+if (!currentWebsiteUrl) return;
+location.href = currentWebsiteUrl;
 };
 
 // ==============================================
 // 只监听主内容，完全不碰侧边栏（安全版）
 // ==============================================
 document.addEventListener('DOMContentLoaded', () => {
-  const mainContent = document.querySelector('.layout-body');
-  if (!mainContent) return;
+const mainContent = document.querySelector('.layout-body');
+if (!mainContent) return;
 
-  mainContent.addEventListener('click', (e) => {
-    const card = e.target.closest('.website-item');
-    if (!card) return;
+mainContent.addEventListener('click', (e) => {
+const card = e.target.closest('.website-item');
+if (!card) return;
 
-    const isSidebar = card.closest('.sidebar');
-    if (isSidebar) return; // 侧边栏直接跳过
+const isSidebar = card.closest('.sidebar');
+if (isSidebar) return; // 侧边栏直接跳过
 
-    e.preventDefault();
-    const url = card.dataset.url;
-    const title = card.dataset.title || card.querySelector('.website-name')?.textContent || '未知';
-    const desc = card.dataset.desc || '';
-    const features = card.dataset.features || '';
-    const color = card.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
-    const password = card.dataset.password || '';
+e.preventDefault();
+const url = card.dataset.url;
+const title = card.dataset.title || card.querySelector('.website-name')?.textContent || '未知';
+const desc = card.dataset.desc || '';
+const features = card.dataset.features || '';
+const color = card.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
+const password = card.dataset.password || '';
 
-    openDetailModal(title, url, desc, features, color, password);
-  });
+openDetailModal(title, url, desc, features, color, password);
+});
 });
 </script>
 <!-- ============================================== -->
@@ -9578,8 +9578,8 @@ showMessage(message, 'success');
 
 
 /**
- * 搜索网站功能（性能优化版）
- */
+* 搜索网站功能（性能优化版）
+*/
 function searchSite(query) {
 const results = [];
 const searchItems = document.querySelectorAll('.website-item');
@@ -9616,8 +9616,8 @@ setTimeout(() => item.classList.remove('highlight'), 2000);
 // ==================== 收藏功能模块 ====================
 
 /**
- * 设置收藏功能
- */
+* 设置收藏功能
+*/
 function setupFavorites() {
 document.querySelectorAll('.favorite-btn').forEach(btn => {
 btn.addEventListener('click', function(e) {
@@ -9713,8 +9713,8 @@ return historyJson ? JSON.parse(historyJson) : [];
 // ==================== 历史记录功能模块 ====================
 
 /**
- * 设置历史记录功能
- */
+* 设置历史记录功能
+*/
 function setupHistory() {
 const historyBtn = document.getElementById('history-btn');
 if (historyBtn) {
@@ -9759,8 +9759,8 @@ document.getElementById('history-modal').style.display = 'block';
 // ==================== 管理功能模块 ====================
 
 /**
- * 设置管理功能
- */
+* 设置管理功能
+*/
 function setupManagement() {
 const manageBtn = document.getElementById('manage-btn');
 if (manageBtn) {
@@ -10020,8 +10020,8 @@ document.getElementById('delete-confirm-modal').style.display = 'block';
 // ==================== 模态框管理功能模块 ====================
 
 /**
- * 设置模态框管理功能
- */
+* 设置模态框管理功能
+*/
 function setupModals() {
 const modals = [
 'add-category', 'add-module', 'add-website', 'search-options', 'filter',
@@ -10082,8 +10082,8 @@ select.appendChild(option);
 // ==================== 图片上传功能模块 ====================
 
 /**
- * 设置图片上传功能
- */
+* 设置图片上传功能
+*/
 function setupImageUploads() {
 const websiteImageUpload = document.getElementById('website-image-upload');
 if (websiteImageUpload) {
@@ -10167,8 +10167,8 @@ reader.readAsDataURL(file);
 // ==================== 加载器功能模块 ====================
 
 /**
- * 显示加载动画
- */
+* 显示加载动画
+*/
 function showLoader() {
 const loader = document.querySelector('.loader-container');
 if (loader) {
@@ -10177,8 +10177,8 @@ loader.classList.add('active');
 }
 
 /**
- * 隐藏加载动画
- */
+* 隐藏加载动画
+*/
 function hideLoader() {
 const loader = document.querySelector('.loader-container');
 if (loader) {
@@ -10189,8 +10189,8 @@ loader.classList.remove('active');
 // ==================== 网站点击处理功能模块 ====================
 
 /**
- * 设置网站点击处理功能
- */
+* 设置网站点击处理功能
+*/
 function setupWebsiteClickHandlers() {
 // 使用事件委托优化性能，避免为每个元素单独绑定事件
 const mainContent = document.getElementById('main-content');
@@ -10224,8 +10224,8 @@ window.location.href = url;
 // ==================== 编辑按钮功能模块 ====================
 
 /**
- * 设置编辑按钮功能
- */
+* 设置编辑按钮功能
+*/
 function setupEditButtons() {
 document.querySelectorAll('.edit-btn').forEach(btn => {
 const form = btn.previousElementSibling;
@@ -10461,8 +10461,8 @@ portraitPreview.style.display = 'block';
 // ==================== 自定义设置功能模块 ====================
 
 /**
- * 设置自定义设置功能
- */
+* 设置自定义设置功能
+*/
 function setupCustomization() {
 const applyBtn = document.getElementById('apply-bg');
 const resetBtn = document.getElementById('reset-bg');
@@ -10619,8 +10619,8 @@ return (usePound ? "#" : "") + (b | (g << 8) | (r << 16)).toString(16).padStart(
 // ==================== 筛选功能模块 ====================
 
 /**
- * 设置筛选功能
- */
+* 设置筛选功能
+*/
 function setupFilter() {
 const filterBtn = document.getElementById('filter-btn');
 if (filterBtn) {
@@ -10704,8 +10704,8 @@ setTimeout(restoreScrollPosition, 100);
 // ==================== 侧边栏功能模块 ====================
 
 /**
- * 初始化侧边栏响应式布局
- */
+* 初始化侧边栏响应式布局
+*/
 function initSidebar() {
 const sidebar = document.getElementById('sidebar');
 if (!sidebar) return;
@@ -10728,8 +10728,8 @@ sidebar.classList.remove('active');
 }
 
 /**
- * 设置侧边栏切换功能
- */
+* 设置侧边栏切换功能
+*/
 function setupSidebarToggle() {
 const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
@@ -10748,8 +10748,8 @@ sidebar.classList.toggle('active');
 }
 
 /**
- * 设置点击空白处关闭侧边栏
- */
+* 设置点击空白处关闭侧边栏
+*/
 function setupSidebarCloseOnClickOutside() {
 const sidebar = document.getElementById('sidebar');
 const menuBtn = document.getElementById('menu-btn');
@@ -10767,8 +10767,8 @@ sidebar.classList.remove('active');
 // ==================== 音乐播放器功能模块 ====================
 
 /**
- * 初始化音乐播放器
- */
+* 初始化音乐播放器
+*/
 function initMusicBox() {
 const fixedPlaylists = [
 {
@@ -11112,8 +11112,8 @@ return colors[Math.floor(Math.random() * colors.length)];
 // ==================== 事件处理程序设置 ====================
 
 /**
- * 设置所有事件处理程序
- */
+* 设置所有事件处理程序
+*/
 function setupEventHandlers() {
 // 侧边栏功能
 initSidebar();
@@ -11143,8 +11143,8 @@ updateCategorySelects();
 // ==================== 主初始化函数 ====================
 
 /**
- * 主初始化函数
- */
+* 主初始化函数
+*/
 function init() {
 // 初始化侧边栏功能
 initSidebar();
