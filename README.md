@@ -8,7 +8,7 @@
 
 **一站式网络资源导航平台**
 
-[![下载APK](https://img.shields.io/badge/立即下载-APK_安装包-brightgreen)](https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk)
+[![下载APK](https://img.shields.io/badge/立即下载-APK_安装包-brightgreen)](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)
 
 </div>
 
@@ -21,7 +21,7 @@
 **未成年人禁止访问该资源库**，本应用包含大量gay成人内容，仅限18岁及以上成年用户使用。请确认您已达到法定成年年龄后再下载使用。
 
 ### 下载链接
-🔗 **[点击此处下载APK安装包](https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk)**
+🔗 **[点击此处下载APK安装包](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)**
 
 ### 安装说明
 1. 下载APK文件到您的Android设备
@@ -263,6 +263,6 @@ A: 请尝试清除应用缓存或重新安装应用。
 
 如果觉得这个应用对您有帮助，请给个⭐Star支持一下！
 
-[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk)
+[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)
 
 </div>
