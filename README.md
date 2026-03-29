@@ -230,4 +230,39 @@
 
 ## ❓ 常见问题
 
-### Q:
+### Q: 应用无法安装怎么办？
+A: 请检查Android版本是否满足要求，并确保已开启"未知来源"安装权限。
+
+### Q: 部分资源无法访问？
+A: 可能是网络问题或资源链接失效，请尝试刷新或使用其他资源。
+
+### Q: 如何备份收藏数据？
+A: 目前支持导出收藏列表功能，可在设置中找到相关选项。
+
+### Q: 应用闪退怎么办？
+A: 请尝试清除应用缓存或重新安装应用。
+
+---
+
+## 🤝 技术支持
+
+### 反馈渠道
+- **问题反馈**：通过应用内反馈功能提交问题
+- **功能建议**：欢迎提出改进建议和新功能需求
+- **Bug报告**：发现Bug请及时报告以便修复
+
+### 联系方式
+- **邮箱**：<xz35238345yun@163.com>
+- **QQ群**：[点击加入](https://qun.qq.com/universal-share/share?ac=1&authKey=XZPMTomBWW55rCTj9d%2B%2B16CA7FXzX88PdDYN4IyoS6MxEw4lI1VYWKApc4s8zlGa&busi_data=eyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJBZ0RPME8xcTFaNVJYVGhXaVExdVc1MjRZWnM1ZklCeUxIM2ZZQzdQY2VEbk9hYW9OdUNrTk0xRUNnYTBsczA1IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=NWJ_-3Syee3-r3DjUbMI2-RH_MWjBYP7Ramds46dfz67S9DNXS-OI9rxf7Vfoo-I7zEbYd-pd0bEJcolwZtlug&svctype=4&tempid=h5_group_info)
+  
+---
+
+<div align="center">
+
+**感谢使用巳泷资源库！** 🎉
+
+如果觉得这个应用对您有帮助，请给个⭐Star支持一下！
+
+[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/zyk/releases/download/apk/SilongResPool_v7.0.4.apk)
+
+</div>
