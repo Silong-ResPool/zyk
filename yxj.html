@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+ <html lang="zh-CN">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+ <meta name="description" content="巳泷资源库 - 游戏机专区，提供海量SWF游戏在线游玩与离线缓存">
+ <title>巳泷资源库-游戏机</title>
+ <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; frame-src 'self' https:; object-src 'self' blob:;">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta http-equiv="X-Content-Type-Options" content="nosniff">
+ <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+ <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+ <meta http-equiv="Cache-Control" content="public, max-age=2592000, immutable">
+ <meta http-equiv="Pragma" content="cache">
+ <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+ <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+ <link rel="dns-prefetch" href="https://silong-respool.github.io">
+ <link rel="preconnect" href="https://silong-respool.github.io" crossorigin>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
+ <script src="./ruffle/ruffle.js"></script>
+ <script>
+ window.RufflePlayer = window.RufflePlayer || {};
+ window.RufflePlayer.config = {
+   wasmUrl: "./ruffle/ruffle.wasm",
+   publicPath: "./ruffle/",
+   autoplay: "on",
+   unmuteOverlay: "hidden",
+   backgroundColor: "#333333",
+   letterbox: "on",
+   forceWebGL: true,
+   forceWebGL2: true,
+   quality: "high",
+   antialiasing: true,
+   frameRate: 30,
+   vsync: true,
+   renderBuffer: 2
+ };
+ </script>
+<style>
+:root {
+  --primary: #b377ff;
+  --primary-dark: #8a3fc7;
+  --primary-darker: #6a2a99;
+  --primary-light: #e0c6ff;
+  --bg: #0a0a14;
+  --card-bg: #171727;
+  --card-hover: #22223a;
+  --text: #f0e6ff;
+  --text-dim: #b8a9d0;
+  --border: rgba(179, 119, 255, 0.3);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --screen-bg: #000000;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', system-ui, -apple-system, sans-serif;
+  line-height: 1.4;
+  overflow-x: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+button { cursor: pointer; border: none; background: none; font-family: inherit; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+#gameConsoleModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0a0a12;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+.close-console-btn {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  background: var(--primary-dark);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  z-index: 1001;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.close-console-btn:hover { background: var(--primary); transform: scale(1.02); }
+.console { flex: 1; display: flex; flex-direction: column; width: 100%; height: 100%; }
+.console .header {
+  padding: max(12px, env(safe-area-inset-top)) 12px 12px;
+  text-align: center;
+  font-weight: bold;
+  background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark), #5a1a8a);
+  color: white;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.screen-area {
+  flex: 1;
+  background: #000000;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+}
+#gameContainer { width: 100%; height: 100%; max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; background: transparent; }
+#standbyText { text-align: center; color: var(--primary); font-size: 1.8rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+#standbyText i { font-size: 2.5rem; }
+.controls {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+  background: #111118;
+  border-top: 1px solid var(--border);
+}
+.controls .btn {
+  flex: 1;
+  padding: 10px 6px;
+  background: var(--primary-dark);
+  color: white;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.controls .btn:hover { background: var(--primary); box-shadow: 0 4px 12px rgba(179, 119, 255, 0.3); }
+.controls .btn:active { transform: scale(0.96); }
+body.fullscreen-game .close-console-btn,
+body.fullscreen-game .console .header,
+body.fullscreen-game .controls { display: none !important; }
+body.fullscreen-game .screen-area {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background: #000000;
+}
+body.fullscreen-game #gameContainer { width: 100%; height: 100%; }
+.float-exit-fullscreen {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  z-index: 2100;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.float-exit-fullscreen:hover { background: rgba(179, 119, 255, 0.9); transform: scale(1.05); }
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalScaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.internal-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.internal-modal.show { display: flex; animation: modalFadeIn 0.2s ease-out forwards; }
+.internal-modal.show .modal-content { animation: modalScaleIn 0.25s ease-out forwards; }
+.modal-content {
+  background: var(--card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--primary);
+  max-width: 92%;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 40px var(--shadow);
+}
+.modal-header {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, var(--primary-dark), #3f1a55);
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.modal-header .close-modal-btn {
+  background: rgba(255,255,255,0.2);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.modal-header .close-modal-btn:hover { background: rgba(255,255,255,0.4); transform: rotate(90deg); }
+.game-list { padding: 12px 10px; max-height: 70vh; overflow-y: auto; scrollbar-width: thin; }
+.game-list::-webkit-scrollbar { width: 6px; }
+.game-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.game-list::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 10px; }
+.game-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(30,30,45,0.8);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.game-item:hover { background: var(--card-hover); transform: translateX(3px); border-color: var(--primary); box-shadow: 0 4px 10px var(--shadow); }
+.game-item-left { flex: 1; min-width: 0; }
+.game-item-left span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; font-size: 0.9rem; }
+.game-item-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.status-icon { font-size: 0.7rem; background: rgba(179, 119, 255, 0.2); padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.status-icon.active { background: var(--primary); color: white; font-weight: 500; }
+.edit-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 1.1rem; }
+.edit-btn:hover { background: rgba(255,255,255,0.25); }
+.more-games { justify-content: center; background: rgba(122,31,162,0.3); color: var(--primary-light); font-weight: bold; }
+.more-games:hover { background: rgba(138, 63, 199, 0.4); transform: translateX(0); }
+.btn { background: var(--primary-dark); color: white; padding: 10px 14px; border-radius: 30px; font-weight: bold; width: 100%; margin-bottom: 8px; font-size: 0.9rem; transition: all 0.2s ease; }
+.btn:hover { background: var(--primary); box-shadow: 0 3px 10px rgba(179, 119, 255, 0.25); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-success { background: #6a4e9e; }
+.btn-danger { background: #b53b7a; }
+.input-box { width: 100%; padding: 10px 14px; border-radius: 40px; border: 1px solid var(--border); background: #222236; color: white; outline: none; font-size: 0.9rem; }
+.input-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(179, 119, 255, 0.15); }
+.input-label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.85rem; }
+.progress-container { height: 4px; background: #2a2a2a; border-radius: 10px; overflow: hidden; margin: 8px 0; }
+.progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.1s linear; }
+.status-text { font-size: 0.8rem; text-align: center; margin-top: 6px; }
+.section-title { font-size: 0.9rem; font-weight: bold; margin: 12px 0 8px; padding-left: 8px; border-left: 3px solid var(--primary); color: var(--primary-light); }
+.loading-text { padding: 14px; text-align: center; color: #ccc; animation: loadingPulse 1.5s ease-in-out infinite; }
+@keyframes loadingPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div id="gameConsoleModal">
+  <button class="close-console-btn" id="closeConsoleBtn" title="返回首页"><i class="fas fa-arrow-left"></i> 返回</button>
+  <div class="console">
+    <div class="header"><i class="fas fa-gamepad"></i><span>巳泷游戏机</span></div>
+    <div class="screen-area" id="screenArea">
+      <div id="gameContainer"><div id="standbyText"><i class="fas fa-gamepad"></i><span>点击游戏开始</span></div></div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="menuBtn" title="打开游戏库">☰ 游戏</button>
+      <button class="btn" id="addBtn" title="添加自定义游戏">✚ 添加</button>
+      <button class="btn" id="refreshBtn" title="刷新当前游戏">↻ 刷新</button>
+      <button class="btn" id="fullscreenBtn" title="真·全屏沉浸">⛶ 全屏</button>
+    </div>
+  </div>
+</div>
+
+<!-- 游戏库弹窗 -->
+<div class="internal-modal" id="menuModal">
+  <div class="modal-content">
+    <div class="modal-header"><span>🎮 游戏库</span><button class="close-modal-btn" data-modal="menuModal"><i class="fas fa-times"></i></button></div>
+    <div class="game-list" id="gameList">
+      <div id="update-title" style="padding: 8px 12px; font-weight: bold; font-size: 1rem;">✨ 最新游戏 ✨</div>
+      <div id="recent-games-wrapper" style="margin-bottom: 12px; border-radius: 12px; overflow: hidden;"><div id="recent-games" class="loading-text"><i class="fas fa-cloud-download-alt"></i> 正在从仓库拉取游戏列表...</div></div>
+      <div class="section-title">📀 内置游戏</div>
+      <div id="builtin-games-container">
+        <div class="game-item" data-url="yxwj/yx-1.swf" data-builtin="true"><div class="game-item-left"><span>《Snow Basch Game》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-2.swf" data-builtin="true"><div class="game-item-left"><span>《孙坚》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-3.swf" data-builtin="true"><div class="game-item-left"><span>《卫宫切嗣Solo》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-32.swf" data-builtin="true"><div class="game-item-left"><span>《卫宫切嗣Solo2》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-4.swf" data-builtin="true"><div class="game-item-left"><span>《生化奇兵：无限》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-5.swf" data-builtin="true"><div class="game-item-left"><span>《触手物语》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-6.swf" data-builtin="true"><div class="game-item-left"><span>《罪恶装备-索尔》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-7.swf" data-builtin="true"><div class="game-item-left"><span>《树枝游戏》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-8.swf" data-builtin="true"><div class="game-item-left"><span>《山治&索隆》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-9.swf" data-builtin="true"><div class="game-item-left"><span>《兄弟之爱》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-10.swf" data-builtin="true"><div class="game-item-left"><span>《足球狂猎人》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-11.swf" data-builtin="true"><div class="game-item-left"><span>《军营》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-12.swf" data-builtin="true"><div class="game-item-left"><span>《触碰与挑逗1》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-13.swf" data-builtin="true"><div class="game-item-left"><span>《触碰与挑逗2》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-14.swf" data-builtin="true"><div class="game-item-left"><span>《悟空&贝吉塔》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-15.swf" data-builtin="true"><div class="game-item-left"><span>《阿米西提亚》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-16.swf" data-builtin="true"><div class="game-item-left"><span>《Vindictus》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-17.swf" data-builtin="true"><div class="game-item-left"><span>《Flesh Jack Game》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-18.swf" data-builtin="true"><div class="game-item-left"><span>《巴托&索隆》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-19.swf" data-builtin="true"><div class="game-item-left"><span>《东城刃更》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-20.swf" data-builtin="true"><div class="game-item-left"><span>《斯摩格VS维尔戈》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-21.swf" data-builtin="true"><div class="game-item-left"><span>《鬼泣但丁1》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-22.swf" data-builtin="true"><div class="game-item-left"><span>《鬼泣但丁2》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-23.swf" data-builtin="true"><div class="game-item-left"><span>《通缉：生死相依》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-24.swf" data-builtin="true"><div class="game-item-left"><span>《徐金》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-25.swf" data-builtin="true"><div class="game-item-left"><span>《龙珠z-海滩》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-26.swf" data-builtin="true"><div class="game-item-left"><span>《圣星矢-海滩》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-27.swf" data-builtin="true"><div class="game-item-left"><span>《布罗利&特兰克斯》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-28.swf" data-builtin="true"><div class="game-item-left"><span>《黄金太阳》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-29.swf" data-builtin="true"><div class="game-item-left"><span>《尹当面交康·温》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-30.swf" data-builtin="true"><div class="game-item-left"><span>《合金装备x》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+        <div class="game-item" data-url="yxwj/yx-31.swf" data-builtin="true"><div class="game-item-left"><span>《猜拳游戏》</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div></div>
+      </div>
+      <div class="game-item more-games" data-feedback="true">📖 游戏问题反馈</div>
+      <div class="game-item more-games" data-resource="true">🌐 更多游戏资源</div>
+    </div>
+  </div>
+</div>
+
+<!-- 操作弹窗 -->
+<div class="internal-modal" id="actionModal"><div class="modal-content" style="max-width: 400px;"><div class="modal-header"><span>🎮 游戏操作</span><button class="close-modal-btn" data-modal="actionModal"><i class="fas fa-times"></i></button></div><div style="padding: 20px 30px;"><p id="actionName" style="text-align:center; color:#bb77ff; margin-bottom:20px; font-weight: bold;">选择操作</p><button class="btn btn-success" id="playNowBtn">▶ 立即游玩</button><button class="btn" id="downloadBtn">⬇ 下载到本地缓存 (离线版)</button><button class="btn btn-danger" id="deleteBtn" style="display:none;">🗑 删除本地缓存</button><div class="progress-container" id="dlProgress" style="display:none;"><div class="progress-bar" id="dlBar"></div></div><div class="status-text" id="dlStatus"></div></div></div></div>
+
+<!-- 编辑管理弹窗 -->
+<div class="internal-modal" id="editModal"><div class="modal-content" style="max-width: 400px;"><div class="modal-header"><span>⚙️ 游戏管理</span><button class="close-modal-btn" data-modal="editModal"><i class="fas fa-times"></i></button></div><div style="padding: 20px 30px;"><p id="editGameName" style="text-align:center; color:#bb77ff; margin-bottom:20px; font-weight: bold;"></p><button class="btn" id="clearCacheBtn">🗑 清理缓存 (仅删除本地存档)</button><button class="btn btn-danger" id="deleteGameBtn" style="display:none;">❌ 彻底删除游戏 (自定义)</button><div class="status-text" id="editStatus"></div></div></div></div>
+
+<!-- 添加自定义游戏弹窗 -->
+<div class="internal-modal" id="addModal"><div class="modal-content"><div class="modal-header"><span>📥 添加自定义游戏</span><button class="close-modal-btn" data-modal="addModal"><i class="fas fa-times"></i></button></div><div style="padding: 30px 40px; overflow-y:auto;"><div style="margin-bottom: 25px;"><label class="input-label">游戏名称 <span style="color: #ff3366;">*</span></label><input type="text" id="gameName" class="input-box" placeholder="请输入游戏名称"></div><div style="margin-bottom: 25px;"><label class="input-label">网络地址 (URL)</label><input type="text" id="customUrl" class="input-box" placeholder="https://example.com/game.swf"></div><div style="text-align:center; padding-top: 20px; border-top: 1px solid rgba(153,51,255,0.2);"><p style="margin:0 0 15px; color:#e6ccff; font-size: 0.9em;">或上传本地 .swf 文件</p><input type="file" id="fileInput" accept=".swf" style="display:none;"><button class="btn" id="uploadBtn" style="width: auto; padding: 10px 40px;">📁 选择本地文件</button><p id="fileName" style="margin-top:12px; font-size: 0.9em; color:#e6ccff;"></p></div><div style="text-align:center; margin-top:30px;"><button class="btn" id="loadCustom" style="width: 100%;">确认添加</button></div></div></div></div>
+
+<script>
+// ---------- 全局变量 ----------
+let db, currentPlayer = null, currentUrl = null, selectedGameUrl = null, selectedGameName = null, selectedGameType = null;
+let customGames = [];
+let currentBlobUrl = null;
+const DB_NAME = 'SLConsoleDB', STORE_NAME = 'games';
+const REMOTE_GAME_SOURCE = 'https://silong-respool.github.io/gay/yxgx.html';
+
+function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
+
+// ---------- IndexedDB 缓存 ----------
+function initDB() { return new Promise((resolve, reject) => { if (!window.indexedDB) { alert('浏览器不支持离线缓存'); reject(); } const req = indexedDB.open(DB_NAME, 1); req.onupgradeneeded = e => { db = e.target.result; if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME); }; req.onsuccess = e => { db = e.target.result; resolve(db); }; req.onerror = reject; }); }
+function saveGameToDB(url, blob) { return new Promise((res, rej) => { const tx = db.transaction([STORE_NAME], 'readwrite'); tx.objectStore(STORE_NAME).put(blob, url).onsuccess = res; tx.onerror = rej; }); }
+function getGameFromDB(url) { return new Promise((res) => { const tx = db.transaction([STORE_NAME], 'readonly'); const req = tx.objectStore(STORE_NAME).get(url); req.onsuccess = () => res(req.result); req.onerror = () => res(null); }); }
+function deleteGameFromDB(url) { return new Promise((res) => { const tx = db.transaction([STORE_NAME], 'readwrite'); tx.objectStore(STORE_NAME).delete(url).onsuccess = res; }); }
+async function checkGameExists(url) { if (!db) return false; const blob = await getGameFromDB(url); return !!blob; }
+async function downloadAndCache(url, onProgress) { return new Promise((resolve, reject) => { const xhr = new XMLHttpRequest(); xhr.open('GET', url, true); xhr.responseType = 'blob'; xhr.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(e.loaded, e.total); }; xhr.onload = async () => { if (xhr.status === 200) { await saveGameToDB(url, xhr.response); resolve(xhr.response); } else reject(new Error('下载失败')); }; xhr.onerror = () => reject(new Error('网络错误')); xhr.send(); }); }
+
+// ---------- 游戏加载 ----------
+async function loadGame(url) {
+  const container = document.getElementById('gameContainer'); 
+  container.innerHTML = '<div style="color:#bb77ff;"><i class="fas fa-spinner fa-spin"></i><br>加载中...</div>';
+  if (!window.RufflePlayer || typeof window.RufflePlayer.newest !== 'function') { container.innerHTML = '⚠️ Ruffle 未加载'; return; }
+  if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+  const ruffle = window.RufflePlayer.newest(); const player = ruffle.createPlayer(); player.style.width = '100%'; player.style.height = '100%'; container.innerHTML = ''; container.appendChild(player);
+  try { const cached = await getGameFromDB(url); if (cached) { const blobUrl = URL.createObjectURL(cached); currentBlobUrl = blobUrl; player.load({ url: blobUrl }); setTimeout(() => { if (currentBlobUrl === blobUrl) { URL.revokeObjectURL(blobUrl); currentBlobUrl = null; } }, 12000); } else { player.load({ url }); } currentPlayer = player; currentUrl = url; hideAllModals(); } catch (e) { container.innerHTML = '❌ 加载失败'; console.error(e); }
+}
+
+// ---------- 状态刷新 ----------
+async function refreshAllStatusIcons() { const items = document.querySelectorAll('.game-item[data-url]'); for (const item of items) { const url = item.dataset.url; const ex = await checkGameExists(url); const ic = item.querySelector('.status-icon'); if (ic) { ic.textContent = ex ? '已缓存' : '待缓存'; ic.classList.toggle('active', ex); } } }
+
+// ---------- 全屏控制 ----------
+let floatExitBtn = null;
+function removeFloatExitButton() { if (floatExitBtn && floatExitBtn.remove) floatExitBtn.remove(); floatExitBtn = null; }
+function createFloatExitButton() { if (floatExitBtn) return; const btn = document.createElement('div'); btn.className = 'float-exit-fullscreen'; btn.innerHTML = '<i class="fas fa-compress-alt"></i>'; btn.addEventListener('click', () => { if (document.exitFullscreen) document.exitFullscreen(); }); document.body.appendChild(btn); floatExitBtn = btn; }
+function onFullscreenChange() { const isFullscreen = !!document.fullscreenElement; if (isFullscreen) { document.body.classList.add('fullscreen-game'); createFloatExitButton(); if (screen.orientation?.lock) screen.orientation.lock('landscape').catch(()=>{}); } else { document.body.classList.remove('fullscreen-game'); removeFloatExitButton(); if (screen.orientation?.unlock) screen.orientation.unlock(); } }
+document.addEventListener('fullscreenchange', onFullscreenChange);
+document.getElementById('fullscreenBtn').onclick = () => { const el = document.getElementById('gameConsoleModal'); if (!document.fullscreenElement) el.requestFullscreen().catch(e=>alert("全屏失败")); else document.exitFullscreen(); };
+
+// ---------- 弹窗控制 ----------
+function hideAllModals() { document.querySelectorAll('.internal-modal').forEach(m => m.classList.remove('show')); }
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+document.getElementById('closeConsoleBtn').onclick = () => { window.location.href = './index.html'; };
+document.getElementById('playNowBtn').onclick = () => { if (selectedGameUrl) loadGame(selectedGameUrl); };
+document.getElementById('menuBtn').onclick = async () => { await refreshAllStatusIcons(); showModal('menuModal'); };
+document.getElementById('addBtn').onclick = () => showModal('addModal');
+document.getElementById('refreshBtn').onclick = () => { if (currentUrl) loadGame(currentUrl); else alert('无游戏运行'); };
+document.getElementById('downloadBtn').onclick = async () => { const url = selectedGameUrl; const btn = document.getElementById('downloadBtn'); if (!url || btn.disabled) return; btn.disabled = true; const prog = document.getElementById('dlProgress'); const bar = document.getElementById('dlBar'); const st = document.getElementById('dlStatus'); prog.style.display = 'block'; bar.style.width = '0%'; st.textContent = '开始下载'; try { await downloadAndCache(url, (l,t)=>{ bar.style.width = (l/t*100)+'%'; st.textContent = `下载中 ${Math.floor(l/t*100)}%`; }); st.textContent = '✅ 缓存成功'; await refreshAllStatusIcons(); document.getElementById('downloadBtn').style.display = 'none'; document.getElementById('deleteBtn').style.display = 'block'; } catch(e) { st.textContent = '❌ 失败'; } finally { btn.disabled = false; } };
+document.getElementById('deleteBtn').onclick = async () => { if (!confirm('删除缓存？')) return; await deleteGameFromDB(selectedGameUrl); await refreshAllStatusIcons(); document.getElementById('deleteBtn').style.display = 'none'; document.getElementById('downloadBtn').style.display = 'block'; hideAllModals(); showModal('menuModal'); };
+document.getElementById('clearCacheBtn').onclick = async () => { if (!confirm('清理缓存？')) return; await deleteGameFromDB(selectedGameUrl); await refreshAllStatusIcons(); document.getElementById('editStatus').textContent = '✅ 已清理'; setTimeout(()=>document.getElementById('editStatus').textContent='',1500); };
+
+// ---------- 自定义游戏 ----------
+function loadCustomGamesStorage() { const s = localStorage.getItem('customGayGames'); customGames = s ? JSON.parse(s) : []; renderCustomGames(); }
+function saveCustomGames() { localStorage.setItem('customGayGames', JSON.stringify(customGames)); }
+function renderCustomGames() { const list = document.getElementById('gameList'); const anchor = document.querySelector('.game-item.more-games'); document.querySelectorAll('.custom-game-item').forEach(e=>e.remove()); customGames.forEach(g=>{ const div = document.createElement('div'); div.className = 'game-item custom-game-item'; div.dataset.url = g.url; div.dataset.type = 'custom'; div.innerHTML = `<div class="game-item-left"><span>♡ ${escapeHtml(g.name)}</span></div><div class="game-item-right"><span class="status-icon">待缓存</span><button class="edit-btn">⋮</button></div>`; if(anchor) anchor.before(div); else list.appendChild(div); }); bindGameEvents(); }
+async function addCustomGame(name, url, blob=null) { if(!name) return false; if(customGames.some(x=>x.name===name || (url && x.url===url))){ alert('已存在'); return false; } let finalUrl = url; if(blob){ finalUrl = `custom_${Date.now()}.swf`; await saveGameToDB(finalUrl, blob); } customGames.push({ name, url: finalUrl }); saveCustomGames(); renderCustomGames(); return true; }
+
+// ---------- 游戏事件绑定 ----------
+function bindGameEvents() { 
+  document.querySelectorAll('.game-item[data-url]:not([data-bound])').forEach(it=>{ 
+    it.dataset.bound = 'true'; 
+    it.onclick = async e=>{ 
+      if(e.target.closest('.edit-btn')) return; 
+      selectedGameUrl = it.dataset.url; 
+      selectedGameName = (it.querySelector('.game-item-left span')?.innerText || '').replace(/[《》♡]/g,''); 
+      selectedGameType = it.dataset.type || 'builtin'; 
+      document.getElementById('actionName').textContent = selectedGameName; 
+      const ex = await checkGameExists(selectedGameUrl); 
+      document.getElementById('downloadBtn').style.display = ex ? 'none' : 'block'; 
+      document.getElementById('deleteBtn').style.display = ex ? 'block' : 'none'; 
+      document.getElementById('playNowBtn').innerHTML = ex ? '<i class="fas fa-bolt"></i> 立即游玩(本地)' : '<i class="fas fa-play"></i> 立即游玩'; 
+      hideAllModals(); showModal('actionModal'); 
+    }; 
+    it.querySelector('.edit-btn').onclick = e=>{ 
+      e.stopPropagation(); 
+      selectedGameUrl = it.dataset.url; 
+      selectedGameName = (it.querySelector('.game-item-left span')?.innerText || '').replace(/[《》♡]/g,''); 
+      selectedGameType = it.dataset.type || 'builtin'; 
+      document.getElementById('editGameName').textContent = selectedGameName; 
+      document.getElementById('deleteGameBtn').style.display = selectedGameType === 'custom' ? 'block' : 'none'; 
+      hideAllModals(); showModal('editModal'); 
+    }; 
+  }); 
+}
+
+document.getElementById('deleteGameBtn').onclick = async () => { if(selectedGameType !== 'custom') return; if(!confirm(`彻底删除“${selectedGameName}”？`)) return; customGames = customGames.filter(g=>g.url !== selectedGameUrl); saveCustomGames(); await deleteGameFromDB(selectedGameUrl); renderCustomGames(); hideAllModals(); showModal('menuModal'); };
+let selBlob = null;
+document.getElementById('uploadBtn').onclick = () => document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange = async e => { const f = e.target.files[0]; if(!f || !f.name.endsWith('.swf')){ alert('只支持swf'); return; } selBlob = new Blob([await f.arrayBuffer()], { type: 'application/x-shockwave-flash' }); document.getElementById('fileName').textContent = '已选：'+escapeHtml(f.name); document.getElementById('customUrl').value = ''; if(!document.getElementById('gameName').value) document.getElementById('gameName').value = f.name.replace('.swf',''); };
+document.getElementById('loadCustom').onclick = async () => { const name = document.getElementById('gameName').value.trim(); const url = document.getElementById('customUrl').value.trim(); if(!name || (!url && !selBlob)){ alert('请填完整'); return; } const ok = await addCustomGame(name, url, selBlob); if(ok){ selBlob = null; document.getElementById('fileInput').value = ''; document.getElementById('fileName').textContent = ''; document.getElementById('gameName').value = ''; document.getElementById('customUrl').value = ''; hideAllModals(); showModal('menuModal'); } };
+
+// ✅ 只拉取 .game-item 结构，不做任何解析，完全原样导入
+async function fetchRemoteGames() {
+  const container = document.getElementById('recent-games');
+  container.innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-pulse"></i> 正在拉取仓库游戏...</div>';
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const response = await fetch(REMOTE_GAME_SOURCE, { 
+      cache: "no-cache", 
+      headers: { "Cache-Control": "no-cache" }, 
+      signal: controller.signal 
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    // 只提取 body 内的所有 .game-item 节点，完全保留你写的结构
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const gameItems = doc.querySelectorAll('body .game-item');
+
+    if (gameItems.length === 0) throw new Error('远程游戏列表为空');
+    
+    container.innerHTML = '';
+    gameItems.forEach(item => {
+      // 移除远程页面的 onclick，统一用游戏机的事件
+      item.removeAttribute('onclick');
+      item.querySelectorAll('[onclick]').forEach(el => el.removeAttribute('onclick'));
+      // 添加远程标记
+      item.dataset.type = 'remote';
+      // 原样插入
+      container.appendChild(item);
+    });
+
+    // 绑定事件
+    bindGameEvents();
+    // 刷新缓存状态
+    await refreshAllStatusIcons();
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `<div style="padding:20px;text-align:center;color:#ffaaaa;">
+      <i class="fas fa-exclamation-triangle"></i> 游戏拉取失败: ${escapeHtml(err.message)}
+      <br><button class="btn" id="retryRemoteBtn" style="margin-top:12px;width:auto;padding:6px 20px;">🔄 重试</button>
+    </div>`;
+    document.getElementById('retryRemoteBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fetchRemoteGames();
+    });
+  }
+}
+
+// ---------- 初始化 ----------
+window.addEventListener('DOMContentLoaded', async () => {
+  await initDB();
+  bindGameEvents();
+  loadCustomGamesStorage();
+  await refreshAllStatusIcons();
+  document.querySelectorAll('.close-modal-btn').forEach(b => { b.onclick = () => hideAllModals(); });
+  document.querySelectorAll('.internal-modal').forEach(m => { m.onclick = e => { if (e.target === m) hideAllModals(); }; });
+  document.querySelectorAll('[data-feedback],[data-resource]').forEach(el => { el.onclick = e => { e.stopPropagation(); if(el.dataset.feedback) window.open('https://www.kdocs.cn/l/cjz7zaEJMVoH', '_blank'); if(el.dataset.resource) window.open('https://gaymes.net/', '_blank'); }; });
+  // 拉取远程游戏
+  await fetchRemoteGames();
+});
+</script>
+</body>
+</html>
