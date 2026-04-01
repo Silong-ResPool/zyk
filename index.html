@@ -21,6 +21,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
+<!-- Ruffle配置 -->
+<script src="./ruffle/ruffle.js"></script>
+<script>
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+wasmUrl: "./ruffle/ruffle.wasm",
+publicPath: "./ruffle/",
+autoplay: "on",
+unmuteOverlay: "hidden",
+backgroundColor: "#0A001A",
+letterbox: "on",
+forceWebGL: true,
+forceWebGL2: true,
+quality: "high",
+antialiasing: true,
+frameRate: 30,
+vsync: true,
+renderBuffer: 2
+};
+</script>
 <style>
 :root {
 --primary-color: #b026ff;
@@ -2393,8 +2413,7 @@ style="display:flex; align-items:center; padding:12px 15px; color:var(--text-col
 <div class="menu-group"><a href="#" id="history-btn" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span class="menu-text" style="flex:1; color:inherit;">浏览历史</span></a></div>
 <div class="menu-group music-box-group"><a href="#" id="musicBoxBtn" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-music" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span class="menu-text" style="flex:1; color:inherit;">音乐盒子</span></a></div>
 <div class="menu-group">
-<!-- 👇 已改为本地相对路径跳转（index.html 同级） -->
-<a href="yxj.html" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; color:var(--text-color); opacity:0.7;">
+<a href="#" id="openConsoleBtn" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; color:var(--text-color); opacity:0.7;">
 <i class="fas fa-gamepad" style="width:20px; text-align:center; font-size:1rem; color:inherit;"></i>
 <span class="menu-text" style="flex:1; color:inherit;">游戏盒子</span>
 </a>
@@ -2411,6 +2430,269 @@ style="display:flex; align-items:center; padding:12px 15px; color:var(--text-col
 </div>
 </aside>
 
+
+<div id="gameConsoleModal">
+<button class="close-console-btn" id="closeConsoleBtn" title="返回">返回</button>
+
+<div class="console">
+<div class="header">游戏机</div>
+<div class="screen-area">
+<div id="gameContainer"></div>
+</div>
+<div class="controls">
+<button class="btn" id="menuBtn">☰ 游戏</button>
+<button class="btn" id="addBtn">✚ 添加</button>
+<button class="btn" id="refreshBtn">↻ 刷新</button>
+<button class="btn" id="fullscreenBtn">⛶ 全屏</button>
+</div>
+</div>
+</div>
+
+<div class="internal-modal" id="menuModal">
+<div class="modal-content">
+<div class="modal-header">游戏库♂</div>
+<div class="game-list" id="gameList">
+
+<!-- 最近更新（暗紫罗兰框 + 白色文字版 + 标题居中 + 成功后隐藏框）-->
+<div id="update-title" style="padding: 8px 12px; font-weight: bold; font-size: 1rem; color: var(--text-color); text-align: center;">更新检查❤</div>
+<div id="recent-games-wrapper" style="margin-bottom: 12px; border: 1px solid #7a1fa2; border-radius: 12px; overflow: hidden; background: rgba(102, 31, 153, 0.15);">
+<div id="recent-games" class="loading-text" style="padding: 14px; text-align: center; color: #fff; font-size: 0.9rem;">
+正在拉取最新游戏...
+</div>
+</div>
+
+<!-- 下面是你原来的所有游戏，不动 -->
+<div class="game-item" data-url="yxwj/yx-1.swf" data-builtin="true">
+<div class="game-item-left"><span>《Snow Basch Game》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-2.swf" data-builtin="true">
+<div class="game-item-left"><span>《孙坚》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-3.swf" data-builtin="true">
+<div class="game-item-left"><span>《卫宫切嗣Solo》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-32.swf" data-builtin="true">
+<div class="game-item-left"><span>《卫宫切嗣Solo2》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-4.swf" data-builtin="true">
+<div class="game-item-left"><span>《生化奇兵：无限》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-5.swf" data-builtin="true">
+<div class="game-item-left"><span>《触手物语》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-6.swf" data-builtin="true">
+<div class="game-item-left"><span>《罪恶装备-索尔》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-7.swf" data-builtin="true">
+<div class="game-item-left"><span>《树枝游戏》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-8.swf" data-builtin="true">
+<div class="game-item-left"><span>《山治&索隆》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-9.swf" data-builtin="true">
+<div class="game-item-left"><span>《兄弟之爱》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-10.swf" data-builtin="true">
+<div class="game-item-left"><span>《足球狂猎人》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-11.swf" data-builtin="true">
+<div class="game-item-left"><span>《军营》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-12.swf" data-builtin="true">
+<div class="game-item-left"><span>《触碰与挑逗1》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-13.swf" data-builtin="true">
+<div class="game-item-left"><span>《触碰与挑逗2》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-14.swf" data-builtin="true">
+<div class="game-item-left"><span>《悟空&贝吉塔》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-15.swf" data-builtin="true">
+<div class="game-item-left"><span>《阿米西提亚》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-16.swf" data-builtin="true">
+<div class="game-item-left"><span>《Vindictus》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-17.swf" data-builtin="true">
+<div class="game-item-left"><span>《Flesh Jack Game》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-18.swf" data-builtin="true">
+<div class="game-item-left"><span>《巴托&索隆》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-19.swf" data-builtin="true">
+<div class="game-item-left"><span>《东城刃更》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-20.swf" data-builtin="true">
+<div class="game-item-left"><span>《斯摩格VS维尔戈》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-21.swf" data-builtin="true">
+<div class="game-item-left"><span>《鬼泣但丁1》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-22.swf" data-builtin="true">
+<div class="game-item-left"><span>《鬼泣但丁2》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-23.swf" data-builtin="true">
+<div class="game-item-left"><span>《通缉：生死相依》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-24.swf" data-builtin="true">
+<div class="game-item-left"><span>《徐金》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-25.swf" data-builtin="true">
+<div class="game-item-left"><span>《龙珠z-海滩》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-26.swf" data-builtin="true">
+<div class="game-item-left"><span>《圣星矢-海滩》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-27.swf" data-builtin="true">
+<div class="game-item-left"><span>《布罗利&特兰克斯》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-28.swf" data-builtin="true">
+<div class="game-item-left"><span>《黄金太阳》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-29.swf" data-builtin="true">
+<div class="game-item-left"><span>《尹当面交康·温》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-30.swf" data-builtin="true">
+<div class="game-item-left"><span>《合金装备x》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+<div class="game-item" data-url="yxwj/yx-31.swf" data-builtin="true">
+<div class="game-item-left"><span>《猜拳游戏》</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+</div>
+
+<div class="game-item more-games" onclick="window.open('https://www.kdocs.cn/l/cjz7zaEJMVoH', '_blank')">《游戏问题》</div>
+<div class="game-item more-games" onclick="window.open('https://gaymes.net/', '_blank')">《更多游戏》</div>
+</div>
+</div>
+</div>
+
+<!-- 拉取最近更新游戏 -->
+<script>
+fetch('https://silong-respool.github.io/gay/yxgx.html')
+.then(res => res.text())
+.then(html => {
+const div = document.createElement('div');
+div.innerHTML = html;
+const items = div.querySelectorAll('.game-item');
+const wrapper = document.getElementById('recent-games-wrapper');
+const target = document.getElementById('recent-games');
+const title = document.getElementById('update-title');
+target.innerHTML = ''; // 清空加载提示
+
+// 替换标题文本
+title.textContent = '已拉取最新内容';
+
+if (items.length === 0) {
+target.innerHTML = '<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+return;
+}
+
+// 拉取成功：移除框样式，让新游戏和下方列表融为一体
+wrapper.style.border = 'none';
+wrapper.style.background = 'transparent';
+wrapper.style.borderRadius = '0';
+target.style.padding = '0';
+target.style.textAlign = 'left';
+
+items.forEach(i => target.appendChild(i.cloneNode(true)));
+
+// 添加底部分隔线
+const divider = document.createElement('div');
+divider.style.height = '1px';
+divider.style.background = 'rgba(122, 31, 162, 0.3)';
+divider.style.margin = '12px 0';
+wrapper.appendChild(divider);
+})
+.catch(err => {
+console.error('拉取失败:', err);
+const title = document.getElementById('update-title');
+title.textContent = '已拉取最新内容';
+document.getElementById('recent-games').innerHTML =
+'<div style="padding:14px;text-align:center;color:#fff;font-size:0.9rem;">仓库暂无新游戏</div>';
+});
+</script>
+
+<div class="internal-modal" id="actionModal">
+<div class="modal-content" style="max-width: 400px;">
+<div class="modal-header">游戏操作</div>
+<div style="padding: 20px 30px;">
+<p id="actionName" style="text-align:center; color:#bb77ff; margin-bottom:20px;">选择操作</p>
+<button class="btn btn-success" id="playNowBtn" style="margin-bottom: 15px;">▶ 立即游玩</button>
+<button class="btn" id="downloadBtn">⬇ 下载到本地缓存 (离线版)</button>
+<button class="btn btn-danger" id="deleteBtn" style="display:none; margin-top:10px;">🗑 删除本地缓存</button>
+<div class="progress-container" id="dlProgress"><div class="progress-bar" id="dlBar"></div></div>
+<div class="status-text" id="dlStatus"></div>
+</div>
+</div>
+</div>
+
+<div class="internal-modal" id="editModal">
+<div class="modal-content" style="max-width: 400px;">
+<div class="modal-header">游戏管理</div>
+<div style="padding: 20px 30px;">
+<p id="editGameName" style="text-align:center; color:#bb77ff; margin-bottom:20px;"></p>
+<button class="btn" id="clearCacheBtn" style="margin-bottom: 15px;">🗑 清理缓存</button>
+<button class="btn btn-danger" id="deleteGameBtn" style="display:none;">❌ 删除游戏</button>
+<div class="status-text" id="editStatus"></div>
+</div>
+</div>
+</div>
+
+<div class="internal-modal" id="addModal">
+<div class="modal-content">
+<div class="modal-header">添加自定义游戏</div>
+<div style="padding: 30px 40px; overflow-y:auto;">
+<div style="margin-bottom: 25px;">
+<label class="input-label" style="display:block; margin-bottom:8px; color:#e6ccff;">游戏名称 <span style="color: #ff3366;">*</span></label>
+<input type="text" id="gameName" class="input-box" placeholder="请输入游戏名称">
+</div>
+<div style="margin-bottom: 25px;">
+<label class="input-label" style="display:block; margin-bottom:8px; color:#e6ccff;">网络地址 (URL)</label>
+<input type="text" id="customUrl" class="input-box" placeholder="https://example.com/game.swf">
+</div>
+<div style="text-align:center; padding-top: 20px; border-top: 1px solid rgba(153,51,255,0.2);">
+<p style="margin:0 0 15px; color:#e6ccff; font-size: 0.9em;">或上传本地 .swf 文件</p>
+<input type="file" id="fileInput" accept=".swf" style="display:none;">
+<button class="btn" id="uploadBtn" style="width: auto; padding: 10px 40px;">📁 选择本地文件</button>
+<p id="fileName" style="margin-top:12px; font-size: 0.9em; color:#e6ccff; min-height:20px;"></p>
+</div>
+<div style="text-align:center; margin-top:30px;">
+<button class="btn" id="loadCustom" style="width: 100%;">确认添加</button>
+</div>
+</div>
+</div>
+</div>
 
 <main class="main-content">
 <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -2497,7 +2779,7 @@ font-size: 13px;
 </a>
 </div>
 <div style="width:20%; height:100%;">
-<a href="../yxj.html" style="display:block; width:100%; height:100%;" class="carousel-link">
+<a href="javascript:;" style="display:block; width:100%; height:100%;" id="carouselGameBoxBtn">
 <img src="lbt/lbt3.jpg" class="carousel-img" style="width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.5s ease; will-change: opacity;">
 </a>
 </div>
@@ -2645,6 +2927,17 @@ clickLoader.style.display = 'flex';
 function hideClickLoader() {
 clickLoader.style.display = 'none';
 }
+
+// 第三张图打开游戏盒子
+document.getElementById('carouselGameBoxBtn').addEventListener('click', function(e) {
+e.preventDefault();
+showClickLoader();
+setTimeout(() => {
+const gameBoxLink = document.getElementById('openConsoleBtn');
+if (gameBoxLink) gameBoxLink.click();
+hideClickLoader();
+}, 700);
+});
 
 // 普通链接点击加载
 document.querySelectorAll('.carousel-link').forEach(link => {
@@ -10853,119 +11146,473 @@ updateCategorySelects();
 * 主初始化函数
 */
 function init() {
-    // 初始化侧边栏功能
-    initSidebar();
-    setupSidebarToggle();
-    setupSidebarCloseOnClickOutside();
+// 初始化侧边栏功能
+initSidebar();
+setupSidebarToggle();
+setupSidebarCloseOnClickOutside();
 
-    // 初始化数据管理功能
-    setupFavorites();
-    setupHistory();
-    setupManagement();
+// 初始化数据管理功能
+setupFavorites();
+setupHistory();
+setupManagement();
 
-    // 初始化交互功能
-    setupSearch();
-    setupWebsiteClickHandlers();
-    setupModals();
-    setupImageUploads();
-    setupEditButtons();
-    setupCustomization();
-    setupFilter();
-    setupScroll();
+// 初始化交互功能
+setupSearch();
+setupWebsiteClickHandlers();
+setupModals();
+setupImageUploads();
+setupEditButtons();
+setupCustomization();
+setupFilter();
+setupScroll();
 
-    // 初始化组件
-    initFavoriteButtons();
-    updateCategorySelects();
+// 初始化组件
+initFavoriteButtons();
+updateCategorySelects();
 
-    // 加载用户数据
-    loadUserItems();
-    loadCustomSettings();
+// 加载用户数据
+loadUserItems();
+loadCustomSettings();
 
-    restoreScrollPosition();
+restoreScrollPosition();
 
-    initMusicBox();
+initMusicBox();
 
-    initTimer();
+initTimer();
 
-    setTimeout(() => {
-        const footer = document.getElementById('footer');
-        if (footer) {
-            footer.classList.add('visible');
-        }
-    }, 500);
+setTimeout(() => {
+const footer = document.getElementById('footer');
+if (footer) {
+footer.classList.add('visible');
+}
+}, 500);
 
-    setTimeout(() => {
-        hideLoader();
-    }, 1000);
+setTimeout(() => {
+hideLoader();
+}, 1000);
 }
 
 // 计时器功能
 function initTimer() {
-    let seconds = 0;
-    const timerElement = document.getElementById('timer');
+let seconds = 0;
+const timerElement = document.getElementById('timer');
 
-    if (timerElement) {
-        setInterval(() => {
-            seconds++;
-            const hrs = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            timerElement.textContent =
-                `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }, 1000);
-    }
+if (timerElement) {
+setInterval(() => {
+seconds++;
+const hrs = Math.floor(seconds / 3600);
+const mins = Math.floor((seconds % 3600) / 60);
+const secs = seconds % 60;
+timerElement.textContent =
+`${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}, 1000);
 }
+}
+
+// 游戏机功能代码
+const dbName = 'SLConsoleDB';
+const storeName = 'games';
+let db;
+
+function initDB() {
+return new Promise((resolve, reject) => {
+const request = indexedDB.open(dbName, 1);
+request.onupgradeneeded = (event) => {
+db = event.target.result;
+if (!db.objectStoreNames.contains(storeName)) {
+db.createObjectStore(storeName);
+}
+};
+request.onsuccess = (event) => {
+db = event.target.result;
+checkAllGameStatus();
+resolve(db);
+};
+request.onerror = (event) => reject(event);
+});
+}
+function saveGameToDB(url, blob) {
+return new Promise((resolve, reject) => {
+const transaction = db.transaction([storeName], 'readwrite');
+const store = transaction.objectStore(storeName);
+const request = store.put(blob, url);
+request.onsuccess = () => resolve();
+request.onerror = () => reject();
+});
+}
+function getGameFromDB(url) {
+return new Promise((resolve, reject) => {
+const transaction = db.transaction([storeName], 'readonly');
+const store = transaction.objectStore(storeName);
+const request = store.get(url);
+request.onsuccess = (event) => resolve(event.target.result);
+request.onerror = () => reject();
+});
+}
+function deleteGameFromDB(url) {
+return new Promise((resolve, reject) => {
+const transaction = db.transaction([storeName], 'readwrite');
+const store = transaction.objectStore(storeName);
+const request = store.delete(url);
+request.onsuccess = () => resolve();
+request.onerror = () => reject();
+});
+}
+function checkGameExists(url) {
+return new Promise((resolve) => {
+if(!db) return resolve(false);
+const transaction = db.transaction([storeName], 'readonly');
+const store = transaction.objectStore(storeName);
+const request = store.count(url);
+request.onsuccess = () => resolve(request.result > 0);
+request.onerror = () => resolve(false);
+});
+}
+
+window.currentPlayer = null;
+window.currentUrl = null;
+let selectedGameUrl = null;
+let selectedGameName = null;
+let selectedGameIsBuiltin = false;
+let customGames = JSON.parse(localStorage.getItem('customGayGames')) || [];
+
+function loadCustomGames() {
+customGames.forEach(game => {
+if (!document.querySelector(`[data-url="${game.url}"]`)) {
+const item = document.createElement('div');
+item.className = 'game-item custom-game';
+item.setAttribute('data-url', game.url);
+item.setAttribute('data-builtin', 'false');
+item.innerHTML = `
+<div class="game-item-left"><span>♡ ${game.name || '未命名'}</span></div>
+<div class="game-item-right"><span class="status-icon">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+`;
+const moreBtn = document.querySelector('.more-games');
+if(moreBtn) { gameList.insertBefore(item, moreBtn); } else { gameList.appendChild(item); }
+}
+});
+}
+
+window.checkAllGameStatus = async function() {
+const items = document.querySelectorAll('.game-item[data-url]');
+for (let item of items) {
+const url = item.getAttribute('data-url');
+const exists = await checkGameExists(url);
+const icon = item.querySelector('.status-icon');
+if(icon) {
+if (exists) icon.classList.add('active');
+else icon.classList.remove('active');
+}
+}
+}
+
+async function loadGame(url) {
+const gameContainer = document.getElementById('gameContainer');
+gameContainer.innerHTML = '';
+window.RufflePlayer = window.RufflePlayer || {};
+const ruffle = window.RufflePlayer.newest();
+const player = ruffle.createPlayer();
+player.style.width = '100%';
+player.style.height = '100%';
+gameContainer.appendChild(player);
+
+try {
+const cachedBlob = await getGameFromDB(url);
+if (cachedBlob) {
+const objectUrl = URL.createObjectURL(cachedBlob);
+player.load({ url: objectUrl });
+} else {
+player.load({ url: url });
+}
+window.currentPlayer = player;
+window.currentUrl = url;
+document.querySelectorAll('.internal-modal').forEach(m => m.style.display = 'none');
+} catch (e) {
+alert("加载失败，请检查网络或URL是否正确");
+}
+}
+
+window.openEditModal = function(event, button) {
+event.stopPropagation();
+const item = button.closest('.game-item');
+selectedGameUrl = item.getAttribute('data-url');
+selectedGameIsBuiltin = item.getAttribute('data-builtin') === 'true';
+selectedGameName = item.querySelector('.game-item-left span').textContent.replace('♡ ', '').trim();
+
+document.getElementById('editGameName').textContent = selectedGameName;
+document.getElementById('editStatus').textContent = '';
+
+document.getElementById('deleteGameBtn').style.display = selectedGameIsBuiltin ? 'none' : 'block';
+
+const menuModal = document.getElementById('menuModal');
+const editModal = document.getElementById('editModal');
+menuModal.style.display = 'none';
+editModal.style.display = 'flex';
+}
+
+function initGameConsole() {
+const gameConsoleModal = document.getElementById('gameConsoleModal');
+const openConsoleBtn = document.getElementById('openConsoleBtn');
+const closeConsoleBtn = document.getElementById('closeConsoleBtn');
+const menuModal = document.getElementById('menuModal');
+const gameList = document.getElementById('gameList');
+const gameContainer = document.getElementById('gameContainer');
+const actionModal = document.getElementById('actionModal');
+const editModal = document.getElementById('editModal');
+const addModal = document.getElementById('addModal');
+const dlProgress = document.getElementById('dlProgress');
+const dlBar = document.getElementById('dlBar');
+const dlStatus = document.getElementById('dlStatus');
+
+openConsoleBtn.onclick = function(e) {
+e.preventDefault();
+gameConsoleModal.style.display = 'flex';
+};
+
+closeConsoleBtn.onclick = function() {
+gameConsoleModal.style.display = 'none';
+document.querySelectorAll('.internal-modal').forEach(m => m.style.display = 'none');
+
+const gameContainer = document.getElementById('gameContainer');
+gameContainer.innerHTML = '';
+window.currentUrl = null;
+window.currentPlayer = null;
+};
+
+initDB();
+loadCustomGames();
+
+document.getElementById('menuBtn').onclick = () => { checkAllGameStatus(); menuModal.style.display = 'flex'; };
+document.getElementById('addBtn').onclick = () => { addModal.style.display = 'flex'; };
+document.getElementById('refreshBtn').onclick = () => window.currentUrl && loadGame(window.currentUrl);
+document.getElementById('fullscreenBtn').onclick = () => window.currentPlayer?.requestFullscreen();
+
+gameList.addEventListener('click', async e => {
+const item = e.target.closest('.game-item');
+if (item && item.hasAttribute('data-url') && !item.classList.contains('more-games')) {
+if (e.target.classList.contains('edit-btn') || e.target.closest('.edit-btn')) return;
+
+selectedGameUrl = item.getAttribute('data-url');
+selectedGameName = item.querySelector('.game-item-left span').textContent.replace('♡ ', '').trim();
+document.getElementById('actionName').textContent = selectedGameName;
+
+dlProgress.style.display = 'none';
+dlBar.style.width = '0%';
+dlStatus.textContent = '';
+
+const isCached = await checkGameExists(selectedGameUrl);
+const playBtn = document.getElementById('playNowBtn');
+const dlBtn = document.getElementById('downloadBtn');
+const delBtn = document.getElementById('deleteBtn');
+
+if (isCached) {
+dlBtn.style.display = 'none';
+delBtn.style.display = 'block';
+playBtn.textContent = '▶ 立即游玩 (本地极速版)';
+} else {
+dlBtn.style.display = 'block';
+delBtn.style.display = 'none';
+playBtn.textContent = '▶ 立即游玩 (在线加载)';
+dlBtn.textContent = '⬇ 下载到本地 (快速加载)';
+dlBtn.disabled = false;
+}
+menuModal.style.display = 'none';
+actionModal.style.display = 'flex';
+}
+});
+
+document.getElementById('playNowBtn').onclick = () => loadGame(selectedGameUrl);
+
+document.getElementById('downloadBtn').onclick = async () => {
+const btn = document.getElementById('downloadBtn');
+btn.disabled = true;
+dlProgress.style.display = 'block';
+dlStatus.textContent = '正在连接资源服务器...';
+try {
+const response = await fetch(selectedGameUrl, { mode: 'cors' });
+if (!response.ok) throw new Error('网络请求失败');
+
+const reader = response.body.getReader();
+const total = parseInt(response.headers.get('content-length') || 0, 10);
+let loaded = 0;
+const chunks = [];
+
+while(true) {
+const {done, value} = await reader.read();
+if (done) break;
+chunks.push(value);
+loaded += value.length;
+if (total) dlBar.style.width = (loaded / total * 100) + '%';
+dlStatus.textContent = `下载中... ${(loaded/1024/1024).toFixed(1)} MB`;
+}
+const blob = new Blob(chunks, {type: 'application/x-shockwave-flash'});
+await saveGameToDB(selectedGameUrl, blob);
+
+dlStatus.textContent = '下载完成！';
+dlStatus.style.color = '#00ffaa';
+setTimeout(() => {
+btn.style.display = 'none';
+document.getElementById('deleteBtn').style.display = 'block';
+document.getElementById('playNowBtn').textContent = '▶ 立即游玩 (本地极速版)';
+checkAllGameStatus();
+}, 1000);
+} catch (err) {
+dlStatus.textContent = '下载失败';
+dlStatus.style.color = '#ff3366';
+btn.disabled = false;
+}
+};
+
+document.getElementById('deleteBtn').onclick = async () => {
+if(confirm('删除缓存？')) {
+await deleteGameFromDB(selectedGameUrl);
+document.getElementById('deleteBtn').style.display = 'none';
+document.getElementById('downloadBtn').style.display = 'block';
+checkAllGameStatus();
+actionModal.style.display = 'none';
+menuModal.style.display = 'flex';
+}
+};
+
+document.getElementById('clearCacheBtn').onclick = async () => {
+if(confirm('清理缓存？')) {
+await deleteGameFromDB(selectedGameUrl);
+checkAllGameStatus();
+document.getElementById('editStatus').textContent = '已清理';
+}
+};
+
+document.getElementById('deleteGameBtn').onclick = () => {
+if(confirm('删除游戏？')) {
+customGames = customGames.filter(g => g.url !== selectedGameUrl);
+localStorage.setItem('customGayGames', JSON.stringify(customGames));
+document.querySelector(`[data-url="${selectedGameUrl}"]`)?.remove();
+deleteGameFromDB(selectedGameUrl);
+editModal.style.display = 'none';
+menuModal.style.display = 'flex';
+}
+};
+
+document.querySelectorAll('.internal-modal').forEach(modal => {
+modal.onclick = e => {
+if (e.target === modal) {
+modal.style.display = 'none';
+if (modal.id === 'actionModal' || modal.id === 'editModal') {
+checkAllGameStatus();
+menuModal.style.display = 'flex';
+}
+}
+};
+});
+
+const fileInput = document.getElementById('fileInput');
+document.getElementById('uploadBtn').onclick = () => fileInput.click();
+
+fileInput.onchange = (e) => {
+if(e.target.files[0]) {
+document.getElementById('fileName').textContent = e.target.files[0].name;
+if(!document.getElementById('gameName').value)
+document.getElementById('gameName').value = e.target.files[0].name.replace('.swf','');
+}
+};
+
+document.getElementById('loadCustom').onclick = async () => {
+const name = document.getElementById('gameName').value.trim();
+const file = fileInput.files[0];
+const urlVal = document.getElementById('customUrl').value.trim();
+
+if(!name) return alert('请输入名称');
+
+let url = urlVal;
+if(file) {
+url = 'local_' + Date.now() + '_' + file.name;
+await saveGameToDB(url, file);
+} else if (!url) return alert('请输入地址或上传文件');
+
+customGames.push({ url, name });
+localStorage.setItem('customGayGames', JSON.stringify(customGames));
+
+document.getElementById('gameName').value = '';
+document.getElementById('customUrl').value = '';
+document.getElementById('fileName').textContent = '';
+fileInput.value = '';
+
+const item = document.createElement('div');
+item.className = 'game-item custom-game';
+item.setAttribute('data-url', url);
+item.setAttribute('data-builtin', 'false');
+item.innerHTML = `
+<div class="game-item-left"><span>♡ ${name}</span></div>
+<div class="game-item-right"><span class="status-icon ${file ? 'active' : ''}">已缓存</span><button class="edit-btn" onclick="openEditModal(event, this)">⋮</button></div>
+`;
+const moreBtn = document.querySelector('.more-games');
+if(moreBtn) gameList.insertBefore(item, moreBtn); else gameList.appendChild(item);
+
+addModal.style.display = 'none';
+menuModal.style.display = 'flex';
+};
+}
+
+// Ruffle跨域配置（必须放在最前面）
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+unlock_swfs: true,
+allow_networking: "all",
+allow_script_access: "always"
+};
 
 // 页面加载完成时初始化
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-        init();
+document.addEventListener('DOMContentLoaded', function() {
+init();
+initGameConsole();
 
-        // 为音乐盒子按钮添加点击事件
-        const musicBoxBtn = document.getElementById('musicBoxBtn');
-        const fullscreenMusicBoxModal = document.getElementById('fullscreenMusicBoxModal');
-        const closeFullscreenMusic = document.getElementById('closeFullscreenMusic');
+// 为音乐盒子按钮添加点击事件
+const musicBoxBtn = document.getElementById('musicBoxBtn');
+const fullscreenMusicBoxModal = document.getElementById('fullscreenMusicBoxModal');
+const closeFullscreenMusic = document.getElementById('closeFullscreenMusic');
 
-        if (musicBoxBtn) {
-            musicBoxBtn.addEventListener('click', function() {
-                if (fullscreenMusicBoxModal) {
-                    fullscreenMusicBoxModal.style.display = 'flex';
-                }
-            });
-        }
+if (musicBoxBtn) {
+musicBoxBtn.addEventListener('click', function() {
+if (fullscreenMusicBoxModal) {
+fullscreenMusicBoxModal.style.display = 'flex';
+}
+});
+}
 
-        if (closeFullscreenMusic) {
-            closeFullscreenMusic.addEventListener('click', function() {
-                if (fullscreenMusicBoxModal) {
-                    fullscreenMusicBoxModal.style.display = 'none';
-                }
-                if (window.currentPlayer) {
-                    try {
-                        window.currentPlayer.pause();
-                    } catch(e) {
-                        console.error('暂停播放器失败:', e);
-                    }
-                }
-            });
-        }
+if (closeFullscreenMusic) {
+closeFullscreenMusic.addEventListener('click', function() {
+if (fullscreenMusicBoxModal) {
+fullscreenMusicBoxModal.style.display = 'none';
+}
+if (window.currentPlayer) {
+try {
+window.currentPlayer.pause();
+} catch(e) {
+console.error('暂停播放器失败:', e);
+}
+}
+});
+}
 
-        if (fullscreenMusicBoxModal) {
-            fullscreenMusicBoxModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
-                    if (window.currentPlayer) {
-                        try {
-                            window.currentPlayer.pause();
-                        } catch(e) {
-                            console.error('暂停播放器失败:', e);
-                        }
-                    }
-                }
-            });
-        }
-    });
+if (fullscreenMusicBoxModal) {
+fullscreenMusicBoxModal.addEventListener('click', function(e) {
+if (e.target === this) {
+this.style.display = 'none';
+if (window.currentPlayer) {
+try {
+window.currentPlayer.pause();
+} catch(e) {
+console.error('暂停播放器失败:', e);
+}
+}
+}
+});
+}
+});
 } else {
-    init();
+init();
+initGameConsole();
 }
 
 // 页面卸载前保存滚动位置
