@@ -5,7 +5,7 @@
 <!-- 移动端适配 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="巳泷资源库 - 提供各类优质网络资源导航">
-<title>巳泷资源库</title>
+<title>巳泷游戏机</title>
 <!-- 宽松协议配置 -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -19,17 +19,21 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
+
+<!-- 2026 最新官方 Ruffle 主文件 -->
+<script src="https://unpkg.com/@ruffle-rs/ruffle@0.2.0-nightly.2026.3.31/ruffle.js"></script>
+
 <script>
 window.RufflePlayer = window.RufflePlayer || {};
 window.RufflePlayer.config = {
-  wasmUrl: "./ruffle/ruffle.wasm",
-  publicPath: "./ruffle/",
+  // 官方最新版已自动加载 wasm，无需本地路径
   autoplay: "on",
   unmuteOverlay: "hidden",
   backgroundColor: "#333333",
   letterbox: "on",
-  forceWebGL: true,
-  forceWebGL2: true,
+  // 关闭强制 WebGL，防止黑屏，兼容所有浏览器
+  forceWebGL: false,
+  forceWebGL2: false,
   quality: "high",
   antialiasing: true,
   frameRate: 30,
