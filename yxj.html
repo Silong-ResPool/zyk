@@ -27,7 +27,7 @@
 <script>
 window.RufflePlayer = window.RufflePlayer || {};
 window.RufflePlayer.config = {
-  wasmUrl: "./ruffle/ruffle.wasm",
+  wasmUrl: "./ruffle/file.wasm",
   publicPath: "./ruffle/",
   autoplay: "on",
   unmuteOverlay: "hidden",
@@ -288,7 +288,7 @@ body.fullscreen-game #gameContainer { width: 100%; height: 100%; }
   <div class="console">
     <div class="header"><i class="fas fa-gamepad"></i><span>巳泷游戏机</span></div>
     <div class="screen-area" id="screenArea">
-      <div id="gameContainer"><div id="standbyText"><i class="fas fa-gamepad"></i><span>点击游戏开始</span></div></div>
+      <div id="playArea"><div id="loadTip"><i class="fas fa-gamepad"></i><span>点击游戏开始</span></div></div>
     </div>
     <div class="controls">
       <button class="btn" id="menuBtn" title="打开游戏库">☰ 游戏</button>
