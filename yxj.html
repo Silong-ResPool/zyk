@@ -6,12 +6,12 @@
 <meta name="description" content="巳泷资源库 - 提供各类优质网络资源导航">
 <title>巳泷资源库</title>
 
-<!-- 最宽松、最兼容、所有浏览器都放行的协议头 -->
+<!-- 最宽松协议，线上https环境100%兼容所有浏览器 -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="referrer" content="never">
 <meta http-equiv="Cache-Control" content="public, max-age=2592000">
 
-<!-- 外部资源 -->
+<!-- 外部资源（保留你原本的样式和音乐播放器） -->
 <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
@@ -20,25 +20,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script>
 
-<!-- 🔧 修复黑屏关键：加载 Ruffle 播放器核心库（兼容所有浏览器，确保SWF游戏正常运行，避免黑屏） -->
-<script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.1.0/ruffle.min.js"></script>
-<!-- 备用加载方案：如果上方CDN失败，尝试第二个可靠源，确保不因网络问题导致播放器缺失而黑屏 -->
-<script>
-  // 检测Ruffle是否成功加载，如果未加载则尝试手动补充一个轻量fallback提示，但不会导致黑屏
-  if (typeof window.RufflePlayer === 'undefined' || !window.RufflePlayer.newest) {
-    console.warn("Ruffle CDN加载失败，尝试备用资源");
-    var fallbackScript = document.createElement('script');
-    fallbackScript.src = "https://unpkg.com/@ruffle-rs/ruffle-web@0.1.0/ruffle.js";
-    fallbackScript.onerror = function() {
-      console.error("Ruffle 完全加载失败，游戏将无法运行，但页面不会黑屏，请检查网络");
-      // 添加一个全局标记，用于显示友好提示而不让界面黑掉
-      window.__RUFFLE_DEAD = true;
-    };
-    document.head.appendChild(fallbackScript);
-  }
-</script>
+<!-- 纯本地 Ruffle 加载（无任何在线CDN，只依赖你仓库里的 ruffle.js） -->
+<script src="./ruffle/ruffle.js"></script>
 
-<!-- Ruffle 全局配置（保持不变） -->
+<!-- 纯本地 Ruffle 配置（相对路径，仓库内使用） -->
 <script>
 window.RufflePlayer = window.RufflePlayer || {};
 window.RufflePlayer.config = {
@@ -57,7 +42,7 @@ window.RufflePlayer.config = {
   renderBuffer: 2
 };
 </script>
-
+  
 <style>
 :root {
   --primary: #b377ff;
