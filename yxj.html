@@ -363,9 +363,9 @@ let currentBlobUrl = null;
 const DB_NAME = 'SLConsoleDB', STORE_NAME = 'games';
 
 // 本地文件（绕过拦截用）
-const LOCAL_GAME_SOURCE = 'https://silong-respool.github.io/gay/yxwj/yxgx.html';
+const LOCAL_GAME_SOURCE = 'https://silong-respool.github.io/gay/yxgx.html';
 // 真正从仓库拉取更新
-const REMOTE_GAME_UPDATE_URL = 'https://silong-respool.github.io/gay/yxwj/yxgx.html';
+const REMOTE_GAME_UPDATE_URL = 'https://silong-respool.github.io/gay/yxgx.html';
 
 
 function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
