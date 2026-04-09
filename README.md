@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![巳泷资源库](https://img.shields.io/badge/版本-v7.0.4-blue)
+![巳泷资源库](https://img.shields.io/badge/版本-v7.0.5-blue)
 ![平台](https://img.shields.io/badge/平台-Android-green)
 ![状态](https://img.shields.io/badge/状态-活跃开发中-orange)
 
@@ -188,13 +188,26 @@
 
 ## 🔄 更新日志
 
-### v7.0.4 更新内容
-- ✅ **界面优化**：改进UI设计，提升视觉效果
-- ✅ **性能提升**：优化加载速度，减少内存占用
-- ✅ **功能完善**：增强搜索和收藏功能
-- ✅ **Bug修复**：修复已知问题和兼容性
+### v7.0.5 更新内容
+- 🔖 **全新LOGO焕新上线**，视觉风格全面升级
+- 🔍 **优化搜索交互逻辑**，查找资源更流畅顺手
+- 📦 **新增部分优质资源**，资源库持续扩充
+- 📱 **全面适配平板设备**，大屏体验更舒适
+- 🎮 **侧边栏游戏盒子新增部分小游戏**
+- ✨ **全新上线详情页功能**
+- 🌐 **优化网页跳转规则**：点击卡片进入详情页，再前往网站
+- 🔧 **优化整体使用体验**
+- 🐛 **修复已知问题**
 
 ### 历史版本
+
+#### v7.0.4
+- 适配平板设备
+- 侧边栏游戏盒子新增部分小游戏
+- 新增详情页功能
+- 网页需在详情页内点击前往网站
+- 优化细节体验
+- 修复已知问题
 
 #### v7.0.3
 新增音乐播放器功能，支持在线播放各类音频资源，丰富产品使用场景，满足用户多元娱乐需求。
@@ -263,6 +276,6 @@ A: 请尝试清除应用缓存或重新安装应用。
 
 如果觉得这个应用对您有帮助，请给个⭐Star支持一下！
 
-[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/gay/releases/tag/gay)
+[![下载APK](https://img.shields.io/badge/立即下载-v7.0.5_APK-brightgreen)](https://github.com/Silong-ResPool/gay/releases/tag/gay)
 
 </div>
