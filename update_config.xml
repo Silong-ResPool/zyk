@@ -1,12 +1,15 @@
 <update>
-    <version>7.0.4</version>
+    <version>7.0.5</version>
     
-    <log>📱 适配平板设备
-🎮 侧边栏游戏盒子新增部分小游戏
-✨ 新增详情页功能
-🌐 网页需在详情页内点击前往网站
-🔧 优化细节体验
-🐛 修复已知问题</log>
+    <log>✨ 全新LOGO焕新上线，视觉体验升级
+🔍 优化搜索交互逻辑，查找资源更高效
+📱 全面适配平板设备，大屏使用更舒适
+🎮 侧边栏游戏盒子新增多款小游戏
+📄 全新上线资源详情页功能
+🌐 优化网页跳转规则：点击卡片进入详情页，再跳转至目标网站
+📦 新增海量优质资源，内容库持续扩充
+🔧 全面优化整体使用体验
+🐛 修复已知问题，运行更稳定流畅</log>
     
-    <url>https://github.com/Silong-ResPool/zyk/releases/download/apk/Silong-ResPool_v7.0.4.apk</url>
+    <url>https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.5.apk</url>
 </update>
