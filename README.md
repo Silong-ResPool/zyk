@@ -8,7 +8,7 @@
 
 **一站式网络资源导航平台**
 
-[![下载APK](https://img.shields.io/badge/立即下载-APK_安装包-brightgreen)](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)
+[![下载APK](https://img.shields.io/badge/立即下载-APK_安装包-brightgreen)](https://github.com/Silong-ResPool/gay/releases/tag/gay)
 
 </div>
 
@@ -21,7 +21,7 @@
 **未成年人禁止访问该资源库**，本应用包含大量gay成人内容，仅限18岁及以上成年用户使用。请确认您已达到法定成年年龄后再下载使用。
 
 ### 下载链接
-🔗 **[点击此处下载APK安装包](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)**
+🔗 **[点击此处下载APK安装包](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FSilong-ResPool%2Fgay%2Freleases%2Ftag%2Fgay&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)**
 
 ### 安装说明
 1. 下载APK文件到您的Android设备
@@ -253,7 +253,7 @@ A: 请尝试清除应用缓存或重新安装应用。
 
 ### 联系方式
 - **邮箱**：<xz35238345yun@163.com>
-- **QQ群**：[点击加入](https://qun.qq.com/universal-share/share?ac=1&authKey=XZPMTomBWW55rCTj9d%2B%2B16CA7FXzX88PdDYN4IyoS6MxEw4lI1VYWKApc4s8zlGa&busi_data=eyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJBZ0RPME8xcTFaNVJYVGhXaVExdVc1MjRZWnM1ZklCeUxIM2ZZQzdQY2VEbk9hYW9OdUNrTk0xRUNnYTBsczA1IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=NWJ_-3Syee3-r3DjUbMI2-RH_MWjBYP7Ramds46dfz67S9DNXS-OI9rxf7Vfoo-I7zEbYd-pd0bEJcolwZtlug&svctype=4&tempid=h5_group_info)
+- **QQ群**：[点击加入](sslocal://flow/file_open?url=https%3A%2F%2Fqun.qq.com%2Funiversal-share%2Fshare%3Fac%3D1%26authKey%3DXZPMTomBWW55rCTj9d%252B%252B16CA7FXzX88PdDYN4IyoS6MxEw4lI1VYWKApc4s8zlGa%26busi_data%3DeyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJBZ0RPME8xcTFaNVJYVGhXaVExdVc1MjRZWnM1ZklCeUxIM2ZZQzdQY2VEbk9hYW9OdUNrTk0xRUNnYTBsczA1IiwidWluIjoiMzIxMzgyNDEyNiJ9%26data%3DNWJ_-3Syee3-r3DjUbMI2-RH_MWjBYP7Ramds46dfz67S9DNXS-OI9rxf7Vfoo-I7zEbYd-pd0bEJcolwZtlug%26svctype%3D4%26tempid%3Dh5_group_info&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
   
 ---
 
@@ -263,6 +263,6 @@ A: 请尝试清除应用缓存或重新安装应用。
 
 如果觉得这个应用对您有帮助，请给个⭐Star支持一下！
 
-[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/gay/releases/download/apk/Silong-ResPool_v7.0.4.apk)
+[![下载APK](https://img.shields.io/badge/立即下载-v7.0.4_APK-brightgreen)](https://github.com/Silong-ResPool/gay/releases/tag/gay)
 
 </div>
