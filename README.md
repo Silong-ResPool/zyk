@@ -21,10 +21,10 @@
 **未成年人禁止访问该资源库**，本应用包含大量gay成人内容，仅限18岁及以上成年用户使用。请确认您已达到法定成年年龄后再下载使用。
 
 ### 下载链接
-🔗 **[点击此处下载APK安装包](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FSilong-ResPool%2Fgay%2Freleases%2Ftag%2Fgay&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)**
+🔗 **[点击前往发布页下载](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FSilong-ResPool%2Fgay%2Freleases%2Ftag%2Fgay&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)**
 
 ### 安装说明
-1. 下载APK文件到您的Android设备
+1. 进入发布页后下载最新APK文件到您的Android设备
 2. 在设置中启用"允许来自未知来源的应用"
 3. 点击APK文件进行安装
 4. 安装完成后即可使用
@@ -133,7 +133,7 @@
 ### 🚀 快速开始
 
 #### 首次使用
-1. **安装应用**：下载并安装APK文件
+1. **安装应用**：从发布页下载并安装APK文件
 2. **权限设置**：根据需要授予相应权限
 3. **界面熟悉**：浏览各个功能模块
 4. **开始使用**：点击资源链接开始体验
@@ -265,9 +265,9 @@ A: 请尝试清除应用缓存或重新安装应用。
 - **Bug报告**：发现Bug请及时报告以便修复
 
 ### 联系方式
-- **邮箱**：<xz35238345yun@163.com>
-- **QQ群**：[点击加入](sslocal://flow/file_open?url=https%3A%2F%2Fqun.qq.com%2Funiversal-share%2Fshare%3Fac%3D1%26authKey%3DXZPMTomBWW55rCTj9d%252B%252B16CA7FXzX88PdDYN4IyoS6MxEw4lI1VYWKApc4s8zlGa%26busi_data%3DeyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJBZ0RPME8xcTFaNVJYVGhXaVExdVc1MjRZWnM1ZklCeUxIM2ZZQzdQY2VEbk9hYW9OdUNrTk0xRUNnYTBsczA1IiwidWluIjoiMzIxMzgyNDEyNiJ9%26data%3DNWJ_-3Syee3-r3DjUbMI2-RH_MWjBYP7Ramds46dfz67S9DNXS-OI9rxf7Vfoo-I7zEbYd-pd0bEJcolwZtlug%26svctype%3D4%26tempid%3Dh5_group_info&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
-  
+- **邮箱**：xz35238345yun@163.com
+- **QQ群**：[点击加群](sslocal://flow/file_open?url=https%3A%2F%2Fqun.qq.com%2Funiversal-share%2Fshare%3Fac%3D1%26authKey%3D67SgFYc1tHoLWT1MDhj%252B18pxGVyl6BzPGhARhRPcBje0wQdc2xIUp46HRK5ozz%252B5%26busi_data%3DeyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJKL0pXQ2FYL1M3ajYrZm1IL2JaMUVDb2s1ak1aREU2SFhTK0g0TE1YVE5EVWVyZ0t0V1p5NzA2TVlaaXEzTndpIiwidWluIjoiMzIxMzgyNDEyNiJ9%26data%3DXGYu8cpLKEvONmhllO1WMcWovqZu52oNkXXxoTYZJcsfmC8h5H-pQmv3plwV1Pw5H3p7eHOnE2vQ_c9aLD8ddw%26svctype%3D4%26tempid%3Dh5_group_info&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+
 ---
 
 <div align="center">
