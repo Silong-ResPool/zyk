@@ -5,234 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>应用公告</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-            background: linear-gradient(180deg, #10002B 0%, #240046 100%);
-            color: #FFFFFF;
-            min-height: 100vh;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        .header {
-            padding: 20px 16px;
-            text-align: center;
-            background: rgba(123, 44, 191, 0.15);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(157, 78, 221, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            color: #FFFFFF;
-            background: linear-gradient(90deg, #C77DFF, #9D4EDD);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .container {
-            padding: 20px 16px;
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .notice-card {
-            background: rgba(123, 44, 191, 0.2);
-            border: 1px solid rgba(157, 78, 221, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-        }
-
-        .notice-card:hover {
-            border-color: rgba(199, 125, 255, 0.6);
-            box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .notice-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notice-title::before {
-            content: "📢";
-            font-size: 16px;
-        }
-
-        .notice-time {
-            font-size: 12px;
-            color: #C77DFF;
-            margin-bottom: 12px;
-            opacity: 0.8;
-        }
-
-        .notice-content {
-            font-size: 14px;
-            color: #E0AAFF;
-            line-height: 1.8;
-            word-break: break-word;
-        }
-
-        .notice-content p {
-            margin-bottom: 10px;
-        }
-
-        .notice-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .tag-top {
-            display: inline-block;
-            background: rgba(220, 38, 38, 0.8);
-            color: #FFFFFF;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-            font-weight: 500;
-        }
-
-        .tag-new {
-            display: inline-block;
-            background: rgba(157, 78, 221, 0.8);
-            color: #FFFFFF;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-            font-weight: 500;
-        }
-
-        .download-btn {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 8px 16px;
-            background: linear-gradient(90deg, #9D4EDD, #C77DFF);
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 12px;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .download-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.03);
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px 16px 40px;
-            font-size: 12px;
-            color: #9D4EDD;
-            opacity: 0.7;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            color: #9D4EDD;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; background: linear-gradient(180deg, #10002B 0%, #240046 100%); color: #FFFFFF; min-height: 100vh; line-height: 1.6; }
+        .header { padding: 20px 16px; text-align: center; background: rgba(123, 44, 191, 0.15); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(157, 78, 221, 0.2); position: sticky; top: 0; z-index: 10; }
+        .header h1 { font-size: 22px; font-weight: 700; color: #FFFFFF; background: linear-gradient(90deg, #C77DFF, #9D4EDD); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .container { padding: 20px 16px; max-width: 100%; margin: 0 auto; }
+        .notice-card { background: rgba(123, 44, 191, 0.2); border: 1px solid rgba(157, 78, 221, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(8px); }
+        .notice-title { font-size: 18px; font-weight: 600; color: #FFFFFF; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .notice-title::before { content: "📢"; font-size: 16px; }
+        .notice-time { font-size: 12px; color: #C77DFF; margin-bottom: 12px; opacity: 0.8; }
+        .notice-content { font-size: 14px; color: #E0AAFF; line-height: 1.8; }
+        .tag-top { background: rgba(220, 38, 38, 0.8); color: #FFFFFF; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+        .tag-new { background: rgba(157, 78, 221, 0.8); color: #FFFFFF; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+        .download-btn { display: inline-block; margin-top: 12px; padding: 8px 16px; background: linear-gradient(90deg, #9D4EDD, #C77DFF); color: #fff; font-size: 14px; font-weight: 600; border-radius: 12px; text-decoration: none; }
+        .footer { text-align: center; padding: 20px 16px 40px; font-size: 12px; color: #9D4EDD; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>应用公告</h1>
-    </div>
-
+    <div class="header"><h1>应用公告</h1></div>
     <div class="container">
-        <!-- 置顶：v7.0.5 最新公告 -->
-        <div class="notice-card">
-            <div class="notice-title">
-                巳泷资源库 v7.0.5 正式更新
-                <span class="tag-top">置顶</span>
+        <div class="notice-card" style="border: 1px solid rgba(199, 125, 255, 0.6);">
+            <div class="notice-title">巳泷资源库 v7.0.6 正式更新<span class="tag-top">置顶</span></div>
+            <div class="notice-time">2026-04-19 12:00</div>
+            <div class="notice-content">
+                <p>🚀 采用动态更新机制，网页内容实时同步，无需频繁打包。</p>
+                <p>🎵 <strong>更名：</strong>“音乐盒子”更名为“媒体音乐”，重构搜索，支持全网免费搜索。</p>
+                <p>🎮 <strong>更名：</strong>“游戏盒子”更名为“游戏娱乐”，升级交互，扩充资源。</p>
+                <p>🗑️ 移除资源管理与主题设置，精简核心体验。</p>
+                <p>✨ 优化加载稳定性与整体交互体验。</p>
+                <a href="https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.6.apk" class="download-btn">点击下载 v7.0.6 最新版</a>
             </div>
+        </div>
+        <div class="notice-card">
+            <div class="notice-title">巳泷资源库 v7.0.5 正式更新<span class="tag-new">历史</span></div>
             <div class="notice-time">2026-04-10 12:00</div>
             <div class="notice-content">
-                <p>🔖 全新更换应用LOGO，视觉风格全新升级</p>
-                <p>🔍 优化搜索交互逻辑，搜索更流畅顺手</p>
-                <p>📦 新增部分优质资源，资源库持续扩充</p>
-                <p>📱 全面适配平板设备，大屏体验更舒适</p>
-                <p>🎮 侧边栏游戏盒子新增部分小游戏</p>
-                <p>✨ 全新上线详情页功能</p>
-                <p>🌐 网页跳转规则优化：点击卡片进入详情页再前往网站</p>
-                <p>🔧 优化整体使用体验</p>
-                <p>🐛 修复已知问题</p>
-                
-                <a href="https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.5.apk" class="download-btn">
-                    点击下载最新版本
-                </a>
+                <p>🔖 全新更换应用LOGO，搜索逻辑优化。</p>
+                <p>📱 全面适配平板设备，新增详情页功能。</p>
             </div>
         </div>
-
-        <!-- 历史：v7.0.4 公告 -->
         <div class="notice-card">
-            <div class="notice-title">
-                巳泷资源库 v7.0.4 正式更新
-                <span class="tag-new">历史</span>
-            </div>
+            <div class="notice-title">巳泷资源库 v7.0.4 正式更新<span class="tag-new">历史</span></div>
             <div class="notice-time">2026-03-28 12:00</div>
             <div class="notice-content">
-                <p>📱 适配平板设备</p>
-                <p>🎮 侧边栏游戏盒子新增部分小游戏</p>
-                <p>✨ 新增详情页功能</p>
-                <p>🌐 网页需在详情页内点击前往网站</p>
-                <p>🔧 优化细节体验</p>
-                <p>🐛 修复已知问题</p>
+                <p>🎮 游戏盒子新增部分小游戏，网页跳转规则优化。</p>
             </div>
         </div>
-
-        <!-- 历史：v7.0.3 公告 -->
         <div class="notice-card">
-            <div class="notice-title">
-                巳泷资源库 v7.0.3 正式更新
-                <span class="tag-new">历史</span>
-            </div>
+            <div class="notice-title">巳泷资源库 v7.0.3 正式更新<span class="tag-new">历史</span></div>
             <div class="notice-time">2026-03-25 12:00</div>
             <div class="notice-content">
-                <p>🔄 舍弃原版网页加载拉取，更换为更稳定的本地拉取</p>
-                <p>🔄 采用JAVA代码编译安装包版本</p>
-                <p>✨ 新增顶部拉直、实时拉取最新内容、游戏盒子拉取最新游戏</p>
-                <p>✨ 新增底部导航栏：返回、刷新、设置键</p>
-                <p>✨ 新增设置弹窗及内部功能</p>
-                <p>🔧 优化整体加载与体验</p>
-                <p>🐛 修复已知问题</p>
+                <p>🔄 采用JAVA代码编译安装包，新增底部导航栏。</p>
             </div>
         </div>
     </div>
-
-    <div class="footer">
-        最终解释权归应用巳泷本人所有
-    </div>
+    <div class="footer">最终解释权归应用巳泷本人所有</div>
 </body>
 </html>
