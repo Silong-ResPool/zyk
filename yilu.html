@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>巳泷资源库·音律</title>
+  <title>巳泷资源库·音律 | 后台畅听</title>
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* 完全保留您原有的样式，一字未改 */
+    /* 完全保留原有风格，微调以适配新增的迷你进度条/时间/上下曲，并修复歌词滚动穿透 */
     :root {
       --v-primary: #8b5cf6;
       --v-accent: #d8b4fe;
@@ -31,6 +31,7 @@
       min-height: 100vh;
       padding-bottom: 140px;
       overflow-x: hidden;
+      /* 歌词打开时通过js控制overflow，此处不硬编码 */
     }
     .header-ui {
       position: sticky;
@@ -214,12 +215,104 @@
       border-top: 1px solid var(--v-border);
       transition: all 0.5s ease;
     }
+    /* 迷你栏微调：增加高度以容纳进度条/时间/上下曲，保持视觉和谐 */
     .mini-bar {
-      height: 85px;
+      min-height: 95px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 8px 16px;
+      gap: 8px;
+    }
+    /* 左侧封面+信息区 */
+    .mini-left {
       display: flex;
       align-items: center;
-      padding: 0 20px;
-      gap: 12px;
+      gap: 10px;
+      flex: 2;
+      min-width: 160px;
+    }
+    #miniCover {
+      width: 48px;
+      height: 48px;
+      background: var(--v-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .mini-info {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+    #mTitle {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 15px;
+    }
+    #mArtist {
+      font-size: 11px;
+      color: var(--v-text-2);
+      margin-top: 2px;
+    }
+    /* 迷你进度条+时间行 */
+    .mini-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 2px;
+    }
+    .mini-time {
+      font-size: 10px;
+      color: var(--v-text-2);
+      min-width: 35px;
+      text-align: right;
+    }
+    .mini-progress-wrap {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      position: relative;
+    }
+    .mini-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--v-primary);
+      border-radius: 2px;
+    }
+    /* 迷你控制按钮组 */
+    .mini-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .mini-ctrl-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      background: var(--v-card);
+      border: 1px solid var(--v-border);
+    }
+    .mini-ctrl-btn.small {
+      font-size: 15px;
     }
     .full-panel {
       height: 0;
@@ -269,12 +362,21 @@
       width: 100%;
       height: 22px;
       margin: 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .time-current, .time-duration {
+      font-size: 12px;
+      color: var(--v-text-2);
+      min-width: 40px;
     }
     .progress-bar-bg {
-      width: 100%;
+      flex: 1;
       height: 3px;
       background: rgba(255,255,255,0.1);
       border-radius: 2px;
+      position: relative;
     }
     .progress-current {
       height: 100%;
@@ -322,13 +424,13 @@
       font-size: 28px;
     }
     .lyric-overlay {
-      position: absolute;
+      position: fixed;
       inset: 0;
       background: #030014;
       z-index: 1001;
       display: none;
       flex-direction: column;
-      padding: 50px 25px;
+      padding: 50px 25px 20px;
       text-align: center;
     }
     .lyric-overlay.show {display: flex;}
@@ -340,6 +442,8 @@
       color: var(--v-text-2);
       mask-image: linear-gradient(transparent, #fff 12%, #fff 88%, transparent);
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;  /* 防止滚动穿透及过度拉拽 */
+      padding-bottom: 20px;
     }
     .lrc-line {
       transition: 0.3s;
@@ -356,6 +460,7 @@
       font-size: 22px;
       opacity: 0.5;
       cursor: pointer;
+      z-index: 10;
     }
     .mask {
       position: fixed;
@@ -402,15 +507,8 @@
       justify-content: space-between;
       align-items: center;
     }
-    .menu-item.disable-del{
-      opacity:0.5;
-      cursor:not-allowed;
-    }
-    .del-pl-btn{
-      color:#ff6b6b;
-      font-size:14px;
-      padding:2px 6px;
-    }
+    .menu-item.disable-del{ opacity:0.5; cursor:not-allowed; }
+    .del-pl-btn{ color:#ff6b6b; font-size:14px; padding:2px 6px; }
     .popup {
       position: fixed;
       left: 50%;
@@ -470,25 +568,12 @@
       outline: none;
       margin-bottom: 10px;
     }
-    .loading-dot {
-      text-align: center;
-      padding: 15px;
-      color: var(--v-primary);
-      font-size: 12px;
-    }
+    .loading-dot { text-align: center; padding: 15px; color: var(--v-primary); font-size: 12px; }
     .hidden {display: none;}
     .toast-tip{
-      position:fixed;
-      left:50%;
-      top:45%;
-      transform:translate(-50%,-50%);
-      background:rgba(0,0,0,0.75);
-      color:#fff;
-      padding:10px 20px;
-      border-radius:8px;
-      font-size:14px;
-      z-index:9999;
-      display:none;
+      position:fixed; left:50%; top:45%; transform:translate(-50%,-50%);
+      background:rgba(0,0,0,0.75); color:#fff; padding:10px 20px;
+      border-radius:8px; font-size:14px; z-index:9999; display:none;
     }
   </style>
 </head>
@@ -519,16 +604,32 @@
 <div class="song-list" id="list"></div>
 <div id="loader" class="loading-dot hidden">加载中...</div>
 
+<!-- 播放器：底部固定，包含增强的迷你栏（进度/时间/上下曲） -->
 <div class="player-root" id="playerNode">
   <div class="mini-bar">
-    <div id="miniCover" style="width: 48px;height: 48px;background: var(--v-primary);border-radius: 12px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;cursor:pointer;" onclick="openFull()">🎵</div>
-    <div style="flex: 1;min-width: 0;cursor:pointer;" onclick="openFull()">
-      <div id="mTitle" style="font-weight: 600;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">未在播放</div>
-      <div id="mArtist" style="font-size: 11px;color: var(--v-text-2);margin-top: 3px;">聚合无损音乐</div>
+    <div class="mini-left">
+      <div id="miniCover" onclick="openFull()">🎵</div>
+      <div class="mini-info" onclick="openFull()">
+        <div id="mTitle">未在播放</div>
+        <div id="mArtist">聚合无损音乐</div>
+      </div>
     </div>
-    <button class="btn-circle" id="miniCollectBtn" style="font-size: 20px;margin-right:8px;" onclick="curSongCollect()"><i class="fa-regular fa-heart"></i></button>
-    <button class="btn-circle" style="font-size: 20px;" id="mPlay" onclick="togglePlay()"><i class="fa-solid fa-play"></i></button>
+    <div class="mini-controls">
+      <button class="mini-ctrl-btn small" onclick="playPrev()"><i class="fa-solid fa-backward-step"></i></button>
+      <button class="mini-ctrl-btn" id="mPlay" onclick="togglePlay()"><i class="fa-solid fa-play"></i></button>
+      <button class="mini-ctrl-btn small" onclick="playNext()"><i class="fa-solid fa-forward-step"></i></button>
+      <button class="mini-ctrl-btn" id="miniCollectBtn" onclick="curSongCollect()"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <!-- 迷你进度条 + 时间 -->
+    <div class="mini-progress-row">
+      <span class="mini-time" id="miniCurrTime">00:00</span>
+      <div class="mini-progress-wrap" id="miniProgressWrap">
+        <div class="mini-progress-bar" id="miniProgBar"></div>
+      </div>
+      <span class="mini-time" id="miniDurTime">00:00</span>
+    </div>
   </div>
+
   <div class="full-panel">
     <div style="font-size: 22px;opacity: 0.5;cursor:pointer;margin-left:auto" onclick="closeFull()">✕</div>
     <div class="circle-cover" id="fullCover">🎵</div>
@@ -544,10 +645,16 @@
       <div class="ctrl-opt-btn" id="fullCollectBtn" onclick="curSongCollect()" title="收藏"><i class="fa-regular fa-heart"></i></div>
     </div>
 
+    <!-- 全屏进度条 + 时间显示 -->
     <div class="progress-wrap">
-      <div class="progress-bar-bg"><div class="progress-current" id="progBar"></div></div>
-      <input type="range" class="progress-input" id="progSeek" value="0" step="0.1">
+      <span class="time-current" id="fullCurrTime">00:00</span>
+      <div class="progress-bar-bg" style="position:relative;">
+        <div class="progress-current" id="progBar"></div>
+        <input type="range" class="progress-input" id="progSeek" value="0" step="0.1">
+      </div>
+      <span class="time-duration" id="fullDurTime">00:00</span>
     </div>
+
     <div class="main-controls">
       <div class="mode-btn" id="modeBtn" onclick="switchMode()">🔁</div>
       <div class="play-main-group">
@@ -577,30 +684,21 @@
 <div class="popup" id="addPlaylistPopup">
   <div class="popup-title">选择加入歌单</div>
   <div class="playlist-scroll" id="playlistBox"></div>
-  <div class="popup-btn-group">
-    <div class="popup-btn" onclick="closeAddPlaylistPopup()">取消</div>
-  </div>
+  <div class="popup-btn-group"><div class="popup-btn" onclick="closeAddPlaylistPopup()">取消</div></div>
 </div>
-
 <div class="popup" id="createPlaylistPopup">
   <div class="popup-title">创建新歌单</div>
-  <div style="padding:15px;">
-    <input class="input-box" id="newPlaylistName" placeholder="输入歌单名称">
-  </div>
+  <div style="padding:15px;"><input class="input-box" id="newPlaylistName" placeholder="输入歌单名称"></div>
   <div class="popup-btn-group">
     <div class="popup-btn" onclick="closeCreatePlaylistPopup()">取消</div>
     <div class="popup-btn" onclick="createNewPlaylist()">确定</div>
   </div>
 </div>
-
 <div class="popup" id="playlistDetailPopup">
   <div class="popup-title" id="detailTitle">歌单</div>
   <div class="playlist-scroll" id="detailList"></div>
-  <div class="popup-btn-group">
-    <div class="popup-btn" onclick="closePlaylistDetail()">关闭</div>
-  </div>
+  <div class="popup-btn-group"><div class="popup-btn" onclick="closePlaylistDetail()">关闭</div></div>
 </div>
-
 <div class="popup" id="delPlaylistPopup">
   <div class="popup-title">确认删除该歌单？</div>
   <div style="padding:20px;text-align:center;color:var(--v-text-2);">删除后无法恢复</div>
@@ -610,7 +708,7 @@
   </div>
 </div>
 
-<audio id="audioCore"></audio>
+<audio id="audioCore" crossorigin="anonymous"></audio>
 
 <script>
 (function(){
@@ -635,13 +733,7 @@
   let audioQuality = 320;
   let curSong = null;
   let tempDelPid = "";
-  
-  // 分页状态
-  let homePage = 1;
-  let searchPage = 1;
-  let hasMoreHome = true;
-  let hasMoreSearch = true;
-  let isLoadingMore = false;
+  let homePage = 1, searchPage = 1, hasMoreHome = true, hasMoreSearch = true, isLoadingMore = false;
 
   const dom = {
     audio: document.getElementById('audioCore'),
@@ -675,8 +767,20 @@
     miniCollectBtn: document.getElementById('miniCollectBtn'),
     fullCollectBtn: document.getElementById('fullCollectBtn'),
     toastTip: document.getElementById('toastTip'),
-    delPlaylistPopup: document.getElementById('delPlaylistPopup')
+    delPlaylistPopup: document.getElementById('delPlaylistPopup'),
+    // 新增时间/进度元素
+    miniCurrTime: document.getElementById('miniCurrTime'),
+    miniDurTime: document.getElementById('miniDurTime'),
+    miniProgBar: document.getElementById('miniProgBar'),
+    fullCurrTime: document.getElementById('fullCurrTime'),
+    fullDurTime: document.getElementById('fullDurTime'),
   };
+
+  function formatTime(sec){
+    if(isNaN(sec)) return '00:00';
+    const m = Math.floor(sec/60), s = Math.floor(sec%60);
+    return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  }
 
   function showToast(text){
     dom.toastTip.innerText = text;
@@ -685,84 +789,48 @@
   }
 
   const CacheUtil = {
-    set(key,data){
-      const expire = Date.now() + CACHE_EXPIRE_DAY * 24 * 60 * 60 * 1000;
-      localStorage.setItem(key,JSON.stringify({data,expire}));
-    },
+    set(key,data){ localStorage.setItem(key,JSON.stringify({data,expire:Date.now()+CACHE_EXPIRE_DAY*86400000})); },
     get(key){
-      const str = localStorage.getItem(key);
-      if(!str) return null;
-      const obj = JSON.parse(str);
-      if(Date.now() > obj.expire){
-        localStorage.removeItem(key);
-        return null;
-      }
+      const str = localStorage.getItem(key); if(!str) return null;
+      const obj = JSON.parse(str); if(Date.now()>obj.expire){ localStorage.removeItem(key); return null; }
       return obj.data;
     }
   };
 
   const DataStore = {
-    getPlaylist(){
-      let d = localStorage.getItem('music_playlist');
-      return d ? JSON.parse(d) : [{id:"default",name:"默认收藏",list:[]}];
-    },
-    savePlaylist(list){
-      localStorage.setItem('music_playlist',JSON.stringify(list));
-      renderPlaylistMenu();
-    },
-    isCollected(sid){
-      const list = this.getPlaylist();
-      return list.some(pl => pl.list.includes(sid));
-    },
-    // 从指定歌单移除歌曲
-    removeSongInPlaylist(pid,sid){
-      const list = this.getPlaylist();
-      const pl = list.find(x=>x.id === pid);
-      if(!pl) return;
-      const idx = pl.list.indexOf(sid);
-      if(idx > -1) pl.list.splice(idx,1);
-      this.savePlaylist(list);
-    },
-    // 从所有歌单移除歌曲（用于取消收藏）
-    removeSongAll(sid){
-      const list = this.getPlaylist();
-      list.forEach(pl=>{
-        const idx = pl.list.indexOf(sid);
-        if(idx > -1) pl.list.splice(idx,1);
-      });
-      this.savePlaylist(list);
-    },
-    // 添加歌曲到指定歌单（不重复）
-    addSongToPlaylist(pid, sid){
-      const list = this.getPlaylist();
-      const pl = list.find(x=>x.id === pid);
-      if(!pl) return false;
-      if(!pl.list.includes(sid)){
-        pl.list.push(sid);
-        this.savePlaylist(list);
-        return true;
-      }
-      return false;
-    }
+    getPlaylist(){ let d = localStorage.getItem('music_playlist'); return d ? JSON.parse(d) : [{id:"default",name:"默认收藏",list:[]}]; },
+    savePlaylist(list){ localStorage.setItem('music_playlist',JSON.stringify(list)); renderPlaylistMenu(); },
+    isCollected(sid){ return this.getPlaylist().some(pl => pl.list.includes(sid)); },
+    removeSongInPlaylist(pid,sid){ const list=this.getPlaylist(); const pl=list.find(x=>x.id===pid); if(pl){ const i=pl.list.indexOf(sid); if(i>-1)pl.list.splice(i,1); this.savePlaylist(list); } },
+    removeSongAll(sid){ const list=this.getPlaylist(); list.forEach(pl=>{ const i=pl.list.indexOf(sid); if(i>-1)pl.list.splice(i,1); }); this.savePlaylist(list); },
+    addSongToPlaylist(pid, sid){ const list=this.getPlaylist(); const pl=list.find(x=>x.id===pid); if(!pl) return false; if(!pl.list.includes(sid)){ pl.list.push(sid); this.savePlaylist(list); return true; } return false; }
   };
 
-  // 全局刷新所有收藏UI（基于sid）
   function refreshCollectUIForSong(sid){
-    const isCollected = DataStore.isCollected(sid);
-    const iconClass = isCollected ? 'fa-solid' : 'fa-regular';
-    const activeClass = isCollected ? 'collect-active' : '';
-    
-    // 更新所有列表中的收藏按钮
+    const collected = DataStore.isCollected(sid);
+    const iconClass = collected ? 'fa-solid' : 'fa-regular';
     document.querySelectorAll(`.opt-btn[data-sid="${sid}"]`).forEach(el => {
-      el.className = `opt-btn ${activeClass}`;
+      el.className = `opt-btn ${collected?'collect-active':''}`;
       el.innerHTML = `<i class="${iconClass} fa-heart"></i>`;
     });
-    
-    // 如果当前正在播放的歌曲就是这首歌，更新播放器按钮
     if(curSong && curSong.id === sid){
       dom.miniCollectBtn.innerHTML = `<i class="${iconClass} fa-heart"></i>`;
       dom.fullCollectBtn.innerHTML = `<i class="${iconClass} fa-heart"></i>`;
     }
+  }
+
+  // 后台播放增强
+  function enhanceBackgroundPlayback(){
+    const audio = dom.audio;
+    audio.crossOrigin = "anonymous";
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        const playIcon = document.querySelector('#mPlay i');
+        if (playIcon && playIcon.classList.contains('fa-pause') && audio.paused && curSong) {
+          audio.play().catch(()=>{});
+        }
+      }
+    });
   }
 
   window.onload = async () => {
@@ -771,300 +839,146 @@
     renderPlaylistMenu();
     await loadPageData();
     initInfiniteScroll();
+    enhanceBackgroundPlayback();
   };
 
   function initInfiniteScroll(){
     window.addEventListener('scroll', throttle(() => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      
-      if (documentHeight - (scrollTop + windowHeight) < 200) {
-        if (isSearchPage) {
-          if (!isLoadingMore && hasMoreSearch) loadMoreSearch();
-        } else {
-          if (!isLoadingMore && hasMoreHome) loadMoreHome();
-        }
+      const st = window.pageYOffset, wh = window.innerHeight, dh = document.documentElement.scrollHeight;
+      if (dh - (st + wh) < 200) {
+        if (isSearchPage) { if (!isLoadingMore && hasMoreSearch) loadMoreSearch(); }
+        else { if (!isLoadingMore && hasMoreHome) loadMoreHome(); }
       }
     }, 200));
   }
-
-  function throttle(fn, delay){
-    let timer = null;
-    return function(...args){
-      if(timer) return;
-      timer = setTimeout(() => {
-        fn.apply(this, args);
-        timer = null;
-      }, delay);
-    };
-  }
+  function throttle(fn, d){ let t=null; return function(...a){ if(t)return; t=setTimeout(()=>{fn.apply(this,a);t=null;},d);}; }
 
   function renderPlaylistMenu(){
     const list = DataStore.getPlaylist();
     dom.playlistMenuList.innerHTML = '';
     list.forEach(pl => {
-      const item = document.createElement('div');
       const isDefault = pl.id === "default";
+      const item = document.createElement('div');
       item.className = 'menu-item ' + (isDefault ? 'disable-del' : '');
-      item.innerHTML = `
-        <span onclick="openPlaylistDetail('${pl.id}')">${pl.name}</span>
-        ${isDefault 
-          ? '<span style="font-size:12px;color:var(--v-text-2);">默认</span>' 
-          : '<span class="del-pl-btn" onclick="event.stopPropagation();askDelPlaylist(\''+pl.id+'\')"><i class="fa-solid fa-trash"></i></span>'
-        }
-      `;
+      item.innerHTML = `<span onclick="openPlaylistDetail('${pl.id}')">${pl.name}</span>
+        ${isDefault ? '<span style="font-size:12px;color:var(--v-text-2);">默认</span>' : '<span class="del-pl-btn" onclick="event.stopPropagation();askDelPlaylist(\''+pl.id+'\')"><i class="fa-solid fa-trash"></i></span>'}`;
       dom.playlistMenuList.appendChild(item);
     });
   }
 
-  window.askDelPlaylist = function(pid){
-    tempDelPid = pid;
-    dom.delPlaylistPopup.classList.add('show');
-  };
-  window.closeDelPlaylistPopup = function(){
-    dom.delPlaylistPopup.classList.remove('show');
-    tempDelPid = "";
-  };
-  window.confirmDelPlaylist = function(){
-    let list = DataStore.getPlaylist();
-    list = list.filter(item => item.id !== tempDelPid);
-    DataStore.savePlaylist(list);
-    closeDelPlaylistPopup();
-    showToast('歌单已删除');
+  window.askDelPlaylist = (pid)=>{ tempDelPid=pid; dom.delPlaylistPopup.classList.add('show'); };
+  window.closeDelPlaylistPopup = ()=>{ dom.delPlaylistPopup.classList.remove('show'); tempDelPid=""; };
+  window.confirmDelPlaylist = ()=>{
+    let list = DataStore.getPlaylist().filter(i=>i.id!==tempDelPid);
+    DataStore.savePlaylist(list); closeDelPlaylistPopup(); showToast('歌单已删除');
   };
 
   async function loadPageData(){
     const topCache = CacheUtil.get('music_top_song');
-    if(topCache) {
-      topSongData = topCache;
-      renderTopSingle(topSongData);
-    } else {
-      await loadMagicMoment();
-    }
+    if(topCache) { topSongData = topCache; renderTopSingle(topSongData); } else await loadMagicMoment();
     const homeCache = CacheUtil.get('music_home_cache');
-    if(homeCache) {
-      homePlaylist = homeCache;
-      renderHomeList(true);
-    } else {
-      await loadHomeHot(true);
-    }
+    if(homeCache) { homePlaylist = homeCache; renderHomeList(true); } else await loadHomeHot(true);
   }
 
   async function loadMagicMoment(){
-    try {
+    try{
       const res = await fetch(`${API}?types=search&source=netease&name=${encodeURIComponent(TOP_SONG_KEY)}&count=1`);
       const data = await res.json();
-      if(Array.isArray(data) && data.length > 0){
-        const item = data[0];
-        topSongData = {
-          id: item.id,
-          name: item.name,
-          artist: Array.isArray(item.artist) ? item.artist.join('/') : item.artist,
-          source: "netease",
-          sName: "网易"
-        };
-        CacheUtil.set('music_top_song',topSongData);
-        renderTopSingle(topSongData);
+      if(Array.isArray(data) && data.length){
+        const item=data[0]; topSongData={id:item.id,name:item.name,artist:Array.isArray(item.artist)?item.artist.join('/'):item.artist,source:"netease",sName:"网易"};
+        CacheUtil.set('music_top_song',topSongData); renderTopSingle(topSongData);
       }
-    } catch(e){}
+    }catch(e){}
   }
 
   function renderTopSingle(song){
     dom.topWrap.innerHTML = '';
     const collected = DataStore.isCollected(song.id);
-    const d = document.createElement('div');
-    d.className = 'song-item';
-    d.innerHTML = `
-      <div class="song-info">
-        <div class="song-name">${song.name}</div>
-        <div class="song-artist"><span class="platform-tag">${song.sName}</span>${song.artist}</div>
-      </div>
-      <div class="song-opt">
-        <span class="opt-btn ${collected?'collect-active':''}" data-sid="${song.id}" onclick="event.stopPropagation();toggleCollect('${song.id}', this)">
-          <i class="fa-${collected?'solid':'regular'} fa-heart"></i>
-        </span>
-      </div>
-    `;
-    d.onclick = () => {
-      if(!homePlaylist.includes(song)) homePlaylist.unshift(song);
-      curPlaylist = homePlaylist;
-      play(0);
-    };
+    const d = document.createElement('div'); d.className='song-item';
+    d.innerHTML = `<div class="song-info"><div class="song-name">${song.name}</div><div class="song-artist"><span class="platform-tag">${song.sName}</span>${song.artist}</div></div>
+      <div class="song-opt"><span class="opt-btn ${collected?'collect-active':''}" data-sid="${song.id}" onclick="event.stopPropagation();toggleCollect('${song.id}', this)"><i class="fa-${collected?'solid':'regular'} fa-heart"></i></span></div>`;
+    d.onclick = ()=>{ if(!homePlaylist.includes(song)) homePlaylist.unshift(song); curPlaylist = homePlaylist; play(0); };
     dom.topWrap.appendChild(d);
   }
 
-  async function loadHomeHot(reset = true){
-    if(reset) {
-      homePage = 1;
-      hasMoreHome = true;
-      homePlaylist = [];
-      dom.list.innerHTML = '';
-    }
+  async function loadHomeHot(reset=true){
+    if(reset){ homePage=1; hasMoreHome=true; homePlaylist=[]; dom.list.innerHTML=''; }
     if(!hasMoreHome) return;
-    
-    isLoadingMore = true;
-    dom.loader.classList.remove('hidden');
-    let fetchedCount = 0;
+    isLoadingMore=true; dom.loader.classList.remove('hidden');
+    let fetched=0;
     for(const src of SOURCES){
       if(!hasMoreHome) break;
-      try {
-        const res = await fetch(`${API}?types=search&source=${src}&name=热门&count=${PAGE_SIZE}&page=${homePage}`);
-        const data = await res.json();
-        if(Array.isArray(data) && data.length > 0){
-          data.forEach(item => {
-            const s = {
-              id: item.id,
-              name: item.name,
-              artist: Array.isArray(item.artist) ? item.artist.join('/') : item.artist,
-              source: src,
-              sName: {netease:'网易',kuwo:'酷我',kugou:'酷狗',migu:'咪咕',joox:'JOOX',bilibili:'B站'}[src] || src
-            };
-            homePlaylist.push(s);
-            fetchedCount++;
-          });
-        }
-      } catch(e){}
+      try{
+        const res=await fetch(`${API}?types=search&source=${src}&name=热门&count=${PAGE_SIZE}&page=${homePage}`);
+        const data=await res.json();
+        if(Array.isArray(data)) data.forEach(item=>{ homePlaylist.push({id:item.id,name:item.name,artist:Array.isArray(item.artist)?item.artist.join('/'):item.artist,source:src,sName:{netease:'网易',kuwo:'酷我',kugou:'酷狗',migu:'咪咕',joox:'JOOX',bilibili:'B站'}[src]}); fetched++; });
+      }catch(e){}
     }
-    if(fetchedCount === 0) hasMoreHome = false;
-    else homePage++;
-    
-    renderHomeList(reset);
-    isLoadingMore = false;
-    dom.loader.classList.add('hidden');
+    if(fetched===0) hasMoreHome=false; else homePage++;
+    renderHomeList(reset); isLoadingMore=false; dom.loader.classList.add('hidden');
   }
+  async function loadMoreHome(){ await loadHomeHot(false); }
 
-  async function loadMoreHome(){
-    await loadHomeHot(false);
-  }
-
-  function renderHomeList(reset = false){
-    if(reset) dom.list.innerHTML = '';
-    homePlaylist.forEach((s,idx)=>{
+  function renderHomeList(reset=false){
+    if(reset) dom.list.innerHTML='';
+    homePlaylist.forEach(s=>{
       if(document.querySelector(`.song-item[data-id="${s.id}"]`)) return;
       const collected = DataStore.isCollected(s.id);
-      const d = document.createElement('div');
-      d.className = 'song-item';
-      d.setAttribute('data-id', s.id);
-      d.innerHTML = `
-        <div class="song-info">
-          <div class="song-name">${s.name}</div>
-          <div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div>
-        </div>
-        <div class="song-opt">
-          <span class="opt-btn ${collected?'collect-active':''}" data-sid="${s.id}" onclick="event.stopPropagation();toggleCollect('${s.id}', this)">
-            <i class="fa-${collected?'solid':'regular'} fa-heart"></i>
-          </span>
-        </div>
-      `;
-      d.onclick = () => {
-        curPlaylist = homePlaylist;
-        play(homePlaylist.findIndex(item => item.id === s.id));
-      };
+      const d = document.createElement('div'); d.className='song-item'; d.setAttribute('data-id',s.id);
+      d.innerHTML = `<div class="song-info"><div class="song-name">${s.name}</div><div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div></div>
+        <div class="song-opt"><span class="opt-btn ${collected?'collect-active':''}" data-sid="${s.id}" onclick="event.stopPropagation();toggleCollect('${s.id}', this)"><i class="fa-${collected?'solid':'regular'} fa-heart"></i></span></div>`;
+      d.onclick = ()=>{ curPlaylist = homePlaylist; play(homePlaylist.findIndex(item=>item.id===s.id)); };
       dom.list.appendChild(d);
     });
     dom.count.innerText = homePlaylist.length;
   }
 
   async function doSearch(){
-    const v = dom.keywordInput.value.trim();
-    if(!v) return;
-    switchPage(true);
-    dom.filterBar.classList.remove("hidden");
-    keyword = v;
-    searchPage = 1;
-    hasMoreSearch = true;
-    searchPlaylist = [];
-    dom.list.innerHTML = '';
-    
+    const v = dom.keywordInput.value.trim(); if(!v) return;
+    switchPage(true); dom.filterBar.classList.remove("hidden"); keyword=v; searchPage=1; hasMoreSearch=true; searchPlaylist=[]; dom.list.innerHTML='';
     const cache = CacheUtil.get('music_search_'+v);
-    if(cache && Array.isArray(cache) && cache.length > 0){
-      searchPlaylist = cache;
-      renderSearchList(true);
-      // 仍然尝试加载更多，但缓存不覆盖
-    }
+    if(cache && Array.isArray(cache) && cache.length){ searchPlaylist=cache; renderSearchList(true); }
     await fetchSearchData(true);
-    if(searchPlaylist.length > 0) CacheUtil.set('music_search_'+v, searchPlaylist);
+    if(searchPlaylist.length) CacheUtil.set('music_search_'+v, searchPlaylist);
   }
-
-  async function fetchSearchData(reset = true){
-    if(!hasMoreSearch) return;
-    isLoadingMore = true;
-    dom.loader.classList.remove('hidden');
-    let fetchedCount = 0;
+  async function fetchSearchData(reset=true){
+    if(!hasMoreSearch) return; isLoadingMore=true; dom.loader.classList.remove('hidden'); let fetched=0;
     for(const src of SOURCES){
       if(!hasMoreSearch) break;
-      try {
-        const res = await fetch(`${API}?types=search&source=${src}&name=${encodeURIComponent(keyword)}&count=${PAGE_SIZE}&page=${searchPage}`);
-        const data = await res.json();
-        if(Array.isArray(data) && data.length > 0){
-          data.forEach(item => {
-            const s = {
-              id: item.id,
-              name: item.name,
-              artist: Array.isArray(item.artist) ? item.artist.join('/') : item.artist,
-              source: src,
-              sName: {netease:'网易',kuwo:'酷我',kugou:'酷狗',migu:'咪咕',joox:'JOOX',bilibili:'B站'}[src] || src
-            };
-            // 避免重复
-            if(!searchPlaylist.some(ex => ex.id === s.id)){
-              searchPlaylist.push(s);
-              fetchedCount++;
-            }
-          });
-        }
-      } catch(e){}
+      try{
+        const res=await fetch(`${API}?types=search&source=${src}&name=${encodeURIComponent(keyword)}&count=${PAGE_SIZE}&page=${searchPage}`);
+        const data=await res.json();
+        if(Array.isArray(data)) data.forEach(item=>{
+          const s={id:item.id,name:item.name,artist:Array.isArray(item.artist)?item.artist.join('/'):item.artist,source:src,sName:{netease:'网易',kuwo:'酷我',kugou:'酷狗',migu:'咪咕',joox:'JOOX',bilibili:'B站'}[src]};
+          if(!searchPlaylist.some(ex=>ex.id===s.id)){ searchPlaylist.push(s); fetched++; }
+        });
+      }catch(e){}
     }
-    if(fetchedCount === 0) hasMoreSearch = false;
-    else searchPage++;
-    
-    renderSearchList(reset);
-    isLoadingMore = false;
-    dom.loader.classList.add('hidden');
+    if(fetched===0) hasMoreSearch=false; else searchPage++;
+    renderSearchList(reset); isLoadingMore=false; dom.loader.classList.add('hidden');
   }
+  async function loadMoreSearch(){ await fetchSearchData(false); }
 
-  async function loadMoreSearch(){
-    await fetchSearchData(false);
-  }
-
-  function renderSearchList(reset = false){
-    if(reset) dom.list.innerHTML = '';
-    searchPlaylist.forEach((s,idx)=>{
+  function renderSearchList(reset=false){
+    if(reset) dom.list.innerHTML='';
+    searchPlaylist.forEach(s=>{
       if(document.querySelector(`.song-item[data-id="${s.id}"]`)) return;
       const collected = DataStore.isCollected(s.id);
-      const d = document.createElement('div');
-      d.className = 'song-item';
-      d.setAttribute('data-id', s.id);
-      d.innerHTML = `
-        <div class="song-info">
-          <div class="song-name">${s.name}</div>
-          <div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div>
-        </div>
-        <div class="song-opt">
-          <span class="opt-btn ${collected?'collect-active':''}" data-sid="${s.id}" onclick="event.stopPropagation();toggleCollect('${s.id}', this)">
-            <i class="fa-${collected?'solid':'regular'} fa-heart"></i>
-          </span>
-        </div>
-      `;
-      d.onclick = () => {
-        curPlaylist = searchPlaylist;
-        play(searchPlaylist.findIndex(item => item.id === s.id));
-      };
+      const d = document.createElement('div'); d.className='song-item'; d.setAttribute('data-id',s.id);
+      d.innerHTML = `<div class="song-info"><div class="song-name">${s.name}</div><div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div></div>
+        <div class="song-opt"><span class="opt-btn ${collected?'collect-active':''}" data-sid="${s.id}" onclick="event.stopPropagation();toggleCollect('${s.id}', this)"><i class="fa-${collected?'solid':'regular'} fa-heart"></i></span></div>`;
+      d.onclick = ()=>{ curPlaylist = searchPlaylist; play(searchPlaylist.findIndex(item=>item.id===s.id)); };
       dom.list.appendChild(d);
     });
     dom.count.innerText = searchPlaylist.length;
   }
 
   async function play(idx){
-    curIdx = idx;
-    const s = curPlaylist[idx];
-    curSong = s;
+    curIdx = idx; const s = curPlaylist[idx]; curSong = s;
     refreshCollectUIForSong(s.id);
-    document.getElementById('mTitle').innerText = s.name;
-    document.getElementById('fTitle').innerText = s.name;
-    document.getElementById('mArtist').innerText = s.artist;
-    document.getElementById('fArtist').innerText = s.artist;
-    try {
+    document.getElementById('mTitle').innerText = s.name; document.getElementById('fTitle').innerText = s.name;
+    document.getElementById('mArtist').innerText = s.artist; document.getElementById('fArtist').innerText = s.artist;
+    try{
       const res = await fetch(`${API}?types=url&source=${s.source}&id=${s.id}&br=${audioQuality}`);
       const data = await res.json();
       if(data.url){
@@ -1073,315 +987,126 @@
         updatePlayBtn(true);
         loadLyric(s.source,s.id);
       }
-    } catch(e){}
+    }catch(e){}
   }
 
   function initPlayer(){
     dom.audio.playbackRate = audioSpeed;
     dom.audio.ontimeupdate = ()=>{
-      const p = (dom.audio.currentTime/dom.audio.duration*100)||0;
-      dom.progBar.style.width = p+'%';
-      dom.progSeek.value = p;
-      syncLrc(dom.audio.currentTime);
+      const cur = dom.audio.currentTime, dur = dom.audio.duration;
+      const p = (dur ? cur/dur*100 : 0);
+      dom.progBar.style.width = p+'%'; dom.progSeek.value = p;
+      dom.miniProgBar.style.width = p+'%';
+      dom.miniCurrTime.innerText = formatTime(cur);
+      dom.fullCurrTime.innerText = formatTime(cur);
+      if(dur){
+        dom.miniDurTime.innerText = formatTime(dur);
+        dom.fullDurTime.innerText = formatTime(dur);
+      }
+      syncLrc(cur);
     };
-    dom.progSeek.oninput = ()=>{
-      dom.audio.currentTime = dom.progSeek.value/100 * dom.audio.duration;
-    };
+    dom.progSeek.oninput = ()=>{ dom.audio.currentTime = dom.progSeek.value/100 * dom.audio.duration; };
     dom.audio.onended = ()=>{
       if(playMode==='single') dom.audio.play();
       else if(playMode==='loop') playNext();
-      else if(playMode==='random'){
-        let rand = Math.floor(Math.random() * curPlaylist.length);
-        play(rand);
-      }
+      else if(playMode==='random'){ let rand = Math.floor(Math.random()*curPlaylist.length); play(rand); }
     };
   }
 
   function loadLyric(source,id){
-    fetch(`${API}?types=lyric&source=${source}&id=${id}`)
-      .then(r=>r.json())
-      .then(d=>{
-        lrcList = parseLrc(d.lyric||"");
-        renderFullLrc();
-      }).catch(()=>{});
+    fetch(`${API}?types=lyric&source=${source}&id=${id}`).then(r=>r.json()).then(d=>{
+      lrcList = parseLrc(d.lyric||""); renderFullLrc();
+    }).catch(()=>{});
   }
-
   function parseLrc(str){
-    let arr = [];
-    const reg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
-    str.split('\n').forEach(line=>{
-      let m = line.match(reg);
-      if(m){
-        let t = parseInt(m[1])*60 + parseInt(m[2]) + parseInt(m[3])/1000;
-        let txt = line.replace(reg,"").trim();
-        arr.push({t,txt});
-      }
-    });
+    let arr=[]; const reg=/\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+    str.split('\n').forEach(line=>{ let m=line.match(reg); if(m){ let t=parseInt(m[1])*60+parseInt(m[2])+parseInt(m[3])/1000; arr.push({t,txt:line.replace(reg,"").trim()}); } });
     return arr;
   }
-
-  function renderFullLrc(){
-    let html = "";
-    lrcList.forEach(i=>html+=`<div class="lrc-line">${i.txt}</div>`);
-    dom.lrcContent.innerHTML = html;
-  }
-
+  function renderFullLrc(){ dom.lrcContent.innerHTML = lrcList.map(i=>`<div class="lrc-line">${i.txt}</div>`).join(''); }
   function syncLrc(cur){
     if(!lrcList.length) return;
-    let line = 0;
-    for(let i=0;i<lrcList.length;i++) if(cur >= lrcList[i].t) line = i;
+    let line=0; for(let i=0;i<lrcList.length;i++) if(cur>=lrcList[i].t) line=i;
     dom.miniLrcView.innerText = lrcList[line]?.txt||"";
     const lines = dom.lrcContent.querySelectorAll('.lrc-line');
     lines.forEach((el,i)=>el.classList.toggle('active',i===line));
     if(lines[line]) lines[line].scrollIntoView({behavior:'smooth',block:'center'});
   }
 
-  // 收藏核心逻辑：多歌单交互，实时刷新UI
   window.toggleCollect = function(sid, el){
     const allPlaylist = DataStore.getPlaylist();
-    // 如果已收藏（在任意歌单），则全部移除（取消收藏）
-    if(DataStore.isCollected(sid)){
-      DataStore.removeSongAll(sid);
-      refreshCollectUIForSong(sid);
-      showToast('已取消收藏');
-      return;
-    }
-    
-    // 未收藏：若只有一个歌单，直接加入默认
-    if(allPlaylist.length === 1){
-      DataStore.addSongToPlaylist(allPlaylist[0].id, sid);
-      refreshCollectUIForSong(sid);
-      showToast(`已加入【${allPlaylist[0].name}】`);
-      return;
-    }
-    
-    // 多个歌单：弹窗选择
-    window.tempSid = sid;
-    dom.playlistBox.innerHTML = "";
-    allPlaylist.forEach(item=>{
-      const itemDom = document.createElement("div");
-      itemDom.className = "playlist-item";
-      itemDom.innerText = item.name;
-      itemDom.onclick = ()=>selectPlaylist(item.id);
-      dom.playlistBox.appendChild(itemDom);
-    });
+    if(DataStore.isCollected(sid)){ DataStore.removeSongAll(sid); refreshCollectUIForSong(sid); showToast('已取消收藏'); return; }
+    if(allPlaylist.length === 1){ DataStore.addSongToPlaylist(allPlaylist[0].id, sid); refreshCollectUIForSong(sid); showToast(`已加入【${allPlaylist[0].name}】`); return; }
+    window.tempSid = sid; dom.playlistBox.innerHTML = "";
+    allPlaylist.forEach(item=>{ const d=document.createElement("div"); d.className="playlist-item"; d.innerText=item.name; d.onclick=()=>selectPlaylist(item.id); dom.playlistBox.appendChild(d); });
     dom.addPlaylistPopup.classList.add("show");
   };
-
-  window.curSongCollect = function(){
-    if(!curSong) return;
-    toggleCollect(curSong.id, null);
-  };
-
+  window.curSongCollect = function(){ if(curSong) toggleCollect(curSong.id); };
   window.selectPlaylist = function(pid){
-    const sid = window.tempSid;
-    const added = DataStore.addSongToPlaylist(pid, sid);
-    closeAddPlaylistPopup();
-    if(added){
-      refreshCollectUIForSong(sid);
-      const pl = DataStore.getPlaylist().find(p=>p.id===pid);
-      showToast(`已加入【${pl.name}】`);
-    } else {
-      showToast('该歌曲已在歌单中');
-    }
+    const sid = window.tempSid; const added = DataStore.addSongToPlaylist(pid, sid);
+    closeAddPlaylistPopup(); refreshCollectUIForSong(sid);
+    if(added){ const pl=DataStore.getPlaylist().find(p=>p.id===pid); showToast(`已加入【${pl.name}】`); } else showToast('该歌曲已在歌单中');
   };
-
-  function closeAddPlaylistPopup(){
-    dom.addPlaylistPopup.classList.remove('show');
-  }
+  function closeAddPlaylistPopup(){ dom.addPlaylistPopup.classList.remove('show'); }
 
   window.openPlaylistDetail = async function(pid){
-    closeMenu();
-    const pl = DataStore.getPlaylist().find(x=>x.id===pid);
-    dom.detailTitle.innerText = pl.name;
-    dom.detailList.innerHTML = '<div class="loading-dot">加载中...</div>';
+    closeMenu(); const pl = DataStore.getPlaylist().find(x=>x.id===pid);
+    dom.detailTitle.innerText = pl.name; dom.detailList.innerHTML = '<div class="loading-dot">加载中...</div>';
     dom.playlistDetailPopup.classList.add('show');
-    
     const allSongs = [...homePlaylist, ...searchPlaylist];
-    const detailList = [];
-    for(const sid of pl.list){
-      const s = allSongs.find(x=>x.id===sid);
-      if(s) detailList.push(s);
-    }
-    
+    const detailList = pl.list.map(sid=>allSongs.find(x=>x.id===sid)).filter(Boolean);
     let html = "";
-    detailList.forEach((s,i)=>{
-      html+=`
-        <div class="song-item" onclick="playFromPlaylist(${i},'${pid}')">
-          <div class="song-info">
-            <div class="song-name">${s.name}</div>
-            <div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div>
-          </div>
-          <div class="song-opt">
-            <span class="opt-btn" onclick="event.stopPropagation();delSongFromPl('${pid}','${s.id}')" style="color:#ff6b6b;">
-              <i class="fa-solid fa-minus-circle"></i>
-            </span>
-          </div>
-        </div>
-      `;
-    });
+    detailList.forEach((s,i)=>{ html+=`<div class="song-item" onclick="playFromPlaylist(${i},'${pid}')"><div class="song-info"><div class="song-name">${s.name}</div><div class="song-artist"><span class="platform-tag">${s.sName}</span>${s.artist}</div></div><div class="song-opt"><span class="opt-btn" onclick="event.stopPropagation();delSongFromPl('${pid}','${s.id}')" style="color:#ff6b6b;"><i class="fa-solid fa-minus-circle"></i></span></div></div>`; });
     dom.detailList.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--v-text-2);">暂无歌曲</div>';
   };
-
-  window.delSongFromPl = function(pid,sid){
-    DataStore.removeSongInPlaylist(pid,sid);
-    openPlaylistDetail(pid);
-    refreshCollectUIForSong(sid);
-    showToast('已从歌单移除');
-  };
-
+  window.delSongFromPl = function(pid,sid){ DataStore.removeSongInPlaylist(pid,sid); openPlaylistDetail(pid); refreshCollectUIForSong(sid); showToast('已从歌单移除'); };
   window.playFromPlaylist = function(idx,pid){
     const pl = DataStore.getPlaylist().find(x=>x.id===pid);
     const allSongs = [...homePlaylist,...searchPlaylist];
-    const list = pl.list.map(sid=>allSongs.find(x=>x.id===sid)).filter(Boolean);
-    curPlaylist = list;
-    play(idx);
-    closePlaylistDetail();
+    curPlaylist = pl.list.map(sid=>allSongs.find(x=>x.id===sid)).filter(Boolean);
+    play(idx); closePlaylistDetail();
   };
-
   window.closePlaylistDetail = ()=>dom.playlistDetailPopup.classList.remove('show');
 
   function bindEvents(){
-    dom.menuBtn.onclick = ()=>{
-      dom.sideMenu.classList.add('show');
-      dom.menuMask.classList.add('show');
-    };
+    dom.menuBtn.onclick = ()=>{ dom.sideMenu.classList.add('show'); dom.menuMask.classList.add('show'); };
     dom.menuMask.onclick = closeMenu;
     dom.homeBtn.onclick = backHome;
     document.getElementById('searchBtn').onclick = doSearch;
-    dom.keywordInput.onkeydown = function(e){
-      if(e.key === 'Enter') doSearch();
-    };
+    dom.keywordInput.onkeydown = e=>{ if(e.key==='Enter') doSearch(); };
     dom.speedBtn.onclick = changeSpeed;
     dom.qualityBtn.onclick = changeQuality;
-    bindFilter();
-  }
-
-  function closeMenu(){
-    dom.sideMenu.classList.remove('show');
-    dom.menuMask.classList.remove('show');
-  }
-
-  function switchPage(search){
-    isSearchPage = search;
-    if(search){
-      dom.menuBtn.classList.add('hidden');
-      dom.homeBtn.classList.remove('hidden');
-      dom.topWrap.classList.add('hidden');
-    }else{
-      dom.menuBtn.classList.remove('hidden');
-      dom.homeBtn.classList.add('hidden');
-      dom.topWrap.classList.remove('hidden');
-    }
-  }
-
-  async function backHome(){
-    switchPage(false);
-    dom.filterBar.classList.add("hidden");
-    dom.keywordInput.value = "";
-    keyword = '';
-    const cache = CacheUtil.get('music_home_cache');
-    if(cache){
-      homePlaylist = cache;
-      renderHomeList(true);
-    } else {
-      await loadHomeHot(true);
-    }
-    // 重置搜索状态
-    searchPage = 1;
-    hasMoreSearch = true;
-  }
-
-  function bindFilter(){
-    const items = dom.filterBar.querySelectorAll('.filter-item');
-    items.forEach(i=>{
-      i.onclick = ()=>{
-        items.forEach(x=>x.classList.remove('active'));
-        i.classList.add('active');
-        currentFilter = i.dataset.type;
-        if(keyword) doSearch();
-      };
+    document.querySelectorAll('.filter-item').forEach(i=> i.onclick = ()=>{
+      document.querySelectorAll('.filter-item').forEach(x=>x.classList.remove('active')); i.classList.add('active'); currentFilter=i.dataset.type; if(keyword) doSearch();
     });
   }
-
-  function changeSpeed(){
-    const list = [1,1.25,1.5,1.75,2];
-    let i = list.indexOf(audioSpeed);
-    audioSpeed = list[(i+1)%list.length];
-    dom.audio.playbackRate = audioSpeed;
-    showToast(`当前倍速：${audioSpeed}x`);
+  function closeMenu(){ dom.sideMenu.classList.remove('show'); dom.menuMask.classList.remove('show'); }
+  function switchPage(search){ isSearchPage=search; dom.menuBtn.classList.toggle('hidden',search); dom.homeBtn.classList.toggle('hidden',!search); dom.topWrap.classList.toggle('hidden',search); }
+  async function backHome(){
+    switchPage(false); dom.filterBar.classList.add("hidden"); dom.keywordInput.value = ""; keyword='';
+    const cache = CacheUtil.get('music_home_cache'); if(cache){ homePlaylist=cache; renderHomeList(true); } else await loadHomeHot(true);
+    searchPage=1; hasMoreSearch=true;
   }
+  function changeSpeed(){ const list=[1,1.25,1.5,1.75,2]; let i=list.indexOf(audioSpeed); audioSpeed=list[(i+1)%list.length]; dom.audio.playbackRate=audioSpeed; showToast(`倍速 ${audioSpeed}x`); }
+  function changeQuality(){ const list=[128,192,320]; const map={128:'标准',192:'高清',320:'无损'}; let i=list.indexOf(audioQuality); audioQuality=list[(i+1)%list.length]; showToast(`音质 ${map[audioQuality]}(${audioQuality}K)`); if(curSong) play(curIdx); }
 
-  function changeQuality(){
-    const list = [128,192,320];
-    const nameMap = {128:'标准',192:'高清',320:'无损'};
-    let i = list.indexOf(audioQuality);
-    audioQuality = list[(i+1)%list.length];
-    showToast(`当前音质：${nameMap[audioQuality]}(${audioQuality}K)`);
-    if(curSong){
-      // 重新加载当前歌曲URL以应用新音质
-      play(curIdx);
-    }
-  }
-
-  function updatePlayBtn(play){
-    const ico = play ? 'fa-pause' : 'fa-play';
-    document.getElementById('mPlay').innerHTML = `<i class="fa-solid ${ico}"></i>`;
-    document.getElementById('fPlay').innerHTML = `<i class="fa-solid ${ico}"></i>`;
-  }
-
-  window.togglePlay = function(){
-    dom.audio.paused ? dom.audio.play() : dom.audio.pause();
-    updatePlayBtn(!dom.audio.paused);
-  };
-
-  window.playNext = function(){
-    if(!curPlaylist.length) return;
-    let next;
-    if(playMode === 'random'){
-      next = Math.floor(Math.random() * curPlaylist.length);
-    } else {
-      next = curIdx+1 >= curPlaylist.length ? 0 : curIdx+1;
-    }
-    play(next);
-  };
-
-  window.playPrev = function(){
-    if(!curPlaylist.length) return;
-    let prev = curIdx-1 < 0 ? curPlaylist.length-1 : curIdx-1;
-    play(prev);
-  };
-
-  window.switchMode = function(){
-    const m = {loop:'🔁',single:'🔂',random:'🔀'};
-    const k = Object.keys(m);
-    playMode = k[(k.indexOf(playMode)+1)%k.length];
-    dom.modeBtn.innerText = m[playMode];
-  };
-
+  function updatePlayBtn(play){ const ico = play ? 'fa-pause' : 'fa-play'; document.getElementById('mPlay').innerHTML = `<i class="fa-solid ${ico}"></i>`; document.getElementById('fPlay').innerHTML = `<i class="fa-solid ${ico}"></i>`; }
+  window.togglePlay = ()=>{ dom.audio.paused ? dom.audio.play() : dom.audio.pause(); updatePlayBtn(!dom.audio.paused); };
+  window.playNext = function(){ if(!curPlaylist.length) return; let next = (playMode==='random')? Math.floor(Math.random()*curPlaylist.length) : (curIdx+1>=curPlaylist.length?0:curIdx+1); play(next); };
+  window.playPrev = function(){ if(!curPlaylist.length) return; let prev = curIdx-1<0 ? curPlaylist.length-1 : curIdx-1; play(prev); };
+  window.switchMode = ()=>{ const m={loop:'🔁',single:'🔂',random:'🔀'}; const k=Object.keys(m); playMode = k[(k.indexOf(playMode)+1)%k.length]; dom.modeBtn.innerText = m[playMode]; };
   window.openFull = ()=>dom.player.classList.add('is-full');
   window.closeFull = ()=>dom.player.classList.remove('is-full');
-  window.toggleLrcMode = (s)=>s?dom.lrcLayer.classList.add('show'):dom.lrcLayer.classList.remove('show');
-  window.showCreatePlaylist = ()=>{closeMenu();dom.createPlaylistPopup.classList.add('show');};
+  window.toggleLrcMode = (show)=>{
+    if(show){ dom.lrcLayer.classList.add('show'); document.body.style.overflow = 'hidden'; }
+    else { dom.lrcLayer.classList.remove('show'); document.body.style.overflow = ''; }
+  };
+  window.showCreatePlaylist = ()=>{ closeMenu(); dom.createPlaylistPopup.classList.add('show'); };
   window.closeCreatePlaylistPopup = ()=>dom.createPlaylistPopup.classList.remove('show');
-  
   window.createNewPlaylist = function(){
-    const name = dom.newPlaylistName.value.trim();
-    if(!name){
-      showToast('请输入歌单名称');
-      return;
-    }
-    const list = DataStore.getPlaylist();
-    const newId = 'pl_' + Date.now();
-    list.push({
-      id: newId,
-      name: name,
-      list: []
-    });
-    DataStore.savePlaylist(list);
-    dom.newPlaylistName.value = '';
-    closeCreatePlaylistPopup();
-    showToast('歌单创建成功');
+    const name = dom.newPlaylistName.value.trim(); if(!name){ showToast('请输入歌单名称'); return; }
+    const list = DataStore.getPlaylist(); list.push({id:'pl_'+Date.now(), name, list:[]}); DataStore.savePlaylist(list);
+    dom.newPlaylistName.value = ''; closeCreatePlaylistPopup(); showToast('歌单创建成功');
   };
 })();
 </script>
