@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>巳泷资源库·音律 | 后台畅听</title>
+  <title>巳泷资源库·音律</title>
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* 完全保留原有风格，微调以适配新增的迷你进度条/时间/上下曲，并修复歌词滚动穿透 */
@@ -31,7 +31,6 @@
       min-height: 100vh;
       padding-bottom: 140px;
       overflow-x: hidden;
-      /* 歌词打开时通过js控制overflow，此处不硬编码 */
     }
     .header-ui {
       position: sticky;
@@ -215,7 +214,7 @@
       border-top: 1px solid var(--v-border);
       transition: all 0.5s ease;
     }
-    /* 迷你栏微调：增加高度以容纳进度条/时间/上下曲，保持视觉和谐 */
+    /* 迷你栏增强：支持进度条拖拽，视觉优雅 */
     .mini-bar {
       min-height: 95px;
       display: flex;
@@ -224,7 +223,6 @@
       padding: 8px 16px;
       gap: 8px;
     }
-    /* 左侧封面+信息区 */
     .mini-left {
       display: flex;
       align-items: center;
@@ -262,13 +260,12 @@
       color: var(--v-text-2);
       margin-top: 2px;
     }
-    /* 迷你进度条+时间行 */
     .mini-progress-row {
       display: flex;
       align-items: center;
       gap: 8px;
       width: 100%;
-      margin-top: 2px;
+      margin-top: 4px;
     }
     .mini-time {
       font-size: 10px;
@@ -278,18 +275,19 @@
     }
     .mini-progress-wrap {
       flex: 1;
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
       position: relative;
+      cursor: pointer;
     }
     .mini-progress-bar {
       height: 100%;
       width: 0%;
       background: var(--v-primary);
-      border-radius: 2px;
+      border-radius: 4px;
+      pointer-events: none;
     }
-    /* 迷你控制按钮组 */
     .mini-controls {
       display: flex;
       align-items: center;
@@ -373,22 +371,25 @@
     }
     .progress-bar-bg {
       flex: 1;
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
       position: relative;
+      cursor: pointer;
     }
     .progress-current {
       height: 100%;
       background: var(--v-primary);
-      border-radius: 2px;
+      border-radius: 4px;
       width: 0%;
+      pointer-events: none;
     }
     .progress-input {
       position: absolute;
       inset: 0;
       opacity: 0;
       cursor: pointer;
+      width: 100%;
     }
     .main-controls {
       display: flex;
@@ -442,7 +443,7 @@
       color: var(--v-text-2);
       mask-image: linear-gradient(transparent, #fff 12%, #fff 88%, transparent);
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;  /* 防止滚动穿透及过度拉拽 */
+      overscroll-behavior: contain;
       padding-bottom: 20px;
     }
     .lrc-line {
@@ -604,7 +605,7 @@
 <div class="song-list" id="list"></div>
 <div id="loader" class="loading-dot hidden">加载中...</div>
 
-<!-- 播放器：底部固定，包含增强的迷你栏（进度/时间/上下曲） -->
+<!-- 播放器：底部固定迷你栏支持进度条拖拽+时间+上下曲 -->
 <div class="player-root" id="playerNode">
   <div class="mini-bar">
     <div class="mini-left">
@@ -620,7 +621,7 @@
       <button class="mini-ctrl-btn small" onclick="playNext()"><i class="fa-solid fa-forward-step"></i></button>
       <button class="mini-ctrl-btn" id="miniCollectBtn" onclick="curSongCollect()"><i class="fa-regular fa-heart"></i></button>
     </div>
-    <!-- 迷你进度条 + 时间 -->
+    <!-- 迷你进度条 + 时间 + 可拖拽区域 -->
     <div class="mini-progress-row">
       <span class="mini-time" id="miniCurrTime">00:00</span>
       <div class="mini-progress-wrap" id="miniProgressWrap">
@@ -768,12 +769,12 @@
     fullCollectBtn: document.getElementById('fullCollectBtn'),
     toastTip: document.getElementById('toastTip'),
     delPlaylistPopup: document.getElementById('delPlaylistPopup'),
-    // 新增时间/进度元素
     miniCurrTime: document.getElementById('miniCurrTime'),
     miniDurTime: document.getElementById('miniDurTime'),
     miniProgBar: document.getElementById('miniProgBar'),
     fullCurrTime: document.getElementById('fullCurrTime'),
     fullDurTime: document.getElementById('fullDurTime'),
+    miniProgressWrap: document.getElementById('miniProgressWrap')
   };
 
   function formatTime(sec){
@@ -819,7 +820,6 @@
     }
   }
 
-  // 后台播放增强
   function enhanceBackgroundPlayback(){
     const audio = dom.audio;
     audio.crossOrigin = "anonymous";
@@ -833,6 +833,35 @@
     });
   }
 
+  // 迷你进度条拖拽交互 (支持滑动)
+  function bindMiniProgressDrag() {
+    const wrap = dom.miniProgressWrap;
+    if(!wrap) return;
+    const seekHandler = (e) => {
+      const rect = wrap.getBoundingClientRect();
+      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+      if(dom.audio.duration) dom.audio.currentTime = ratio * dom.audio.duration;
+    };
+    wrap.addEventListener('click', (e) => {
+      const rect = wrap.getBoundingClientRect();
+      let ratio = (e.clientX - rect.left) / rect.width;
+      if(dom.audio.duration) dom.audio.currentTime = ratio * dom.audio.duration;
+    });
+    wrap.addEventListener('touchstart', (e) => { e.preventDefault(); seekHandler(e); });
+    wrap.addEventListener('touchmove', (e) => { e.preventDefault(); seekHandler(e); });
+    wrap.addEventListener('mousedown', (e) => {
+      seekHandler(e);
+      const onMouseMove = (moveEv) => seekHandler(moveEv);
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
   window.onload = async () => {
     initPlayer();
     bindEvents();
@@ -840,6 +869,7 @@
     await loadPageData();
     initInfiniteScroll();
     enhanceBackgroundPlayback();
+    bindMiniProgressDrag();
   };
 
   function initInfiniteScroll(){
