@@ -29,21 +29,15 @@
 --secondary-color: #7b2cbf;
 --accent-color: #00d2ff;
 --accent-warm: #ff6eb4;
+--success-color: #10b981;
+--warning-color: #f59e0b;
+--error-color: #ef4444;
 --bg-dark: #08061a;
 --bg-gradient: linear-gradient(135deg, #08061a 0%, #130e2e 40%, #1a1035 100%);
 --text-color: #f0eeff;
 --text-muted: rgba(220, 210, 255, 0.55);
 --text-font: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
 --display-font: 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
---glass-bg: rgba(18, 14, 38, 0.45);
---glass-bg-hover: rgba(24, 18, 50, 0.65);
---glass-border: rgba(176, 38, 255, 0.15);
---glass-border-hover: rgba(176, 38, 255, 0.55);
---glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
---blur-amount: 12px;
---neon-glow: 0 0 12px rgba(176, 38, 255, 0.5), 0 0 28px rgba(176, 38, 255, 0.25);
---neon-glow-accent: 0 0 12px rgba(0, 210, 255, 0.4), 0 0 28px rgba(0, 210, 255, 0.2);
---text-glow: 0 0 8px rgba(176, 38, 255, 0.35);
 --header-height: 68px;
 /* 侧边栏宽度 */
 --sidebar-width: 135px;
@@ -52,11 +46,23 @@
 --radius-md: 18px;
 --radius-sm: 10px;
 --radius-xs: 6px;
---bg-image-portrait: url('bjt/zybjt1.jpg');
+--bg-image-portrait: url('zybjt1.jpg');
 --bg-image-landscape: url('bjt/zybjt2.jpg');
 --hue-rotate: 0deg;
 --global-opacity: 1;
 --card-shine: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%, rgba(176,38,255,0.04) 100%);
+
+/* 核心：卡片+侧边栏 全局改更通透 */
+--glass-bg: rgba(18, 14, 38, 0.22);
+--glass-bg-hover: rgba(24, 18, 50, 0.35);
+--glass-border: rgba(176, 38, 255, 0.08);
+--glass-border-hover: rgba(176, 38, 255, 0.3);
+
+--glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+--blur-amount: 1px;
+--neon-glow: 0 0 12px rgba(176, 38, 255, 0.5), 0 0 28px rgba(176, 38, 255, 0.25);
+--neon-glow-accent: 0 0 12px rgba(0, 210, 255, 0.4), 0 0 28px rgba(0, 210, 255, 0.2);
+--text-glow: 0 0 8px rgba(176, 38, 255, 0.35);
 }
 
 /* ═══════════════════════════════════════════════
@@ -226,7 +232,7 @@ position: relative; min-height: 0;
 /* 侧边栏主容器：缩窄宽度，纯粹容纳图标+文字 */
 width: var(--sidebar-width) !important;
 background: rgba(8, 6, 26, 0.6);
-backdrop-filter: blur(20px) saturate(1.3);
+backdrop-filter: blur(1px) saturate(1.3);
 -webkit-backdrop-filter: blur(20px) saturate(1.3);
 border-right: 1px solid rgba(176,38,255,0.12);
 padding: 6px 0;
@@ -347,7 +353,7 @@ background: rgba(12, 10, 30, 0.4);
 border: 1px solid rgba(176,38,255,0.15);
 border-radius: var(--radius-md);
 padding: 14px 16px; margin-bottom: 28px;
-backdrop-filter: blur(10px);
+backdrop-filter: blur(1px);
 -webkit-backdrop-filter: blur(10px);
 transition: border-color 0.3s ease;
 }
@@ -726,8 +732,6 @@ background: rgba(255,255,255,0.14);
 box-shadow: none;
 }
 
-/* ── Footer已移除 ── */
-
 /* ── Back to Top ── */
 .back-to-top {
 position: fixed; bottom: 70px; right: 24px;
@@ -914,19 +918,19 @@ backdrop-filter: blur(3px);
 
 /* ── About module ── */
 .about-module {
-background: rgba(12, 10, 30, 0.5);
-border: 1px solid rgba(176,38,255,0.15);
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
 border-radius: var(--radius-md);
 padding: 18px 20px; margin-top: 24px;
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
+backdrop-filter: blur(var(--blur-amount));
+-webkit-backdrop-filter: blur(var(--blur-amount));
 font-size: 0.82rem;
-color: rgba(200,185,255,0.7);
+color: var(--text-muted);
 line-height: 1.7;
 }
 .about-module h3 {
 font-family: var(--display-font);
-font-size: 1rem; color: rgba(230,220,255,0.9);
+font-size: 1rem; color: var(--text-color);
 margin-bottom: 8px; letter-spacing: 0.5px;
 }
 
@@ -1059,82 +1063,127 @@ outline: none;
 <div class="menu-group">
 <a href="javascript:document.getElementById('recent-update-section').scrollIntoView({ behavior: 'smooth', block: 'start' })"
 class="menu-main"
-style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
+style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
 <i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
-<span style="flex:1;">最近更新</span>
+最近更新
 </a>
 </div>
 
-<div class="menu-group"><a href="#search-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-search" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">磁力搜索</span></a></div>
-<div class="menu-group"><a href="#comprehensive-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-folder" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">综合网站</span></a></div>
-<div class="menu-group"><a href="#comics-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-palette" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">漫画网站</span></a></div>
-<div class="menu-group"><a href="#novels-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-book" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">小说网站</span></a></div>
-<div class="menu-group"><a href="#games-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-gamepad" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">游戏网站</span></a></div>
-<div class="menu-group"><a href="#videos-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-film" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">影视网站</span></a></div>
-<div class="menu-group"><a href="#cloud-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-cloud-download" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">网盘资源</span></a></div>
-<div class="menu-group"><a href="#tools-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-wrench" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">实用工具</span></a></div>
-<div class="menu-group"><a href="#design-resources-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-palette" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">设计资源</span></a></div>
-<div class="menu-group"><a href="#ai-tools-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-robot" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">AI工具</span></a></div>
-<div class="menu-group"><a href="#images-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-images" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">图集资源</span></a></div>
-<div class="menu-group"><a href="#furry-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-paw" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">福瑞资源</span></a></div>
-<div class="menu-group"><a href="#life-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-home" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">生活服务</span></a></div>
-<div class="menu-group"><a href="#learning-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-graduation-cap" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">学习资源</span></a></div>
-<div class="menu-group"><a href="#regular-update-section" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-sync-alt" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">近期更新</span></a></div>
+<div class="menu-group"><a href="#search-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-search" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>磁力搜索</a></div>
+<div class="menu-group"><a href="#comprehensive-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-folder" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>综合网站</a></div>
+<div class="menu-group"><a href="#comics-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-palette" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>漫画网站</a></div>
+<div class="menu-group"><a href="#novels-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-book" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>小说网站</a></div>
+<div class="menu-group"><a href="#games-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-gamepad" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>游戏网站</a></div>
+<div class="menu-group"><a href="#videos-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-film" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>影视网站</a></div>
+<div class="menu-group"><a href="#cloud-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-cloud-download" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>网盘资源</a></div>
+<div class="menu-group"><a href="#tools-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-wrench" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>实用工具</a></div>
+<div class="menu-group"><a href="#design-resources-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-palette" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>设计资源</a></div>
+<div class="menu-group"><a href="#ai-tools-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-robot" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>AI工具</a></div>
+<div class="menu-group"><a href="#images-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-images" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>图集资源</a></div>
+<div class="menu-group"><a href="#furry-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-paw" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>福瑞资源</a></div>
+<div class="menu-group"><a href="#life-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-home" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>生活服务</a></div>
+<div class="menu-group"><a href="#learning-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-graduation-cap" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>学习资源</a></div>
+<div class="menu-group"><a href="#regular-update-section" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-sync-alt" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>近期更新</a></div>
 </nav>
 
-<h2 class="sidebar-title" style="margin-top: 5px; font-size: 1rem; padding: 10px 15px; color:var(--text-color); opacity: 0.9; font-weight: 500; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding-left: 5px;">
+<h2 class="sidebar-title" style="margin-top: 5px; font-size: 1rem; padding: 10px 15px; color: var(--text-color); opacity: 0.9; font-weight: 500; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding-left: 5px;">
     <i class="fas fa-wrench" style="margin-right: 8px; opacity: 0.9;"></i>
     <span style="white-space: nowrap;">功能设置</span>
 </h2>
 <nav class="sidebar-menu">
-    <div class="menu-group"><a href="#" id="favorites-btn" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-star" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">我的收藏</span></a></div>
-    <div class="menu-group"><a href="#" id="history-btn" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span style="flex:1;">浏览历史</span></a></div>
+    <div class="menu-group"><a href="#" id="favorites-btn" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-star" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span class="menu-text" style="flex:1; color:inherit;">我的收藏</span></a></div>
+    <div class="menu-group"><a href="#" id="history-btn" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;"><i class="fas fa-history" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i><span class="menu-text" style="flex:1; color:inherit;">浏览历史</span></a></div>
     
     <!-- 本地相对路径跳转 yilu.html -->
     <div class="menu-group music-box-group">
-        <a href="yilu.html" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
+        <a href="yilu.html" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
             <i class="fas fa-music" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
-            <span style="flex:1;">媒体音乐</span>
+            <span class="menu-text" style="flex:1; color:inherit;">媒体音乐</span>
         </a>
     </div>
 
     <div class="menu-group">
         <!-- 本地相对路径跳转 yxj.html -->
-        <a href="yxj.html" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; color:var(--text-color); opacity:0.7;">
+        <a href="yxj.html" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; color:var(--text-color); opacity:0.7;">
             <i class="fas fa-gamepad" style="width:20px; text-align:center; font-size:1rem; color:inherit;"></i>
-            <span style="flex:1;">成人游戏</span>
+            <span class="menu-text" style="flex:1; color:inherit;">成人游戏</span>
         </a>
     </div>
 
 
     <div class="menu-group">
-        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=iENTELuV2f%2F3WV3CV7vJ3S%2BJIMlokXDMzK6%2F8t1ntejqn5B8x9Oi3Db5MorqUrt9&busi_data=eyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiIwdVZDRjV3WDBtc3RaL1pJdi8wSVRUUm50S3VacU5xaDFBc2tqQzEzSGZheTMrKytIV3IyNFJXV1VFc01sLzk5IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=4CCUz1RZ3zYO6pHm8V001W6A6jUK8MOfa5IHQdA0NU4O5ZUUO3f1jnCVBF4fAF2psNwljrB0KVFrppD0cDrM2g&svctype=4&tempid=h5_group_info" target="_blank" class="menu-main" style="display:flex; align-items:center; justify-content:flex-start; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
+        <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=iENTELuV2f%2F3WV3CV7vJ3S%2BJIMlokXDMzK6%2F8t1ntejqn5B8x9Oi3Db5MorqUrt9&busi_data=eyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiIwdVZDRjV3WDBtc3RaL1pJdi8wSVRUUm50S3VacU5xaDFBc2tqQzEzSGZheTMrKytIV3IyNFJXV1VFc01sLzk5IiwidWluIjoiMzIxMzgyNDEyNiJ9&data=4CCUz1RZ3zYO6pHm8V001W6A6jUK8MOfa5IHQdA0NU4O5ZUUO3f1jnCVBF4fAF2psNwljrB0KVFrppD0cDrM2g&svctype=4&tempid=h5_group_info" target="_blank" class="menu-main" style="display:flex; align-items:center; padding:12px 15px; color:var(--text-color); text-decoration:none; transition:all 0.3s ease; width:100%; box-sizing:border-box; border-left:3px solid transparent; font-size:0.95rem; gap:12px; opacity: 0.7;">
             <i class="fas fa-envelope" style="width:20px; text-align:center; font-size:1rem; color:inherit; opacity: 0.7;"></i>
-            <span style="flex:1;">加入Q群</span>
+            <span class="menu-text" style="flex:1; color:inherit;">加入Q群</span>
         </a>
     </div>
 </nav>
 </div>
 </aside>
-
     
 <main id="main-content" class="main-content">
 <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- 搜索抽屉 - 与顶部栏拼接，高度适中，透明度可调整 -->
-<div id="searchDrawer" style="position:fixed;top:var(--header-height);left:0;right:0;width:100vw;background:rgba(8,6,28,0.92);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border-bottom:1px solid rgba(176,38,255,0.2);padding:20px 22px 16px;box-shadow:0 16px 48px rgba(0,0,0,0.5),inset 0 -1px 0 rgba(176,38,255,0.15);display:none;z-index:999;color:#fff;font-family:var(--text-font);box-sizing:border-box;overflow:hidden;max-height:260px;">
+<div id="searchDrawer" style="
+position: fixed;
+top: var(--header-height); /* 与顶部导航栏拼接 */
+left: 0;
+right: 0;
+width: 100vw;
+background: rgba(20,20,35,0.9); /* 透明度调整：0-1，数值越大越不透明 */
+backdrop-filter: none;
+border: none;
+border-radius: 0;
+padding: 18px;
+padding-top: 20px; /* 调整顶部内边距 */
+padding-bottom: 12px; /* 缩短尾部，减小底部内边距 */
+box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+display: none;
+z-index: 999;
+color: #fff;
+font-family: 'Segoe UI', system-ui, sans-serif;
+box-sizing: border-box;
+overflow: hidden;
+height: 200px; /* 固定高度缩短，可调整数值 */
+max-height: 40vh; /* 最大高度限制缩短，避免移动端过长 */
+">
 
   <!-- 搜索输入框 -->
   <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-    <input id="kw" type="text" placeholder="输入关键词搜索全站资源..." style="flex:1;padding:12px 18px;border-radius:10px;border:1px solid rgba(176,38,255,0.25);background:rgba(0,0,0,0.3);color:#fff;outline:none;font-size:15px;box-sizing:border-box;font-family:var(--text-font);transition:all 0.3s ease;" onfocus="this.style.borderColor='rgba(0,210,255,0.5)';this.style.boxShadow='0 0 0 3px rgba(0,210,255,0.1)'" onblur="this.style.borderColor='rgba(176,38,255,0.25)';this.style.boxShadow='none'">
-    <button id="doSearchBtn" style="width:46px;height:46px;border-radius:10px;border:none;background:linear-gradient(135deg,#b026ff,#7b2cbf);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 16px rgba(176,38,255,0.4);transition:all 0.3s ease;" onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 6px 24px rgba(176,38,255,0.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 16px rgba(176,38,255,0.4)'"><i class="fas fa-search"></i></button>
+    <input id="kw" type="text" placeholder="输入关键词搜索全站资源..." style="
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.25);
+    color: #fff;
+    outline: none;
+    font-size: 15px;
+    box-sizing: border-box;
+    ">
+    <button id="doSearchBtn" style="
+    width: 46px;
+    height: 46px;
+    border-radius: 6px;
+    border: none;
+    background: #b026ff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ">
+      <i class="fas fa-search"></i>
+    </button>
   </div>
 
   <!-- 最近搜索 —— 水平横向滚动 -->
   <div style="margin-bottom: 16px;">
-    <div style="font-size:12px;color:rgba(180,170,255,0.6);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase;letter-spacing:1px;">
+    <div style="font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
       最近搜索
-      <span id="clearRecent" style="font-size:11px;color:rgba(176,38,255,0.7);cursor:pointer;padding:2px 8px;border:1px solid rgba(176,38,255,0.25);border-radius:10px;transition:all 0.2s ease;" onmouseover="this.style.background='rgba(176,38,255,0.15)'" onmouseout="this.style.background='transparent'">清空</span>
+      <span id="clearRecent" style="font-size:12px; color:rgba(255,255,255,0.6); cursor:pointer;">清空</span>
     </div>
     <div id="recentList" style="
       display: flex;
@@ -1150,23 +1199,71 @@ style="display:flex; align-items:center; justify-content:flex-start; padding:12p
   </div>
 
   <!-- 切换搜索引擎按钮 -->
-  <div id="openEngineModal" style="padding:10px 14px;background:rgba(176,38,255,0.08);border:1px solid rgba(176,38,255,0.2);border-radius:8px;text-align:center;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;" onmouseover="this.style.background='rgba(176,38,255,0.18)';this.style.borderColor='rgba(176,38,255,0.4)'" onmouseout="this.style.background='rgba(176,38,255,0.08)';this.style.borderColor='rgba(176,38,255,0.2)'"><i class="fas fa-list-ul" style="color:var(--primary-bright)"></i><span id="currentEngineText">本站</span></div>
+  <div id="openEngineModal" style="
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  ">
+    <i class="fas fa-list-ul"></i>
+    <span id="currentEngineText">本站</span>
+  </div>
 
 </div>
 
 <!-- 搜索引擎选择弹窗 -->
-<div id="search-options-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:linear-gradient(145deg,rgba(14,12,36,0.96),rgba(22,16,52,0.96));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(176,38,255,0.3);border-radius:22px;width:90%;max-width:340px;padding:26px;position:relative;color:#fff;box-shadow:0 24px 80px rgba(0,0,0,0.7);">
-    <span class="close" style="position:absolute;top:14px;right:16px;font-size:22px;cursor:pointer;color:rgba(255,255,255,0.5);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;" onmouseover="this.style.background='rgba(255,255,255,0.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.color='rgba(255,255,255,0.5)'">&times;</span>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-      <i class="fas fa-search" style="color:var(--primary-bright);font-size:18px;"></i>
-      <h2 style="margin:0;font-size:1.1rem;font-family:'Rajdhani',sans-serif;letter-spacing:1px;">选择搜索引擎</h2>
+<div id="search-options-modal" style="
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background: rgba(0,0,0,0.6);
+z-index: 9999;
+align-items: center;
+justify-content: center;
+">
+  <div style="
+background: rgba(20,20,35,0.85);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(255,255,255,0.15);
+border-radius: 20px;
+width: 90%;
+max-width: 360px;
+padding: 24px;
+position: relative;
+color: #fff;
+font-family: 'Segoe UI', system-ui, sans-serif;
+">
+    <span class="close" style="position: absolute; top: 16px; right: 18px; font-size: 22px; cursor: pointer; color: rgba(255,255,255,0.6);">&times;</span>
+    
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; font-size:18px; color: #b026ff;">
+      <i class="fas fa-search"></i>
+      <h2 style="margin:0; font-size:18px;">选择搜索引擎</h2>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div class="search-engine-option" data-type="site" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;background:rgba(176,38,255,0.1);border:1px solid rgba(176,38,255,0.2);border-radius:14px;cursor:pointer;transition:all 0.25s ease;" onmouseover="this.style.background='rgba(176,38,255,0.2)';this.style.borderColor='rgba(176,38,255,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(176,38,255,0.1)';this.style.borderColor='rgba(176,38,255,0.2)';this.style.transform='translateY(0)'"><i class="fas fa-home" style="font-size:20px;color:var(--primary-bright);"></i><div style="font-size:13px;">本站</div></div>
-      <div class="search-engine-option" data-type="yandex-web" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);border-radius:14px;cursor:pointer;transition:all 0.25s ease;" onmouseover="this.style.background='rgba(0,210,255,0.18)';this.style.borderColor='rgba(0,210,255,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(0,210,255,0.08)';this.style.borderColor='rgba(0,210,255,0.2)';this.style.transform='translateY(0)'"><i class="fas fa-globe" style="font-size:20px;color:var(--accent-color);"></i><div style="font-size:13px;">俄罗斯网页</div></div>
-      <div class="search-engine-option" data-type="yandex-img" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;background:rgba(255,110,180,0.08);border:1px solid rgba(255,110,180,0.2);border-radius:14px;cursor:pointer;transition:all 0.25s ease;" onmouseover="this.style.background='rgba(255,110,180,0.18)';this.style.borderColor='rgba(255,110,180,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,110,180,0.08)';this.style.borderColor='rgba(255,110,180,0.2)';this.style.transform='translateY(0)'"><i class="fas fa-image" style="font-size:20px;color:#ff9ed8;"></i><div style="font-size:13px;">俄罗斯图像</div></div>
-      <div class="search-engine-option" data-type="yandex-video" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:14px;cursor:pointer;transition:all 0.25s ease;" onmouseover="this.style.background='rgba(124,58,237,0.2)';this.style.borderColor='rgba(124,58,237,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(124,58,237,0.1)';this.style.borderColor='rgba(124,58,237,0.2)';this.style.transform='translateY(0)'"><i class="fas fa-video" style="font-size:20px;color:#c084fc;"></i><div style="font-size:13px;">俄罗斯视频</div></div>
+    
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="search-engine-option" data-type="site" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 10px; background:rgba(255,255,255,0.08); border-radius:16px; cursor:pointer;">
+        <i class="fas fa-home" style="font-size:20px;"></i>
+        <div>本站</div>
+      </div>
+      <div class="search-engine-option" data-type="yandex-web" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 10px; background:rgba(255,255,255,0.08); border-radius:16px; cursor:pointer;">
+        <i class="fas fa-globe" style="font-size:20px;"></i>
+        <div>俄罗斯网页</div>
+      </div>
+      <div class="search-engine-option" data-type="yandex-img" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 10px; background:rgba(255,255,255,0.08); border-radius:16px; cursor:pointer;">
+        <i class="fas fa-image" style="font-size:20px;"></i>
+        <div>俄罗斯图像</div>
+      </div>
+      <div class="search-engine-option" data-type="yandex-video" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 10px; background:rgba(255,255,255,0.08); border-radius:16px; cursor:pointer;">
+        <i class="fas fa-video" style="font-size:20px;"></i>
+        <div>俄罗斯视频</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1364,39 +1461,42 @@ engineModal.addEventListener("click", e => {
 </script>
 
 <!-- 紫罗兰轮播图 5张 · 3秒切换 · 深紫半透明打底 · 轮播点 -->
-<div style="width:100%;height:190px;margin:0 0 28px 0;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(135deg,rgba(106,13,173,0.4),rgba(138,43,226,0.3));border:1px solid rgba(176,38,255,0.25);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.04) inset;">
+<div style="width:100%; height:180px; margin:12px 0; border-radius:14px; overflow:hidden; position:relative; background: linear-gradient(135deg, #6A0DAD, #8A2BE2);">
 
 <!-- 1. 卡片内部加载动画（图片加载用 —— 独立①） -->
-<div id="carouselImageLoader" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(8,6,26,0.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:99;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:18px;">
+<div id="carouselImageLoader" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(106,13,173,0.85); z-index:99; display:flex; align-items:center; justify-content:center; flex-direction:column; border-radius:14px;">
 <style>
 .carousel-spinner {
-width: 34px; height: 34px;
-border: 2px solid rgba(176,38,255,0.2);
-border-top-color: #c084fc;
-border-right-color: rgba(0,210,255,0.6);
+width: 36px;
+height: 36px;
+border: 3px solid rgba(255,255,255,0.2);
+border-top: 3px solid #D8BFD8;
 border-radius: 50%;
 animation: carousel-spin 0.8s linear infinite;
-box-shadow: 0 0 12px rgba(176,38,255,0.25);
 }
 .carousel-loader-text {
-margin-top: 10px; color: rgba(200,185,255,0.75); font-size: 12px;
-letter-spacing: 1px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif;
+margin-top: 10px;
+color: #D8BFD8;
+font-size: 13px;
 }
-@keyframes carousel-spin { to { transform: rotate(360deg); } }
+@keyframes carousel-spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
 </style>
 <div class="carousel-spinner"></div>
 <div class="carousel-loader-text">图片加载中...</div>
 </div>
 
 <!-- 2. 点击跳转加载动画（点击时用 —— 独立②） -->
-<div id="carouselClickLoader" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(8,6,26,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:100;align-items:center;justify-content:center;flex-direction:column;border-radius:18px;">
+<div id="carouselClickLoader" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(106,13,173,0.85); z-index:100; align-items:center; justify-content:center; flex-direction:column; border-radius:14px;">
 <div class="carousel-spinner"></div>
 <div class="carousel-loader-text">跳转加载中...</div>
 </div>
 
 <!-- 轮播滑动外层 -->
 <div id="carouselWrapper" style="position:relative; width:100%; height:100%; overflow:hidden; touch-action: pan-y;">
-<div id="carouselBox" style="display:flex;width:500%;height:100%;transition:transform 0.55s cubic-bezier(0.25,0.8,0.25,1);will-change:transform;">
+<div id="carouselBox" style="display:flex; width:500%; height:100%; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); will-change: transform;">
 <div style="width:20%; height:100%;">
 <a href="https://poipiku.com/12082901/" target="_blank" style="display:block; width:100%; height:100%;" class="carousel-link">
 <img src="lbt/lbt1.jpg" class="carousel-img" style="width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.5s ease; will-change: opacity;">
@@ -1426,14 +1526,13 @@ letter-spacing: 1px; text-transform: uppercase; font-family: 'Rajdhani', sans-se
 </div>
 
 <!-- 轮播指示器 -->
-<div style="position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:10;">
-<span class="dot" style="width:6px;height:6px;border-radius:50%;background:rgba(220,200,255,0.4);transition:all 0.3s ease;cursor:pointer;"></span>
-<span class="dot" style="width:6px;height:6px;border-radius:50%;background:rgba(220,200,255,0.4);transition:all 0.3s ease;cursor:pointer;"></span>
-<span class="dot" style="width:6px;height:6px;border-radius:50%;background:rgba(220,200,255,0.4);transition:all 0.3s ease;cursor:pointer;"></span>
-<span class="dot" style="width:6px;height:6px;border-radius:50%;background:rgba(220,200,255,0.4);transition:all 0.3s ease;cursor:pointer;"></span>
-<span class="dot" style="width:6px;height:6px;border-radius:50%;background:rgba(220,200,255,0.4);transition:all 0.3s ease;cursor:pointer;"></span>
+<div style="position:absolute; bottom:10px; left:0; right:0; display:flex; justify-content:center; gap:8px; z-index:10;">
+<span class="dot" style="width:6px; height:6px; border-radius:50%; background:#D8BFD8; opacity:0.5; transition: all 0.3s ease;"></span>
+<span class="dot" style="width:6px; height:6px; border-radius:50%; background:#D8BFD8; opacity:0.5; transition: all 0.3s ease;"></span>
+<span class="dot" style="width:6px; height:6px; border-radius:50%; background:#D8BFD8; opacity:0.5; transition: all 0.3s ease;"></span>
+<span class="dot" style="width:6px; height:6px; border-radius:50%; background:#D8BFD8; opacity:0.5; transition: all 0.3s ease;"></span>
+<span class="dot" style="width:6px; height:6px; border-radius:50%; background:#D8BFD8; opacity:0.5; transition: all 0.3s ease;"></span>
 </div>
-<div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to top,rgba(8,6,26,0.45),transparent);pointer-events:none;"></div>
 
 <script>
 (function() {
@@ -7964,12 +8063,14 @@ data-problems="">
 </div>
 </section>
 
-<div class="about-module">
-  <h3>关于本站</h3>
-  <p>© 2026 巳泷资源库 — 本站汇聚全网 90% 优质站点，其中部分内容为网络资源收录及推广，资源均来源于第三方平台，相关资源的版权及内容准确性与本站无直接关联。</p>
+<div class="module" style="background-color: rgba(20, 20, 35, 0.3); border: 1px solid rgba(200, 200, 200, 0.1); border-radius: 8px; padding: 15px; margin-top: 20px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(12px);">
+<div class="module-header" style="color: #ffffff; margin-bottom: 10px;">
+<h3 style="margin: 0;">关于本站</h3>
 </div>
-
-<!-- 页脚：已移除Premium元素 -->
+<div class="module-content" style="color: #ffffff; line-height: 1.5;">
+<p style="margin: 0;">© 2026 巳泷资源库 - 本站汇聚全网90%优质站点其中部分内容为网络资源收录及推广，资源均来源于第三方平台，相关资源的版权、及内容准确性与本站无直接关联!</p>
+</div>
+</div>
 </main>
 
 
@@ -8210,6 +8311,38 @@ container.appendChild(historyItem);
 }
 document.getElementById('history-modal').style.display = 'block';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 滚动位置保存/恢复
 function saveScrollPosition() {
@@ -8478,146 +8611,118 @@ window.addEventListener('scroll', function() {
 console.log('巳泷资源库 - 优化版已加载完成');
 
 </script>
-
-<!-- Favorites Modal -->
-<div id="favorites-modal" class="modal" style="display:none;">
-  <div class="modal-content" style="max-height:80vh;">
-    <span class="close" onclick="document.getElementById('favorites-modal').style.display='none';">&times;</span>
-    <div class="modal-title"><i class="fas fa-star"></i> 我的收藏</div>
-    <div id="favorites-container" class="resource-grid" style="grid-template-columns:1fr;"></div>
-  </div>
-</div>
-
-<!-- History Modal -->
-<div id="history-modal" class="modal" style="display:none;">
-  <div class="modal-content" style="max-height:80vh;">
-    <span class="close" onclick="document.getElementById('history-modal').style.display='none';">&times;</span>
-    <div class="modal-title"><i class="fas fa-history"></i> 浏览历史</div>
-    <div id="history-container"></div>
-  </div>
-</div>
-
-<!-- ═══ PREMIUM DETAIL MODAL ═══ -->
+<!-- 完全独立的详情页模态框 -->
 <div id="detailModal" style="
-  position:fixed; top:0; left:0; width:100vw; height:100vh;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(24px) saturate(1.3);
-  -webkit-backdrop-filter:blur(24px) saturate(1.3);
-  display:none; z-index:9999; overflow:auto;
-  align-items:center; justify-content:center;
-  padding:20px;
-  box-sizing:border-box;
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(0, 0, 0, 0.3);
+backdrop-filter: blur(40px);
+-webkit-backdrop-filter: blur(40px);
+display: none;
+z-index: 9999;
+overflow: auto;
 ">
-<div id="detailCard" style="
-  position:relative;
-  width:100%; max-width:480px;
-  min-height:380px; max-height:85vh;
-  background:linear-gradient(145deg, rgba(14,12,36,0.97) 0%, rgba(22,16,52,0.97) 100%);
-  border:1px solid rgba(176,38,255,0.3);
-  border-radius:22px;
-  box-shadow:0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 60px rgba(176,38,255,0.08);
-  color:white;
-  overflow:hidden;
-  display:flex; flex-direction:column;
-  transform:scale(0.9) translateY(20px);
-  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
-  opacity:0;
-  margin:auto;
+<div style="
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 90%;
+max-width: 500px;
+min-height: 400px;
+max-height: 80vh;
+background: linear-gradient(135deg, #1e1a2f 0%, #2a1e3c 100%);
+border-radius: 20px;
+box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+color: white;
+overflow: hidden;
+display: flex;
+flex-direction: column;
 ">
-  <!-- Top accent bar -->
-  <div style="height:3px;background:linear-gradient(90deg,#7c3aed,#b026ff,#00d2ff,#b026ff,#7c3aed);background-size:200%;animation:shimmer 3s linear infinite;flex-shrink:0;"></div>
+<div style="height: 4px; background: linear-gradient(90deg, #c084fc, #a855f7, #7c3aed);"></div>
 
-  <!-- Close -->
-  <button id="detailClose" style="
-    position:absolute; right:14px; top:14px;
-    font-size:20px; color:rgba(255,255,255,0.55);
-    width:34px; height:34px;
-    display:flex; align-items:center; justify-content:center;
-    border-radius:50%;
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.1);
-    cursor:pointer; z-index:10;
-    transition:all 0.25s ease;
-  " onmouseover="this.style.background='rgba(255,255,255,0.15)';this.style.color='#fff';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.color='rgba(255,255,255,0.55)';this.style.transform='rotate(0deg)'">&times;</button>
+<span id="detailClose" style="
+position: absolute;
+right: 15px;
+top: 15px;
+font-size: 24px;
+color: rgba(255, 255, 255, 0.7);
+width: 32px;
+height: 32px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.1);
+cursor: pointer;
+z-index: 10;
+">&times;</span>
 
-  <!-- Header -->
-  <div style="padding:24px 24px 18px;text-align:center;border-bottom:1px solid rgba(176,38,255,0.12);">
-    <div id="detailImg" style="
-      width:64px; height:64px; border-radius:16px;
-      margin:0 auto 14px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:26px;
-      box-shadow:0 8px 24px rgba(0,0,0,0.4);
-      background:#7B4F9D;
-      border:1px solid rgba(255,255,255,0.12);
-    ">𓂺</div>
-    <h3 id="detailTitle" style="margin:0;font-size:1.3rem;font-weight:700;font-family:'Rajdhani',sans-serif;letter-spacing:1px;"></h3>
-  </div>
+<div style="padding: 25px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+<div id="detailImg" style="
+background: #7B4F9D;
+width: 60px;
+height: 60px;
+border-radius: 15px;
+margin: 0 auto 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+">𓂺</div>
+<h3 id="detailTitle" style="margin: 0; font-size: 22px; font-weight: 600;"></h3>
+</div>
 
-  <!-- Body -->
-  <div style="flex:1;padding:20px 24px;overflow-y:auto;">
-    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(176,38,255,0.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;">
+<div style="flex: 1; padding: 20px; overflow-y: auto;">
+<div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px;">
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">网址</div>
+<div id="detailUrl" style="font-size: 14px; word-break: break-all; color: #d9d2e9;"></div>
+</div>
 
-      <div>
-        <div style="font-size:11px;color:rgba(192,180,255,0.7);margin-bottom:5px;text-transform:uppercase;letter-spacing:1.5px;">🌐 网址</div>
-        <div id="detailUrl" style="font-size:13px;word-break:break-all;color:rgba(180,170,230,0.85);"></div>
-      </div>
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">简介</div>
+<div id="detailDesc" style="font-size: 14px; line-height: 1.5; color: #f0eaff;"></div>
+</div>
 
-      <div>
-        <div style="font-size:11px;color:rgba(192,180,255,0.7);margin-bottom:5px;text-transform:uppercase;letter-spacing:1.5px;">📝 简介</div>
-        <div id="detailDesc" style="font-size:13.5px;line-height:1.6;color:rgba(230,220,255,0.9);"></div>
-      </div>
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">特点</div>
+<div id="detailFeatures" style="font-size: 14px; line-height: 1.5; color: #e2d6ff;"></div>
+</div>
 
-      <div>
-        <div style="font-size:11px;color:rgba(192,180,255,0.7);margin-bottom:8px;text-transform:uppercase;letter-spacing:1.5px;">✨ 特点</div>
-        <div id="detailFeaturesTags" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-      </div>
-
-      <div id="detailPasswordBox" style="display:none;border-top:1px solid rgba(176,38,255,0.15);padding-top:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <div style="font-size:11px;color:rgba(192,180,255,0.7);text-transform:uppercase;letter-spacing:1.5px;">🔑 资源解锁密码</div>
-          <button id="detailCopyBtn" style="padding:5px 12px;font-size:11px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;letter-spacing:0.5px;transition:all 0.25s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">复制密码</button>
-        </div>
-        <div id="detailPassword" style="font-size:13px;color:rgba(220,210,255,0.9);padding:8px 12px;background:rgba(176,38,255,0.08);border:1px solid rgba(176,38,255,0.2);border-radius:8px;word-break:break-all;"></div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div style="padding:16px 24px 22px;flex-shrink:0;">
-    <button id="detailGoBtn" style="
-      background:linear-gradient(135deg,#7c3aed 0%,#b026ff 50%,#00d2ff 100%);
-      background-size:200%;
-      color:#fff; border:none; border-radius:12px;
-      padding:14px 20px; font-size:15px; font-weight:700;
-      cursor:pointer; width:100%;
-      box-shadow:0 6px 24px rgba(124,58,237,0.5);
-      letter-spacing:0.5px;
-      font-family:'Rajdhani',sans-serif;
-      transition:all 0.3s ease;
-    " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(124,58,237,0.7)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 24px rgba(124,58,237,0.5)'">🌐 前往网站</button>
-  </div>
+<div id="detailPasswordBox" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+<div style="display: flex; align-items: center; justify-content: space-between;">
+<div style="font-size: 12px; color: #c4b5fd;">资源解锁密码</div>
+<button id="detailCopyBtn" style="padding: 4px 8px; font-size: 11px; background: #7B4F9D; color: #fff; border: none; border-radius: 4px; cursor: pointer;">复制密码</button>
+</div>
+<div style="margin-top: 5px; font-size: 13px; color: #e2d6ff;" id="detailPassword"></div>
+</div>
 </div>
 </div>
 
-<!-- ═══ TOAST CONTAINER ═══ -->
-<div class="toast-container" id="toastContainer"></div>
+<div style="padding: 0 20px 20px;">
+<button id="detailGoBtn" style="
+background: linear-gradient(105deg, #7c3aed 0%, #a855f7 100%);
+color: #fff;
+border: none;
+border-radius: 8px;
+padding: 12px 20px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+width: 100%;
+box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+">🌐 前往网站</button>
+</div>
+</div>
+</div>
 
-<!-- ═══ SIDEBAR OVERLAY ═══ -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-<!-- ═══ BACK TO TOP ═══ -->
-<div class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></div>
-
-<!-- ═══ SUCCESS MESSAGE ═══ -->
-<div id="success-message"></div>
-
-<!-- ═══ ENHANCED JS ═══ -->
 <script>
-// ── 详情弹窗（统一入口） ──
+// 完全独立的详情页功能
 const detailModal = document.getElementById('detailModal');
-const detailCard = document.getElementById('detailCard');
 const detailClose = document.getElementById('detailClose');
 const detailGoBtn = document.getElementById('detailGoBtn');
 const detailCopyBtn = document.getElementById('detailCopyBtn');
@@ -8626,228 +8731,184 @@ const detailPassword = document.getElementById('detailPassword');
 const detailUrl = document.getElementById('detailUrl');
 const detailTitle = document.getElementById('detailTitle');
 const detailDesc = document.getElementById('detailDesc');
-const detailFeaturesTags = document.getElementById('detailFeaturesTags');
+const detailFeatures = document.getElementById('detailFeatures');
 const detailImg = document.getElementById('detailImg');
+
 let detailCurrentUrl = '';
 let detailCurrentPassword = '';
 
+// 显示详情页
 window.openDetailModal = function(title, url, desc, features, color, password) {
   detailCurrentUrl = url;
   detailCurrentPassword = password || '';
   detailTitle.textContent = title || '未知网站';
   detailUrl.textContent = url || '无网址';
   detailDesc.textContent = desc || '暂无描述';
-
-  // 特点标签渲染
-  detailFeaturesTags.innerHTML = '';
-  const fArr = (features || '').split('|').filter(f => f.trim());
-  fArr.forEach(f => {
-    const tag = document.createElement('span');
-    tag.textContent = f.trim();
-    tag.style.cssText = 'padding:4px 10px;background:rgba(176,38,255,0.12);border:1px solid rgba(176,38,255,0.25);border-radius:20px;font-size:12px;color:rgba(210,195,255,0.85);';
-    detailFeaturesTags.appendChild(tag);
-  });
-  if (!fArr.length) detailFeaturesTags.textContent = '暂无特点';
-
+  detailFeatures.textContent = (features || '').replaceAll('|', ' · ') || '暂无特点';
   detailImg.style.backgroundColor = color || '#7B4F9D';
   detailPasswordBox.style.display = password ? 'block' : 'none';
   detailPassword.textContent = password || '';
-
-  detailModal.style.display = 'flex';
+  
+  // 显示模态框
+  detailModal.style.display = 'block';
   document.body.style.overflow = 'hidden';
-  requestAnimationFrame(() => {
-    detailCard.style.transform = 'scale(1) translateY(0)';
-    detailCard.style.opacity = '1';
-  });
 };
 
+// 关闭详情页
 function closeDetailModal() {
-  detailCard.style.transform = 'scale(0.9) translateY(20px)';
-  detailCard.style.opacity = '0';
-  setTimeout(() => {
-    detailModal.style.display = 'none';
-    document.body.style.overflow = '';
-  }, 300);
+  detailModal.style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 detailClose.addEventListener('click', closeDetailModal);
-detailModal.addEventListener('click', e => { if (e.target === detailModal) closeDetailModal(); });
-detailGoBtn.addEventListener('click', () => {
+
+// 点击模态框外部关闭
+detailModal.addEventListener('click', function(e) {
+  if (e.target === detailModal) {
+    closeDetailModal();
+  }
+});
+
+// 前往网站
+function visitDetailWebsite() {
   if (detailCurrentUrl) {
     window.open(detailCurrentUrl, '_blank', 'noopener,noreferrer');
     closeDetailModal();
   }
-});
-detailCopyBtn.addEventListener('click', () => {
+}
+
+detailGoBtn.addEventListener('click', visitDetailWebsite);
+
+// 复制密码
+function copyDetailPassword() {
   if (detailCurrentPassword) {
     navigator.clipboard.writeText(detailCurrentPassword).then(() => {
-      showToast('密码已复制', 'success');
-    }).catch(() => showToast('复制失败，请手动复制', 'error'));
-  }
-});
-
-// ── 浮动消息通知系统 ──
-function showToast(msg, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
-  // 图标映射
-  const icons = { success: 'fas fa-check-circle', error: 'fas fa-times-circle', info: 'fas fa-info-circle' };
-  const div = document.createElement('div');
-  div.className = `toast ${type}`;
-  div.innerHTML = `<i class="${icons[type] || icons.info} toast-icon"></i><span>${msg}</span>`;
-  container.appendChild(div);
-  setTimeout(() => {
-    div.classList.add('hiding');
-    setTimeout(() => div.remove(), 350);
-  }, 2800);
-}
-
-// 覆盖旧版成功提示函数
-window.showSuccessMessage = (msg) => showToast(msg, 'success');
-
-// ── 点击波纹效果 ──
-function addRipple(el, e) {
-  const ripple = document.createElement('span');
-  ripple.className = 'ripple-effect';
-  const rect = el.getBoundingClientRect();
-  ripple.style.left = (e.clientX - rect.left) + 'px';
-  ripple.style.top = (e.clientY - rect.top) + 'px';
-  el.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 700);
-}
-document.addEventListener('click', e => {
-  const item = e.target.closest('.website-item, .grid-btn');
-  if (item) addRipple(item, e);
-});
-
-// ── 滚动入场动画（IntersectionObserver） ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-
-document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-
-// ── 侧边栏开关增强 ──
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const menuBtnEl = document.getElementById('menu-btn');
-
-if (sidebarOverlay && sidebar) {
-  sidebarOverlay.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    sidebarOverlay.classList.remove('active');
-    if (menuBtnEl) menuBtnEl.classList.remove('active');
-  });
-}
-
-// 覆盖侧边栏切换逻辑，同步更新遮罩层
-document.addEventListener('DOMContentLoaded', () => {
-  const mb = document.getElementById('menu-btn');
-  if (mb && sidebar && sidebarOverlay) {
-    mb.addEventListener('click', () => {
-      const isActive = sidebar.classList.toggle('active');
-      mb.classList.toggle('active', isActive);
-      if (window.innerWidth <= 768) {
-        sidebarOverlay.classList.toggle('active', isActive);
-      }
-    }, true);
-  }
-});
-
-// ── 侧边栏导航高亮跟随滚动 ──
-const mainContent = document.getElementById('main-content');
-const navLinks = document.querySelectorAll('.sidebar .menu-main[href^="#"]');
-
-function updateActiveNav() {
-  const sections = document.querySelectorAll('.category-section[id]');
-  const scrollTop = mainContent ? mainContent.scrollTop : window.scrollY;
-  let currentId = '';
-  sections.forEach(s => {
-    if (s.offsetTop - 100 <= scrollTop) currentId = s.id;
-  });
-  navLinks.forEach(link => {
-    const href = link.getAttribute('href');
-    link.classList.toggle('active', href === '#' + currentId);
-  });
-}
-if (mainContent) mainContent.addEventListener('scroll', updateActiveNav, { passive: true });
-
-// ── 回到顶部按钮 ──
-const btt = document.getElementById('backToTop');
-if (btt && mainContent) {
-  mainContent.addEventListener('scroll', () => {
-    btt.classList.toggle('visible', mainContent.scrollTop > 350);
-  }, { passive: true });
-  btt.addEventListener('click', () => mainContent.scrollTo({ top: 0, behavior: 'smooth' }));
-}
-
-// ── 卡片滚动时触发入场动画 ──
-const cardObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '';
-      entry.target.style.animationPlayState = 'running';
-      cardObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.05 });
-document.querySelectorAll('.category-card').forEach(card => {
-  card.style.animationPlayState = 'paused';
-  cardObserver.observe(card);
-});
-
-// ── 键盘快捷键 ──
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if (detailModal.style.display === 'flex') closeDetailModal();
-    document.querySelectorAll('.modal').forEach(m => {
-      if (m.style.display !== 'none') m.style.display = 'none';
+      alert('密码已复制到剪贴板');
+    }).catch(err => {
+      console.error('复制失败:', err);
+      alert('复制失败，请手动复制');
     });
-    const sd = document.getElementById('searchDrawer');
-    if (sd && sd.style.display === 'block') sd.style.display = 'none';
   }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    const st = document.getElementById('searchToggle');
-    if (st) st.click();
+}
+
+detailCopyBtn.addEventListener('click', copyDetailPassword);
+
+// 键盘快捷键
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && detailModal.style.display === 'block') {
+    closeDetailModal();
   }
 });
-
-// ── 性能优化与移动端适配 ──
-if ('ontouchstart' in window) document.body.classList.add('touch-device');
-const handleResize = () => {
-  const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-  const sb = document.getElementById('sidebar');
-  const ov = document.getElementById('sidebarOverlay');
-  if (sb && ov && window.innerWidth > 768) {
-    sb.classList.add('active');
-    ov.classList.remove('active');
-  }
-};
-window.addEventListener('resize', handleResize);
-window.addEventListener('orientationchange', handleResize);
-handleResize();
-
-// ── Footer 显示 ──
-const footerEl = document.getElementById('footer');
-setTimeout(() => { if (footerEl) footerEl.classList.add('visible'); }, 600);
-
-// ── 区块标题加入滚动动画类 ──
-document.querySelectorAll('.section-header').forEach(el => el.classList.add('animate-on-scroll'));
-document.querySelectorAll('.quick-links-glass').forEach(el => el.classList.add('animate-on-scroll'));
-
-// 加载完成提示
-console.log('巳泷资源库 · Premium Edition 已加载 ✨');
 </script>
 
+<!-- 完全独立的详情页模态框 -->
+<div id="detailModal" style="
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(0, 0, 0, 0.95);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+display: none;
+z-index: 9999;
+overflow: auto;
+">
+<div style="
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 90%;
+max-width: 500px;
+min-height: 400px;
+max-height: 80vh;
+background: linear-gradient(135deg, #1e1a2f 0%, #2a1e3c 100%);
+border-radius: 20px;
+box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+color: white;
+overflow: hidden;
+display: flex;
+flex-direction: column;
+">
+<div style="height: 4px; background: linear-gradient(90deg, #c084fc, #a855f7, #7c3aed);"></div>
 
-<!-- 旧问候弹窗已移除，改为顶部通知条 -->
+<span id="detailClose" style="
+position: absolute;
+right: 15px;
+top: 15px;
+font-size: 24px;
+color: rgba(255, 255, 255, 0.7);
+width: 32px;
+height: 32px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.1);
+cursor: pointer;
+z-index: 10;
+">&times;</span>
 
+<div style="padding: 25px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+<div id="detailImg" style="
+background: #7B4F9D;
+width: 60px;
+height: 60px;
+border-radius: 15px;
+margin: 0 auto 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+">𓂺</div>
+<h3 id="detailTitle" style="margin: 0; font-size: 22px; font-weight: 600;"></h3>
+</div>
+
+<div style="flex: 1; padding: 20px; overflow-y: auto;">
+<div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px;">
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">网址</div>
+<div id="detailUrl" style="font-size: 14px; word-break: break-all; color: #d9d2e9;"></div>
+</div>
+
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">简介</div>
+<div id="detailDesc" style="font-size: 14px; line-height: 1.5; color: #f0eaff;"></div>
+</div>
+
+<div style="margin-bottom: 15px;">
+<div style="font-size: 12px; color: #c4b5fd; margin-bottom: 5px;">特点</div>
+<div id="detailFeatures" style="font-size: 14px; line-height: 1.5; color: #e2d6ff;"></div>
+</div>
+
+<div id="detailPasswordBox" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+<div style="display: flex; align-items: center; justify-content: space-between;">
+<div style="font-size: 12px; color: #c4b5fd;">资源解锁密码</div>
+<button id="detailCopyBtn" style="padding: 4px 8px; font-size: 11px; background: #7B4F9D; color: #fff; border: none; border-radius: 4px; cursor: pointer;">复制密码</button>
+</div>
+<div style="margin-top: 5px; font-size: 13px; color: #e2d6ff;" id="detailPassword"></div>
+</div>
+</div>
+</div>
+
+<div style="padding: 0 20px 20px;">
+<button id="detailGoBtn" style="
+background: linear-gradient(105deg, #7c3aed 0%, #a855f7 100%);
+color: #fff;
+border: none;
+border-radius: 8px;
+padding: 12px 20px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+width: 100%;
+box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+">🌐 前往网站</button>
+</div>
+</div>
+</div>
 <!-- ═══ 问候通知条 JS ═══ -->
 <script>
 // 等待整页所有资源加载完毕再执行
@@ -8888,6 +8949,8 @@ window.addEventListener('load', function () {
     const textWrap = document.getElementById('greetingBannerText');
     const bannerEl = document.getElementById('greetingBanner');
 
+    if(!iconEl || !timeEl || !textWrap || !bannerEl) return;
+
     // 重置滚动容器
     textWrap.innerHTML = '';
     const textInner = document.createElement('span');
@@ -8895,7 +8958,7 @@ window.addEventListener('load', function () {
     textInner.textContent = data.text;
     textWrap.appendChild(textInner);
 
-    // 动态赋值对应时间段图标 + 时间，无固定死符号
+    // 动态赋值对应时间段图标 + 时间
     iconEl.textContent = data.icon;
     timeEl.textContent = data.label;
 
