@@ -1682,10 +1682,12 @@ startAutoPlay();
 
 <div class="quick-links-glass">
 <div class="button-container">
+<a href="https://mp.weixin.qq.com/s/STPFytnwbqegQPwcmzCZgw" class="grid-btn" target="_blank">打赏♡</a>
 <a href="https://mygaysites.com/" class="grid-btn" target="_blank">全球男同网</a>
 <a href="https://poipiku.com/12082901/" class="grid-btn" target="_blank">相册集</a>
 <a href="https://0d56.hfjkzxan.xyz/" class="grid-btn" target="_blank">搜同网</a>
-    <a href="https://zx52q.vvvypik.cc/" class="grid-btn" target="_blank">男同网</a>
+<a href="https://www.91rb.com/categories/gay/" class="grid-btn" target="_blank">同志网</a>
+<a href="https://zx52q.vvvypik.cc/" class="grid-btn" target="_blank">男同网</a>
 <a href="https://www.manwatw.cc/?ysclid=mo69kpg8js992195286" class="grid-btn" target="_blank">漫蛙</a>
 <a href="https://silong-respool.github.io/gay/aitsci.html" class="grid-btn" target="_blank">AI绘图</a>
 <a href="https://voidchat.org/v/silong-Baoku" class="grid-btn" target="_blank">聊天室</a>
@@ -8063,16 +8065,47 @@ data-problems="">
 </div>
 </section>
 
-<div class="module" style="background-color: rgba(20, 20, 35, 0.3); border: 1px solid rgba(200, 200, 200, 0.1); border-radius: 8px; padding: 15px; margin-top: 20px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(12px);">
-<div class="module-header" style="color: #ffffff; margin-bottom: 10px;">
-<h3 style="margin: 0;">关于本站</h3>
+<div class="module" style="background-color: rgba(20, 20, 35, 0.3); border: 1px solid rgba(200, 200, 200, 0.1); border-radius: 8px; padding: 15px; margin-top: 20px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+    <div class="module-header" style="color: #ffffff; margin-bottom: 10px;">
+        <h3 style="margin: 0;">关于本站</h3>
+    </div>
+    <div class="module-content" style="color: #ffffff; line-height: 1.5;">
+        <p style="margin: 0 0 10px 0;">© 2026 巳泷资源库 - 本站汇聚全网90%优质站点，其中部分内容为网络资源收录及推广，资源均来源于第三方平台，相关资源的版权、及内容准确性与本站无直接关联!</p>
+        <p style="margin: 0 0 10px 0;">
+            已运行：<span id="runtime"></span>
+        </p>
+        <p style="margin: 0;">
+            联系方式：
+            <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=UpE5BoHeym4gDyYLT2wr282KW6QmCTHPmTyYR8unHkMnI9HQAsca1kx%2F7ZJwWrR2&busi_data=eyJncm91cENvZGUiOiIxMDkxODE2MzM5IiwidG9rZW4iOiJQeit2MW16MDIxQ3VXZGNkV1ppOXNDQzEwTm11Z0llQnA5MVhEZE91T3BydXlTeU5KRkdPa1hEbWpma1QwNW9uIiwidWluIjoiMzIxMzgyNDEyNiJ9&data=Inb7kVBWYYHVOZmuZqq02uXXVOHWWJuGNtDqF7ti5htz8reqfgipdPfB6jgIwsxzOcZ4Uq_3CRFhRF8wlYT94g&svctype=4&tempid=h5_group_info" style="color: #9370DB; text-decoration: none; margin-right: 10px;" target="_blank">QQ群</a>
+            <a href="https://mp.weixin.qq.com/s/STPFytnwbqegQPwcmzCZgw" style="color: #9370DB; text-decoration: none; margin-right: 10px;" target="_blank">公众号</a>
+            <a href="mailto:xz35238345yun@163.com" style="color: #9370DB; text-decoration: none;" target="_blank">邮箱</a>
+        </p>
+    </div>
 </div>
-<div class="module-content" style="color: #ffffff; line-height: 1.5;">
-<p style="margin: 0;">© 2026 巳泷资源库 - 本站汇聚全网90%优质站点其中部分内容为网络资源收录及推广，资源均来源于第三方平台，相关资源的版权、及内容准确性与本站无直接关联!</p>
-</div>
-</div>
-</main>
 
+<script>
+    // 建站时间：2020-01-01 00:00:00
+    const startDate = new Date('2020-01-01T00:00:00');
+
+    function updateRuntime() {
+        const now = new Date();
+        const diff = now - startDate;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById('runtime').textContent = 
+            `${days} 天 ${hours} 小时 ${minutes} 分钟 ${seconds} 秒`;
+    }
+
+    updateRuntime();
+    setInterval(updateRuntime, 1000);
+</script>
+
+
+</main>
 
 <script>
 let startTime = Date.now();
