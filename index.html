@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<!-- 移动端适配 -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="巳泷资源库 - 提供各类优质网络资源导航">
-<title>巳泷资源库</title>
-<!-- 安全配置 -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-XSS-Protection" content="1; mode=block">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<!-- 缓存加速 -->
-<meta http-equiv="Cache-Control" content="max-age=2592000">
-<!-- DNS预加载 -->
-<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<!-- 资源引用 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <!-- 移动端适配 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="巳泷资源库 - 提供各类优质网络资源导航">
+    <title>巳泷资源库</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
+    <!-- 安全配置 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- 缓存与性能提示（配合 CDN 使用） -->
+    <meta http-equiv="Cache-Control" content="max-age=2592000, public">
+    <meta http-equiv="Pragma" content="no-cache"> <!-- 可根据需要调整 -->
+
+    <!-- 全球加速关键：DNS Prefetch + Preconnect（越早越好） -->
+    <!-- Cloudflare CDN 相关（如果你的站点走 Cloudflare） -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+    <!-- 关键字体资源预加载（高优先级） -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" as="style" fetchpriority="high">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" fetchpriority="high">
+
+    <!-- 资源引用（放在预加载之后） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="all">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- 额外性能提示（可选，配合 Cloudflare Speed Brain） -->
+    <!-- 如果部署在 Cloudflare Pages，可在 Dashboard 开启 Polish / Auto Minify / Brotli 压缩 -->
+
+    <style>
 :root {
 --primary-color: #b026ff;
 --primary-bright: #c44dff;
