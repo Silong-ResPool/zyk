@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>巳泷资源库 - 影盾 | 图像混淆·水印·隐写·二维码·图转码·无损压缩</title>
+    <meta name="description" content="图像混淆加密、Gilbert空间填充曲线、DCT频域盲水印、LSB隐写、二维码合成与检测、图像转二维码、无损压缩、调色">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        :root {
+            --bg-deep: #060318;
+            --bg-primary: #0d0828;
+            --bg-card: #150e3d;
+            --bg-card-glass: rgba(18, 10, 40, 0.75);
+            --bg-input: #1a1045;
+            --bg-input-focus: #1f1455;
+            --purple-light: #a78bfa;
+            --purple-mid: #7c3aed;
+            --purple-deep: #5b21b6;
+            --accent-pink: #ec4899;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-teal: #14b8a6;
+            --text-primary: #f0e9ff;
+            --text-secondary: #c4b5fd;
+            --text-muted: #9a8bc9;
+            --border-subtle: rgba(139, 92, 246, 0.28);
+            --border-glow: rgba(139, 92, 246, 0.55);
+            --radius-xl: 22px;
+            --radius-lg: 15px;
+            --radius-md: 10px;
+            --radius-sm: 7px;
+            --radius-xs: 5px;
+            --shadow-card: 0 12px 50px rgba(0, 0, 0, 0.6), 0 0 80px rgba(109, 40, 217, 0.1);
+            --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.35);
+            --shadow-btn: 0 6px 24px rgba(0, 0, 0, 0.4);
+            --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-mono: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.55);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-deep);
+            background-image: radial-gradient(ellipse at 15% 8%, rgba(109, 40, 217, 0.22) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 55%), radial-gradient(ellipse at 85% 15%, rgba(245, 158, 11, 0.06) 0%, transparent 42%), radial-gradient(ellipse at 30% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 48%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            letter-spacing: 0.01em;
+        }
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+            will-change: transform, opacity;
+            filter: blur(0.5px);
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            4% {
+                opacity: 0.65;
+            }
+            12% {
+                opacity: 0.45;
+            }
+            80% {
+                opacity: 0.15;
+            }
+            94% {
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(-108vh) translateX(40px) scale(0.2);
+                opacity: 0;
+            }
+        }
+        @keyframes floatUpAlt {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            4% {
+                opacity: 0.55;
+            }
+            12% {
+                opacity: 0.35;
+            }
+            80% {
+                opacity: 0.14;
+            }
+            94% {
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(-108vh) translateX(-50px) scale(0.18);
+                opacity: 0;
+            }
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(8, 3, 22, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-subtle);
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .brand {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            background: linear-gradient(135deg, #c4b5fd, #e9d5ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            white-space: nowrap;
+        }
+        .brand i {
+            -webkit-text-fill-color: #8b5cf6;
+            font-size: 1.45rem;
+        }
+        .nav-badge {
+            font-size: 0.7rem;
+            background: rgba(139, 92, 246, 0.18);
+            color: var(--purple-light);
+            padding: 5px 11px;
+            border-radius: 14px;
+            letter-spacing: 0.07em;
+            border: 1px solid rgba(139, 92, 246, 0.28);
+            white-space: nowrap;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 28px auto;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 26px;
+            position: relative;
+            z-index: 1;
+        }
+        .sidebar {
+            background: var(--bg-card-glass);
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 22px 18px;
+            height: fit-content;
+            position: sticky;
+            top: 95px;
+            box-shadow: var(--shadow-card);
+            transition: all var(--transition-smooth);
+            overflow: hidden;
+            max-height: calc(100vh - 130px);
+            overflow-y: auto;
+        }
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(140deg, rgba(139, 92, 246, 0.38) 0%, rgba(236, 72, 153, 0.16) 38%, rgba(6, 182, 212, 0.1) 65%, rgba(139, 92, 246, 0.3) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .sidebar:hover {
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+        }
+        .sidebar>* {
+            position: relative;
+            z-index: 1;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 18px;
+            background: var(--bg-input);
+            padding: 5px;
+            border-radius: 13px;
+        }
+        .nav-tab {
+            flex: 1;
+            min-width: 52px;
+            padding: 9px 6px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 9px;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            font-size: 0.72rem;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .nav-tab i {
+            font-size: 0.85rem;
+        }
+        .nav-tab.active {
+            background: var(--bg-card);
+            color: #fff;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+            font-weight: 600;
+        }
+        .nav-tab:hover:not(.active) {
+            color: #e9d5ff;
+            background: rgba(139, 92, 246, 0.08);
+        }
+        .control-group {
+            margin-bottom: 14px;
+        }
+        .control-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        .styled-input,
+        .styled-select,
+        .styled-textarea {
+            width: 100%;
+            padding: 10px 13px;
+            background: var(--bg-input);
+            border: 1px solid rgba(139, 92, 246, 0.18);
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-size: 0.84rem;
+            transition: all var(--transition-fast);
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+        .styled-textarea {
+            resize: vertical;
+            min-height: 55px;
+        }
+        .styled-input:focus,
+        .styled-textarea:focus {
+            border-color: var(--purple-light);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.13);
+            background: var(--bg-input-focus);
+        }
+        .styled-select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a78bfa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+        input[type=range] {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 5px;
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--purple-light);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 16px rgba(139, 92, 246, 0.55);
+            border: 2px solid #fff;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 24px rgba(139, 92, 246, 0.7);
+        }
+        .upload-zone {
+            border: 2px dashed var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 34px 18px;
+            text-align: center;
+            background: rgba(18, 10, 40, 0.5);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--purple-light);
+            background: rgba(139, 92, 246, 0.07);
+            box-shadow: 0 0 35px rgba(109, 40, 217, 0.18);
+        }
+        .upload-zone i {
+            font-size: 2.4rem;
+            color: var(--text-muted);
+            transition: all var(--transition-fast);
+        }
+        .upload-zone:hover i {
+            transform: translateY(-5px);
+            color: var(--purple-light);
+        }
+        .upload-zone p {
+            color: var(--text-muted);
+            font-size: 0.84rem;
+            letter-spacing: 0.03em;
+        }
+        .upload-zone input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .btn {
+            width: 100%;
+            padding: 11px 15px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 0.88rem;
+            letter-spacing: 0.04em;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            font-family: inherit;
+            box-shadow: var(--shadow-btn);
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 55%);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        .btn:active {
+            transform: scale(0.93);
+            transition: transform 0.08s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+            box-shadow: 0 4px 24px rgba(124, 58, 237, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 34px rgba(124, 58, 237, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            width: auto;
+            padding: 8px 13px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            border-color: var(--purple-light);
+            color: #fff;
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 22px rgba(16, 185, 129, 0.35);
+        }
+        .btn-success:hover {
+            box-shadow: 0 6px 30px rgba(16, 185, 129, 0.55);
+            transform: translateY(-2px);
+        }
+        .btn-accent {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            box-shadow: 0 4px 22px rgba(236, 72, 153, 0.35);
+        }
+        .btn-accent:hover {
+            box-shadow: 0 6px 30px rgba(236, 72, 153, 0.55);
+            transform: translateY(-2px);
+        }
+        .btn-teal {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            box-shadow: 0 4px 22px rgba(20, 184, 166, 0.35);
+        }
+        .btn-teal:hover {
+            box-shadow: 0 6px 30px rgba(20, 184, 166, 0.55);
+            transform: translateY(-2px);
+        }
+        .btn-small {
+            width: auto;
+            padding: 7px 11px;
+            font-size: 0.74rem;
+            border-radius: 16px;
+        }
+        .result-panel {
+            background: var(--bg-card-glass);
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 22px;
+            min-height: 380px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .result-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(140deg, rgba(139, 92, 246, 0.32) 0%, rgba(236, 72, 153, 0.14) 38%, rgba(6, 182, 212, 0.09) 65%, rgba(139, 92, 246, 0.26) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.55;
+        }
+        .result-panel>* {
+            position: relative;
+            z-index: 1;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid var(--border-subtle);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+        }
+        .grid-item {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .grid-item:hover {
+            border-color: var(--purple-light);
+            box-shadow: 0 0 22px rgba(139, 92, 246, 0.22);
+            transform: translateY(-2px);
+        }
+        .grid-item img {
+            width: 100%;
+            height: 125px;
+            object-fit: contain;
+            background-image: linear-gradient(45deg, #150e3d 25%, transparent 25%), linear-gradient(-45deg, #150e3d 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #150e3d 75%), linear-gradient(-45deg, transparent 75%, #150e3d 75%);
+            background-size: 16px 16px;
+            cursor: zoom-in;
+        }
+        .grid-info {
+            padding: 7px 9px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .grid-info .btn-download {
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--purple-light);
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .grid-info .btn-download:hover {
+            background: var(--purple-mid);
+            color: #fff;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.66rem;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        .status-pending {
+            background: #3b3358;
+            color: #c4b5fd;
+        }
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .progress-container {
+            width: 100%;
+            background: var(--bg-input);
+            height: 5px;
+            border-radius: 3px;
+            margin-top: 14px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #a78bfa, #ec4899);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        .mode-switch {
+            display: flex;
+            background: var(--bg-input);
+            border-radius: 11px;
+            padding: 4px;
+            margin-bottom: 14px;
+            gap: 2px;
+        }
+        .mode-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px 4px;
+            font-size: 0.73rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        .mode-option.active {
+            background: var(--purple-mid);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 12px rgba(109, 40, 217, 0.4);
+        }
+        .toast-container {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            pointer-events: none;
+        }
+        .toast {
+            background: rgba(18, 10, 40, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #fff;
+            padding: 10px 17px;
+            border-radius: 22px;
+            border-left: 3px solid var(--purple-light);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            animation: slideIn 0.35s forwards;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: all;
+        }
+        .toast.error {
+            border-left-color: #ef4444;
+        }
+        .toast.warning {
+            border-left-color: #f59e0b;
+        }
+        .toast.success {
+            border-left-color: #10b981;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .hidden {
+            display: none !important;
+        }
+        .preview-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.93);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .preview-modal.active {
+            display: flex;
+        }
+        .preview-modal img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: 0 0 70px rgba(139, 92, 246, 0.35);
+            cursor: default;
+        }
+        .preview-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .preview-actions .btn {
+            width: auto;
+            padding: 10px 18px;
+            font-size: 0.8rem;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 8px;
+        }
+        .filter-btn {
+            padding: 7px 3px;
+            background: var(--bg-input);
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            border-radius: var(--radius-xs);
+            font-size: 0.68rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--purple-mid);
+            color: #fff;
+            border-color: var(--purple-light);
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+        }
+        input[type=checkbox] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 17px;
+            height: 17px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            transition: var(--transition-fast);
+            cursor: pointer;
+            flex-shrink: 0;
+            position: relative;
+        }
+        input[type=checkbox]:checked {
+            background: var(--purple-mid);
+            border-color: var(--purple-light);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+        }
+        input[type=checkbox]:checked::after {
+            content: '✓';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .info-box {
+            background: rgba(0, 0, 0, 0.22);
+            padding: 9px 11px;
+            border-radius: var(--radius-sm);
+            font-size: 0.73rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+            border: 1px solid rgba(139, 92, 246, 0.13);
+        }
+        .color-group {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .color-group input[type=color] {
+            height: 36px;
+            width: 42px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xs);
+            background: transparent;
+            cursor: pointer;
+            padding: 2px;
+        }
+        .tab-subsection {
+            margin-top: 11px;
+            padding-top: 11px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        #detect-result {
+            margin-top: 14px;
+            background: var(--bg-input);
+            padding: 13px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            border: 1px solid var(--border-subtle);
+        }
+        #detect-canvas {
+            max-width: 100%;
+            max-height: 440px;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            background: #000;
+            border: 1px solid var(--border-subtle);
+        }
+        .download-format-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border-radius: var(--radius-md);
+            margin-top: 10px;
+        }
+        .download-format-bar select {
+            padding: 7px 10px;
+            border-radius: var(--radius-xs);
+            background: var(--bg-primary);
+            color: #fff;
+            border: 1px solid var(--border-subtle);
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .download-format-bar .btn {
+            width: auto;
+            padding: 7px 14px;
+            font-size: 0.76rem;
+        }
+        .img2qr-preview {
+            text-align: center;
+            padding: 16px;
+        }
+        .img2qr-preview img {
+            max-width: 220px;
+            max-height: 220px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+        .size-comparison {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        .size-comparison span {
+            background: var(--bg-input);
+            padding: 5px 10px;
+            border-radius: 12px;
+        }
+        @media (max-width: 950px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .sidebar {
+                position: static;
+                order: 2;
+                border-radius: var(--radius-lg);
+                max-height: none;
+                overflow-y: visible;
+            }
+            .result-panel {
+                order: 1;
+                min-height: 260px;
+                border-radius: var(--radius-lg);
+            }
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 9px;
+            }
+            .grid-item img {
+                height: 90px;
+            }
+            .filter-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .navbar {
+                padding: 10px 14px;
+            }
+            .brand {
+                font-size: 1.1rem;
+            }
+            .nav-tab {
+                font-size: 0.66rem;
+                padding: 7px 3px;
+            }
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 0 6px;
+                margin: 14px auto;
+            }
+            .sidebar {
+                padding: 14px 10px;
+            }
+            .result-panel {
+                padding: 14px 10px;
+            }
+            .btn {
+                padding: 9px 11px;
+                font-size: 0.76rem;
+            }
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 7px;
+            }
+            .grid-item img {
+                height: 65px;
+            }
+            .filter-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particlesContainer" aria-hidden="true"></div>
+    <div class="toast-container" id="toast-area"></div>
+    <nav class="navbar">
+        <div class="brand"><i class="fas fa-shield-halved"></i> 巳泷资源库 - 影盾</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="nav-badge"><i class="fas fa-shield"></i> 本地离线处理</span>
+            <span class="nav-badge"><i class="fas fa-lock"></i> 数据不上传</span>
+        </div>
+    </nav>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-tabs" id="nav-tabs">
+                <div class="nav-tab active" data-tab="obfuscate"><i class="fas fa-random"></i>混淆</div>
+                <div class="nav-tab" data-tab="text"><i class="fas fa-font"></i>文字</div>
+                <div class="nav-tab" data-tab="image"><i class="fas fa-image"></i>图水印</div>
+                <div class="nav-tab" data-tab="qr"><i class="fas fa-qrcode"></i>二维码</div>
+                <div class="nav-tab" data-tab="img2qr"><i class="fas fa-camera-retro"></i>图转码</div>
+                <div class="nav-tab" data-tab="adjust"><i class="fas fa-sliders"></i>调色</div>
+                <div class="nav-tab" data-tab="detect"><i class="fas fa-magnifying-glass"></i>检测</div>
+            </div>
+            <div id="conf-obfuscate" class="tab-content">
+                <div class="info-box"><i class="fas fa-info-circle" style="color:var(--accent-cyan)"></i> Gilbert空间填充曲线混淆，保持像素空间相关性。未选中图片时批量处理全部，点击图片可单独处理。</div>
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                    <button class="btn btn-primary" onclick="processObfuscate('encrypt')"><i class="fas fa-lock"></i> <span id="obfuscate-btn-text">批量混淆</span></button>
+                    <button class="btn btn-outline" onclick="processObfuscate('decrypt')" style="width:100%;"><i class="fas fa-unlock"></i> <span id="deobfuscate-btn-text">批量解混淆</span></button>
+                    <button class="btn btn-outline" onclick="restoreOriginal()"><i class="fas fa-rotate-left"></i> 还原原始图片</button>
+                </div>
+            </div>
+            <div id="conf-text" class="tab-content hidden">
+                <div class="mode-switch">
+                    <div class="mode-option active" onclick="toggleWatermarkMode('visible')">可见平铺</div>
+                    <div class="mode-option" onclick="toggleWatermarkMode('blind')">DCT盲水印</div>
+                    <div class="mode-option" onclick="toggleWatermarkMode('lsb')">LSB隐写</div>
+                </div>
+                <div class="control-group"><label class="control-label">水印内容</label><textarea id="text-content" class="styled-textarea" rows="2">© 影盾 | 严禁盗用</textarea></div>
+                <div id="visible-options">
+                    <div class="control-group"><label class="control-label">字体/颜色</label><div class="color-group"><input type="color" id="text-color" value="#ffffff"><select id="text-font" class="styled-select"><option value="Microsoft YaHei">微软雅黑</option><option value="Arial">Arial</option><option value="SimSun">宋体</option><option value="KaiTi">楷体</option></select></div></div>
+                    <div class="control-group"><label class="control-label">不透明度 <span id="text-opacity-val">15%</span></label><input type="range" id="text-opacity" min="1" max="100" value="15"></div>
+                    <div class="control-group"><label class="control-label">字体大小 <span id="text-size-val">24px</span></label><input type="range" id="text-size" min="10" max="200" value="24"></div>
+                    <div class="control-group"><label class="control-label">旋转角度 <span id="text-rotate-val">-30°</span></label><input type="range" id="text-rotate" min="-90" max="90" value="-30"></div>
+                    <div class="control-group"><label class="control-label">间距 <span id="text-spacing-x-val">50%</span></label><input type="range" id="text-spacing-x" min="10" max="200" value="50"></div>
+                    <label class="checkbox-label"><input type="checkbox" id="text-shadow">添加阴影</label>
+                    <label class="checkbox-label"><input type="checkbox" id="text-bold">粗体</label>
+                </div>
+                <div id="blind-options" class="hidden">
+                    <div class="control-group"><label class="control-label">嵌入强度 <span id="dct-strength-val">0.020</span></label><input type="range" id="dct-strength" min="1" max="100" value="20"></div>
+                    <div class="control-group"><label class="control-label">嵌入通道</label><select id="dct-channel" class="styled-select"><option value="all">所有通道</option><option value="blue">蓝色通道</option><option value="green">绿色通道</option><option value="red">红色通道</option></select></div>
+                    <div class="info-box"><i class="fas fa-info-circle"></i> 频域盲水印抗裁剪压缩，肉眼不可见。解密需使用检测功能。</div>
+                </div>
+                <div id="lsb-options" class="hidden">
+                    <div class="control-group"><label class="control-label">隐藏位深度 <span id="lsb-depth-val">1</span></label><input type="range" id="lsb-depth" min="1" max="4" value="1" step="1"></div>
+                    <div class="control-group"><label class="control-label">加密密钥（可选）</label><input type="text" id="lsb-key" class="styled-input" placeholder="输入密钥"></div>
+                    <div class="info-box"><i class="fas fa-info-circle"></i> LSB隐写适合隐藏文本，容量大但抗压缩较弱。</div>
+                </div>
+                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('text')"><i class="fas fa-bolt"></i> 批量处理</button>
+            </div>
+            <div id="conf-image" class="tab-content hidden">
+                <div class="upload-zone" id="image-watermark-dropzone" style="padding:14px;min-height:60px;"><i class="fas fa-image"></i><p>上传水印图片（PNG推荐）</p><input type="file" id="image-watermark-input" accept="image/*"></div>
+                <div id="image-watermark-preview" style="margin-top:7px;text-align:center;"></div>
+                <div class="control-group"><label class="control-label">位置</label><select id="image-position" class="styled-select"><option value="br">右下角</option><option value="bl">左下角</option><option value="tr">右上角</option><option value="tl">左上角</option><option value="center">正中间</option><option value="tile">平铺</option></select></div>
+                <div class="control-group"><label class="control-label">尺寸比例 <span id="image-scale-val">15%</span></label><input type="range" id="image-scale" min="5" max="100" value="15"></div>
+                <div class="control-group"><label class="control-label">不透明度 <span id="image-opacity-val">50%</span></label><input type="range" id="image-opacity" min="1" max="100" value="50"></div>
+                <div class="control-group"><label class="control-label">旋转角度 <span id="image-rotate-val">0°</span></label><input type="range" id="image-rotate" min="-180" max="180" value="0"></div>
+                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('image')"><i class="fas fa-image"></i> 批量添加图片水印</button>
+            </div>
+            <div id="conf-qr" class="tab-content hidden">
+                <div class="control-group"><label class="control-label">二维码内容</label><textarea id="qr-content" class="styled-textarea" rows="3" placeholder="输入网址或文本"></textarea></div>
+                <div class="control-group"><label class="control-label">纠错级别</label><select id="qr-level" class="styled-select"><option value="L">低(7%)</option><option value="M">中(15%)</option><option value="Q">高(25%)</option><option value="H" selected>最高(30%)</option></select></div>
+                <div class="control-group"><label class="control-label">前景/背景色</label><div class="color-group"><input type="color" id="qr-foreground" value="#000000"><input type="color" id="qr-background" value="#ffffff"></div></div>
+                <div class="upload-zone" id="qr-logo-dropzone" style="padding:12px;min-height:50px;"><i class="fas fa-icons"></i><p>上传LOGO（可选）</p><input type="file" id="qr-logo-input" accept="image/*"></div>
+                <div id="qr-logo-preview" style="margin-top:7px;text-align:center;"></div>
+                <div class="control-group"><label class="control-label">位置</label><select id="qr-position" class="styled-select"><option value="br">右下角</option><option value="bl">左下角</option><option value="tr">右上角</option><option value="tl">左上角</option><option value="center">正中间</option></select></div>
+                <div class="control-group"><label class="control-label">尺寸比例 <span id="qr-scale-val">15%</span></label><input type="range" id="qr-scale" min="5" max="50" value="15"></div>
+                <div class="control-group"><label class="control-label">不透明度 <span id="qr-opacity-val">90%</span></label><input type="range" id="qr-opacity" min="1" max="100" value="90"></div>
+                <div class="control-group"><label class="control-label">边距 <span id="qr-margin-val">5%</span></label><input type="range" id="qr-margin" min="0" max="20" value="5"></div>
+                <label class="checkbox-label"><input type="checkbox" id="qr-embed-blind">同时嵌入DCT盲水印</label>
+                <div id="qrcode-ghost" style="display:none;"></div>
+                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('qr')"><i class="fas fa-qrcode"></i> 批量合成二维码</button>
+            </div>
+            <div id="conf-img2qr" class="tab-content hidden">
+                <div class="info-box"><i class="fas fa-info-circle" style="color:var(--accent-cyan)"></i> 将图片编码到二维码中，扫码即可还原图片。图片将被压缩缩放到适合QR码的尺寸。</div>
+                <div class="control-group"><label class="control-label">目标尺寸 <span id="img2qr-size-val">64px</span></label><input type="range" id="img2qr-size" min="32" max="120" value="64"></div>
+                <div class="control-group"><label class="control-label">JPEG质量 <span id="img2qr-quality-val">40%</span></label><input type="range" id="img2qr-quality" min="10" max="90" value="40"></div>
+                <div class="control-group"><label class="control-label">纠错级别</label><select id="img2qr-level" class="styled-select"><option value="L">低(容量大)</option><option value="M" selected>中(平衡)</option><option value="Q">高</option><option value="H">最高</option></select></div>
+                <div class="control-group"><label class="control-label">前景/背景色</label><div class="color-group"><input type="color" id="img2qr-foreground" value="#000000"><input type="color" id="img2qr-background" value="#ffffff"></div></div>
+                <button class="btn btn-accent" style="margin-top:10px;" onclick="convertImageToQR()"><i class="fas fa-camera-retro"></i> 图片转二维码</button>
+                <div id="img2qr-result" class="img2qr-preview hidden" style="margin-top:12px;"></div>
+                <div id="img2qr-size-info" class="size-comparison hidden" style="margin-top:8px;"></div>
+            </div>
+            <div id="conf-adjust" class="tab-content hidden">
+                <div class="info-box"><i class="fas fa-sliders"></i> 图像调整：亮度、对比度、饱和度、色相、锐化等。</div>
+                <div class="control-group"><label class="control-label">亮度 <span id="adj-brightness-val">0</span></label><input type="range" id="adj-brightness" min="-100" max="100" value="0"></div>
+                <div class="control-group"><label class="control-label">对比度 <span id="adj-contrast-val">1.0</span></label><input type="range" id="adj-contrast" min="0" max="200" value="100"></div>
+                <div class="control-group"><label class="control-label">饱和度 <span id="adj-saturation-val">1.0</span></label><input type="range" id="adj-saturation" min="0" max="200" value="100"></div>
+                <div class="control-group"><label class="control-label">色相旋转 <span id="adj-hue-val">0°</span></label><input type="range" id="adj-hue" min="-180" max="180" value="0"></div>
+                <div class="control-group"><label class="control-label">锐化强度 <span id="adj-sharpen-val">0</span></label><input type="range" id="adj-sharpen" min="0" max="100" value="0"></div>
+                <div class="control-group"><label class="control-label">模糊强度 <span id="adj-blur-val">0</span></label><input type="range" id="adj-blur" min="0" max="50" value="0"></div>
+                <label class="checkbox-label"><input type="checkbox" id="adj-grayscale">灰度化</label>
+                <label class="checkbox-label"><input type="checkbox" id="adj-invert">反相</label>
+                <button class="btn btn-primary" style="margin-top:10px;" onclick="processBatch('adjust')"><i class="fas fa-bolt"></i> 批量调整</button>
+            </div>
+            <div id="conf-detect" class="tab-content hidden">
+                <div class="info-box"><i class="fas fa-search"></i> 上传图片后选择检测工具。支持二维码扫描、盲水印提取、LSB解密。</div>
+                <div class="filter-grid">
+                    <button class="filter-btn active" data-filter="original" onclick="applyFilter('original')">原图</button>
+                    <button class="filter-btn" data-filter="invert" onclick="applyFilter('invert')">反相</button>
+                    <button class="filter-btn" data-filter="high-contrast" onclick="applyFilter('high-contrast')">高对比</button>
+                    <button class="filter-btn" data-filter="edge" onclick="applyFilter('edge')">边缘</button>
+                    <button class="filter-btn" data-filter="sharpen" onclick="applyFilter('sharpen')">锐化</button>
+                    <button class="filter-btn" data-filter="blur" onclick="applyFilter('blur')">模糊</button>
+                    <button class="filter-btn" data-filter="red-channel" onclick="applyFilter('red-channel')">红通道</button>
+                    <button class="filter-btn" data-filter="green-channel" onclick="applyFilter('green-channel')">绿通道</button>
+                    <button class="filter-btn" data-filter="blue-channel" onclick="applyFilter('blue-channel')">蓝通道</button>
+                    <button class="filter-btn" data-filter="grayscale" onclick="applyFilter('grayscale')">灰度</button>
+                </div>
+                <div class="control-group" style="margin-top:10px;"><label class="control-label">提取阈值 <span id="detect-threshold-val">50</span></label><input type="range" id="detect-threshold" min="0" max="255" value="50"></div>
+                <div class="control-group"><label class="control-label">解密密钥（LSB用）</label><input type="text" id="detect-lsb-key" class="styled-input" placeholder="输入密钥"></div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <button class="btn btn-outline btn-small" onclick="detectBlindWatermark()" style="width:100%;"><i class="fas fa-eye"></i> 提取DCT盲水印</button>
+                    <button class="btn btn-outline btn-small" onclick="detectLsb()" style="width:100%;"><i class="fas fa-lock-open"></i> 提取LSB隐写</button>
+                    <button class="btn btn-outline btn-small" onclick="scanQRCode()" style="width:100%;"><i class="fas fa-qrcode"></i> 识别二维码</button>
+                    <button class="btn btn-outline btn-small" onclick="autoDetectAll()" style="width:100%;"><i class="fas fa-magic"></i> 自动检测全部</button>
+                </div>
+                <div id="detect-result" style="display:none;"><h4 style="font-size:0.83rem;margin-bottom:7px;">提取结果：</h4><pre id="detect-text" style="white-space:pre-wrap;font-size:0.78rem;color:#e9d5ff;"></pre></div>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="upload-zone" id="dropzone"><i class="fas fa-cloud-upload-alt"></i><p>点击或拖拽图片到此处</p><p style="font-size:0.73rem;opacity:0.6;">支持 JPG/PNG/WEBP/GIF/BMP · 可批量上传</p><input type="file" id="file-input" accept="image/*" multiple></div>
+            <div class="result-panel">
+                <div class="result-header">
+                    <div><h3 style="font-size:0.98rem;font-weight:600;">处理列表 <span id="file-count" style="font-size:0.73rem;background:var(--bg-input);padding:3px 10px;border-radius:12px;margin-left:5px;">0</span> <span id="selected-indicator" style="font-size:0.7rem;color:var(--accent-cyan);display:none;">(已选中单张)</span></h3></div>
+                    <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
+                        <button class="btn btn-outline btn-small" onclick="undoLast()"><i class="fas fa-undo"></i> 撤销</button>
+                        <button class="btn btn-outline btn-small" onclick="clearAll()"><i class="fas fa-trash"></i> 清空</button>
+                        <select id="download-format" style="padding:6px 8px;border-radius:12px;background:var(--bg-input);color:#fff;border:1px solid var(--border-subtle);font-size:0.7rem;cursor:pointer;font-family:inherit;">
+                            <option value="png">PNG (无损)</option>
+                            <option value="jpeg">JPEG (高质量)</option>
+                            <option value="webp">WebP</option>
+                            <option value="jpeg-compressed">JPEG 压缩</option>
+                        </select>
+                        <select id="download-quality" style="padding:6px 8px;border-radius:12px;background:var(--bg-input);color:#fff;border:1px solid var(--border-subtle);font-size:0.7rem;cursor:pointer;font-family:inherit;">
+                            <option value="1.0">质量: 100%</option>
+                            <option value="0.95">质量: 95%</option>
+                            <option value="0.9" selected>质量: 90%</option>
+                            <option value="0.8">质量: 80%</option>
+                            <option value="0.7">质量: 70%</option>
+                            <option value="0.6">质量: 60%</option>
+                            <option value="0.5">质量: 50%</option>
+                        </select>
+                        <button class="btn btn-teal btn-small" onclick="compressLossless()"><i class="fas fa-compress"></i> 无损压缩</button>
+                        <button class="btn btn-success btn-small" id="download-all-btn" style="display:none;" onclick="downloadAllZip()"><i class="fas fa-file-archive"></i> ZIP下载</button>
+                    </div>
+                </div>
+                <div class="progress-container" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+                <div class="image-grid" id="preview-grid"><div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">暂无图片，请先上传</div></div>
+                <div id="detect-view" class="hidden" style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
+                    <canvas id="detect-canvas"></canvas>
+                    <div id="detect-batch-grid" class="image-grid hidden"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="preview-modal" id="preview-modal">
+        <img id="preview-img" alt="预览">
+        <div class="preview-actions" id="preview-actions">
+            <button class="btn btn-primary" onclick="previewEncrypt()"><i class="fas fa-lock"></i> 混淆此图</button>
+            <button class="btn btn-outline" onclick="previewDecrypt()"><i class="fas fa-unlock"></i> 解混淆此图</button>
+            <button class="btn btn-success" onclick="previewDownload()"><i class="fas fa-download"></i> 下载此图</button>
+            <button class="btn btn-outline" onclick="closePreview()"><i class="fas fa-times"></i> 关闭</button>
+        </div>
+    </div>
+    <script>
+        (function() {
+            // 粒子背景初始化
+            const pc = document.getElementById('particlesContainer');
+            const colors = ['rgba(139,92,246,0.5)', 'rgba(167,139,250,0.4)', 'rgba(196,181,253,0.35)',
+                'rgba(236,72,153,0.35)', 'rgba(6,182,212,0.3)', 'rgba(245,158,11,0.28)', 'rgba(16,185,129,0.25)'
+            ];
+            for (let i = 0; i < 24; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const s = Math.random() * 5 + 2;
+                p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*95}%;top:${Math.random()*100+100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${s*2+5}px ${p.style.backgroundColor};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*14}s;${Math.random()>0.5?'animation-name:floatUpAlt;':''}`;
+                pc.appendChild(p);
+            }
+
+            // 全局状态管理
+            const state = {
+                files: [],
+                processedBlobs: [],
+                processedHistory: [],
+                mode: 'obfuscate',
+                watermarkType: 'visible',
+                isProcessing: false,
+                detectImg: null,
+                detectBatch: [],
+                imageWatermark: null,
+                qrLogo: null,
+                originalBlobUrl: null,
+                originalFileName: null,
+                currentImageStatus: 'none',
+                detectOriginData: null,
+                img2qrResultBlob: null,
+                img2qrDataUrl: null,
+                originalFileSizes: [],
+                selectedImageIndex: -1,
+                objectUrls: [] // 管理objectURL，防止内存泄漏
+            };
+
+            // 工具函数
+            const $ = id => document.getElementById(id);
+            Math.clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
+
+            // Toast提示
+            function showToast(msg, type = 'info') {
+                const container = $('toast-area');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icons = { 
+                    success: 'fa-check-circle', 
+                    error: 'fa-times-circle', 
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle' 
+                };
+                const cols = { 
+                    success: '#10b981', 
+                    error: '#ef4444', 
+                    warning: '#f59e0b', 
+                    info: '#8b5cf6' 
+                };
+                toast.style.borderLeftColor = cols[type];
+                toast.innerHTML = `<i class="fas ${icons[type]}" style="color:${cols[type]}"></i><span>${msg}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => { 
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-16px)';
+                    setTimeout(() => toast.remove(), 300); 
+                }, 4200);
+            }
+
+            // 释放旧的objectURL
+            function revokeOldUrls() {
+                state.objectUrls.forEach(url => URL.revokeObjectURL(url));
+                state.objectUrls = [];
+            }
+
+            // Tab切换逻辑
+            function switchTab(tab) {
+                // 重置选中状态
+                state.mode = tab;
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+
+                // 更新Tab激活状态
+                document.querySelectorAll('#nav-tabs .nav-tab').forEach(el => {
+                    el.classList.toggle('active', el.dataset.tab === tab);
+                });
+
+                // 隐藏所有Tab内容
+                document.querySelectorAll('#sidebar .tab-content').forEach(el => {
+                    el.classList.add('hidden');
+                });
+
+                // 显示当前Tab内容
+                const confEl = $(`conf-${tab}`);
+                if (confEl) confEl.classList.remove('hidden');
+
+                // 检测模式特殊处理
+                if (tab === 'detect') {
+                    $('preview-grid').classList.add('hidden');
+                    $('detect-view').classList.remove('hidden');
+                    $('detect-batch-grid').classList.toggle('hidden', state.detectBatch.length === 0);
+                    $('file-input').removeAttribute('multiple');
+                    $('download-all-btn').style.display = 'none';
+                    $('file-count').innerText = state.detectImg ? 1 : state.detectBatch.length;
+                } else {
+                    $('preview-grid').classList.remove('hidden');
+                    $('detect-view').classList.add('hidden');
+                    $('file-input').setAttribute('multiple', 'multiple');
+                    // 更新下载按钮显示
+                    if (state.processedBlobs.filter(Boolean).length > 0 && state.files.length > 0) {
+                        $('download-all-btn').style.display = 'inline-flex';
+                    } else {
+                        $('download-all-btn').style.display = 'none';
+                    }
+                    $('file-count').innerText = state.files.length;
+                }
+
+                // 图转码特殊处理
+                if (tab === 'img2qr' && state.files.length > 0 && state.processedBlobs[0]) {
+                    updateImg2qrPreview();
+                }
+            }
+
+            // 混淆按钮文本更新
+            function updateObfuscateButtonLabels() {
+                const encryptSpan = $('obfuscate-btn-text');
+                const decryptSpan = $('deobfuscate-btn-text');
+                if (state.selectedImageIndex >= 0 && state.files.length > 0) {
+                    if (encryptSpan) encryptSpan.textContent = '混淆单张';
+                    if (decryptSpan) decryptSpan.textContent = '解混淆单张';
+                } else {
+                    if (encryptSpan) encryptSpan.textContent = '批量混淆';
+                    if (decryptSpan) decryptSpan.textContent = '批量解混淆';
+                }
+            }
+
+            // 选中状态指示器更新
+            function updateSelectedIndicator() {
+                const ind = $('selected-indicator');
+                if (state.selectedImageIndex >= 0 && state.files.length > 0 && state.mode !== 'detect') {
+                    ind.style.display = 'inline';
+                } else {
+                    ind.style.display = 'none';
+                }
+            }
+
+            // 水印模式切换
+            function toggleWatermarkMode(mode) {
+                state.watermarkType = mode;
+                document.querySelectorAll('#conf-text .mode-option').forEach((el, i) => {
+                    el.classList.toggle('active', ['visible', 'blind', 'lsb'][i] === mode);
+                });
+                ['visible', 'blind', 'lsb'].forEach(m => {
+                    $(`${m}-options`).classList.toggle('hidden', mode !== m);
+                });
+            }
+
+            // 滑块数值初始化与事件绑定
+            const sliderIds = [
+                'text-opacity', 'text-size', 'text-rotate', 'text-spacing-x', 
+                'qr-scale', 'qr-opacity', 'qr-margin', 'image-scale', 
+                'image-opacity', 'image-rotate', 'dct-strength', 'lsb-depth',
+                'detect-threshold', 'img2qr-size', 'img2qr-quality', 
+                'adj-brightness', 'adj-contrast', 'adj-saturation',
+                'adj-hue', 'adj-sharpen', 'adj-blur'
+            ];
+            
+            function initSliderValue(slider) {
+                const id = slider.id;
+                let v = slider.value;
+                let suffix = '';
+                let displayVal = v;
+                
+                if (id.includes('rotate') || id === 'adj-hue') suffix = '°';
+                else if (id.includes('opacity') || id.includes('scale') || id.includes('margin') || id.includes('spacing') || id === 'img2qr-quality') suffix = '%';
+                else if (id.includes('size')) suffix = 'px';
+                else if (id === 'dct-strength') displayVal = (v / 1000).toFixed(3);
+                else if (id === 'adj-contrast' || id === 'adj-saturation') displayVal = (v / 100).toFixed(1);
+                
+                $(`${id}-val`).innerText = displayVal + suffix;
+            }
+
+            sliderIds.forEach(id => {
+                const el = $(id);
+                if (!el) return;
+                // 初始化数值显示
+                initSliderValue(el);
+                // 绑定事件
+                el.addEventListener('input', () => initSliderValue(el));
+            });
+
+            // 上传文件处理核心逻辑（修复上传两次问题）
+            const dropzone = $('dropzone');
+            const fileInput = $('file-input');
+
+            // 点击上传
+            dropzone.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+
+            // 拖拽事件
+            dropzone.addEventListener('dragover', e => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            });
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+            dropzone.addEventListener('drop', e => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            // 文件选择事件
+            fileInput.addEventListener('change', e => {
+                handleFiles(e.target.files);
+                e.target.value = ''; // 清空后可重复选择同一文件
+            });
+
+            // 文件处理核心函数
+            function handleFiles(fileList) {
+                const newFiles = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+                if (!newFiles.length) {
+                    showToast('请选择有效的图片文件', 'warning');
+                    return;
+                }
+
+                // 检测模式处理
+                if (state.mode === 'detect') {
+                    if (newFiles.length > 1) {
+                        // 批量检测
+                        state.detectBatch = [...state.detectBatch, ...newFiles];
+                        updateDetectBatchGrid();
+                        $('file-count').innerText = state.detectBatch.length;
+                        $('detect-batch-grid').classList.remove('hidden');
+                        showToast(`已添加 ${newFiles.length} 张检测图片`, 'success');
+                    } else {
+                        // 单张检测
+                        const file = newFiles[0];
+                        const url = URL.createObjectURL(file);
+                        state.objectUrls.push(url);
+                        const img = new Image();
+                        img.onload = () => {
+                            state.detectImg = img;
+                            renderDetectCanvas(img);
+                            showToast('图片加载完成，请选择检测工具', 'success');
+                            $('file-count').innerText = 1;
+                        };
+                        img.onerror = () => {
+                            showToast('图片加载失败', 'error');
+                        };
+                        img.src = url;
+                    }
+                    return;
+                }
+
+                // 普通模式处理
+                // 保存原始图片
+                if (!state.originalBlobUrl && newFiles.length === 1 && state.files.length === 0) {
+                    const originalUrl = URL.createObjectURL(newFiles[0]);
+                    state.objectUrls.push(originalUrl);
+                    state.originalBlobUrl = originalUrl;
+                    state.originalFileName = newFiles[0].name;
+                }
+
+                // 更新文件列表
+                newFiles.forEach(f => state.originalFileSizes.push(f.size));
+                state.files = [...state.files, ...newFiles];
+                state.processedBlobs = [...state.processedBlobs, ...new Array(newFiles.length).fill(null)];
+                
+                // 重置选中状态
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                
+                // 更新预览网格
+                updatePreviewGrid();
+                showToast(`已添加 ${newFiles.length} 张图片`, 'success');
+
+                // 图转码自动更新
+                if (state.mode === 'img2qr' && state.files.length > 0) {
+                    updateImg2qrPreview();
+                }
+            }
+
+            // 预览网格更新
+            function updatePreviewGrid() {
+                const grid = $('preview-grid');
+                $('file-count').innerText = state.files.length;
+
+                // 空状态
+                if (!state.files.length) {
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">暂无图片，请先上传</div>';
+                    $('download-all-btn').style.display = 'none';
+                    return;
+                }
+
+                // 释放旧URL
+                revokeOldUrls();
+                grid.innerHTML = '';
+
+                // 渲染图片列表
+                state.files.forEach((file, i) => {
+                    const blob = state.processedBlobs[i] || file;
+                    const url = URL.createObjectURL(blob);
+                    state.objectUrls.push(url);
+                    const status = state.processedBlobs[i] ? 'success' : 'pending';
+                    const kb = (blob.size / 1024).toFixed(1);
+                    
+                    const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.innerHTML = `
+                        <img src="${url}" onclick="openPreview(${i}, '${url}')" alt="${file.name}">
+                        <div class="grid-info">
+                            <span style="max-width:80px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" title="${file.name}">${file.name}</span>
+                            <span class="status-badge status-${status}">${status==='success'?kb+'KB':'待处理'}</span>
+                            <button class="btn-download" onclick="event.stopPropagation(); downloadSingle(${i})" title="下载此图">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                });
+
+                // 更新批量下载按钮
+                if (state.processedBlobs.filter(Boolean).length === state.files.length && state.files.length > 0) {
+                    $('download-all-btn').style.display = 'inline-flex';
+                } else {
+                    $('download-all-btn').style.display = 'none';
+                }
+            }
+
+            // 检测批量网格更新
+            function updateDetectBatchGrid() {
+                const grid = $('detect-batch-grid');
+                if (!state.detectBatch.length) {
+                    grid.innerHTML = '';
+                    return;
+                }
+                grid.innerHTML = '';
+                state.detectBatch.forEach((file, i) => {
+                    const url = URL.createObjectURL(file);
+                    state.objectUrls.push(url);
+                    const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.innerHTML = `
+                        <img src="${url}" onclick="loadDetectBatch(${i})" alt="${file.name}">
+                        <div class="grid-info">
+                            <span>${file.name}</span>
+                            <span class="status-badge status-pending">待检测</span>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                });
+            }
+
+            // 加载批量检测图片
+            window.loadDetectBatch = function(i) {
+                const file = state.detectBatch[i];
+                const url = URL.createObjectURL(file);
+                state.objectUrls.push(url);
+                const img = new Image();
+                img.onload = () => {
+                    state.detectImg = img;
+                    renderDetectCanvas(img);
+                    applyFilter('original');
+                    showToast(`已加载 ${file.name}`, 'success');
+                };
+                img.onerror = () => showToast('图片加载失败', 'error');
+                img.src = url;
+            };
+
+            // 打开大图预览
+            window.openPreview = function(index, url) {
+                // 检测模式仅查看
+                if (state.mode === 'detect') {
+                    $('preview-img').src = url;
+                    $('preview-actions').classList.add('hidden');
+                    $('preview-modal').classList.add('active');
+                    return;
+                }
+                // 普通模式
+                state.selectedImageIndex = index;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                $('preview-img').src = url;
+                $('preview-actions').classList.remove('hidden');
+                $('preview-modal').classList.add('active');
+            };
+
+            // 关闭预览
+            window.closePreview = function() {
+                $('preview-modal').classList.remove('active');
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+            };
+
+            // 清空所有
+            window.clearAll = function() {
+                // 释放所有URL
+                revokeOldUrls();
+                // 重置状态
+                state.files = [];
+                state.processedBlobs = [];
+                state.processedHistory = [];
+                state.detectImg = null;
+                state.detectBatch = [];
+                state.originalBlobUrl = null;
+                state.currentImageStatus = 'none';
+                state.originalFileSizes = [];
+                state.img2qrResultBlob = null;
+                state.img2qrDataUrl = null;
+                state.selectedImageIndex = -1;
+                // 更新UI
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                updatePreviewGrid();
+                updateDetectBatchGrid();
+                $('download-all-btn').style.display = 'none';
+                $('file-count').innerText = '0';
+                $('detect-result').style.display = 'none';
+                // 清空canvas
+                const cvs = $('detect-canvas');
+                if (cvs) {
+                    const ctx = cvs.getContext('2d');
+                    ctx.clearRect(0, 0, cvs.width, cvs.height);
+                }
+                // 清空图转码结果
+                const img2qrRes = $('img2qr-result');
+                if (img2qrRes) {
+                    img2qrRes.classList.add('hidden');
+                    img2qrRes.innerHTML = '';
+                }
+                const img2qrInfo = $('img2qr-size-info');
+                if (img2qrInfo) img2qrInfo.classList.add('hidden');
+                
+                showToast('已清空全部', 'info');
+            };
+
+            // 撤销操作
+            window.undoLast = function() {
+                if (!state.processedHistory.length) {
+                    showToast('无操作可撤销', 'warning');
+                    return;
+                }
+                state.processedBlobs = state.processedHistory.pop();
+                updatePreviewGrid();
+                showToast('已撤销', 'success');
+            };
+
+            // Gilbert曲线混淆核心算法
+            function gilbert2d(width, height) {
+                const coords = [];
+                if (width >= height) generate2d(0, 0, width, 0, 0, height, coords);
+                else generate2d(0, 0, 0, height, width, 0, coords);
+                return coords;
+            }
+            function generate2d(x, y, ax, ay, bx, by, coords) {
+                const w = Math.abs(ax + ay), h = Math.abs(bx + by);
+                const dax = Math.sign(ax), day = Math.sign(ay), dbx = Math.sign(bx), dby = Math.sign(by);
+                if (h === 1) {
+                    for (let i = 0; i < w; i++) {
+                        coords.push([x, y]);
+                        x += dax;
+                        y += day;
+                    }
+                    return;
+                }
+                if (w === 1) {
+                    for (let i = 0; i < h; i++) {
+                        coords.push([x, y]);
+                        x += dbx;
+                        y += dby;
+                    }
+                    return;
+                }
+                let ax2 = Math.floor(ax / 2), ay2 = Math.floor(ay / 2), bx2 = Math.floor(bx / 2), by2 = Math.floor(by / 2);
+                const w2 = Math.abs(ax2 + ay2), h2 = Math.abs(bx2 + by2);
+                if (2 * w > 3 * h) {
+                    if ((w2 % 2) && w > 2) { ax2 += dax; ay2 += day; }
+                    generate2d(x, y, ax2, ay2, bx, by, coords);
+                    generate2d(x + ax2, y + ay2, ax - ax2, ay - ay2, bx, by, coords);
+                } else {
+                    if ((h2 % 2) && h > 2) { bx2 += dbx; by2 += dby; }
+                    generate2d(x, y, bx2, by2, ax2, ay2, coords);
+                    generate2d(x + bx2, y + by2, ax, ay, bx - bx2, by - by2, coords);
+                    generate2d(x + (ax - dax) + (bx2 - dbx), y + (ay - day) + (by2 - dby), -bx2, -by2, -(ax - ax2), -(ay - ay2), coords);
+                }
+            }
+
+            // 单张图片混淆处理
+            function processSingleImageBlob(file, mode) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const cvs = document.createElement('canvas');
+                        const w = cvs.width = img.naturalWidth || img.width;
+                        const h = cvs.height = img.naturalHeight || img.height;
+                        const ctx = cvs.getContext('2d', { willReadFrequently: true });
+                        ctx.drawImage(img, 0, 0);
+                        const imgdata = ctx.getImageData(0, 0, w, h);
+                        const imgdata2 = new ImageData(w, h);
+                        const curve = gilbert2d(w, h);
+                        const total = w * h;
+                        const offset = Math.round((Math.sqrt(5) - 1) / 2 * total);
+                        
+                        for (let i = 0; i < total; i++) {
+                            const oldPos = curve[i];
+                            const newPos = curve[(i + offset) % total];
+                            const oldP = 4 * (oldPos[0] + oldPos[1] * w);
+                            const newP = 4 * (newPos[0] + newPos[1] * w);
+                            if (mode === 'encrypt') {
+                                imgdata2.data.set(imgdata.data.slice(oldP, oldP + 4), newP);
+                            } else {
+                                imgdata2.data.set(imgdata.data.slice(newP, newP + 4), oldP);
+                            }
+                        }
+                        ctx.putImageData(imgdata2, 0, 0);
+                        cvs.toBlob(blob => resolve(blob), 'image/png', 1);
+                    };
+                    img.onerror = reject;
+                    const url = URL.createObjectURL(file);
+                    state.objectUrls.push(url);
+                    img.src = url;
+                });
+            }
+
+            // 批量/单张混淆处理
+            window.processObfuscate = async function(mode) {
+                if (!state.files.length) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                if (state.isProcessing) return;
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+
+                // 确定处理目标
+                const targetIndices = state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length 
+                    ? [state.selectedImageIndex] 
+                    : Array.from({ length: state.files.length }, (_, i) => i);
+
+                // 进度条显示
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+                const total = targetIndices.length;
+                let completed = 0;
+
+                // 循环处理
+                for (const i of targetIndices) {
+                    try {
+                        const blob = await processSingleImageBlob(state.files[i], mode);
+                        state.processedBlobs[i] = blob;
+                    } catch (e) {
+                        showToast(`${state.files[i].name} 处理失败`, 'error');
+                    }
+                    completed++;
+                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                    updatePreviewGrid();
+                    await new Promise(r => setTimeout(r, 10));
+                }
+
+                // 处理完成
+                state.isProcessing = false;
+                showToast(mode === 'encrypt' ? '混淆完成' : '解混淆完成', 'success');
+                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 1500);
+                // 重置选中状态
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+            };
+
+            // 还原原始图片
+            window.restoreOriginal = function() {
+                if (!state.originalBlobUrl) {
+                    showToast('没有可还原的原始图片', 'warning');
+                    return;
+                }
+                const img = new Image();
+                img.onload = () => {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = img.naturalWidth;
+                    cvs.height = img.naturalHeight;
+                    const ctx = cvs.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    cvs.toBlob(blob => {
+                        if (blob && state.files.length > 0) {
+                            // 单张还原
+                            if (state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length) {
+                                state.processedBlobs[state.selectedImageIndex] = blob;
+                            } else {
+                                // 批量还原
+                                for (let i = 0; i < state.files.length; i++) {
+                                    state.processedBlobs[i] = blob;
+                                }
+                            }
+                            state.currentImageStatus = 'original';
+                            updatePreviewGrid();
+                            showToast('已还原原始图片', 'success');
+                        }
+                    }, 'image/png', 1);
+                };
+                img.src = state.originalBlobUrl;
+            };
+
+            // DCT变换核心算法
+            const dct1 = (v, n) => {
+                let r = new Float32Array(n);
+                for (let k = 0; k < n; k++) {
+                    let s = 0;
+                    for (let i = 0; i < n; i++) s += v[i] * Math.cos(Math.PI * k * (2 * i + 1) / (2 * n));
+                    s *= Math.sqrt(2 / n);
+                    if (k === 0) s /= Math.sqrt(2);
+                    r[k] = s;
+                }
+                return r;
+            };
+            const idct1 = (v, n) => {
+                let r = new Float32Array(n);
+                for (let i = 0; i < n; i++) {
+                    let s = 0;
+                    for (let k = 0; k < n; k++) {
+                        let c = k === 0 ? 1 / Math.sqrt(2) : 1;
+                        s += c * v[k] * Math.cos(Math.PI * k * (2 * i + 1) / (2 * n));
+                    }
+                    r[i] = s * Math.sqrt(2 / n);
+                }
+                return r;
+            };
+            const dct2 = (d, w, h) => {
+                let r = new Float32Array(w * h), row = new Float32Array(w), col = new Float32Array(h);
+                for (let i = 0; i < h; i++) {
+                    for (let j = 0; j < w; j++) row[j] = d[i * w + j];
+                    let dr = dct1(row, w);
+                    for (let j = 0; j < w; j++) r[i * w + j] = dr[j];
+                }
+                for (let j = 0; j < w; j++) {
+                    for (let i = 0; i < h; i++) col[i] = r[i * w + j];
+                    let dc = dct1(col, h);
+                    for (let i = 0; i < h; i++) r[i * w + j] = dc[i];
+                }
+                return r;
+            };
+            const idct2 = (d, w, h) => {
+                let r = new Float32Array(w * h), row = new Float32Array(w), col = new Float32Array(h);
+                for (let i = 0; i < h; i++) {
+                    for (let j = 0; j < w; j++) row[j] = d[i * w + j];
+                    let dr = idct1(row, w);
+                    for (let j = 0; j < w; j++) r[i * w + j] = dr[j];
+                }
+                for (let j = 0; j < w; j++) {
+                    for (let i = 0; i < h; i++) col[i] = r[i * w + j];
+                    let dc = idct1(col, h);
+                    for (let i = 0; i < h; i++) r[i * w + j] = dc[i];
+                }
+                return r;
+            };
+
+            // 哈希函数
+            function simpleHash(str) {
+                let h = 0;
+                for (let i = 0; i < str.length; i++) {
+                    h = ((h << 5) - h) + str.charCodeAt(i);
+                    h |= 0;
+                }
+                return h;
+            }
+
+            // 单张图片通用处理
+            function processOneImage(file, type, config) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const cvs = document.createElement('canvas');
+                        cvs.width = img.width;
+                        cvs.height = img.height;
+                        const ctx = cvs.getContext('2d', { willReadFrequently: true });
+                        ctx.drawImage(img, 0, 0);
+
+                        // 根据类型处理
+                        if (type === 'text') {
+                            if (config.mode === 'visible') drawVisibleWatermark(ctx, img.width, img.height, config);
+                            else if (config.mode === 'blind') applyBlindWatermark(ctx, img.width, img.height, config);
+                            else if (config.mode === 'lsb') applyLsbWatermark(ctx, img.width, img.height, config);
+                        } else if (type === 'image') {
+                            drawImageWatermark(ctx, img.width, img.height, config);
+                        } else if (type === 'qr') {
+                            drawQrWatermark(ctx, img.width, img.height, config);
+                            if (config.embedBlind) applyBlindWatermark(ctx, img.width, img.height, config.blindConfig);
+                        } else if (type === 'adjust') {
+                            applyAdjustments(ctx, img.width, img.height, config);
+                        }
+
+                        // 导出格式处理
+                        const fmt = $('download-format').value;
+                        const quality = parseFloat($('download-quality').value);
+                        let mimeType = 'image/png';
+                        let encQuality = undefined;
+                        if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
+                            mimeType = 'image/jpeg';
+                            encQuality = quality;
+                        } else if (fmt === 'webp') {
+                            mimeType = 'image/webp';
+                            encQuality = quality;
+                        }
+                        cvs.toBlob(blob => resolve(blob), mimeType, encQuality || 0.92);
+                    };
+                    img.onerror = reject;
+                    const url = URL.createObjectURL(file);
+                    state.objectUrls.push(url);
+                    img.src = url;
+                });
+            }
+
+            // 可见水印绘制
+            function drawVisibleWatermark(ctx, w, h, cfg) {
+                const r = parseInt(cfg.color.slice(1, 3), 16),
+                    g = parseInt(cfg.color.slice(3, 5), 16),
+                    b = parseInt(cfg.color.slice(5, 7), 16);
+                let fs = '';
+                if (cfg.bold) fs += 'bold ';
+                ctx.font = `${fs}${cfg.size}px ${cfg.font}`;
+                ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = `rgba(${r},${g},${b},${cfg.opacity})`;
+                if (cfg.shadow) {
+                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                    ctx.shadowBlur = 5;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 2;
+                }
+                const tw = ctx.measureText(cfg.text).width * cfg.spacingX + cfg.size;
+                const th = cfg.size * 1.5 * cfg.spacingY;
+                const diag = Math.sqrt(w * w + h * h);
+                const rad = cfg.rotate * Math.PI / 180;
+                ctx.save();
+                ctx.translate(w / 2, h / 2);
+                ctx.rotate(rad);
+                ctx.translate(-diag / 2, -diag / 2);
+                for (let y = -diag; y < diag * 2; y += th) {
+                    for (let x = -diag; x < diag * 2; x += tw) {
+                        const ox = (Math.floor(y / th) % 2 === 0) ? 0 : tw / 2;
+                        ctx.fillText(cfg.text, x + ox, y);
+                    }
+                }
+                ctx.restore();
+            }
+
+            // 盲水印嵌入
+            function applyBlindWatermark(ctx, w, h, cfg) {
+                const idata = ctx.getImageData(0, 0, w, h);
+                const data = idata.data;
+                const tCvs = document.createElement('canvas');
+                tCvs.width = w;
+                tCvs.height = h;
+                const tCtx = tCvs.getContext('2d');
+                tCtx.fillStyle = '#000';
+                tCtx.fillRect(0, 0, w, h);
+                tCtx.fillStyle = '#fff';
+                tCtx.font = `bold ${Math.min(w,h)*0.05}px Microsoft YaHei`;
+                tCtx.textAlign = 'center';
+                tCtx.textBaseline = 'middle';
+                tCtx.translate(w / 2, h / 2);
+                tCtx.rotate(-30 * Math.PI / 180);
+                tCtx.fillText(cfg.text, 0, 0);
+                const tData = tCtx.getImageData(0, 0, w, h).data;
+                const tmpl = new Float32Array(w * h);
+                for (let i = 0; i < w * h; i++) tmpl[i] = tData[i * 4] / 255;
+                const chs = cfg.channel === 'all' ? [0, 1, 2] : { red: [0], green: [1], blue: [2] } [cfg.channel] || [2];
+                for (let rep = 0; rep < cfg.repeat; rep++) {
+                    for (let c of chs) {
+                        const ch = new Float32Array(w * h);
+                        for (let i = 0; i < w * h; i++) ch[i] = data[i * 4 + c];
+                        const dct = dct2(ch, w, h);
+                        for (let i = 0; i < w * h; i++) dct[i] += cfg.strength * tmpl[i] * (255 / cfg.repeat);
+                        const idct = idct2(dct, w, h);
+                        for (let i = 0; i < w * h; i++) data[i * 4 + c] = Math.clamp(idct[i], 0, 255);
+                    }
+                }
+                ctx.putImageData(idata, 0, 0);
+            }
+
+            // LSB隐写
+            function applyLsbWatermark(ctx, w, h, cfg) {
+                const bin = cfg.text.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+                const idata = ctx.getImageData(0, 0, w, h);
+                const data = idata.data;
+                let bi = 0;
+                const key = cfg.key ? simpleHash(cfg.key) : 0;
+                const depth = cfg.depth;
+                for (let i = 0; i < data.length && bi < bin.length; i += 4) {
+                    for (let c = 0; c < 3; c++) {
+                        for (let d = 0; d < depth; d++) {
+                            if (bi >= bin.length) break;
+                            const pos = (i + c + key) % data.length;
+                            data[pos] = (data[pos] & ~(1 << d)) | (parseInt(bin[bi++]) << d);
+                        }
+                    }
+                }
+                ctx.putImageData(idata, 0, 0);
+            }
+
+            // 图片水印绘制
+            function drawImageWatermark(ctx, w, h, cfg) {
+                const img = cfg.image;
+                let iw = img.width * cfg.scale, ih = img.height * cfg.scale;
+                if (cfg.proportional) {
+                    const ratio = Math.min(w / iw, h / ih);
+                    iw *= ratio;
+                    ih *= ratio;
+                }
+                let x = 0, y = 0;
+                const pad = Math.min(w, h) * 0.05;
+                const posMap = {
+                    br: [w - iw - pad, h - ih - pad],
+                    bl: [pad, h - ih - pad],
+                    tr: [w - iw - pad, pad],
+                    tl: [pad, pad],
+                    center: [(w - iw) / 2, (h - ih) / 2]
+                };
+                if (cfg.position === 'tile') {
+                    for (let ty = 0; ty < h; ty += ih) {
+                        for (let tx = 0; tx < w; tx += iw) {
+                            ctx.save();
+                            ctx.globalAlpha = cfg.opacity;
+                            ctx.drawImage(img, tx, ty, iw, ih);
+                            ctx.restore();
+                        }
+                    }
+                    return;
+                }
+                [x, y] = posMap[cfg.position] || posMap['br'];
+                ctx.save();
+                ctx.translate(x + iw / 2, y + ih / 2);
+                ctx.rotate(cfg.rotate * Math.PI / 180);
+                ctx.globalAlpha = cfg.opacity;
+                ctx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
+                ctx.restore();
+            }
+
+            // 二维码水印绘制
+            function drawQrWatermark(ctx, w, h, cfg) {
+                const size = Math.min(w, h) * cfg.scale;
+                const pad = size * cfg.margin;
+                const posMap = {
+                    br: [w - size - pad, h - size - pad],
+                    bl: [pad, h - size - pad],
+                    tr: [w - size - pad, pad],
+                    tl: [pad, pad],
+                    center: [(w - size) / 2, (h - size) / 2]
+                };
+                const [x, y] = posMap[cfg.position] || posMap['br'];
+                ctx.save();
+                ctx.globalAlpha = cfg.opacity;
+                ctx.drawImage(cfg.qrImg, x, y, size, size);
+                ctx.restore();
+            }
+
+            // 图像调整
+            function applyAdjustments(ctx, w, h, cfg) {
+                const idata = ctx.getImageData(0, 0, w, h);
+                const data = idata.data;
+                const brightness = cfg.brightness;
+                const contrast = cfg.contrast;
+                const saturation = cfg.saturation;
+                const hue = cfg.hue;
+                const sharpen = cfg.sharpen;
+                const blur = cfg.blur;
+                const grayscale = cfg.grayscale;
+                const invert = cfg.invert;
+
+                // 模糊处理
+                if (blur > 0) {
+                    const tmpData = new Uint8ClampedArray(data);
+                    const kernelSize = Math.ceil(blur);
+                    const sigma = blur / 3;
+                    const ks = kernelSize * 2 + 1;
+                    const kernel = new Float32Array(ks);
+                    let sum = 0;
+                    for (let i = -kernelSize; i <= kernelSize; i++) {
+                        kernel[i + kernelSize] = Math.exp(-(i * i) / (2 * sigma * sigma));
+                        sum += kernel[i + kernelSize];
+                    }
+                    for (let i = 0; i < ks; i++) kernel[i] /= sum;
+                    for (let y = kernelSize; y < h - kernelSize; y++) {
+                        for (let x = kernelSize; x < w - kernelSize; x++) {
+                            for (let c = 0; c < 3; c++) {
+                                let val = 0;
+                                for (let ky = -kernelSize; ky <= kernelSize; ky++) {
+                                    val += tmpData[((y + ky) * w + x) * 4 + c] * kernel[ky + kernelSize];
+                                }
+                                data[(y * w + x) * 4 + c] = Math.clamp(val, 0, 255);
+                            }
+                        }
+                    }
+                }
+
+                // 像素级调整
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i], g = data[i + 1], b = data[i + 2];
+                    // 亮度
+                    r += brightness; g += brightness; b += brightness;
+                    // 对比度
+                    r = (r - 128) * contrast + 128;
+                    g = (g - 128) * contrast + 128;
+                    b = (b - 128) * contrast + 128;
+                    // 饱和度
+                    if (saturation !== 1.0) {
+                        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                        r = gray + saturation * (r - gray);
+                        g = gray + saturation * (g - gray);
+                        b = gray + saturation * (b - gray);
+                    }
+                    // 色相
+                    if (hue !== 0) {
+                        const cosH = Math.cos(hue * Math.PI / 180);
+                        const sinH = Math.sin(hue * Math.PI / 180);
+                        const r2 = r, g2 = g, b2 = b;
+                        r = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (r2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (0.701 * r2 - 0.587 * g2 - 0.114 * b2);
+                        g = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (g2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (-0.299 * r2 + 0.413 * g2 - 0.114 * b2);
+                        b = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (b2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (-0.299 * r2 - 0.587 * g2 + 0.886 * b2);
+                    }
+                    // 灰度
+                    if (grayscale) {
+                        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                        r = g = b = gray;
+                    }
+                    // 反相
+                    if (invert) {
+                        r = 255 - r;
+                        g = 255 - g;
+                        b = 255 - b;
+                    }
+                    // 写入数据
+                    data[i] = Math.clamp(r, 0, 255);
+                    data[i + 1] = Math.clamp(g, 0, 255);
+                    data[i + 2] = Math.clamp(b, 0, 255);
+                }
+
+                // 锐化处理
+                if (sharpen > 0) {
+                    const tmpData = new Uint8ClampedArray(data);
+                    const strength = sharpen / 100;
+                    const kernel = [0, -strength, 0, -strength, 1 + 4 * strength, -strength, 0, -strength, 0];
+                    for (let y = 1; y < h - 1; y++) {
+                        for (let x = 1; x < w - 1; x++) {
+                            for (let c = 0; c < 3; c++) {
+                                let val = 0;
+                                for (let ky = -1; ky <= 1; ky++) {
+                                    for (let kx = -1; kx <= 1; kx++) {
+                                        val += tmpData[((y + ky) * w + (x + kx)) * 4 + c] * kernel[(ky + 1) * 3 + (kx + 1)];
+                                    }
+                                }
+                                data[(y * w + x) * 4 + c] = Math.clamp(val, 0, 255);
+                            }
+                        }
+                    }
+                }
+                ctx.putImageData(idata, 0, 0);
+            }
+
+            // 二维码生成
+            function generateQrImage(text, cfg) {
+                return new Promise(resolve => {
+                    const container = $('qrcode-ghost');
+                    container.innerHTML = '';
+                    new QRCode(container, {
+                        text,
+                        width: 1024,
+                        height: 1024,
+                        colorDark: cfg.foreground,
+                        colorLight: cfg.background,
+                        correctLevel: QRCode.CorrectLevel[cfg.level]
+                    });
+                    setTimeout(() => {
+                        const cvs = container.querySelector('canvas');
+                        if (cvs) {
+                            if (cfg.logo) {
+                                const ctx = cvs.getContext('2d');
+                                const ls = cvs.width * 0.2;
+                                const lx = (cvs.width - ls) / 2, ly = (cvs.height - ls) / 2;
+                                ctx.fillStyle = cfg.background;
+                                ctx.fillRect(lx - 5, ly - 5, ls + 10, ls + 10);
+                                ctx.drawImage(cfg.logo, lx, ly, ls, ls);
+                            }
+                            const img = new Image();
+                            img.onload = () => resolve(img);
+                            const url = cvs.toDataURL();
+                            state.objectUrls.push(url);
+                            img.src = url;
+                        }
+                    }, 150);
+                });
+            }
+
+            // 批量处理核心函数
+            window.processBatch = async function(type) {
+                if (!state.files.length) {
+                    showToast('队列为空，请先上传图片', 'error');
+                    return;
+                }
+                if (state.isProcessing) return;
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                state.processedBlobs = new Array(state.files.length).fill(null);
+
+                // 进度条
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+
+                // 获取配置
+                const config = await getConfig(type);
+                if (!config) {
+                    state.isProcessing = false;
+                    return;
+                }
+
+                // 确定处理目标
+                const targetIndices = state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length 
+                    ? [state.selectedImageIndex] 
+                    : Array.from({ length: state.files.length }, (_, i) => i);
+                const total = targetIndices.length;
+                let completed = 0;
+
+                // 循环处理
+                for (const i of targetIndices) {
+                    try {
+                        const blob = await processOneImage(state.files[i], type, config);
+                        state.processedBlobs[i] = blob;
+                    } catch (err) {
+                        showToast(`${state.files[i].name} 处理失败`, 'error');
+                    }
+                    completed++;
+                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                    if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
+                    await new Promise(r => setTimeout(r, 15));
+                }
+
+                // 处理完成
+                state.isProcessing = false;
+                showToast('处理完成！', 'success');
+                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
+                // 重置选中状态
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+            };
+
+            // 获取配置函数
+            async function getConfig(type) {
+                const cfg = {};
+                if (type === 'text') {
+                    cfg.text = $('text-content').value.trim();
+                    if (!cfg.text) {
+                        showToast('请输入水印内容', 'error');
+                        return null;
+                    }
+                    cfg.mode = state.watermarkType;
+                    if (cfg.mode === 'visible') {
+                        cfg.color = $('text-color').value;
+                        cfg.font = $('text-font').value;
+                        cfg.size = parseInt($('text-size').value);
+                        cfg.opacity = parseInt($('text-opacity').value) / 100;
+                        cfg.rotate = parseInt($('text-rotate').value);
+                        cfg.spacingX = parseInt($('text-spacing-x').value) / 100;
+                        cfg.spacingY = cfg.spacingX;
+                        cfg.shadow = $('text-shadow').checked;
+                        cfg.bold = $('text-bold').checked;
+                    } else if (cfg.mode === 'blind') {
+                        cfg.strength = parseInt($('dct-strength').value) / 1000;
+                        cfg.channel = $('dct-channel').value;
+                        cfg.repeat = 1;
+                    } else if (cfg.mode === 'lsb') {
+                        cfg.depth = parseInt($('lsb-depth').value);
+                        cfg.key = $('lsb-key').value;
+                    }
+                } else if (type === 'image') {
+                    if (!state.imageWatermark) {
+                        showToast('请上传水印图片', 'error');
+                        return null;
+                    }
+                    cfg.image = state.imageWatermark;
+                    cfg.position = $('image-position').value;
+                    cfg.scale = parseInt($('image-scale').value) / 100;
+                    cfg.opacity = parseInt($('image-opacity').value) / 100;
+                    cfg.rotate = parseInt($('image-rotate').value);
+                    cfg.proportional = true;
+                    cfg.blendMultiply = false;
+                } else if (type === 'qr') {
+                    cfg.text = $('qr-content').value.trim();
+                    if (!cfg.text) {
+                        showToast('请输入二维码内容', 'error');
+                        return null;
+                    }
+                    cfg.level = $('qr-level').value;
+                    cfg.foreground = $('qr-foreground').value;
+                    cfg.background = $('qr-background').value;
+                    cfg.logo = state.qrLogo;
+                    cfg.position = $('qr-position').value;
+                    cfg.scale = parseInt($('qr-scale').value) / 100;
+                    cfg.opacity = parseInt($('qr-opacity').value) / 100;
+                    cfg.margin = parseInt($('qr-margin').value) / 100;
+                    cfg.embedBlind = $('qr-embed-blind').checked;
+                    if (cfg.embedBlind) {
+                        cfg.blindConfig = {
+                            text: cfg.text,
+                            strength: 0.02,
+                            channel: 'blue',
+                            repeat: 1
+                        };
+                    }
+                    cfg.qrImg = await generateQrImage(cfg.text, cfg);
+                } else if (type === 'adjust') {
+                    cfg.brightness = parseInt($('adj-brightness').value);
+                    cfg.contrast = parseInt($('adj-contrast').value) / 100;
+                    cfg.saturation = parseInt($('adj-saturation').value) / 100;
+                    cfg.hue = parseInt($('adj-hue').value);
+                    cfg.sharpen = parseInt($('adj-sharpen').value);
+                    cfg.blur = parseInt($('adj-blur').value);
+                    cfg.grayscale = $('adj-grayscale').checked;
+                    cfg.invert = $('adj-invert').checked;
+                }
+                return cfg;
+            }
+
+            // 下载工具函数
+            function downloadBlob(blob, filename) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }
+
+            // 单张下载
+            window.downloadSingle = function(index) {
+                const file = state.files[index];
+                const blob = state.processedBlobs[index] || file;
+                if (!blob) {
+                    showToast('文件不存在', 'error');
+                    return;
+                }
+                // 格式处理
+                const fmt = $('download-format').value;
+                const extMap = { png: 'png', jpeg: 'jpg', webp: 'webp', 'jpeg-compressed': 'jpg' };
+                const ext = extMap[fmt] || 'png';
+                const filename = (file.name || 'image').replace(/\.[^.]+$/, '') + '_processed.' + ext;
+
+                // 已处理直接下载
+                if (state.processedBlobs[index]) {
+                    downloadBlob(blob, filename);
+                    showToast('下载已开始', 'success');
+                    return;
+                }
+
+                // 未处理按格式转换后下载
+                const img = new Image();
+                img.onload = () => {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = img.width;
+                    cvs.height = img.height;
+                    const ctx = cvs.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const quality = parseFloat($('download-quality').value);
+                    let mimeType = 'image/png';
+                    let encQuality = undefined;
+                    if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
+                        mimeType = 'image/jpeg';
+                        encQuality = quality;
+                    } else if (fmt === 'webp') {
+                        mimeType = 'image/webp';
+                        encQuality = quality;
+                    }
+                    cvs.toBlob(b => {
+                        downloadBlob(b, filename);
+                        showToast('下载已开始', 'success');
+                    }, mimeType, encQuality || 0.92);
+                };
+                const url = URL.createObjectURL(blob);
+                state.objectUrls.push(url);
+                img.src = url;
+            };
+
+            // 批量ZIP下载
+            window.downloadAllZip = function() {
+                const processedCount = state.processedBlobs.filter(b => b).length;
+                if (!processedCount) {
+                    showToast('没有已处理的图片', 'warning');
+                    return;
+                }
+                showToast('正在打包压缩...', 'info');
+                const zip = new JSZip();
+                const folder = zip.folder("影盾_处理结果");
+                const fmt = $('download-format').value;
+                const extMap = { png: 'png', jpeg: 'jpg', webp: 'webp', 'jpeg-compressed': 'jpg' };
+                const ext = extMap[fmt] || 'png';
+
+                // 添加文件
+                state.files.forEach((f, i) => {
+                    if (state.processedBlobs[i]) {
+                        const nameBase = f.name.replace(/\.[^.]+$/, '');
+                        folder.file(`${nameBase}_processed.${ext}`, state.processedBlobs[i]);
+                    }
+                });
+
+                // 生成并下载
+                zip.generateAsync({
+                    type: "blob",
+                    compression: "DEFLATE",
+                    compressionOptions: { level: 6 }
+                }).then(content => {
+                    downloadBlob(content, "影盾_批量处理结果.zip");
+                    showToast('ZIP下载已开始', 'success');
+                }).catch(() => {
+                    showToast('打包失败', 'error');
+                });
+            };
+
+            // 预览窗口混淆
+            window.previewEncrypt = function() {
+                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
+                if (state.isProcessing) return;
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                processSingleImageBlob(state.files[state.selectedImageIndex], 'encrypt').then(blob => {
+                    state.processedBlobs[state.selectedImageIndex] = blob;
+                    updatePreviewGrid();
+                    const url = URL.createObjectURL(blob);
+                    state.objectUrls.push(url);
+                    $('preview-img').src = url;
+                    state.isProcessing = false;
+                    showToast('混淆完成', 'success');
+                }).catch(() => {
+                    state.isProcessing = false;
+                    showToast('处理失败', 'error');
+                });
+            };
+
+            // 预览窗口解混淆
+            window.previewDecrypt = function() {
+                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
+                if (state.isProcessing) return;
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                processSingleImageBlob(state.files[state.selectedImageIndex], 'decrypt').then(blob => {
+                    state.processedBlobs[state.selectedImageIndex] = blob;
+                    updatePreviewGrid();
+                    const url = URL.createObjectURL(blob);
+                    state.objectUrls.push(url);
+                    $('preview-img').src = url;
+                    state.isProcessing = false;
+                    showToast('解混淆完成', 'success');
+                }).catch(() => {
+                    state.isProcessing = false;
+                    showToast('处理失败', 'error');
+                });
+            };
+
+            // 预览窗口下载
+            window.previewDownload = function() {
+                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
+                downloadSingle(state.selectedImageIndex);
+            };
+
+            // 检测画布渲染
+            function renderDetectCanvas(img) {
+                const cvs = $('detect-canvas');
+                cvs.width = img.width;
+                cvs.height = img.height;
+                const ctx = cvs.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                state.detectOriginData = ctx.getImageData(0, 0, img.width, img.height);
+                applyFilter('original');
+            }
+
+            // 滤镜应用（修复按钮状态）
+            window.applyFilter = function(type) {
+                if (!state.detectImg || !state.detectOriginData) {
+                    showToast('请先上传检测图片', 'warning');
+                    return;
+                }
+                const cvs = $('detect-canvas');
+                const ctx = cvs.getContext('2d');
+                const w = cvs.width, h = cvs.height;
+                const src = state.detectOriginData.data;
+                const out = ctx.createImageData(w, h);
+                const dst = out.data;
+
+                // 更新按钮激活状态
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.filter === type);
+                });
+
+                // 卷积核
+                const kSharpen = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+                const kBlur = [1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9];
+                
+                // 卷积函数
+                function convolve(s, d, kernel) {
+                    for (let y = 1; y < h - 1; y++) {
+                        for (let x = 1; x < w - 1; x++) {
+                            let r = 0, g = 0, b = 0;
+                            for (let ky = -1; ky <= 1; ky++) {
+                                for (let kx = -1; kx <= 1; kx++) {
+                                    const i2 = ((y + ky) * w + (x + kx)) * 4;
+                                    const ki = (ky + 1) * 3 + (kx + 1);
+                                    r += s[i2] * kernel[ki];
+                                    g += s[i2 + 1] * kernel[ki];
+                                    b += s[i2 + 2] * kernel[ki];
+                                }
+                            }
+                            const di = (y * w + x) * 4;
+                            d[di] = Math.clamp(r, 0, 255);
+                            d[di + 1] = Math.clamp(g, 0, 255);
+                            d[di + 2] = Math.clamp(b, 0, 255);
+                        }
+                    }
+                }
+
+                // 滤镜处理
+                for (let i = 0; i < src.length; i += 4) {
+                    const r = src[i], g = src[i + 1], b = src[i + 2];
+                    let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    let oR = r, oG = g, oB = b;
+
+                    switch (type) {
+                        case 'original':
+                            oR = r; oG = g; oB = b;
+                            break;
+                        case 'invert':
+                            oR = 255 - r; oG = 255 - g; oB = 255 - b;
+                            break;
+                        case 'high-contrast':
+                            gray = gray > 128 ? 255 : 0;
+                            oR = oG = oB = gray;
+                            break;
+                        case 'edge':
+                            let dH = 0, dV = 0;
+                            if (i % (w * 4) < (w - 1) * 4) {
+                                dH = Math.abs(gray - (0.299 * src[i + 4] + 0.587 * src[i + 5] + 0.114 * src[i + 6]));
+                            }
+                            if (i < (h - 1) * w * 4) {
+                                dV = Math.abs(gray - (0.299 * src[i + w * 4] + 0.587 * src[i + w * 4 + 1] + 0.114 * src[i + w * 4 + 2]));
+                            }
+                            const edge = Math.sqrt(dH * dH + dV * dV) * 4;
+                            oR = oG = oB = Math.clamp(edge, 0, 255);
+                            break;
+                        case 'red-channel':
+                            oR = r; oG = 0; oB = 0;
+                            break;
+                        case 'green-channel':
+                            oR = 0; oG = g; oB = 0;
+                            break;
+                        case 'blue-channel':
+                            oR = 0; oG = 0; oB = b;
+                            break;
+                        case 'grayscale':
+                            oR = oG = oB = gray;
+                            break;
+                        case 'sharpen':
+                        case 'blur':
+                            convolve(src, dst, type === 'sharpen' ? kSharpen : kBlur);
+                            continue;
+                    }
+                    dst[i] = oR;
+                    dst[i + 1] = oG;
+                    dst[i + 2] = oB;
+                    dst[i + 3] = 255;
+                }
+                ctx.putImageData(out, 0, 0);
+            }
+
+            // 盲水印提取
+            window.detectBlindWatermark = function() {
+                if (!state.detectImg) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                showToast('正在进行DCT频域分析...', 'info');
+                setTimeout(() => {
+                    const cvs = $('detect-canvas');
+                    const ctx = cvs.getContext('2d');
+                    const w = cvs.width, h = cvs.height;
+                    const thresh = parseInt($('detect-threshold').value);
+                    const data = ctx.getImageData(0, 0, w, h).data;
+                    const ch = new Float32Array(w * h);
+                    for (let i = 0; i < w * h; i++) ch[i] = data[i * 4 + 2];
+                    const dct = dct2(ch, w, h);
+                    const signal = new Float32Array(w * h);
+                    for (let i = 0; i < w * h; i++) signal[i] = Math.abs(dct[i]) * 10;
+                    const out = ctx.createImageData(w, h);
+                    for (let i = 0; i < w * h; i++) {
+                        const v = signal[i] > thresh ? 255 : 0;
+                        out.data[i * 4] = v;
+                        out.data[i * 4 + 1] = v;
+                        out.data[i * 4 + 2] = v;
+                        out.data[i * 4 + 3] = 255;
+                    }
+                    ctx.putImageData(out, 0, 0);
+                    // 文本提取
+                    let bin = '';
+                    for (let i = 0; i < Math.min(1000, w * h); i++) bin += signal[i] > 128 ? '1' : '0';
+                    let txt = '';
+                    for (let j = 0; j < bin.length; j += 8) {
+                        const bt = bin.slice(j, j + 8);
+                        if (bt.length < 8) break;
+                        const ch = String.fromCharCode(parseInt(bt, 2));
+                        if (ch === '\0') break;
+                        txt += ch;
+                    }
+                    displayDetectResult(txt.trim() || '未提取到文本水印');
+                    showToast('DCT分析完成', 'success');
+                }, 100);
+            };
+
+            // LSB提取
+            window.detectLsb = function() {
+                if (!state.detectImg) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                const cvs = $('detect-canvas');
+                const data = cvs.getContext('2d').getImageData(0, 0, cvs.width, cvs.height).data;
+                const depth = parseInt($('lsb-depth').value) || 1;
+                const key = $('detect-lsb-key').value ? simpleHash($('detect-lsb-key').value) : 0;
+                let bin = '';
+                for (let i = 0; i < data.length; i += 4) {
+                    for (let c = 0; c < 3; c++) {
+                        for (let d = 0; d < depth; d++) {
+                            const pos = (i + c + key) % data.length;
+                            bin += (data[pos] >> d) & 1;
+                        }
+                    }
+                }
+                let txt = '';
+                for (let j = 0; j < bin.length; j += 8) {
+                    const bt = bin.slice(j, j + 8);
+                    if (bt.length < 8) break;
+                    const ch = String.fromCharCode(parseInt(bt, 2));
+                    if (ch.charCodeAt(0) === 0) break;
+                    txt += ch;
+                }
+                displayDetectResult(txt || '未提取到隐藏信息');
+                showToast(txt ? 'LSB提取成功' : '未提取到信息', txt ? 'success' : 'warning');
+            };
+
+            // 二维码识别
+            window.scanQRCode = function() {
+                if (!state.detectImg) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                const cvs = $('detect-canvas');
+                const idata = cvs.getContext('2d').getImageData(0, 0, cvs.width, cvs.height);
+                const code = jsQR(idata.data, idata.width, idata.height, { inversionAttempts: "attemptBoth" });
+                if (code) {
+                    showToast('二维码识别成功！', 'success');
+                    displayDetectResult(code.data);
+                } else {
+                    showToast('未识别到二维码', 'warning');
+                }
+            };
+
+            // 自动检测
+            window.autoDetectAll = function() {
+                detectBlindWatermark();
+                detectLsb();
+                scanQRCode();
+            };
+
+            // 显示检测结果
+            function displayDetectResult(text) {
+                $('detect-text').innerText = text;
+                $('detect-result').style.display = 'block';
+            }
+
+            // 图片转二维码
+            window.convertImageToQR = async function() {
+                if (!state.files.length) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                const file = state.processedBlobs[0] || state.files[0];
+                const img = new Image();
+                img.onload = async () => {
+                    const targetSize = parseInt($('img2qr-size').value);
+                    const quality = parseInt($('img2qr-quality').value) / 100;
+                    const level = $('img2qr-level').value;
+                    const fg = $('img2qr-foreground').value;
+                    const bg = $('img2qr-background').value;
+                    // 缩放图片
+                    const cvs = document.createElement('canvas');
+                    cvs.width = targetSize;
+                    cvs.height = targetSize;
+                    const ctx = cvs.getContext('2d');
+                    const ratio = Math.min(targetSize / img.width, targetSize / img.height);
+                    const dw = img.width * ratio, dh = img.height * ratio;
+                    const dx = (targetSize - dw) / 2, dy = (targetSize - dh) / 2;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, targetSize, targetSize);
+                    ctx.drawImage(img, dx, dy, dw, dh);
+                    // 转blob
+                    const blob = await new Promise(r => cvs.toBlob(r, 'image/jpeg', quality));
+                    const dataUrl = await new Promise(r => {
+                        const reader = new FileReader();
+                        reader.onload = () => r(reader.result);
+                        reader.readAsDataURL(blob);
+                    });
+                    // 保存状态
+                    state.img2qrDataUrl = dataUrl;
+                    state.img2qrResultBlob = blob;
+                    // 生成二维码
+                    const container = $('qrcode-ghost');
+                    container.innerHTML = '';
+                    try {
+                        new QRCode(container, {
+                            text: dataUrl,
+                            width: 1024,
+                            height: 1024,
+                            colorDark: fg,
+                            colorLight: bg,
+                            correctLevel: QRCode.CorrectLevel[level]
+                        });
+                    } catch (e) {
+                        showToast('数据量过大，请降低尺寸或质量', 'error');
+                        return;
+                    }
+                    await new Promise(r => setTimeout(r, 200));
+                    const qrCvs = container.querySelector('canvas');
+                    if (!qrCvs) {
+                        showToast('QR码生成失败，请减小图片尺寸', 'error');
+                        return;
+                    }
+                    const qrDataUrl = qrCvs.toDataURL('image/png');
+                    // 更新UI
+                    const resultDiv = $('img2qr-result');
+                    resultDiv.classList.remove('hidden');
+                    resultDiv.innerHTML = `
+                        <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;">📱 扫码即可还原图片</p>
+                        <img src="${qrDataUrl}" alt="图片二维码" style="max-width:240px;border-radius:12px;cursor:pointer;" onclick="openPreview(-1, '${qrDataUrl}')">
+                        <br><small style="color:var(--text-muted);font-size:0.7rem;">扫码后复制文本，粘贴到浏览器地址栏查看</small>
+                        <br><button class="btn btn-outline btn-small" style="margin-top:6px;" onclick="downloadImg2QR()"><i class="fas fa-download"></i> 下载二维码PNG</button>
+                    `;
+                    const infoDiv = $('img2qr-size-info');
+                    infoDiv.classList.remove('hidden');
+                    infoDiv.innerHTML = `
+                        <span>📐 图片: ${targetSize}×${targetSize}px</span>
+                        <span>💾 数据: ${(blob.size/1024).toFixed(1)}KB</span>
+                        <span>🔗 Base64: ${(dataUrl.length/1024).toFixed(1)}KB</span>
+                    `;
+                    showToast('图片转二维码成功！扫码即可还原', 'success');
+                };
+                const url = URL.createObjectURL(file);
+                state.objectUrls.push(url);
+                img.src = url;
+            };
+
+            // 下载图转码二维码
+            window.downloadImg2QR = function() {
+                const container = $('qrcode-ghost');
+                const qrCvs = container.querySelector('canvas');
+                if (!qrCvs) {
+                    showToast('请先生成二维码', 'warning');
+                    return;
+                }
+                qrCvs.toBlob(blob => {
+                    downloadBlob(blob, '影盾_图转二维码.png');
+                    showToast('二维码已下载', 'success');
+                }, 'image/png');
+            };
+
+            // 更新图转码预览
+            function updateImg2qrPreview() {
+                if (state.mode === 'img2qr' && state.files.length > 0 && (state.processedBlobs[0] || state.files[0])) {
+                    convertImageToQR();
+                }
+            }
+
+            // 无损压缩
+            window.compressLossless = function() {
+                if (!state.files.length) {
+                    showToast('请先上传图片', 'error');
+                    return;
+                }
+                if (state.isProcessing) return;
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                state.processedBlobs = new Array(state.files.length).fill(null);
+                // 进度条
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+                // 格式配置
+                const fmt = $('download-format').value;
+                const quality = parseFloat($('download-quality').value);
+                let mimeType = 'image/png';
+                let encQuality = undefined;
+                if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
+                    mimeType = 'image/jpeg';
+                    encQuality = quality;
+                } else if (fmt === 'webp') {
+                    mimeType = 'image/webp';
+                    encQuality = quality;
+                }
+                // 循环处理
+                (async () => {
+                    const total = state.files.length;
+                    let completed = 0;
+                    for (let i = 0; i < state.files.length; i++) {
+                        const file = state.processedBlobs[i] || state.files[i];
+                        const img = new Image();
+                        const blob = await new Promise((resolve, reject) => {
+                            img.onload = () => {
+                                const cvs = document.createElement('canvas');
+                                cvs.width = img.width;
+                                cvs.height = img.height;
+                                const ctx = cvs.getContext('2d');
+                                ctx.drawImage(img, 0, 0);
+                                cvs.toBlob(b => resolve(b), mimeType, encQuality || 1);
+                            };
+                            img.onerror = reject;
+                            const url = URL.createObjectURL(file);
+                            state.objectUrls.push(url);
+                            img.src = url;
+                        });
+                        state.processedBlobs[i] = blob;
+                        completed++;
+                        $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                        if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
+                    }
+                    state.isProcessing = false;
+                    showToast('压缩完成！', 'success');
+                    setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
+                })();
+            };
+
+            // 水印图片上传区域初始化
+            function setupDropzone(dzId, inputId, previewId, stateKey) {
+                const dz = $(dzId);
+                const inp = $(inputId);
+                if (!dz || !inp) return;
+                // 处理函数
+                const handler = function(file) {
+                    if (!file || !file.type.startsWith('image/')) return;
+                    const url = URL.createObjectURL(file);
+                    state.objectUrls.push(url);
+                    const img = new Image();
+                    img.onload = () => {
+                        state[stateKey] = img;
+                        $(previewId).innerHTML = `<img src="${url}" style="max-width:100%;max-height:80px;border-radius:6px;">`;
+                        showToast('图片加载成功', 'success');
+                    };
+                    img.onerror = () => showToast('图片加载失败', 'error');
+                    img.src = url;
+                };
+                // 事件绑定
+                dz.onclick = (e) => {
+                    e.stopPropagation();
+                    inp.click();
+                };
+                dz.ondragover = e => {
+                    e.preventDefault();
+                    dz.classList.add('dragover');
+                };
+                dz.ondragleave = () => dz.classList.remove('dragover');
+                dz.ondrop = e => {
+                    e.preventDefault();
+                    dz.classList.remove('dragover');
+                    handler(e.dataTransfer.files[0]);
+                };
+                inp.onchange = e => {
+                    if (e.target.files.length) handler(e.target.files[0]);
+                    e.target.value = '';
+                };
+            }
+            setupDropzone('image-watermark-dropzone', 'image-watermark-input', 'image-watermark-preview', 'imageWatermark');
+            setupDropzone('qr-logo-dropzone', 'qr-logo-input', 'qr-logo-preview', 'qrLogo');
+
+            // 点击空白关闭预览
+            $('preview-modal').addEventListener('click', (e) => {
+                if (e.target === $('preview-modal')) closePreview();
+            });
+
+            // 键盘ESC关闭预览
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closePreview();
+            });
+
+            // 初始化Tab
+            switchTab('obfuscate');
+
+            // 控制台输出
+            console.log('🔐 巳泷资源库 - 影盾 | 已就绪');
+            console.log('   📐 Gilbert空间填充曲线 · DCT频域盲水印 · LSB隐写 · 二维码');
+            console.log('   📸 图像转二维码 · 🎨 调色 · 📦 无损压缩 · 批量处理');
+            console.log('   🛡️ 紫罗兰主题 · 本地离线处理 · 数据安全');
+        })();
+    </script>
+</body>
+</html>
