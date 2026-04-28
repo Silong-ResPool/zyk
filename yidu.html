@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>巳泷资源库 - 影盾 | 图像混淆·水印·隐写·二维码·图转码·无损压缩</title>
+    <title>巳泷资源库-影盾</title>
     <meta name="description" content="图像混淆加密、Gilbert空间填充曲线、DCT频域盲水印、LSB隐写、二维码合成与检测、图像转二维码、无损压缩、调色">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -258,6 +258,7 @@
             flex-direction: column;
             align-items: center;
             gap: 3px;
+            user-select: none;
         }
         .nav-tab i {
             font-size: 0.85rem;
@@ -282,6 +283,7 @@
             color: var(--text-secondary);
             font-weight: 600;
             letter-spacing: 0.03em;
+            user-select: none;
         }
         .styled-input,
         .styled-select,
@@ -356,6 +358,7 @@
             align-items: center;
             justify-content: center;
             gap: 7px;
+            user-select: none;
         }
         .upload-zone:hover,
         .upload-zone.dragover {
@@ -403,6 +406,7 @@
             overflow: hidden;
             font-family: inherit;
             box-shadow: var(--shadow-btn);
+            user-select: none;
         }
         .btn::after {
             content: '';
@@ -615,6 +619,7 @@
             transition: var(--transition-fast);
             letter-spacing: 0.03em;
             white-space: nowrap;
+            user-select: none;
         }
         .mode-option.active {
             background: var(--purple-mid);
@@ -721,6 +726,7 @@
             transition: var(--transition-fast);
             letter-spacing: 0.03em;
             text-align: center;
+            user-select: none;
         }
         .filter-btn:hover,
         .filter-btn.active {
@@ -737,6 +743,7 @@
             margin-bottom: 7px;
             cursor: pointer;
             letter-spacing: 0.03em;
+            user-select: none;
         }
         input[type=checkbox] {
             appearance: none;
@@ -1106,7 +1113,7 @@
         </div>
     </div>
     <script>
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // 粒子背景初始化
             const pc = document.getElementById('particlesContainer');
             const colors = ['rgba(139,92,246,0.5)', 'rgba(167,139,250,0.4)', 'rgba(196,181,253,0.35)',
@@ -1229,6 +1236,15 @@
                 }
             }
 
+            // Tab点击事件绑定
+            document.querySelectorAll('#nav-tabs .nav-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    switchTab(tab.dataset.tab);
+                });
+            });
+
             // 混淆按钮文本更新
             function updateObfuscateButtonLabels() {
                 const encryptSpan = $('obfuscate-btn-text');
@@ -1263,6 +1279,15 @@
                 });
             }
 
+            // 水印模式点击事件绑定
+            document.querySelectorAll('#conf-text .mode-option').forEach((opt, i) => {
+                opt.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleWatermarkMode(['visible', 'blind', 'lsb'][i]);
+                });
+            });
+
             // 滑块数值初始化与事件绑定
             const sliderIds = [
                 'text-opacity', 'text-size', 'text-rotate', 'text-spacing-x', 
@@ -1294,15 +1319,19 @@
                 // 初始化数值显示
                 initSliderValue(el);
                 // 绑定事件
-                el.addEventListener('input', () => initSliderValue(el));
+                el.addEventListener('input', (e) => {
+                    e.preventDefault();
+                    initSliderValue(el);
+                });
             });
 
-            // 上传文件处理核心逻辑（修复上传两次问题）
+            // 上传文件处理核心逻辑
             const dropzone = $('dropzone');
             const fileInput = $('file-input');
 
             // 点击上传
             dropzone.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 fileInput.click();
             });
@@ -1310,17 +1339,25 @@
             // 拖拽事件
             dropzone.addEventListener('dragover', e => {
                 e.preventDefault();
+                e.stopPropagation();
                 dropzone.classList.add('dragover');
             });
-            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+            dropzone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.remove('dragover');
+            });
             dropzone.addEventListener('drop', e => {
                 e.preventDefault();
+                e.stopPropagation();
                 dropzone.classList.remove('dragover');
                 handleFiles(e.dataTransfer.files);
             });
 
             // 文件选择事件
             fileInput.addEventListener('change', e => {
+                e.preventDefault();
+                e.stopPropagation();
                 handleFiles(e.target.files);
                 e.target.value = ''; // 清空后可重复选择同一文件
             });
@@ -1597,8 +1634,8 @@
                 }
             }
 
-            // 单张图片混淆处理
-            function processSingleImageBlob(file, mode) {
+            // 单张图片混淆处理（核心修复：使用当前处理后的blob作为源）
+            function processSingleImageBlob(sourceBlob, mode) {
                 return new Promise((resolve, reject) => {
                     const img = new Image();
                     img.onload = () => {
@@ -1628,13 +1665,13 @@
                         cvs.toBlob(blob => resolve(blob), 'image/png', 1);
                     };
                     img.onerror = reject;
-                    const url = URL.createObjectURL(file);
+                    const url = URL.createObjectURL(sourceBlob);
                     state.objectUrls.push(url);
                     img.src = url;
                 });
             }
 
-            // 批量/单张混淆处理
+            // 批量/单张混淆处理（核心修复：正确获取源文件）
             window.processObfuscate = async function(mode) {
                 if (!state.files.length) {
                     showToast('请先上传图片', 'error');
@@ -1658,8 +1695,10 @@
                 // 循环处理
                 for (const i of targetIndices) {
                     try {
-                        const blob = await processSingleImageBlob(state.files[i], mode);
-                        state.processedBlobs[i] = blob;
+                        // 核心修复：使用已处理的blob，没有则用原始文件
+                        const sourceBlob = state.processedBlobs[i] || state.files[i];
+                        const resultBlob = await processSingleImageBlob(sourceBlob, mode);
+                        state.processedBlobs[i] = resultBlob;
                     } catch (e) {
                         showToast(`${state.files[i].name} 处理失败`, 'error');
                     }
@@ -2134,7 +2173,8 @@
                 // 循环处理
                 for (const i of targetIndices) {
                     try {
-                        const blob = await processOneImage(state.files[i], type, config);
+                        const sourceBlob = state.processedBlobs[i] || state.files[i];
+                        const blob = await processOneImage(sourceBlob, type, config);
                         state.processedBlobs[i] = blob;
                     } catch (err) {
                         showToast(`${state.files[i].name} 处理失败`, 'error');
@@ -2334,7 +2374,9 @@
                 if (state.isProcessing) return;
                 state.isProcessing = true;
                 state.processedHistory.push([...state.processedBlobs]);
-                processSingleImageBlob(state.files[state.selectedImageIndex], 'encrypt').then(blob => {
+                // 核心修复：使用当前处理后的blob
+                const sourceBlob = state.processedBlobs[state.selectedImageIndex] || state.files[state.selectedImageIndex];
+                processSingleImageBlob(sourceBlob, 'encrypt').then(blob => {
                     state.processedBlobs[state.selectedImageIndex] = blob;
                     updatePreviewGrid();
                     const url = URL.createObjectURL(blob);
@@ -2354,7 +2396,9 @@
                 if (state.isProcessing) return;
                 state.isProcessing = true;
                 state.processedHistory.push([...state.processedBlobs]);
-                processSingleImageBlob(state.files[state.selectedImageIndex], 'decrypt').then(blob => {
+                // 核心修复：使用当前处理后的blob
+                const sourceBlob = state.processedBlobs[state.selectedImageIndex] || state.files[state.selectedImageIndex];
+                processSingleImageBlob(sourceBlob, 'decrypt').then(blob => {
                     state.processedBlobs[state.selectedImageIndex] = blob;
                     updatePreviewGrid();
                     const url = URL.createObjectURL(blob);
@@ -2385,7 +2429,7 @@
                 applyFilter('original');
             }
 
-            // 滤镜应用（修复按钮状态）
+            // 滤镜应用
             window.applyFilter = function(type) {
                 if (!state.detectImg || !state.detectOriginData) {
                     showToast('请先上传检测图片', 'warning');
@@ -2765,24 +2809,33 @@
                     img.src = url;
                 };
                 // 事件绑定
-                dz.onclick = (e) => {
+                dz.addEventListener('click', (e) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     inp.click();
-                };
-                dz.ondragover = e => {
+                });
+                dz.addEventListener('dragover', e => {
                     e.preventDefault();
+                    e.stopPropagation();
                     dz.classList.add('dragover');
-                };
-                dz.ondragleave = () => dz.classList.remove('dragover');
-                dz.ondrop = e => {
+                });
+                dz.addEventListener('dragleave', (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
+                    dz.classList.remove('dragover');
+                });
+                dz.addEventListener('drop', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     dz.classList.remove('dragover');
                     handler(e.dataTransfer.files[0]);
-                };
-                inp.onchange = e => {
+                });
+                inp.addEventListener('change', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     if (e.target.files.length) handler(e.target.files[0]);
                     e.target.value = '';
-                };
+                });
             }
             setupDropzone('image-watermark-dropzone', 'image-watermark-input', 'image-watermark-preview', 'imageWatermark');
             setupDropzone('qr-logo-dropzone', 'qr-logo-input', 'qr-logo-preview', 'qrLogo');
@@ -2805,7 +2858,7 @@
             console.log('   📐 Gilbert空间填充曲线 · DCT频域盲水印 · LSB隐写 · 二维码');
             console.log('   📸 图像转二维码 · 🎨 调色 · 📦 无损压缩 · 批量处理');
             console.log('   🛡️ 紫罗兰主题 · 本地离线处理 · 数据安全');
-        })();
+        });
     </script>
 </body>
 </html>
