@@ -122,7 +122,7 @@
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                object-fit: cover;
+                object-fit: contain;
                 z-index: -1;
                 opacity: 0;
                 display: block !important;
@@ -878,7 +878,210 @@
                             </div>
                         </div>
                     </div>
-                    <script>const MAX_RECENT = 10; const engineNameMap = { site: "本站", "yandex-web": "俄罗斯网页", "yandex-img": "俄罗斯图像", "yandex-video": "俄罗斯视频" }; function getSavedEngine() { return localStorage.getItem("silong_search_engine") || "site"; } function saveEngine(type) { localStorage.setItem("silong_search_engine", type); } let currentEngine = getSavedEngine(); const searchToggle = document.getElementById("searchToggle"); const searchDrawer = document.getElementById("searchDrawer"); const kwInput = document.getElementById("kw"); const doSearchBtn = document.getElementById("doSearchBtn"); const currentEngineText = document.getElementById("currentEngineText"); const recentListEl = document.getElementById("recentList"); const clearRecentBtn = document.getElementById("clearRecent"); const openEngineModalBtn = document.getElementById("openEngineModal"); const engineModal = document.getElementById("search-options-modal"); const closeModalBtn = engineModal.querySelector(".close"); const engineOptions = document.querySelectorAll(".search-engine-option"); if (searchToggle) { searchToggle.addEventListener("click", () => { const main = document.getElementById("main-content") || document.querySelector(".main-content"); if (main) main.scrollTo({ top: 0, behavior: "smooth" }); else window.scrollTo({ top: 0, behavior: "smooth" }); if (searchDrawer.style.display === "block") { searchDrawer.style.display = "none"; document.body.style.overflow = ""; } else { searchDrawer.style.display = "block"; currentEngineText.textContent = engineNameMap[currentEngine]; renderRecent(); document.body.style.overflow = "hidden"; kwInput.focus(); } }); } openEngineModalBtn.addEventListener("click", () => { engineModal.style.display = "flex"; }); engineOptions.forEach(option => { option.addEventListener("click", () => { const type = option.dataset.type; currentEngine = type; saveEngine(type); currentEngineText.textContent = engineNameMap[currentEngine]; engineModal.style.display = "none"; }); }); doSearchBtn.addEventListener("click", doRealSearch); function doRealSearch() { const keyword = kwInput.value.trim(); if (!keyword) return; saveRecent(keyword); if (currentEngine === "site") { const results = siteSearch(keyword.toLowerCase()); if (results.length > 0) { highlightResults(results); setTimeout(() => { results[0].scrollIntoView({ behavior: "smooth", block: "center" }); }, 400); searchDrawer.style.display = "none"; document.body.style.overflow = ""; } else { engineModal.style.display = "flex"; } } else { performExternalSearch(keyword); } } function performExternalSearch(keyword) { let url = ""; switch (currentEngine) { case "yandex-web": url = `https://yandex.com/search/?text=${encodeURIComponent(keyword)}`; break; case "yandex-img": url = `https://yandex.com/images/search/?text=${encodeURIComponent(keyword)}`; break; case "yandex-video": url = `https://yandex.com/video/search/?text=${encodeURIComponent(keyword)}`; break; default: url = `https://yandex.com/search/?text=${encodeURIComponent(keyword)}`; } searchDrawer.style.display = "none"; engineModal.style.display = "none"; document.body.style.overflow = ""; window.open(url, "_blank"); } function getRecent() { const d = localStorage.getItem("silong_recent_search"); return d ? JSON.parse(d) : []; } function saveRecent(word) { if (!word.trim()) return; let arr = getRecent().filter(w => w !== word); arr.unshift(word); if (arr.length > MAX_RECENT) arr = arr.slice(0, MAX_RECENT); localStorage.setItem("silong_recent_search", JSON.stringify(arr)); } function renderRecent() { const list = getRecent(); recentListEl.innerHTML = ""; if (list.length === 0) { recentListEl.innerHTML = '<div style="color:rgba(255,255,255,0.6);font-size:13px;">暂无搜索记录</div>'; return; } list.forEach(word => { const div = document.createElement("div"); div.style.cssText = ` padding: 6px 12px; background: rgba(255,255,255,0.08); border-radius: 6px; font-size: 14px; cursor: pointer; white-space: nowrap; flex-shrink: 0; `; div.textContent = word; div.onclick = (e) => { e.stopPropagation(); kwInput.value = word; }; recentListEl.appendChild(div); }); } clearRecentBtn.addEventListener("click", (e) => { e.stopPropagation(); localStorage.removeItem("silong_recent_search"); renderRecent(); }); function siteSearch(query) { const results = []; const items = document.querySelectorAll('.website-item'); items.forEach(item => { const name = (item.dataset.searchName || item.dataset.title || '').toLowerCase(); const desc = (item.dataset.searchDesc || item.dataset.desc || '').toLowerCase(); const keywords = (item.dataset.keywords || '').toLowerCase(); if (name.includes(query) || desc.includes(query) || keywords.includes(query)) { results.push(item); } }); return results; } function highlightResults(results) { document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight')); results.forEach(item => { item.classList.add('highlight'); setTimeout(() => item.classList.remove('highlight'), 2500); }); } document.addEventListener("click", (e) => { if (e.target === searchDrawer) { searchDrawer.style.display = "none"; engineModal.style.display = "none"; document.body.style.overflow = ""; } }); searchDrawer.addEventListener("click", e => e.stopPropagation()); closeModalBtn.addEventListener("click", () => engineModal.style.display = "none"); engineModal.addEventListener("click", e => { if (e.target === engineModal) engineModal.style.display = "none"; });</script>
+                    <script>
+                        const MAX_RECENT = 10;
+                        
+                        const engineNameMap = {
+                            site: "本站",
+                            "yandex-web": "俄罗斯网页",
+                            "yandex-img": "俄罗斯图像",
+                            "yandex-video": "俄罗斯视频"
+                        };
+                        
+                        function getSavedEngine() {
+                            return localStorage.getItem("silong_search_engine") || "site";
+                        }
+                        
+                        function saveEngine(type) {
+                            localStorage.setItem("silong_search_engine", type);
+                        }
+                        
+                        let currentEngine = getSavedEngine();
+                        
+                        const searchToggle = document.getElementById("searchToggle");
+                        const searchDrawer = document.getElementById("searchDrawer");
+                        const kwInput = document.getElementById("kw");
+                        const doSearchBtn = document.getElementById("doSearchBtn");
+                        const currentEngineText = document.getElementById("currentEngineText");
+                        const recentListEl = document.getElementById("recentList");
+                        const clearRecentBtn = document.getElementById("clearRecent");
+                        const openEngineModalBtn = document.getElementById("openEngineModal");
+                        const engineModal = document.getElementById("search-options-modal");
+                        const closeModalBtn = engineModal.querySelector(".close");
+                        const engineOptions = document.querySelectorAll(".search-engine-option");
+                        
+                        if (searchToggle) {
+                            searchToggle.addEventListener("click", () => {
+                                const main = document.getElementById("main-content") || document.querySelector(".main-content");
+                                if (main) {
+                                    main.scrollTo({
+                                        top: 0,
+                                        behavior: "smooth"
+                                    });
+                                } else {
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: "smooth"
+                                    });
+                                }
+                                if (searchDrawer.style.display === "block") {
+                                    searchDrawer.style.display = "none";
+                                    document.body.style.overflow = "";
+                                } else {
+                                    searchDrawer.style.display = "block";
+                                    currentEngineText.textContent = engineNameMap[currentEngine];
+                                    renderRecent();
+                                    document.body.style.overflow = "hidden";
+                                    kwInput.focus();
+                                }
+                            });
+                        }
+                        
+                        openEngineModalBtn.addEventListener("click", () => {
+                            engineModal.style.display = "flex";
+                        });
+                        
+                        engineOptions.forEach(option => {
+                            option.addEventListener("click", () => {
+                                const type = option.dataset.type;
+                                currentEngine = type;
+                                saveEngine(type);
+                                currentEngineText.textContent = engineNameMap[currentEngine];
+                                engineModal.style.display = "none";
+                            });
+                        });
+                        
+                        doSearchBtn.addEventListener("click", doRealSearch);
+                        
+                        function doRealSearch() {
+                            const keyword = kwInput.value.trim();
+                            if (!keyword) return;
+                            saveRecent(keyword);
+                            if (currentEngine === "site") {
+                                const results = siteSearch(keyword.toLowerCase());
+                                if (results.length > 0) {
+                                    highlightResults(results);
+                                    setTimeout(() => {
+                                        results[0].scrollIntoView({
+                                            behavior: "smooth",
+                                            block: "center"
+                                        });
+                                    }, 400);
+                                    searchDrawer.style.display = "none";
+                                    document.body.style.overflow = "";
+                                } else {
+                                    engineModal.style.display = "flex";
+                                }
+                            } else {
+                                performExternalSearch(keyword);
+                            }
+                        }
+                        
+                        function performExternalSearch(keyword) {
+                            let url = "";
+                            switch (currentEngine) {
+                                case "yandex-web":
+                                    url = `https://yandex.com/search/?text=${encodeURIComponent(keyword)}`;
+                                    break;
+                                case "yandex-img":
+                                    url = `https://yandex.com/images/search/?text=${encodeURIComponent(keyword)}`;
+                                    break;
+                                case "yandex-video":
+                                    url = `https://yandex.com/video/search/?text=${encodeURIComponent(keyword)}`;
+                                    break;
+                                default:
+                                    url = `https://yandex.com/search/?text=${encodeURIComponent(keyword)}`;
+                            }
+                            searchDrawer.style.display = "none";
+                            engineModal.style.display = "none";
+                            document.body.style.overflow = "";
+                            window.open(url, "_blank");
+                        }
+                        
+                        function getRecent() {
+                            const d = localStorage.getItem("silong_recent_search");
+                            return d ? JSON.parse(d) : [];
+                        }
+                        
+                        function saveRecent(word) {
+                            if (!word.trim()) return;
+                            let arr = getRecent().filter(w => w !== word);
+                            arr.unshift(word);
+                            if (arr.length > MAX_RECENT) arr = arr.slice(0, MAX_RECENT);
+                            localStorage.setItem("silong_recent_search", JSON.stringify(arr));
+                        }
+                        
+                        function renderRecent() {
+                            const list = getRecent();
+                            recentListEl.innerHTML = "";
+                            if (list.length === 0) {
+                                recentListEl.innerHTML = '<div style="color:rgba(255,255,255,0.6);font-size:13px;">暂无搜索记录</div>';
+                                return;
+                            }
+                            list.forEach(word => {
+                                const div = document.createElement("div");
+                                div.style.cssText = `
+                                    padding: 6px 12px;
+                                    background: rgba(255,255,255,0.08);
+                                    border-radius: 6px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    white-space: nowrap;
+                                    flex-shrink: 0;
+                                `;
+                                div.textContent = word;
+                                div.onclick = (e) => {
+                                    e.stopPropagation();
+                                    kwInput.value = word;
+                                };
+                                recentListEl.appendChild(div);
+                            });
+                        }
+                        
+                        clearRecentBtn.addEventListener("click", (e) => {
+                            e.stopPropagation();
+                            localStorage.removeItem("silong_recent_search");
+                            renderRecent();
+                        });
+                        
+                        function siteSearch(query) {
+                            const results = [];
+                            const items = document.querySelectorAll('.website-item');
+                            items.forEach(item => {
+                                const name = (item.dataset.searchName || item.dataset.title || '').toLowerCase();
+                                const desc = (item.dataset.searchDesc || item.dataset.desc || '').toLowerCase();
+                                const keywords = (item.dataset.keywords || '').toLowerCase();
+                                if (name.includes(query) || desc.includes(query) || keywords.includes(query)) {
+                                    results.push(item);
+                                }
+                            });
+                            return results;
+                        }
+                        
+                        function highlightResults(results) {
+                            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+                            results.forEach(item => {
+                                item.classList.add('highlight');
+                                setTimeout(() => item.classList.remove('highlight'), 2500);
+                            });
+                        }
+                        
+                        document.addEventListener("click", (e) => {
+                            if (e.target === searchDrawer) {
+                                searchDrawer.style.display = "none";
+                                engineModal.style.display = "none";
+                                document.body.style.overflow = "";
+                            }
+                        });
+                        
+                        searchDrawer.addEventListener("click", e => e.stopPropagation());
+                        
+                        closeModalBtn.addEventListener("click", () => engineModal.style.display = "none");
+                        
+                        engineModal.addEventListener("click", e => {
+                            if (e.target === engineModal) engineModal.style.display = "none";
+                        });
+                    </script>
                     <div style="width: 100%; height: 180px; margin: 12px 0; border-radius: 14px; overflow: hidden; position: relative; background: linear-gradient(135deg, #6A0DAD, #8A2BE2);">
                         <div id="carouselImageLoader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(106,13,173,0.85); z-index: 99; display: flex; align-items: center; justify-content: center; flex-direction: column; border-radius: 14px;">
                             <style>
@@ -943,7 +1146,142 @@
                             <span class="dot" style="width: 6px; height: 6px; border-radius: 50%; background: #D8BFD8; opacity: 0.5; transition: all 0.3s ease;"></span>
                             <span class="dot" style="width: 6px; height: 6px; border-radius: 50%; background: #D8BFD8; opacity: 0.5; transition: all 0.3s ease;"></span>
                         </div>
-                        <script>(function() { const imgs = document.querySelectorAll('.carousel-img'); const carouselWrapper = document.getElementById('carouselWrapper'); const carouselBox = document.getElementById('carouselBox'); const dots = document.querySelectorAll('.dot'); const imageLoader = document.getElementById('carouselImageLoader'); const clickLoader = document.getElementById('carouselClickLoader'); let loadedCount = 0; let currentIndex = 0; const totalSlides = 5; let interval = null; imgs.forEach(img => { img.style.opacity = '0'; if (img.complete) { onImageLoaded.call(img); } else { img.onload = onImageLoaded; img.onerror = onImageLoaded; } }); function onImageLoaded() { this.style.opacity = '1'; loadedCount++; if (imageLoader.style.display !== 'none') { imageLoader.style.display = 'none'; startAutoPlay(); } } let startX = 0; let currentTranslate = 0; let prevTranslate = 0; let isDragging = false; carouselWrapper.addEventListener('touchstart', touchStart, { passive: true }); carouselWrapper.addEventListener('touchmove', touchMove, { passive: true }); carouselWrapper.addEventListener('touchend', touchEnd); carouselWrapper.addEventListener('mousedown', touchStart); carouselWrapper.addEventListener('mousemove', touchMove); carouselWrapper.addEventListener('mouseup', touchEnd); carouselWrapper.addEventListener('mouseleave', touchEnd); function touchStart(e) { startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX; isDragging = true; carouselBox.style.transition = 'none'; stopAutoPlay(); } function touchMove(e) { if (!isDragging) return; const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX; const diff = currentX - startX; currentTranslate = prevTranslate + diff; carouselBox.style.transform = `translateX(${currentTranslate}px)`; } function touchEnd() { isDragging = false; const moveBy = currentTranslate - prevTranslate; if (moveBy < -60) currentIndex++; else if (moveBy > 60) currentIndex--; if (currentIndex >= totalSlides) currentIndex = 0; if (currentIndex < 0) currentIndex = totalSlides - 1; setPositionByIndex(); carouselBox.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'; startAutoPlay(); } function setPositionByIndex() { const width = carouselWrapper.clientWidth; currentTranslate = currentIndex * -width; prevTranslate = currentTranslate; carouselBox.style.transform = `translateX(${currentTranslate}px)`; updateDots(); } function updateDots() { dots.forEach((dot, i) => { if (i === currentIndex) { dot.style.transform = 'scale(1.3)'; dot.style.opacity = '1'; dot.style.background = '#9370DB'; } else { dot.style.transform = 'scale(1)'; dot.style.opacity = '0.5'; dot.style.background = '#D8BFD8'; } }); } function nextSlide() { currentIndex = (currentIndex + 1) % totalSlides; setPositionByIndex(); } function startAutoPlay() { if (interval) clearInterval(interval); interval = setInterval(nextSlide, 3000); } function stopAutoPlay() { if (interval) clearInterval(interval); interval = null; } function showClickLoader() { clickLoader.style.display = 'flex'; } function hideClickLoader() { clickLoader.style.display = 'none'; } document.querySelectorAll('.carousel-link').forEach(link => { link.addEventListener('click', function() { showClickLoader(); const hideLoader = () => hideClickLoader(); window.addEventListener('beforeunload', hideLoader); setTimeout(hideLoader, 5000); }); }); document.addEventListener('visibilitychange', () => { if (document.hidden) { stopAutoPlay(); } else { startAutoPlay(); } }); })();</script>
+                        <script>
+                            (function() {
+                                const imgs = document.querySelectorAll('.carousel-img');
+                                const carouselWrapper = document.getElementById('carouselWrapper');
+                                const carouselBox = document.getElementById('carouselBox');
+                                const dots = document.querySelectorAll('.dot');
+                                const imageLoader = document.getElementById('carouselImageLoader');
+                                const clickLoader = document.getElementById('carouselClickLoader');
+                                
+                                let loadedCount = 0;
+                                let currentIndex = 0;
+                                const totalSlides = 5;
+                                let interval = null;
+                                
+                                imgs.forEach(img => {
+                                    img.style.opacity = '0';
+                                    if (img.complete) {
+                                        onImageLoaded.call(img);
+                                    } else {
+                                        img.onload = onImageLoaded;
+                                        img.onerror = onImageLoaded;
+                                    }
+                                });
+                                
+                                function onImageLoaded() {
+                                    this.style.opacity = '1';
+                                    loadedCount++;
+                                    if (imageLoader.style.display !== 'none') {
+                                        imageLoader.style.display = 'none';
+                                        startAutoPlay();
+                                    }
+                                }
+                                
+                                let startX = 0;
+                                let currentTranslate = 0;
+                                let prevTranslate = 0;
+                                let isDragging = false;
+                                
+                                carouselWrapper.addEventListener('touchstart', touchStart, { passive: true });
+                                carouselWrapper.addEventListener('touchmove', touchMove, { passive: true });
+                                carouselWrapper.addEventListener('touchend', touchEnd);
+                                carouselWrapper.addEventListener('mousedown', touchStart);
+                                carouselWrapper.addEventListener('mousemove', touchMove);
+                                carouselWrapper.addEventListener('mouseup', touchEnd);
+                                carouselWrapper.addEventListener('mouseleave', touchEnd);
+                                
+                                function touchStart(e) {
+                                    startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                                    isDragging = true;
+                                    carouselBox.style.transition = 'none';
+                                    stopAutoPlay();
+                                }
+                                
+                                function touchMove(e) {
+                                    if (!isDragging) return;
+                                    const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                                    const diff = currentX - startX;
+                                    currentTranslate = prevTranslate + diff;
+                                    carouselBox.style.transform = `translateX(${currentTranslate}px)`;
+                                }
+                                
+                                function touchEnd() {
+                                    isDragging = false;
+                                    const moveBy = currentTranslate - prevTranslate;
+                                    if (moveBy < -60) currentIndex++;
+                                    else if (moveBy > 60) currentIndex--;
+                                    if (currentIndex >= totalSlides) currentIndex = 0;
+                                    if (currentIndex < 0) currentIndex = totalSlides - 1;
+                                    setPositionByIndex();
+                                    carouselBox.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                                    startAutoPlay();
+                                }
+                                
+                                function setPositionByIndex() {
+                                    const width = carouselWrapper.clientWidth;
+                                    currentTranslate = currentIndex * -width;
+                                    prevTranslate = currentTranslate;
+                                    carouselBox.style.transform = `translateX(${currentTranslate}px)`;
+                                    updateDots();
+                                }
+                                
+                                function updateDots() {
+                                    dots.forEach((dot, i) => {
+                                        if (i === currentIndex) {
+                                            dot.style.transform = 'scale(1.3)';
+                                            dot.style.opacity = '1';
+                                            dot.style.background = '#9370DB';
+                                        } else {
+                                            dot.style.transform = 'scale(1)';
+                                            dot.style.opacity = '0.5';
+                                            dot.style.background = '#D8BFD8';
+                                        }
+                                    });
+                                }
+                                
+                                function nextSlide() {
+                                    currentIndex = (currentIndex + 1) % totalSlides;
+                                    setPositionByIndex();
+                                }
+                                
+                                function startAutoPlay() {
+                                    if (interval) clearInterval(interval);
+                                    interval = setInterval(nextSlide, 3000);
+                                }
+                                
+                                function stopAutoPlay() {
+                                    if (interval) clearInterval(interval);
+                                    interval = null;
+                                }
+                                
+                                function showClickLoader() {
+                                    clickLoader.style.display = 'flex';
+                                }
+                                
+                                function hideClickLoader() {
+                                    clickLoader.style.display = 'none';
+                                }
+                                
+                                document.querySelectorAll('.carousel-link').forEach(link => {
+                                    link.addEventListener('click', function() {
+                                        showClickLoader();
+                                        const hideLoader = () => hideClickLoader();
+                                        window.addEventListener('beforeunload', hideLoader);
+                                        setTimeout(hideLoader, 5000);
+                                    });
+                                });
+                                
+                                document.addEventListener('visibilitychange', () => {
+                                    if (document.hidden) {
+                                        stopAutoPlay();
+                                    } else {
+                                        startAutoPlay();
+                                    }
+                                });
+                            })();
+                        </script>
                     </div>
                     <div class="quick-links-glass">
                         <div class="button-container">
@@ -989,8 +1327,63 @@
                                     </div>
                                 </div>
                             </div>
-                            <script>fetch('https://silong-respool.github.io/gay/zjgx.html') .then(res => res.text()) .then(html => { const parser = new DOMParser(); const doc = parser.parseFromString(html, 'text/html'); const items = doc.querySelectorAll('a.website-item'); const target = document.getElementById('recent-update-list'); target.innerHTML = ''; if (items.length === 0) { target.innerHTML = '<div style="padding:20px;text-align:center;color:#f66;">仓库里暂时没新资源</div>'; return; } items.forEach(item => { const clone = item.cloneNode(true); const imgDiv = clone.querySelector('.website-img'); if (imgDiv) { imgDiv.innerHTML += '<span style="position:absolute;top:4px;right:4px;background:red;color:white;font-size:10px;padding:2px 6px;border-radius:10px;line-height:1;">NEW</span>'; } target.appendChild(clone); }); document.querySelectorAll('.website-item').forEach(item => { item.addEventListener('click', function(e) { e.preventDefault(); const targetUrl = this.getAttribute('href'); const overlay = document.getElementById('loading-overlay'); overlay.style.display = 'flex'; setTimeout(() => { window.location.href = targetUrl; }, 1500); }); }); }) .catch(err => { console.error('拉取失败:', err); document.getElementById('recent-update-list').innerHTML = '<div style="padding:20px;text-align:center;color:#f66;">连不上仓库</div>'; });</script>
-                            <script>function handleWebsiteItemClick(e) { const card = e.target.closest('.website-item'); if (!card) return; if (card.closest('.sidebar') || card.closest('#searchDrawer')) { return; } e.preventDefault(); e.stopPropagation(); const url = card.dataset.url || ''; const title = card.dataset.title || card.querySelector('.website-name')?.textContent || '未知网站'; const desc = card.dataset.desc || '暂无描述'; const features = card.dataset.features || '暂无特点'; const color = card.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D'; const password = card.dataset.password || ''; window.openDetailModal(title, url, desc, features, color, password); } document.addEventListener('click', handleWebsiteItemClick);</script>
+                            <script>
+                                fetch('https://silong-respool.github.io/gay/zjgx.html')
+                                    .then(res => res.text())
+                                    .then(html => {
+                                        const parser = new DOMParser();
+                                        const doc = parser.parseFromString(html, 'text/html');
+                                        const items = doc.querySelectorAll('a.website-item');
+                                        const target = document.getElementById('recent-update-list');
+                                        target.innerHTML = '';
+                                        if (items.length === 0) {
+                                            target.innerHTML = '<div style="padding:20px;text-align:center;color:#f66;">仓库里暂时没新资源</div>';
+                                            return;
+                                        }
+                                        items.forEach(item => {
+                                            const clone = item.cloneNode(true);
+                                            const imgDiv = clone.querySelector('.website-img');
+                                            if (imgDiv) {
+                                                imgDiv.innerHTML += '<span style="position:absolute;top:4px;right:4px;background:red;color:white;font-size:10px;padding:2px 6px;border-radius:10px;line-height:1;">NEW</span>';
+                                            }
+                                            target.appendChild(clone);
+                                        });
+                                        document.querySelectorAll('.website-item').forEach(item => {
+                                            item.addEventListener('click', function(e) {
+                                                e.preventDefault();
+                                                const targetUrl = this.getAttribute('href');
+                                                const overlay = document.getElementById('loading-overlay');
+                                                overlay.style.display = 'flex';
+                                                setTimeout(() => {
+                                                    window.location.href = targetUrl;
+                                                }, 1500);
+                                            });
+                                        });
+                                    })
+                                    .catch(err => {
+                                        console.error('拉取失败:', err);
+                                        document.getElementById('recent-update-list').innerHTML = '<div style="padding:20px;text-align:center;color:#f66;">连不上仓库</div>';
+                                    });
+                            </script>
+                            <script>
+                                function handleWebsiteItemClick(e) {
+                                    const card = e.target.closest('.website-item');
+                                    if (!card) return;
+                                    if (card.closest('.sidebar') || card.closest('#searchDrawer')) {
+                                        return;
+                                    }
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    const url = card.dataset.url || '';
+                                    const title = card.dataset.title || card.querySelector('.website-name')?.textContent || '未知网站';
+                                    const desc = card.dataset.desc || '暂无描述';
+                                    const features = card.dataset.features || '暂无特点';
+                                    const color = card.querySelector('.website-img')?.style.backgroundColor || '#7B4F9D';
+                                    const password = card.dataset.password || '';
+                                    window.openDetailModal(title, url, desc, features, color, password);
+                                }
+                                document.addEventListener('click', handleWebsiteItemClick);
+                            </script>
                             <div id="resources-container">
                                 <section id="search-section" class="category-section active" data-default="true">
                                     <div class="section-header">
