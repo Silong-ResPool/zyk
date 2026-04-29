@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>巳泷资源库-影盾</title>
+    <title>巳泷资源库 - 影盾 | 图像混淆·水印·隐写·二维码·图转码·无损压缩</title>
     <meta name="description" content="图像混淆加密、Gilbert空间填充曲线、DCT频域盲水印、LSB隐写、二维码合成与检测、图像转二维码、无损压缩、调色">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js">
+    </script>
     <style>
         :root {
             --bg-deep: #060318;
@@ -68,7 +72,11 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg-deep);
-            background-image: radial-gradient(ellipse at 15% 8%, rgba(109, 40, 217, 0.22) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 55%), radial-gradient(ellipse at 85% 15%, rgba(245, 158, 11, 0.06) 0%, transparent 42%), radial-gradient(ellipse at 30% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 48%);
+            background-image: radial-gradient(ellipse at 15% 8%, rgba(109, 40, 217, 0.22) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(245, 158, 11, 0.06) 0%, transparent 42%),
+                radial-gradient(ellipse at 30% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 48%);
             background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
@@ -204,6 +212,7 @@
             overflow: hidden;
             max-height: calc(100vh - 130px);
             overflow-y: auto;
+            z-index: 10;
         }
         .sidebar::before {
             content: '';
@@ -231,6 +240,7 @@
             display: flex;
             flex-direction: column;
             gap: 22px;
+            min-width: 0;
         }
         .nav-tabs {
             display: flex;
@@ -359,6 +369,7 @@
             justify-content: center;
             gap: 7px;
             user-select: none;
+            overflow: hidden;
         }
         .upload-zone:hover,
         .upload-zone.dragover {
@@ -366,10 +377,15 @@
             background: rgba(139, 92, 246, 0.07);
             box-shadow: 0 0 35px rgba(109, 40, 217, 0.18);
         }
+        .upload-zone:active {
+            transform: scale(0.98);
+        }
         .upload-zone i {
             font-size: 2.4rem;
             color: var(--text-muted);
             transition: all var(--transition-fast);
+            pointer-events: none;
+            z-index: 1;
         }
         .upload-zone:hover i {
             transform: translateY(-5px);
@@ -379,13 +395,19 @@
             color: var(--text-muted);
             font-size: 0.84rem;
             letter-spacing: 0.03em;
+            pointer-events: none;
+            z-index: 1;
+            position: relative;
         }
-        .upload-zone input {
+        .upload-zone input[type=file] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
-            z-index: 2;
+            z-index: 20;
+            width: 100%;
+            height: 100%;
+            font-size: 0;
         }
         .btn {
             width: 100%;
@@ -536,7 +558,10 @@
             width: 100%;
             height: 125px;
             object-fit: contain;
-            background-image: linear-gradient(45deg, #150e3d 25%, transparent 25%), linear-gradient(-45deg, #150e3d 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #150e3d 75%), linear-gradient(-45deg, transparent 75%, #150e3d 75%);
+            background-image: linear-gradient(45deg, #150e3d 25%, transparent 25%),
+                linear-gradient(-45deg, #150e3d 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #150e3d 75%),
+                linear-gradient(-45deg, transparent 75%, #150e3d 75%);
             background-size: 16px 16px;
             cursor: zoom-in;
         }
@@ -964,16 +989,16 @@
             <div id="conf-obfuscate" class="tab-content">
                 <div class="info-box"><i class="fas fa-info-circle" style="color:var(--accent-cyan)"></i> Gilbert空间填充曲线混淆，保持像素空间相关性。未选中图片时批量处理全部，点击图片可单独处理。</div>
                 <div style="display:flex;flex-direction:column;gap:7px;">
-                    <button class="btn btn-primary" onclick="processObfuscate('encrypt')"><i class="fas fa-lock"></i> <span id="obfuscate-btn-text">批量混淆</span></button>
-                    <button class="btn btn-outline" onclick="processObfuscate('decrypt')" style="width:100%;"><i class="fas fa-unlock"></i> <span id="deobfuscate-btn-text">批量解混淆</span></button>
-                    <button class="btn btn-outline" onclick="restoreOriginal()"><i class="fas fa-rotate-left"></i> 还原原始图片</button>
+                    <button class="btn btn-primary" id="btn-obfuscate-encrypt"><i class="fas fa-lock"></i> <span id="obfuscate-btn-text">批量混淆</span></button>
+                    <button class="btn btn-outline" id="btn-obfuscate-decrypt" style="width:100%;"><i class="fas fa-unlock"></i> <span id="deobfuscate-btn-text">批量解混淆</span></button>
+                    <button class="btn btn-outline" id="btn-restore-original"><i class="fas fa-rotate-left"></i> 还原原始图片</button>
                 </div>
             </div>
             <div id="conf-text" class="tab-content hidden">
-                <div class="mode-switch">
-                    <div class="mode-option active" onclick="toggleWatermarkMode('visible')">可见平铺</div>
-                    <div class="mode-option" onclick="toggleWatermarkMode('blind')">DCT盲水印</div>
-                    <div class="mode-option" onclick="toggleWatermarkMode('lsb')">LSB隐写</div>
+                <div class="mode-switch" id="watermark-mode-switch">
+                    <div class="mode-option active" data-mode="visible">可见平铺</div>
+                    <div class="mode-option" data-mode="blind">DCT盲水印</div>
+                    <div class="mode-option" data-mode="lsb">LSB隐写</div>
                 </div>
                 <div class="control-group"><label class="control-label">水印内容</label><textarea id="text-content" class="styled-textarea" rows="2">© 影盾 | 严禁盗用</textarea></div>
                 <div id="visible-options">
@@ -995,22 +1020,28 @@
                     <div class="control-group"><label class="control-label">加密密钥（可选）</label><input type="text" id="lsb-key" class="styled-input" placeholder="输入密钥"></div>
                     <div class="info-box"><i class="fas fa-info-circle"></i> LSB隐写适合隐藏文本，容量大但抗压缩较弱。</div>
                 </div>
-                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('text')"><i class="fas fa-bolt"></i> 批量处理</button>
+                <button class="btn btn-primary" style="margin-top:12px;" id="btn-process-text"><i class="fas fa-bolt"></i> 批量处理</button>
             </div>
             <div id="conf-image" class="tab-content hidden">
-                <div class="upload-zone" id="image-watermark-dropzone" style="padding:14px;min-height:60px;"><i class="fas fa-image"></i><p>上传水印图片（PNG推荐）</p><input type="file" id="image-watermark-input" accept="image/*"></div>
+                <div class="upload-zone upload-zone-small" id="image-watermark-dropzone" style="padding:14px;min-height:60px;">
+                    <i class="fas fa-image"></i><p>上传水印图片（PNG推荐）</p>
+                    <input type="file" id="image-watermark-input" accept="image/*">
+                </div>
                 <div id="image-watermark-preview" style="margin-top:7px;text-align:center;"></div>
                 <div class="control-group"><label class="control-label">位置</label><select id="image-position" class="styled-select"><option value="br">右下角</option><option value="bl">左下角</option><option value="tr">右上角</option><option value="tl">左上角</option><option value="center">正中间</option><option value="tile">平铺</option></select></div>
                 <div class="control-group"><label class="control-label">尺寸比例 <span id="image-scale-val">15%</span></label><input type="range" id="image-scale" min="5" max="100" value="15"></div>
                 <div class="control-group"><label class="control-label">不透明度 <span id="image-opacity-val">50%</span></label><input type="range" id="image-opacity" min="1" max="100" value="50"></div>
                 <div class="control-group"><label class="control-label">旋转角度 <span id="image-rotate-val">0°</span></label><input type="range" id="image-rotate" min="-180" max="180" value="0"></div>
-                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('image')"><i class="fas fa-image"></i> 批量添加图片水印</button>
+                <button class="btn btn-primary" style="margin-top:12px;" id="btn-process-image"><i class="fas fa-image"></i> 批量添加图片水印</button>
             </div>
             <div id="conf-qr" class="tab-content hidden">
                 <div class="control-group"><label class="control-label">二维码内容</label><textarea id="qr-content" class="styled-textarea" rows="3" placeholder="输入网址或文本"></textarea></div>
                 <div class="control-group"><label class="control-label">纠错级别</label><select id="qr-level" class="styled-select"><option value="L">低(7%)</option><option value="M">中(15%)</option><option value="Q">高(25%)</option><option value="H" selected>最高(30%)</option></select></div>
                 <div class="control-group"><label class="control-label">前景/背景色</label><div class="color-group"><input type="color" id="qr-foreground" value="#000000"><input type="color" id="qr-background" value="#ffffff"></div></div>
-                <div class="upload-zone" id="qr-logo-dropzone" style="padding:12px;min-height:50px;"><i class="fas fa-icons"></i><p>上传LOGO（可选）</p><input type="file" id="qr-logo-input" accept="image/*"></div>
+                <div class="upload-zone upload-zone-small" id="qr-logo-dropzone" style="padding:12px;min-height:50px;">
+                    <i class="fas fa-icons"></i><p>上传LOGO（可选）</p>
+                    <input type="file" id="qr-logo-input" accept="image/*">
+                </div>
                 <div id="qr-logo-preview" style="margin-top:7px;text-align:center;"></div>
                 <div class="control-group"><label class="control-label">位置</label><select id="qr-position" class="styled-select"><option value="br">右下角</option><option value="bl">左下角</option><option value="tr">右上角</option><option value="tl">左上角</option><option value="center">正中间</option></select></div>
                 <div class="control-group"><label class="control-label">尺寸比例 <span id="qr-scale-val">15%</span></label><input type="range" id="qr-scale" min="5" max="50" value="15"></div>
@@ -1018,7 +1049,7 @@
                 <div class="control-group"><label class="control-label">边距 <span id="qr-margin-val">5%</span></label><input type="range" id="qr-margin" min="0" max="20" value="5"></div>
                 <label class="checkbox-label"><input type="checkbox" id="qr-embed-blind">同时嵌入DCT盲水印</label>
                 <div id="qrcode-ghost" style="display:none;"></div>
-                <button class="btn btn-primary" style="margin-top:12px;" onclick="processBatch('qr')"><i class="fas fa-qrcode"></i> 批量合成二维码</button>
+                <button class="btn btn-primary" style="margin-top:12px;" id="btn-process-qr"><i class="fas fa-qrcode"></i> 批量合成二维码</button>
             </div>
             <div id="conf-img2qr" class="tab-content hidden">
                 <div class="info-box"><i class="fas fa-info-circle" style="color:var(--accent-cyan)"></i> 将图片编码到二维码中，扫码即可还原图片。图片将被压缩缩放到适合QR码的尺寸。</div>
@@ -1026,7 +1057,7 @@
                 <div class="control-group"><label class="control-label">JPEG质量 <span id="img2qr-quality-val">40%</span></label><input type="range" id="img2qr-quality" min="10" max="90" value="40"></div>
                 <div class="control-group"><label class="control-label">纠错级别</label><select id="img2qr-level" class="styled-select"><option value="L">低(容量大)</option><option value="M" selected>中(平衡)</option><option value="Q">高</option><option value="H">最高</option></select></div>
                 <div class="control-group"><label class="control-label">前景/背景色</label><div class="color-group"><input type="color" id="img2qr-foreground" value="#000000"><input type="color" id="img2qr-background" value="#ffffff"></div></div>
-                <button class="btn btn-accent" style="margin-top:10px;" onclick="convertImageToQR()"><i class="fas fa-camera-retro"></i> 图片转二维码</button>
+                <button class="btn btn-accent" style="margin-top:10px;" id="btn-img2qr"><i class="fas fa-camera-retro"></i> 图片转二维码</button>
                 <div id="img2qr-result" class="img2qr-preview hidden" style="margin-top:12px;"></div>
                 <div id="img2qr-size-info" class="size-comparison hidden" style="margin-top:8px;"></div>
             </div>
@@ -1040,41 +1071,46 @@
                 <div class="control-group"><label class="control-label">模糊强度 <span id="adj-blur-val">0</span></label><input type="range" id="adj-blur" min="0" max="50" value="0"></div>
                 <label class="checkbox-label"><input type="checkbox" id="adj-grayscale">灰度化</label>
                 <label class="checkbox-label"><input type="checkbox" id="adj-invert">反相</label>
-                <button class="btn btn-primary" style="margin-top:10px;" onclick="processBatch('adjust')"><i class="fas fa-bolt"></i> 批量调整</button>
+                <button class="btn btn-primary" style="margin-top:10px;" id="btn-process-adjust"><i class="fas fa-bolt"></i> 批量调整</button>
             </div>
             <div id="conf-detect" class="tab-content hidden">
                 <div class="info-box"><i class="fas fa-search"></i> 上传图片后选择检测工具。支持二维码扫描、盲水印提取、LSB解密。</div>
-                <div class="filter-grid">
-                    <button class="filter-btn active" data-filter="original" onclick="applyFilter('original')">原图</button>
-                    <button class="filter-btn" data-filter="invert" onclick="applyFilter('invert')">反相</button>
-                    <button class="filter-btn" data-filter="high-contrast" onclick="applyFilter('high-contrast')">高对比</button>
-                    <button class="filter-btn" data-filter="edge" onclick="applyFilter('edge')">边缘</button>
-                    <button class="filter-btn" data-filter="sharpen" onclick="applyFilter('sharpen')">锐化</button>
-                    <button class="filter-btn" data-filter="blur" onclick="applyFilter('blur')">模糊</button>
-                    <button class="filter-btn" data-filter="red-channel" onclick="applyFilter('red-channel')">红通道</button>
-                    <button class="filter-btn" data-filter="green-channel" onclick="applyFilter('green-channel')">绿通道</button>
-                    <button class="filter-btn" data-filter="blue-channel" onclick="applyFilter('blue-channel')">蓝通道</button>
-                    <button class="filter-btn" data-filter="grayscale" onclick="applyFilter('grayscale')">灰度</button>
+                <div class="filter-grid" id="filter-grid">
+                    <button class="filter-btn active" data-filter="original">原图</button>
+                    <button class="filter-btn" data-filter="invert">反相</button>
+                    <button class="filter-btn" data-filter="high-contrast">高对比</button>
+                    <button class="filter-btn" data-filter="edge">边缘</button>
+                    <button class="filter-btn" data-filter="sharpen">锐化</button>
+                    <button class="filter-btn" data-filter="blur">模糊</button>
+                    <button class="filter-btn" data-filter="red-channel">红通道</button>
+                    <button class="filter-btn" data-filter="green-channel">绿通道</button>
+                    <button class="filter-btn" data-filter="blue-channel">蓝通道</button>
+                    <button class="filter-btn" data-filter="grayscale">灰度</button>
                 </div>
                 <div class="control-group" style="margin-top:10px;"><label class="control-label">提取阈值 <span id="detect-threshold-val">50</span></label><input type="range" id="detect-threshold" min="0" max="255" value="50"></div>
                 <div class="control-group"><label class="control-label">解密密钥（LSB用）</label><input type="text" id="detect-lsb-key" class="styled-input" placeholder="输入密钥"></div>
                 <div style="display:flex;flex-direction:column;gap:6px;">
-                    <button class="btn btn-outline btn-small" onclick="detectBlindWatermark()" style="width:100%;"><i class="fas fa-eye"></i> 提取DCT盲水印</button>
-                    <button class="btn btn-outline btn-small" onclick="detectLsb()" style="width:100%;"><i class="fas fa-lock-open"></i> 提取LSB隐写</button>
-                    <button class="btn btn-outline btn-small" onclick="scanQRCode()" style="width:100%;"><i class="fas fa-qrcode"></i> 识别二维码</button>
-                    <button class="btn btn-outline btn-small" onclick="autoDetectAll()" style="width:100%;"><i class="fas fa-magic"></i> 自动检测全部</button>
+                    <button class="btn btn-outline btn-small" id="btn-detect-blind" style="width:100%;"><i class="fas fa-eye"></i> 提取DCT盲水印</button>
+                    <button class="btn btn-outline btn-small" id="btn-detect-lsb" style="width:100%;"><i class="fas fa-lock-open"></i> 提取LSB隐写</button>
+                    <button class="btn btn-outline btn-small" id="btn-detect-qr" style="width:100%;"><i class="fas fa-qrcode"></i> 识别二维码</button>
+                    <button class="btn btn-outline btn-small" id="btn-detect-all" style="width:100%;"><i class="fas fa-magic"></i> 自动检测全部</button>
                 </div>
                 <div id="detect-result" style="display:none;"><h4 style="font-size:0.83rem;margin-bottom:7px;">提取结果：</h4><pre id="detect-text" style="white-space:pre-wrap;font-size:0.78rem;color:#e9d5ff;"></pre></div>
             </div>
         </aside>
         <main class="main-content">
-            <div class="upload-zone" id="dropzone"><i class="fas fa-cloud-upload-alt"></i><p>点击或拖拽图片到此处</p><p style="font-size:0.73rem;opacity:0.6;">支持 JPG/PNG/WEBP/GIF/BMP · 可批量上传</p><input type="file" id="file-input" accept="image/*" multiple></div>
+            <div class="upload-zone" id="dropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>点击或拖拽图片到此处</p>
+                <p style="font-size:0.73rem;opacity:0.6;">支持 JPG/PNG/WEBP/GIF/BMP · 可批量上传</p>
+                <input type="file" id="file-input" accept="image/*" multiple>
+            </div>
             <div class="result-panel">
                 <div class="result-header">
                     <div><h3 style="font-size:0.98rem;font-weight:600;">处理列表 <span id="file-count" style="font-size:0.73rem;background:var(--bg-input);padding:3px 10px;border-radius:12px;margin-left:5px;">0</span> <span id="selected-indicator" style="font-size:0.7rem;color:var(--accent-cyan);display:none;">(已选中单张)</span></h3></div>
                     <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
-                        <button class="btn btn-outline btn-small" onclick="undoLast()"><i class="fas fa-undo"></i> 撤销</button>
-                        <button class="btn btn-outline btn-small" onclick="clearAll()"><i class="fas fa-trash"></i> 清空</button>
+                        <button class="btn btn-outline btn-small" id="btn-undo"><i class="fas fa-undo"></i> 撤销</button>
+                        <button class="btn btn-outline btn-small" id="btn-clear"><i class="fas fa-trash"></i> 清空</button>
                         <select id="download-format" style="padding:6px 8px;border-radius:12px;background:var(--bg-input);color:#fff;border:1px solid var(--border-subtle);font-size:0.7rem;cursor:pointer;font-family:inherit;">
                             <option value="png">PNG (无损)</option>
                             <option value="jpeg">JPEG (高质量)</option>
@@ -1090,8 +1126,8 @@
                             <option value="0.6">质量: 60%</option>
                             <option value="0.5">质量: 50%</option>
                         </select>
-                        <button class="btn btn-teal btn-small" onclick="compressLossless()"><i class="fas fa-compress"></i> 无损压缩</button>
-                        <button class="btn btn-success btn-small" id="download-all-btn" style="display:none;" onclick="downloadAllZip()"><i class="fas fa-file-archive"></i> ZIP下载</button>
+                        <button class="btn btn-teal btn-small" id="btn-compress-lossless"><i class="fas fa-compress"></i> 无损压缩</button>
+                        <button class="btn btn-success btn-small" id="download-all-btn" style="display:none;"><i class="fas fa-file-archive"></i> ZIP下载</button>
                     </div>
                 </div>
                 <div class="progress-container" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
@@ -1106,28 +1142,16 @@
     <div class="preview-modal" id="preview-modal">
         <img id="preview-img" alt="预览">
         <div class="preview-actions" id="preview-actions">
-            <button class="btn btn-primary" onclick="previewEncrypt()"><i class="fas fa-lock"></i> 混淆此图</button>
-            <button class="btn btn-outline" onclick="previewDecrypt()"><i class="fas fa-unlock"></i> 解混淆此图</button>
-            <button class="btn btn-success" onclick="previewDownload()"><i class="fas fa-download"></i> 下载此图</button>
-            <button class="btn btn-outline" onclick="closePreview()"><i class="fas fa-times"></i> 关闭</button>
+            <button class="btn btn-primary" id="btn-preview-encrypt"><i class="fas fa-lock"></i> 混淆此图</button>
+            <button class="btn btn-outline" id="btn-preview-decrypt"><i class="fas fa-unlock"></i> 解混淆此图</button>
+            <button class="btn btn-success" id="btn-preview-download"><i class="fas fa-download"></i> 下载此图</button>
+            <button class="btn btn-outline" id="btn-preview-close"><i class="fas fa-times"></i> 关闭</button>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 粒子背景初始化
-            const pc = document.getElementById('particlesContainer');
-            const colors = ['rgba(139,92,246,0.5)', 'rgba(167,139,250,0.4)', 'rgba(196,181,253,0.35)',
-                'rgba(236,72,153,0.35)', 'rgba(6,182,212,0.3)', 'rgba(245,158,11,0.28)', 'rgba(16,185,129,0.25)'
-            ];
-            for (let i = 0; i < 24; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const s = Math.random() * 5 + 2;
-                p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*95}%;top:${Math.random()*100+100}%;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 ${s*2+5}px ${p.style.backgroundColor};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*14}s;${Math.random()>0.5?'animation-name:floatUpAlt;':''}`;
-                pc.appendChild(p);
-            }
 
-            // 全局状态管理
+    <script>
+        (function() {
+            // ==================== 全局状态管理 ====================
             const state = {
                 files: [],
                 processedBlobs: [],
@@ -1147,118 +1171,50 @@
                 img2qrDataUrl: null,
                 originalFileSizes: [],
                 selectedImageIndex: -1,
-                objectUrls: [] // 管理objectURL，防止内存泄漏
+                objectUrls: [],
+                currentPreviewUrl: null,
+                currentPreviewIndex: -1
             };
 
-            // 工具函数
+            const MAX_FILE_SIZE = 50 * 1024 * 1024;
             const $ = id => document.getElementById(id);
-            Math.clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
 
-            // Toast提示
+            // 安全释放对象URL
+            function revokeAllUrls() {
+                state.objectUrls.forEach(url => {
+                    try { URL.revokeObjectURL(url); } catch (e) { /* ignore */ }
+                });
+                state.objectUrls = [];
+            }
+
+            // 安全创建对象URL并追踪
+            function createTrackedUrl(blob) {
+                const url = URL.createObjectURL(blob);
+                state.objectUrls.push(url);
+                return url;
+            }
+
+            // Toast通知
             function showToast(msg, type = 'info') {
                 const container = $('toast-area');
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
-                const icons = { 
-                    success: 'fa-check-circle', 
-                    error: 'fa-times-circle', 
-                    warning: 'fa-exclamation-triangle',
-                    info: 'fa-info-circle' 
-                };
-                const cols = { 
-                    success: '#10b981', 
-                    error: '#ef4444', 
-                    warning: '#f59e0b', 
-                    info: '#8b5cf6' 
-                };
+                const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle' };
+                const cols = { success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#8b5cf6' };
                 toast.style.borderLeftColor = cols[type];
-                toast.innerHTML = `<i class="fas ${icons[type]}" style="color:${cols[type]}"></i><span>${msg}</span>`;
+                toast.innerHTML =
+                    `<i class="fas ${icons[type]}" style="color:${cols[type]}"></i><span>${msg}</span>`;
                 container.appendChild(toast);
-                setTimeout(() => { 
+                setTimeout(() => {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateY(-16px)';
-                    setTimeout(() => toast.remove(), 300); 
-                }, 4200);
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3800);
             }
 
-            // 释放旧的objectURL
-            function revokeOldUrls() {
-                state.objectUrls.forEach(url => URL.revokeObjectURL(url));
-                state.objectUrls = [];
-            }
-
-            // Tab切换逻辑
-            function switchTab(tab) {
-                // 重置选中状态
-                state.mode = tab;
-                state.selectedImageIndex = -1;
-                updateSelectedIndicator();
-                updateObfuscateButtonLabels();
-
-                // 更新Tab激活状态
-                document.querySelectorAll('#nav-tabs .nav-tab').forEach(el => {
-                    el.classList.toggle('active', el.dataset.tab === tab);
-                });
-
-                // 隐藏所有Tab内容
-                document.querySelectorAll('#sidebar .tab-content').forEach(el => {
-                    el.classList.add('hidden');
-                });
-
-                // 显示当前Tab内容
-                const confEl = $(`conf-${tab}`);
-                if (confEl) confEl.classList.remove('hidden');
-
-                // 检测模式特殊处理
-                if (tab === 'detect') {
-                    $('preview-grid').classList.add('hidden');
-                    $('detect-view').classList.remove('hidden');
-                    $('detect-batch-grid').classList.toggle('hidden', state.detectBatch.length === 0);
-                    $('file-input').removeAttribute('multiple');
-                    $('download-all-btn').style.display = 'none';
-                    $('file-count').innerText = state.detectImg ? 1 : state.detectBatch.length;
-                } else {
-                    $('preview-grid').classList.remove('hidden');
-                    $('detect-view').classList.add('hidden');
-                    $('file-input').setAttribute('multiple', 'multiple');
-                    // 更新下载按钮显示
-                    if (state.processedBlobs.filter(Boolean).length > 0 && state.files.length > 0) {
-                        $('download-all-btn').style.display = 'inline-flex';
-                    } else {
-                        $('download-all-btn').style.display = 'none';
-                    }
-                    $('file-count').innerText = state.files.length;
-                }
-
-                // 图转码特殊处理
-                if (tab === 'img2qr' && state.files.length > 0 && state.processedBlobs[0]) {
-                    updateImg2qrPreview();
-                }
-            }
-
-            // Tab点击事件绑定
-            document.querySelectorAll('#nav-tabs .nav-tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    switchTab(tab.dataset.tab);
-                });
-            });
-
-            // 混淆按钮文本更新
-            function updateObfuscateButtonLabels() {
-                const encryptSpan = $('obfuscate-btn-text');
-                const decryptSpan = $('deobfuscate-btn-text');
-                if (state.selectedImageIndex >= 0 && state.files.length > 0) {
-                    if (encryptSpan) encryptSpan.textContent = '混淆单张';
-                    if (decryptSpan) decryptSpan.textContent = '解混淆单张';
-                } else {
-                    if (encryptSpan) encryptSpan.textContent = '批量混淆';
-                    if (decryptSpan) decryptSpan.textContent = '批量解混淆';
-                }
-            }
-
-            // 选中状态指示器更新
+            // 更新选中指示器
             function updateSelectedIndicator() {
                 const ind = $('selected-indicator');
                 if (state.selectedImageIndex >= 0 && state.files.length > 0 && state.mode !== 'detect') {
@@ -1268,377 +1224,409 @@
                 }
             }
 
-            // 水印模式切换
-            function toggleWatermarkMode(mode) {
-                state.watermarkType = mode;
-                document.querySelectorAll('#conf-text .mode-option').forEach((el, i) => {
-                    el.classList.toggle('active', ['visible', 'blind', 'lsb'][i] === mode);
-                });
-                ['visible', 'blind', 'lsb'].forEach(m => {
-                    $(`${m}-options`).classList.toggle('hidden', mode !== m);
-                });
+            // 更新混淆按钮标签
+            function updateObfuscateButtonLabels() {
+                const encSpan = $('obfuscate-btn-text');
+                const decSpan = $('deobfuscate-btn-text');
+                const single = state.selectedImageIndex >= 0 && state.files.length > 0;
+                if (encSpan) encSpan.textContent = single ? '混淆单张' : '批量混淆';
+                if (decSpan) decSpan.textContent = single ? '解混淆单张' : '批量解混淆';
             }
 
-            // 水印模式点击事件绑定
-            document.querySelectorAll('#conf-text .mode-option').forEach((opt, i) => {
-                opt.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleWatermarkMode(['visible', 'blind', 'lsb'][i]);
-                });
-            });
-
-            // 滑块数值初始化与事件绑定
-            const sliderIds = [
-                'text-opacity', 'text-size', 'text-rotate', 'text-spacing-x', 
-                'qr-scale', 'qr-opacity', 'qr-margin', 'image-scale', 
-                'image-opacity', 'image-rotate', 'dct-strength', 'lsb-depth',
-                'detect-threshold', 'img2qr-size', 'img2qr-quality', 
-                'adj-brightness', 'adj-contrast', 'adj-saturation',
-                'adj-hue', 'adj-sharpen', 'adj-blur'
-            ];
-            
-            function initSliderValue(slider) {
-                const id = slider.id;
-                let v = slider.value;
-                let suffix = '';
-                let displayVal = v;
-                
-                if (id.includes('rotate') || id === 'adj-hue') suffix = '°';
-                else if (id.includes('opacity') || id.includes('scale') || id.includes('margin') || id.includes('spacing') || id === 'img2qr-quality') suffix = '%';
-                else if (id.includes('size')) suffix = 'px';
-                else if (id === 'dct-strength') displayVal = (v / 1000).toFixed(3);
-                else if (id === 'adj-contrast' || id === 'adj-saturation') displayVal = (v / 100).toFixed(1);
-                
-                $(`${id}-val`).innerText = displayVal + suffix;
-            }
-
-            sliderIds.forEach(id => {
-                const el = $(id);
-                if (!el) return;
-                // 初始化数值显示
-                initSliderValue(el);
-                // 绑定事件
-                el.addEventListener('input', (e) => {
-                    e.preventDefault();
-                    initSliderValue(el);
-                });
-            });
-
-            // 上传文件处理核心逻辑
-            const dropzone = $('dropzone');
-            const fileInput = $('file-input');
-
-            // 点击上传
-            dropzone.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                fileInput.click();
-            });
-
-            // 拖拽事件
-            dropzone.addEventListener('dragover', e => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.add('dragover');
-            });
-            dropzone.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.remove('dragover');
-            });
-            dropzone.addEventListener('drop', e => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.remove('dragover');
-                handleFiles(e.dataTransfer.files);
-            });
-
-            // 文件选择事件
-            fileInput.addEventListener('change', e => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleFiles(e.target.files);
-                e.target.value = ''; // 清空后可重复选择同一文件
-            });
-
-            // 文件处理核心函数
-            function handleFiles(fileList) {
-                const newFiles = Array.from(fileList).filter(f => f.type.startsWith('image/'));
-                if (!newFiles.length) {
-                    showToast('请选择有效的图片文件', 'warning');
-                    return;
-                }
-
-                // 检测模式处理
-                if (state.mode === 'detect') {
-                    if (newFiles.length > 1) {
-                        // 批量检测
-                        state.detectBatch = [...state.detectBatch, ...newFiles];
-                        updateDetectBatchGrid();
-                        $('file-count').innerText = state.detectBatch.length;
-                        $('detect-batch-grid').classList.remove('hidden');
-                        showToast(`已添加 ${newFiles.length} 张检测图片`, 'success');
-                    } else {
-                        // 单张检测
-                        const file = newFiles[0];
-                        const url = URL.createObjectURL(file);
-                        state.objectUrls.push(url);
-                        const img = new Image();
-                        img.onload = () => {
-                            state.detectImg = img;
-                            renderDetectCanvas(img);
-                            showToast('图片加载完成，请选择检测工具', 'success');
-                            $('file-count').innerText = 1;
-                        };
-                        img.onerror = () => {
-                            showToast('图片加载失败', 'error');
-                        };
-                        img.src = url;
-                    }
-                    return;
-                }
-
-                // 普通模式处理
-                // 保存原始图片
-                if (!state.originalBlobUrl && newFiles.length === 1 && state.files.length === 0) {
-                    const originalUrl = URL.createObjectURL(newFiles[0]);
-                    state.objectUrls.push(originalUrl);
-                    state.originalBlobUrl = originalUrl;
-                    state.originalFileName = newFiles[0].name;
-                }
-
-                // 更新文件列表
-                newFiles.forEach(f => state.originalFileSizes.push(f.size));
-                state.files = [...state.files, ...newFiles];
-                state.processedBlobs = [...state.processedBlobs, ...new Array(newFiles.length).fill(null)];
-                
-                // 重置选中状态
+            // ==================== Tab切换 ====================
+            function switchTab(tab) {
+                state.mode = tab;
                 state.selectedImageIndex = -1;
                 updateSelectedIndicator();
                 updateObfuscateButtonLabels();
-                
-                // 更新预览网格
-                updatePreviewGrid();
-                showToast(`已添加 ${newFiles.length} 张图片`, 'success');
 
-                // 图转码自动更新
-                if (state.mode === 'img2qr' && state.files.length > 0) {
+                document.querySelectorAll('#nav-tabs .nav-tab').forEach(el => {
+                    el.classList.toggle('active', el.dataset.tab === tab);
+                });
+                document.querySelectorAll('#sidebar .tab-content').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                const confEl = $(`conf-${tab}`);
+                if (confEl) confEl.classList.remove('hidden');
+
+                const fileInput = $('file-input');
+                if (tab === 'detect') {
+                    fileInput.removeAttribute('multiple');
+                } else {
+                    fileInput.setAttribute('multiple', 'multiple');
+                }
+                fileInput.value = '';
+
+                if (tab === 'detect') {
+                    $('preview-grid').classList.add('hidden');
+                    $('detect-view').classList.remove('hidden');
+                    $('detect-batch-grid').classList.toggle('hidden', state.detectBatch.length === 0);
+                    $('download-all-btn').style.display = 'none';
+                    $('file-count').innerText = state.detectImg ? 1 : state.detectBatch.length;
+                } else {
+                    $('preview-grid').classList.remove('hidden');
+                    $('detect-view').classList.add('hidden');
+                    const hasProcessed = state.processedBlobs.filter(Boolean).length > 0 && state.files.length >
+                        0;
+                    $('download-all-btn').style.display = hasProcessed ? 'inline-flex' : 'none';
+                    $('file-count').innerText = state.files.length;
+                }
+
+                if (tab === 'img2qr' && state.files.length > 0) {
                     updateImg2qrPreview();
                 }
             }
 
-            // 预览网格更新
+            // 水印模式切换
+            function toggleWatermarkMode(mode) {
+                state.watermarkType = mode;
+                document.querySelectorAll('#watermark-mode-switch .mode-option').forEach(el => {
+                    el.classList.toggle('active', el.dataset.mode === mode);
+                });
+                ['visible', 'blind', 'lsb'].forEach(m => {
+                    const el = $(`${m}-options`);
+                    if (el) el.classList.toggle('hidden', mode !== m);
+                });
+            }
+
+            // ==================== 文件处理 ====================
+            function isValidImageFile(file) {
+                if (!file) return false;
+                const isImage = file.type.startsWith('image/');
+                const extMatch = /\.(jpg|jpeg|png|webp|gif|bmp|tiff|svg)$/i.test(file.name);
+                if (!isImage && !extMatch) return false;
+                if (file.size > MAX_FILE_SIZE) return false;
+                return true;
+            }
+
+            function handleFiles(fileList) {
+                if (!fileList || fileList.length === 0) {
+                    showToast('未选择有效文件', 'warning');
+                    return;
+                }
+
+                const validFiles = Array.from(fileList).filter(f => {
+                    if (!isValidImageFile(f)) {
+                        showToast(`文件 ${f.name} 无效或超过50MB，已跳过`, 'warning');
+                        return false;
+                    }
+                    return true;
+                });
+
+                if (!validFiles.length) {
+                    showToast('没有可处理的有效图片文件', 'error');
+                    return;
+                }
+
+                if (state.mode === 'detect') {
+                    handleDetectFiles(validFiles);
+                    return;
+                }
+
+                handleNormalFiles(validFiles);
+            }
+
+            function handleDetectFiles(validFiles) {
+                if (validFiles.length > 1) {
+                    state.detectBatch = [...state.detectBatch, ...validFiles];
+                    updateDetectBatchGrid();
+                    $('file-count').innerText = state.detectBatch.length;
+                    $('detect-batch-grid').classList.remove('hidden');
+                    showToast(`已添加 ${validFiles.length} 张检测图片`, 'success');
+                } else {
+                    const file = validFiles[0];
+                    const url = createTrackedUrl(file);
+                    const img = new Image();
+                    const loadTimeout = setTimeout(() => {
+                        img.src = '';
+                        showToast(`图片 ${file.name} 加载超时`, 'error');
+                    }, 15000);
+                    img.onload = () => {
+                        clearTimeout(loadTimeout);
+                        state.detectImg = img;
+                        state.detectBatch = [];
+                        $('detect-batch-grid').classList.add('hidden');
+                        renderDetectCanvas(img);
+                        showToast('图片加载完成，请选择检测工具', 'success');
+                        $('file-count').innerText = 1;
+                    };
+                    img.onerror = () => {
+                        clearTimeout(loadTimeout);
+                        showToast(`图片 ${file.name} 加载失败`, 'error');
+                    };
+                    img.src = url;
+                }
+            }
+
+            function handleNormalFiles(validFiles) {
+                if (!state.originalBlobUrl && validFiles.length === 1 && state.files.length === 0) {
+                    state.originalBlobUrl = createTrackedUrl(validFiles[0]);
+                    state.originalFileName = validFiles[0].name;
+                }
+                validFiles.forEach(f => state.originalFileSizes.push(f.size));
+                state.files = [...state.files, ...validFiles];
+                state.processedBlobs = [...state.processedBlobs, ...new Array(validFiles.length).fill(null)];
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                updatePreviewGrid();
+                showToast(`已添加 ${validFiles.length} 张图片`, 'success');
+                if (state.mode === 'img2qr') updateImg2qrPreview();
+            }
+
+            // ==================== 预览网格 ====================
             function updatePreviewGrid() {
                 const grid = $('preview-grid');
                 $('file-count').innerText = state.files.length;
+                revokeAllUrls();
 
-                // 空状态
                 if (!state.files.length) {
-                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">暂无图片，请先上传</div>';
+                    grid.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">暂无图片，请先上传</div>';
                     $('download-all-btn').style.display = 'none';
                     return;
                 }
 
-                // 释放旧URL
-                revokeOldUrls();
                 grid.innerHTML = '';
-
-                // 渲染图片列表
                 state.files.forEach((file, i) => {
                     const blob = state.processedBlobs[i] || file;
-                    const url = URL.createObjectURL(blob);
-                    state.objectUrls.push(url);
+                    const url = createTrackedUrl(blob);
                     const status = state.processedBlobs[i] ? 'success' : 'pending';
                     const kb = (blob.size / 1024).toFixed(1);
-                    
+
                     const div = document.createElement('div');
                     div.className = 'grid-item';
                     div.innerHTML = `
-                        <img src="${url}" onclick="openPreview(${i}, '${url}')" alt="${file.name}">
+                        <img src="${url}" data-index="${i}" alt="${file.name}" title="点击预览" style="cursor:zoom-in;">
                         <div class="grid-info">
                             <span style="max-width:80px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" title="${file.name}">${file.name}</span>
                             <span class="status-badge status-${status}">${status==='success'?kb+'KB':'待处理'}</span>
-                            <button class="btn-download" onclick="event.stopPropagation(); downloadSingle(${i})" title="下载此图">
-                                <i class="fas fa-download"></i>
-                            </button>
+                            <button class="btn-download" data-index="${i}" title="下载此图"><i class="fas fa-download"></i></button>
                         </div>
                     `;
                     grid.appendChild(div);
                 });
 
-                // 更新批量下载按钮
-                if (state.processedBlobs.filter(Boolean).length === state.files.length && state.files.length > 0) {
-                    $('download-all-btn').style.display = 'inline-flex';
-                } else {
-                    $('download-all-btn').style.display = 'none';
-                }
+                const hasProcessed = state.processedBlobs.filter(Boolean).length === state.files.length && state
+                    .files.length > 0;
+                $('download-all-btn').style.display = hasProcessed ? 'inline-flex' : 'none';
+
+                // 事件委托：点击图片预览
+                grid.querySelectorAll('img[data-index]').forEach(img => {
+                    img.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(img.dataset.index);
+                        openPreview(idx);
+                    });
+                });
+                // 事件委托：下载按钮
+                grid.querySelectorAll('.btn-download[data-index]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.dataset.index);
+                        downloadSingle(idx);
+                    });
+                });
             }
 
-            // 检测批量网格更新
             function updateDetectBatchGrid() {
                 const grid = $('detect-batch-grid');
                 if (!state.detectBatch.length) {
                     grid.innerHTML = '';
+                    grid.classList.add('hidden');
                     return;
                 }
+                grid.classList.remove('hidden');
+                revokeAllUrls();
                 grid.innerHTML = '';
                 state.detectBatch.forEach((file, i) => {
-                    const url = URL.createObjectURL(file);
-                    state.objectUrls.push(url);
+                    const url = createTrackedUrl(file);
                     const div = document.createElement('div');
                     div.className = 'grid-item';
                     div.innerHTML = `
-                        <img src="${url}" onclick="loadDetectBatch(${i})" alt="${file.name}">
-                        <div class="grid-info">
-                            <span>${file.name}</span>
-                            <span class="status-badge status-pending">待检测</span>
-                        </div>
+                        <img src="${url}" data-detect-index="${i}" alt="${file.name}" title="点击加载检测" style="cursor:pointer;">
+                        <div class="grid-info"><span>${file.name}</span><span class="status-badge status-pending">待检测</span></div>
                     `;
                     grid.appendChild(div);
                 });
+                grid.querySelectorAll('img[data-detect-index]').forEach(img => {
+                    img.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        loadDetectBatch(parseInt(img.dataset.detectIndex));
+                    });
+                });
             }
 
-            // 加载批量检测图片
-            window.loadDetectBatch = function(i) {
+            function loadDetectBatch(i) {
                 const file = state.detectBatch[i];
-                const url = URL.createObjectURL(file);
-                state.objectUrls.push(url);
+                if (!file) return;
+                const url = createTrackedUrl(file);
                 const img = new Image();
+                const loadTimeout = setTimeout(() => {
+                    img.src = '';
+                    showToast('图片加载超时', 'error');
+                }, 15000);
                 img.onload = () => {
+                    clearTimeout(loadTimeout);
                     state.detectImg = img;
+                    state.detectBatch = [];
+                    $('detect-batch-grid').classList.add('hidden');
                     renderDetectCanvas(img);
                     applyFilter('original');
                     showToast(`已加载 ${file.name}`, 'success');
+                    $('file-count').innerText = 1;
                 };
-                img.onerror = () => showToast('图片加载失败', 'error');
+                img.onerror = () => {
+                    clearTimeout(loadTimeout);
+                    showToast('图片加载失败', 'error');
+                };
                 img.src = url;
-            };
+            }
 
-            // 打开大图预览
-            window.openPreview = function(index, url) {
-                // 检测模式仅查看
+            // ==================== 预览模态框 ====================
+            function openPreview(index) {
                 if (state.mode === 'detect') {
-                    $('preview-img').src = url;
+                    if (state.detectImg) {
+                        const cvs = $('detect-canvas');
+                        $('preview-img').src = cvs.toDataURL();
+                    }
                     $('preview-actions').classList.add('hidden');
                     $('preview-modal').classList.add('active');
                     return;
                 }
-                // 普通模式
+                if (index < 0 || index >= state.files.length) return;
                 state.selectedImageIndex = index;
+                state.currentPreviewIndex = index;
                 updateSelectedIndicator();
                 updateObfuscateButtonLabels();
+                const blob = state.processedBlobs[index] || state.files[index];
+                const url = createTrackedUrl(blob);
+                state.currentPreviewUrl = url;
                 $('preview-img').src = url;
                 $('preview-actions').classList.remove('hidden');
                 $('preview-modal').classList.add('active');
-            };
+            }
 
-            // 关闭预览
-            window.closePreview = function() {
+            function closePreview() {
                 $('preview-modal').classList.remove('active');
                 state.selectedImageIndex = -1;
+                state.currentPreviewIndex = -1;
+                state.currentPreviewUrl = null;
                 updateSelectedIndicator();
                 updateObfuscateButtonLabels();
-            };
+            }
 
-            // 清空所有
-            window.clearAll = function() {
-                // 释放所有URL
-                revokeOldUrls();
-                // 重置状态
-                state.files = [];
-                state.processedBlobs = [];
-                state.processedHistory = [];
-                state.detectImg = null;
-                state.detectBatch = [];
-                state.originalBlobUrl = null;
-                state.currentImageStatus = 'none';
-                state.originalFileSizes = [];
-                state.img2qrResultBlob = null;
-                state.img2qrDataUrl = null;
-                state.selectedImageIndex = -1;
-                // 更新UI
-                updateSelectedIndicator();
-                updateObfuscateButtonLabels();
-                updatePreviewGrid();
-                updateDetectBatchGrid();
-                $('download-all-btn').style.display = 'none';
-                $('file-count').innerText = '0';
-                $('detect-result').style.display = 'none';
-                // 清空canvas
-                const cvs = $('detect-canvas');
-                if (cvs) {
-                    const ctx = cvs.getContext('2d');
-                    ctx.clearRect(0, 0, cvs.width, cvs.height);
-                }
-                // 清空图转码结果
-                const img2qrRes = $('img2qr-result');
-                if (img2qrRes) {
-                    img2qrRes.classList.add('hidden');
-                    img2qrRes.innerHTML = '';
-                }
-                const img2qrInfo = $('img2qr-size-info');
-                if (img2qrInfo) img2qrInfo.classList.add('hidden');
-                
-                showToast('已清空全部', 'info');
-            };
+            function previewEncrypt() {
+                if (state.currentPreviewIndex < 0 || state.currentPreviewIndex >= state.files.length) return;
+                if (state.isProcessing) { showToast('正在处理中，请稍候', 'warning'); return; }
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                const sourceBlob = state.processedBlobs[state.currentPreviewIndex] || state.files[state
+                    .currentPreviewIndex];
+                processSingleImageBlob(sourceBlob, 'encrypt').then(blob => {
+                    state.processedBlobs[state.currentPreviewIndex] = blob;
+                    state.selectedImageIndex = state.currentPreviewIndex;
+                    updatePreviewGrid();
+                    updateSelectedIndicator();
+                    updateObfuscateButtonLabels();
+                    const url = createTrackedUrl(blob);
+                    state.currentPreviewUrl = url;
+                    $('preview-img').src = url;
+                    state.isProcessing = false;
+                    showToast('混淆完成', 'success');
+                }).catch(() => {
+                    state.isProcessing = false;
+                    showToast('处理失败', 'error');
+                });
+            }
 
-            // 撤销操作
-            window.undoLast = function() {
-                if (!state.processedHistory.length) {
-                    showToast('无操作可撤销', 'warning');
-                    return;
-                }
-                state.processedBlobs = state.processedHistory.pop();
-                updatePreviewGrid();
-                showToast('已撤销', 'success');
-            };
+            function previewDecrypt() {
+                if (state.currentPreviewIndex < 0 || state.currentPreviewIndex >= state.files.length) return;
+                if (state.isProcessing) { showToast('正在处理中，请稍候', 'warning'); return; }
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                const sourceBlob = state.processedBlobs[state.currentPreviewIndex] || state.files[state
+                    .currentPreviewIndex];
+                processSingleImageBlob(sourceBlob, 'decrypt').then(blob => {
+                    state.processedBlobs[state.currentPreviewIndex] = blob;
+                    state.selectedImageIndex = state.currentPreviewIndex;
+                    updatePreviewGrid();
+                    updateSelectedIndicator();
+                    updateObfuscateButtonLabels();
+                    const url = createTrackedUrl(blob);
+                    state.currentPreviewUrl = url;
+                    $('preview-img').src = url;
+                    state.isProcessing = false;
+                    showToast('解混淆完成', 'success');
+                }).catch(() => {
+                    state.isProcessing = false;
+                    showToast('处理失败', 'error');
+                });
+            }
 
-            // Gilbert曲线混淆核心算法
+            function previewDownload() {
+                if (state.currentPreviewIndex < 0 || state.currentPreviewIndex >= state.files.length) return;
+                downloadSingle(state.currentPreviewIndex);
+            }
+
+            // ==================== Gilbert曲线混淆 ====================
             function gilbert2d(width, height) {
                 const coords = [];
                 if (width >= height) generate2d(0, 0, width, 0, 0, height, coords);
                 else generate2d(0, 0, 0, height, width, 0, coords);
                 return coords;
             }
+
             function generate2d(x, y, ax, ay, bx, by, coords) {
-                const w = Math.abs(ax + ay), h = Math.abs(bx + by);
-                const dax = Math.sign(ax), day = Math.sign(ay), dbx = Math.sign(bx), dby = Math.sign(by);
+                const w = Math.abs(ax + ay),
+                    h = Math.abs(bx + by);
+                const dax = Math.sign(ax),
+                    day = Math.sign(ay),
+                    dbx = Math.sign(bx),
+                    dby = Math.sign(by);
                 if (h === 1) {
-                    for (let i = 0; i < w; i++) {
-                        coords.push([x, y]);
+                    for (let i = 0; i < w; i++) { coords.push([x, y]);
                         x += dax;
-                        y += day;
-                    }
+                        y += day; }
                     return;
                 }
                 if (w === 1) {
-                    for (let i = 0; i < h; i++) {
-                        coords.push([x, y]);
+                    for (let i = 0; i < h; i++) { coords.push([x, y]);
                         x += dbx;
-                        y += dby;
-                    }
+                        y += dby; }
                     return;
                 }
-                let ax2 = Math.floor(ax / 2), ay2 = Math.floor(ay / 2), bx2 = Math.floor(bx / 2), by2 = Math.floor(by / 2);
-                const w2 = Math.abs(ax2 + ay2), h2 = Math.abs(bx2 + by2);
+                let ax2 = Math.floor(ax / 2),
+                    ay2 = Math.floor(ay / 2),
+                    bx2 = Math.floor(bx / 2),
+                    by2 = Math.floor(by / 2);
+                const w2 = Math.abs(ax2 + ay2),
+                    h2 = Math.abs(bx2 + by2);
                 if (2 * w > 3 * h) {
-                    if ((w2 % 2) && w > 2) { ax2 += dax; ay2 += day; }
+                    if ((w2 % 2) && w > 2) { ax2 += dax;
+                        ay2 += day; }
                     generate2d(x, y, ax2, ay2, bx, by, coords);
                     generate2d(x + ax2, y + ay2, ax - ax2, ay - ay2, bx, by, coords);
                 } else {
-                    if ((h2 % 2) && h > 2) { bx2 += dbx; by2 += dby; }
+                    if ((h2 % 2) && h > 2) { bx2 += dbx;
+                        by2 += dby; }
                     generate2d(x, y, bx2, by2, ax2, ay2, coords);
                     generate2d(x + bx2, y + by2, ax, ay, bx - bx2, by - by2, coords);
-                    generate2d(x + (ax - dax) + (bx2 - dbx), y + (ay - day) + (by2 - dby), -bx2, -by2, -(ax - ax2), -(ay - ay2), coords);
+                    generate2d(x + (ax - dax) + (bx2 - dbx), y + (ay - day) + (by2 - dby), -bx2, -by2, -(ax - ax2), -(
+                        ay - ay2), coords);
                 }
             }
 
-            // 单张图片混淆处理（核心修复：使用当前处理后的blob作为源）
             function processSingleImageBlob(sourceBlob, mode) {
                 return new Promise((resolve, reject) => {
+                    const url = createTrackedUrl(sourceBlob);
                     const img = new Image();
+                    const loadTimeout = setTimeout(() => {
+                        img.src = '';
+                        reject(new Error('图片加载超时'));
+                    }, 15000);
                     img.onload = () => {
+                        clearTimeout(loadTimeout);
                         const cvs = document.createElement('canvas');
                         const w = cvs.width = img.naturalWidth || img.width;
                         const h = cvs.height = img.naturalHeight || img.height;
@@ -1649,7 +1637,6 @@
                         const curve = gilbert2d(w, h);
                         const total = w * h;
                         const offset = Math.round((Math.sqrt(5) - 1) / 2 * total);
-                        
                         for (let i = 0; i < total; i++) {
                             const oldPos = curve[i];
                             const newPos = curve[(i + offset) % total];
@@ -1664,95 +1651,14 @@
                         ctx.putImageData(imgdata2, 0, 0);
                         cvs.toBlob(blob => resolve(blob), 'image/png', 1);
                     };
-                    img.onerror = reject;
-                    const url = URL.createObjectURL(sourceBlob);
-                    state.objectUrls.push(url);
+                    img.onerror = () => { clearTimeout(loadTimeout);
+                        reject(new Error('图片加载失败')); };
                     img.src = url;
                 });
             }
 
-            // 批量/单张混淆处理（核心修复：正确获取源文件）
-            window.processObfuscate = async function(mode) {
-                if (!state.files.length) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
-                if (state.isProcessing) return;
-                state.isProcessing = true;
-                state.processedHistory.push([...state.processedBlobs]);
-
-                // 确定处理目标
-                const targetIndices = state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length 
-                    ? [state.selectedImageIndex] 
-                    : Array.from({ length: state.files.length }, (_, i) => i);
-
-                // 进度条显示
-                $('progress-wrap').style.display = 'block';
-                $('progress-bar').style.width = '0%';
-                const total = targetIndices.length;
-                let completed = 0;
-
-                // 循环处理
-                for (const i of targetIndices) {
-                    try {
-                        // 核心修复：使用已处理的blob，没有则用原始文件
-                        const sourceBlob = state.processedBlobs[i] || state.files[i];
-                        const resultBlob = await processSingleImageBlob(sourceBlob, mode);
-                        state.processedBlobs[i] = resultBlob;
-                    } catch (e) {
-                        showToast(`${state.files[i].name} 处理失败`, 'error');
-                    }
-                    completed++;
-                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
-                    updatePreviewGrid();
-                    await new Promise(r => setTimeout(r, 10));
-                }
-
-                // 处理完成
-                state.isProcessing = false;
-                showToast(mode === 'encrypt' ? '混淆完成' : '解混淆完成', 'success');
-                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 1500);
-                // 重置选中状态
-                state.selectedImageIndex = -1;
-                updateSelectedIndicator();
-                updateObfuscateButtonLabels();
-            };
-
-            // 还原原始图片
-            window.restoreOriginal = function() {
-                if (!state.originalBlobUrl) {
-                    showToast('没有可还原的原始图片', 'warning');
-                    return;
-                }
-                const img = new Image();
-                img.onload = () => {
-                    const cvs = document.createElement('canvas');
-                    cvs.width = img.naturalWidth;
-                    cvs.height = img.naturalHeight;
-                    const ctx = cvs.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    cvs.toBlob(blob => {
-                        if (blob && state.files.length > 0) {
-                            // 单张还原
-                            if (state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length) {
-                                state.processedBlobs[state.selectedImageIndex] = blob;
-                            } else {
-                                // 批量还原
-                                for (let i = 0; i < state.files.length; i++) {
-                                    state.processedBlobs[i] = blob;
-                                }
-                            }
-                            state.currentImageStatus = 'original';
-                            updatePreviewGrid();
-                            showToast('已还原原始图片', 'success');
-                        }
-                    }, 'image/png', 1);
-                };
-                img.src = state.originalBlobUrl;
-            };
-
-            // DCT变换核心算法
-            const dct1 = (v, n) => {
+            // ==================== DCT变换 ====================
+            function dct1(v, n) {
                 let r = new Float32Array(n);
                 for (let k = 0; k < n; k++) {
                     let s = 0;
@@ -1762,8 +1668,9 @@
                     r[k] = s;
                 }
                 return r;
-            };
-            const idct1 = (v, n) => {
+            }
+
+            function idct1(v, n) {
                 let r = new Float32Array(n);
                 for (let i = 0; i < n; i++) {
                     let s = 0;
@@ -1774,9 +1681,12 @@
                     r[i] = s * Math.sqrt(2 / n);
                 }
                 return r;
-            };
-            const dct2 = (d, w, h) => {
-                let r = new Float32Array(w * h), row = new Float32Array(w), col = new Float32Array(h);
+            }
+
+            function dct2(d, w, h) {
+                let r = new Float32Array(w * h),
+                    row = new Float32Array(w),
+                    col = new Float32Array(h);
                 for (let i = 0; i < h; i++) {
                     for (let j = 0; j < w; j++) row[j] = d[i * w + j];
                     let dr = dct1(row, w);
@@ -1788,9 +1698,12 @@
                     for (let i = 0; i < h; i++) r[i * w + j] = dc[i];
                 }
                 return r;
-            };
-            const idct2 = (d, w, h) => {
-                let r = new Float32Array(w * h), row = new Float32Array(w), col = new Float32Array(h);
+            }
+
+            function idct2(d, w, h) {
+                let r = new Float32Array(w * h),
+                    row = new Float32Array(w),
+                    col = new Float32Array(h);
                 for (let i = 0; i < h; i++) {
                     for (let j = 0; j < w; j++) row[j] = d[i * w + j];
                     let dr = idct1(row, w);
@@ -1802,71 +1715,37 @@
                     for (let i = 0; i < h; i++) r[i * w + j] = dc[i];
                 }
                 return r;
-            };
+            }
 
-            // 哈希函数
             function simpleHash(str) {
                 let h = 0;
-                for (let i = 0; i < str.length; i++) {
-                    h = ((h << 5) - h) + str.charCodeAt(i);
-                    h |= 0;
-                }
+                for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i);
+                    h |= 0; }
                 return h;
             }
 
-            // 单张图片通用处理
-            function processOneImage(file, type, config) {
+            Math.clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
+
+            // ==================== 图像处理核心 ====================
+            function loadImageFromBlob(blob) {
                 return new Promise((resolve, reject) => {
+                    const url = createTrackedUrl(blob);
                     const img = new Image();
-                    img.onload = () => {
-                        const cvs = document.createElement('canvas');
-                        cvs.width = img.width;
-                        cvs.height = img.height;
-                        const ctx = cvs.getContext('2d', { willReadFrequently: true });
-                        ctx.drawImage(img, 0, 0);
-
-                        // 根据类型处理
-                        if (type === 'text') {
-                            if (config.mode === 'visible') drawVisibleWatermark(ctx, img.width, img.height, config);
-                            else if (config.mode === 'blind') applyBlindWatermark(ctx, img.width, img.height, config);
-                            else if (config.mode === 'lsb') applyLsbWatermark(ctx, img.width, img.height, config);
-                        } else if (type === 'image') {
-                            drawImageWatermark(ctx, img.width, img.height, config);
-                        } else if (type === 'qr') {
-                            drawQrWatermark(ctx, img.width, img.height, config);
-                            if (config.embedBlind) applyBlindWatermark(ctx, img.width, img.height, config.blindConfig);
-                        } else if (type === 'adjust') {
-                            applyAdjustments(ctx, img.width, img.height, config);
-                        }
-
-                        // 导出格式处理
-                        const fmt = $('download-format').value;
-                        const quality = parseFloat($('download-quality').value);
-                        let mimeType = 'image/png';
-                        let encQuality = undefined;
-                        if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
-                            mimeType = 'image/jpeg';
-                            encQuality = quality;
-                        } else if (fmt === 'webp') {
-                            mimeType = 'image/webp';
-                            encQuality = quality;
-                        }
-                        cvs.toBlob(blob => resolve(blob), mimeType, encQuality || 0.92);
-                    };
-                    img.onerror = reject;
-                    const url = URL.createObjectURL(file);
-                    state.objectUrls.push(url);
+                    const loadTimeout = setTimeout(() => { img.src = '';
+                        reject(new Error('图片加载超时')); }, 15000);
+                    img.onload = () => { clearTimeout(loadTimeout);
+                        resolve(img); };
+                    img.onerror = () => { clearTimeout(loadTimeout);
+                        reject(new Error('图片加载失败')); };
                     img.src = url;
                 });
             }
 
-            // 可见水印绘制
             function drawVisibleWatermark(ctx, w, h, cfg) {
                 const r = parseInt(cfg.color.slice(1, 3), 16),
                     g = parseInt(cfg.color.slice(3, 5), 16),
                     b = parseInt(cfg.color.slice(5, 7), 16);
-                let fs = '';
-                if (cfg.bold) fs += 'bold ';
+                let fs = cfg.bold ? 'bold ' : '';
                 ctx.font = `${fs}${cfg.size}px ${cfg.font}`;
                 ctx.textBaseline = 'middle';
                 ctx.textAlign = 'center';
@@ -1892,9 +1771,12 @@
                     }
                 }
                 ctx.restore();
+                if (cfg.shadow) { ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0; }
             }
 
-            // 盲水印嵌入
             function applyBlindWatermark(ctx, w, h, cfg) {
                 const idata = ctx.getImageData(0, 0, w, h);
                 const data = idata.data;
@@ -1915,12 +1797,12 @@
                 const tmpl = new Float32Array(w * h);
                 for (let i = 0; i < w * h; i++) tmpl[i] = tData[i * 4] / 255;
                 const chs = cfg.channel === 'all' ? [0, 1, 2] : { red: [0], green: [1], blue: [2] } [cfg.channel] || [2];
-                for (let rep = 0; rep < cfg.repeat; rep++) {
+                for (let rep = 0; rep < (cfg.repeat || 1); rep++) {
                     for (let c of chs) {
                         const ch = new Float32Array(w * h);
                         for (let i = 0; i < w * h; i++) ch[i] = data[i * 4 + c];
                         const dct = dct2(ch, w, h);
-                        for (let i = 0; i < w * h; i++) dct[i] += cfg.strength * tmpl[i] * (255 / cfg.repeat);
+                        for (let i = 0; i < w * h; i++) dct[i] += cfg.strength * tmpl[i] * (255 / (cfg.repeat || 1));
                         const idct = idct2(dct, w, h);
                         for (let i = 0; i < w * h; i++) data[i * 4 + c] = Math.clamp(idct[i], 0, 255);
                     }
@@ -1928,9 +1810,9 @@
                 ctx.putImageData(idata, 0, 0);
             }
 
-            // LSB隐写
             function applyLsbWatermark(ctx, w, h, cfg) {
-                const bin = cfg.text.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+                const bin = cfg.text.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join('') +
+                    '00000000';
                 const idata = ctx.getImageData(0, 0, w, h);
                 const data = idata.data;
                 let bi = 0;
@@ -1948,16 +1830,15 @@
                 ctx.putImageData(idata, 0, 0);
             }
 
-            // 图片水印绘制
             function drawImageWatermark(ctx, w, h, cfg) {
                 const img = cfg.image;
-                let iw = img.width * cfg.scale, ih = img.height * cfg.scale;
+                let iw = img.width * cfg.scale,
+                    ih = img.height * cfg.scale;
                 if (cfg.proportional) {
                     const ratio = Math.min(w / iw, h / ih);
                     iw *= ratio;
                     ih *= ratio;
                 }
-                let x = 0, y = 0;
                 const pad = Math.min(w, h) * 0.05;
                 const posMap = {
                     br: [w - iw - pad, h - ih - pad],
@@ -1977,7 +1858,7 @@
                     }
                     return;
                 }
-                [x, y] = posMap[cfg.position] || posMap['br'];
+                const [x, y] = posMap[cfg.position] || posMap['br'];
                 ctx.save();
                 ctx.translate(x + iw / 2, y + ih / 2);
                 ctx.rotate(cfg.rotate * Math.PI / 180);
@@ -1986,7 +1867,6 @@
                 ctx.restore();
             }
 
-            // 二维码水印绘制
             function drawQrWatermark(ctx, w, h, cfg) {
                 const size = Math.min(w, h) * cfg.scale;
                 const pad = size * cfg.margin;
@@ -2004,101 +1884,79 @@
                 ctx.restore();
             }
 
-            // 图像调整
             function applyAdjustments(ctx, w, h, cfg) {
                 const idata = ctx.getImageData(0, 0, w, h);
                 const data = idata.data;
-                const brightness = cfg.brightness;
-                const contrast = cfg.contrast;
-                const saturation = cfg.saturation;
-                const hue = cfg.hue;
-                const sharpen = cfg.sharpen;
-                const blur = cfg.blur;
-                const grayscale = cfg.grayscale;
-                const invert = cfg.invert;
-
-                // 模糊处理
-                if (blur > 0) {
+                if (cfg.blur > 0) {
                     const tmpData = new Uint8ClampedArray(data);
-                    const kernelSize = Math.ceil(blur);
-                    const sigma = blur / 3;
+                    const kernelSize = Math.ceil(cfg.blur);
+                    const sigma = cfg.blur / 3;
                     const ks = kernelSize * 2 + 1;
                     const kernel = new Float32Array(ks);
                     let sum = 0;
-                    for (let i = -kernelSize; i <= kernelSize; i++) {
-                        kernel[i + kernelSize] = Math.exp(-(i * i) / (2 * sigma * sigma));
-                        sum += kernel[i + kernelSize];
-                    }
+                    for (let i = -kernelSize; i <= kernelSize; i++) { kernel[i + kernelSize] = Math.exp(-(i * i) / (2 *
+                            sigma * sigma));
+                        sum += kernel[i + kernelSize]; }
                     for (let i = 0; i < ks; i++) kernel[i] /= sum;
                     for (let y = kernelSize; y < h - kernelSize; y++) {
                         for (let x = kernelSize; x < w - kernelSize; x++) {
                             for (let c = 0; c < 3; c++) {
                                 let val = 0;
-                                for (let ky = -kernelSize; ky <= kernelSize; ky++) {
+                                for (let ky = -kernelSize; ky <= kernelSize; ky++)
                                     val += tmpData[((y + ky) * w + x) * 4 + c] * kernel[ky + kernelSize];
-                                }
                                 data[(y * w + x) * 4 + c] = Math.clamp(val, 0, 255);
                             }
                         }
                     }
                 }
-
-                // 像素级调整
                 for (let i = 0; i < data.length; i += 4) {
-                    let r = data[i], g = data[i + 1], b = data[i + 2];
-                    // 亮度
-                    r += brightness; g += brightness; b += brightness;
-                    // 对比度
-                    r = (r - 128) * contrast + 128;
-                    g = (g - 128) * contrast + 128;
-                    b = (b - 128) * contrast + 128;
-                    // 饱和度
-                    if (saturation !== 1.0) {
+                    let r = data[i],
+                        g = data[i + 1],
+                        b = data[i + 2];
+                    r += cfg.brightness;
+                    g += cfg.brightness;
+                    b += cfg.brightness;
+                    r = (r - 128) * cfg.contrast + 128;
+                    g = (g - 128) * cfg.contrast + 128;
+                    b = (b - 128) * cfg.contrast + 128;
+                    if (cfg.saturation !== 1.0) {
                         const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                        r = gray + saturation * (r - gray);
-                        g = gray + saturation * (g - gray);
-                        b = gray + saturation * (b - gray);
+                        r = gray + cfg.saturation * (r - gray);
+                        g = gray + cfg.saturation * (g - gray);
+                        b = gray + cfg.saturation * (b - gray);
                     }
-                    // 色相
-                    if (hue !== 0) {
-                        const cosH = Math.cos(hue * Math.PI / 180);
-                        const sinH = Math.sin(hue * Math.PI / 180);
-                        const r2 = r, g2 = g, b2 = b;
-                        r = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (r2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (0.701 * r2 - 0.587 * g2 - 0.114 * b2);
-                        g = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (g2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (-0.299 * r2 + 0.413 * g2 - 0.114 * b2);
-                        b = 0.299 * r2 + 0.587 * g2 + 0.114 * b2 + cosH * (b2 - (0.299 * r2 + 0.587 * g2 + 0.114 * b2)) + sinH * (-0.299 * r2 - 0.587 * g2 + 0.886 * b2);
+                    if (cfg.hue !== 0) {
+                        const cosH = Math.cos(cfg.hue * Math.PI / 180);
+                        const sinH = Math.sin(cfg.hue * Math.PI / 180);
+                        const r2 = r,
+                            g2 = g,
+                            b2 = b;
+                        const gray2 = 0.299 * r2 + 0.587 * g2 + 0.114 * b2;
+                        r = gray2 + cosH * (r2 - gray2) + sinH * (0.701 * r2 - 0.587 * g2 - 0.114 * b2);
+                        g = gray2 + cosH * (g2 - gray2) + sinH * (-0.299 * r2 + 0.413 * g2 - 0.114 * b2);
+                        b = gray2 + cosH * (b2 - gray2) + sinH * (-0.299 * r2 - 0.587 * g2 + 0.886 * b2);
                     }
-                    // 灰度
-                    if (grayscale) {
-                        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                        r = g = b = gray;
-                    }
-                    // 反相
-                    if (invert) {
-                        r = 255 - r;
+                    if (cfg.grayscale) { const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                        r = g = b = gray; }
+                    if (cfg.invert) { r = 255 - r;
                         g = 255 - g;
-                        b = 255 - b;
-                    }
-                    // 写入数据
+                        b = 255 - b; }
                     data[i] = Math.clamp(r, 0, 255);
                     data[i + 1] = Math.clamp(g, 0, 255);
                     data[i + 2] = Math.clamp(b, 0, 255);
                 }
-
-                // 锐化处理
-                if (sharpen > 0) {
+                if (cfg.sharpen > 0) {
                     const tmpData = new Uint8ClampedArray(data);
-                    const strength = sharpen / 100;
+                    const strength = cfg.sharpen / 100;
                     const kernel = [0, -strength, 0, -strength, 1 + 4 * strength, -strength, 0, -strength, 0];
                     for (let y = 1; y < h - 1; y++) {
                         for (let x = 1; x < w - 1; x++) {
                             for (let c = 0; c < 3; c++) {
                                 let val = 0;
-                                for (let ky = -1; ky <= 1; ky++) {
-                                    for (let kx = -1; kx <= 1; kx++) {
-                                        val += tmpData[((y + ky) * w + (x + kx)) * 4 + c] * kernel[(ky + 1) * 3 + (kx + 1)];
-                                    }
-                                }
+                                for (let ky = -1; ky <= 1; ky++)
+                                    for (let kx = -1; kx <= 1; kx++)
+                                        val += tmpData[((y + ky) * w + (x + kx)) * 4 + c] * kernel[(ky + 1) * 3 + (kx +
+                                            1)];
                                 data[(y * w + x) * 4 + c] = Math.clamp(val, 0, 255);
                             }
                         }
@@ -2107,103 +1965,12 @@
                 ctx.putImageData(idata, 0, 0);
             }
 
-            // 二维码生成
-            function generateQrImage(text, cfg) {
-                return new Promise(resolve => {
-                    const container = $('qrcode-ghost');
-                    container.innerHTML = '';
-                    new QRCode(container, {
-                        text,
-                        width: 1024,
-                        height: 1024,
-                        colorDark: cfg.foreground,
-                        colorLight: cfg.background,
-                        correctLevel: QRCode.CorrectLevel[cfg.level]
-                    });
-                    setTimeout(() => {
-                        const cvs = container.querySelector('canvas');
-                        if (cvs) {
-                            if (cfg.logo) {
-                                const ctx = cvs.getContext('2d');
-                                const ls = cvs.width * 0.2;
-                                const lx = (cvs.width - ls) / 2, ly = (cvs.height - ls) / 2;
-                                ctx.fillStyle = cfg.background;
-                                ctx.fillRect(lx - 5, ly - 5, ls + 10, ls + 10);
-                                ctx.drawImage(cfg.logo, lx, ly, ls, ls);
-                            }
-                            const img = new Image();
-                            img.onload = () => resolve(img);
-                            const url = cvs.toDataURL();
-                            state.objectUrls.push(url);
-                            img.src = url;
-                        }
-                    }, 150);
-                });
-            }
-
-            // 批量处理核心函数
-            window.processBatch = async function(type) {
-                if (!state.files.length) {
-                    showToast('队列为空，请先上传图片', 'error');
-                    return;
-                }
-                if (state.isProcessing) return;
-                state.isProcessing = true;
-                state.processedHistory.push([...state.processedBlobs]);
-                state.processedBlobs = new Array(state.files.length).fill(null);
-
-                // 进度条
-                $('progress-wrap').style.display = 'block';
-                $('progress-bar').style.width = '0%';
-
-                // 获取配置
-                const config = await getConfig(type);
-                if (!config) {
-                    state.isProcessing = false;
-                    return;
-                }
-
-                // 确定处理目标
-                const targetIndices = state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length 
-                    ? [state.selectedImageIndex] 
-                    : Array.from({ length: state.files.length }, (_, i) => i);
-                const total = targetIndices.length;
-                let completed = 0;
-
-                // 循环处理
-                for (const i of targetIndices) {
-                    try {
-                        const sourceBlob = state.processedBlobs[i] || state.files[i];
-                        const blob = await processOneImage(sourceBlob, type, config);
-                        state.processedBlobs[i] = blob;
-                    } catch (err) {
-                        showToast(`${state.files[i].name} 处理失败`, 'error');
-                    }
-                    completed++;
-                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
-                    if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
-                    await new Promise(r => setTimeout(r, 15));
-                }
-
-                // 处理完成
-                state.isProcessing = false;
-                showToast('处理完成！', 'success');
-                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
-                // 重置选中状态
-                state.selectedImageIndex = -1;
-                updateSelectedIndicator();
-                updateObfuscateButtonLabels();
-            };
-
-            // 获取配置函数
+            // ==================== 获取处理配置 ====================
             async function getConfig(type) {
                 const cfg = {};
                 if (type === 'text') {
                     cfg.text = $('text-content').value.trim();
-                    if (!cfg.text) {
-                        showToast('请输入水印内容', 'error');
-                        return null;
-                    }
+                    if (!cfg.text) { showToast('请输入水印内容', 'error'); return null; }
                     cfg.mode = state.watermarkType;
                     if (cfg.mode === 'visible') {
                         cfg.color = $('text-color').value;
@@ -2224,23 +1991,16 @@
                         cfg.key = $('lsb-key').value;
                     }
                 } else if (type === 'image') {
-                    if (!state.imageWatermark) {
-                        showToast('请上传水印图片', 'error');
-                        return null;
-                    }
+                    if (!state.imageWatermark) { showToast('请上传水印图片', 'error'); return null; }
                     cfg.image = state.imageWatermark;
                     cfg.position = $('image-position').value;
                     cfg.scale = parseInt($('image-scale').value) / 100;
                     cfg.opacity = parseInt($('image-opacity').value) / 100;
                     cfg.rotate = parseInt($('image-rotate').value);
                     cfg.proportional = true;
-                    cfg.blendMultiply = false;
                 } else if (type === 'qr') {
                     cfg.text = $('qr-content').value.trim();
-                    if (!cfg.text) {
-                        showToast('请输入二维码内容', 'error');
-                        return null;
-                    }
+                    if (!cfg.text) { showToast('请输入二维码内容', 'error'); return null; }
                     cfg.level = $('qr-level').value;
                     cfg.foreground = $('qr-foreground').value;
                     cfg.background = $('qr-background').value;
@@ -2251,14 +2011,9 @@
                     cfg.margin = parseInt($('qr-margin').value) / 100;
                     cfg.embedBlind = $('qr-embed-blind').checked;
                     if (cfg.embedBlind) {
-                        cfg.blindConfig = {
-                            text: cfg.text,
-                            strength: 0.02,
-                            channel: 'blue',
-                            repeat: 1
-                        };
+                        cfg.blindConfig = { text: cfg.text, strength: 0.02, channel: 'blue', repeat: 1 };
                     }
-                    cfg.qrImg = await generateQrImage(cfg.text, cfg);
+                    cfg.qrImg = await generateQrImage(cfg);
                 } else if (type === 'adjust') {
                     cfg.brightness = parseInt($('adj-brightness').value);
                     cfg.contrast = parseInt($('adj-contrast').value) / 100;
@@ -2272,7 +2027,150 @@
                 return cfg;
             }
 
-            // 下载工具函数
+            function generateQrImage(cfg) {
+                return new Promise(resolve => {
+                    const container = $('qrcode-ghost');
+                    container.innerHTML = '';
+                    const correctLevelMap = { L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode
+                            .CorrectLevel.Q, H: QRCode.CorrectLevel.H };
+                    new QRCode(container, {
+                        text: cfg.text,
+                        width: 1024,
+                        height: 1024,
+                        colorDark: cfg.foreground,
+                        colorLight: cfg.background,
+                        correctLevel: correctLevelMap[cfg.level] || QRCode.CorrectLevel.H
+                    });
+                    setTimeout(() => {
+                        const cvs = container.querySelector('canvas');
+                        if (cvs) {
+                            if (cfg.logo) {
+                                const ctx = cvs.getContext('2d');
+                                const ls = cvs.width * 0.2;
+                                const lx = (cvs.width - ls) / 2,
+                                    ly = (cvs.height - ls) / 2;
+                                ctx.fillStyle = cfg.background;
+                                ctx.fillRect(lx - 5, ly - 5, ls + 10, ls + 10);
+                                ctx.drawImage(cfg.logo, lx, ly, ls, ls);
+                            }
+                            const img = new Image();
+                            img.onload = () => resolve(img);
+                            img.src = cvs.toDataURL();
+                        } else {
+                            resolve(null);
+                        }
+                    }, 200);
+                });
+            }
+
+            // ==================== 单张图片处理 ====================
+            function processOneImage(file, type, config) {
+                return loadImageFromBlob(file).then(img => {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = img.width;
+                    cvs.height = img.height;
+                    const ctx = cvs.getContext('2d', { willReadFrequently: true });
+                    ctx.drawImage(img, 0, 0);
+                    if (type === 'text') {
+                        if (config.mode === 'visible') drawVisibleWatermark(ctx, img.width, img.height,
+                        config);
+                        else if (config.mode === 'blind') applyBlindWatermark(ctx, img.width, img.height,
+                        config);
+                        else if (config.mode === 'lsb') applyLsbWatermark(ctx, img.width, img.height, config);
+                    } else if (type === 'image') {
+                        drawImageWatermark(ctx, img.width, img.height, config);
+                    } else if (type === 'qr') {
+                        drawQrWatermark(ctx, img.width, img.height, config);
+                        if (config.embedBlind && config.blindConfig) applyBlindWatermark(ctx, img.width, img.height,
+                            config.blindConfig);
+                    } else if (type === 'adjust') {
+                        applyAdjustments(ctx, img.width, img.height, config);
+                    }
+                    const fmt = $('download-format').value;
+                    const quality = parseFloat($('download-quality').value);
+                    let mimeType = 'image/png';
+                    let encQuality = undefined;
+                    if (fmt === 'jpeg' || fmt === 'jpeg-compressed') { mimeType = 'image/jpeg';
+                        encQuality = quality; } else if (fmt === 'webp') { mimeType = 'image/webp';
+                        encQuality = quality; }
+                    return new Promise(resolve => {
+                        cvs.toBlob(blob => resolve(blob), mimeType, encQuality || 0.92);
+                    });
+                });
+            }
+
+            // ==================== 批量处理 ====================
+            async function processBatch(type) {
+                if (!state.files.length) { showToast('队列为空，请先上传图片', 'error'); return; }
+                if (state.isProcessing) { showToast('正在处理中，请稍候', 'warning'); return; }
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                state.processedBlobs = new Array(state.files.length).fill(null);
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+                const config = await getConfig(type);
+                if (!config) { state.isProcessing = false;
+                    $('progress-wrap').style.display = 'none'; return; }
+                const targetIndices = (state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length) ?
+                    [state.selectedImageIndex] :
+                    Array.from({ length: state.files.length }, (_, i) => i);
+                const total = targetIndices.length;
+                let completed = 0;
+                for (const i of targetIndices) {
+                    try {
+                        const sourceBlob = state.files[i];
+                        const blob = await processOneImage(sourceBlob, type, config);
+                        state.processedBlobs[i] = blob;
+                    } catch (err) {
+                        showToast(`${state.files[i].name} 处理失败`, 'error');
+                    }
+                    completed++;
+                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                    if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
+                    await new Promise(r => setTimeout(r, 15));
+                }
+                state.isProcessing = false;
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                showToast('处理完成！', 'success');
+                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
+            }
+
+            async function processObfuscate(mode) {
+                if (!state.files.length) { showToast('请先上传图片', 'error'); return; }
+                if (state.isProcessing) { showToast('正在处理中，请稍候', 'warning'); return; }
+                state.isProcessing = true;
+                state.processedHistory.push([...state.processedBlobs]);
+                const targetIndices = (state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files.length) ?
+                    [state.selectedImageIndex] :
+                    Array.from({ length: state.files.length }, (_, i) => i);
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+                const total = targetIndices.length;
+                let completed = 0;
+                for (const i of targetIndices) {
+                    try {
+                        const sourceBlob = state.processedBlobs[i] || state.files[i];
+                        const resultBlob = await processSingleImageBlob(sourceBlob, mode);
+                        state.processedBlobs[i] = resultBlob;
+                    } catch (e) {
+                        showToast(`${state.files[i].name} 处理失败`, 'error');
+                    }
+                    completed++;
+                    $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                    updatePreviewGrid();
+                    await new Promise(r => setTimeout(r, 10));
+                }
+                state.isProcessing = false;
+                state.selectedImageIndex = -1;
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                showToast(mode === 'encrypt' ? '混淆完成' : '解混淆完成', 'success');
+                setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 1500);
+            }
+
+            // ==================== 下载功能 ====================
             function downloadBlob(blob, filename) {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -2284,30 +2182,20 @@
                 setTimeout(() => URL.revokeObjectURL(url), 1000);
             }
 
-            // 单张下载
-            window.downloadSingle = function(index) {
+            function downloadSingle(index) {
                 const file = state.files[index];
                 const blob = state.processedBlobs[index] || file;
-                if (!blob) {
-                    showToast('文件不存在', 'error');
-                    return;
-                }
-                // 格式处理
+                if (!blob) { showToast('文件不存在', 'error'); return; }
                 const fmt = $('download-format').value;
                 const extMap = { png: 'png', jpeg: 'jpg', webp: 'webp', 'jpeg-compressed': 'jpg' };
                 const ext = extMap[fmt] || 'png';
                 const filename = (file.name || 'image').replace(/\.[^.]+$/, '') + '_processed.' + ext;
-
-                // 已处理直接下载
                 if (state.processedBlobs[index]) {
                     downloadBlob(blob, filename);
                     showToast('下载已开始', 'success');
                     return;
                 }
-
-                // 未处理按格式转换后下载
-                const img = new Image();
-                img.onload = () => {
+                loadImageFromBlob(blob).then(img => {
                     const cvs = document.createElement('canvas');
                     cvs.width = img.width;
                     cvs.height = img.height;
@@ -2316,109 +2204,142 @@
                     const quality = parseFloat($('download-quality').value);
                     let mimeType = 'image/png';
                     let encQuality = undefined;
-                    if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
-                        mimeType = 'image/jpeg';
-                        encQuality = quality;
-                    } else if (fmt === 'webp') {
-                        mimeType = 'image/webp';
-                        encQuality = quality;
-                    }
-                    cvs.toBlob(b => {
-                        downloadBlob(b, filename);
-                        showToast('下载已开始', 'success');
-                    }, mimeType, encQuality || 0.92);
-                };
-                const url = URL.createObjectURL(blob);
-                state.objectUrls.push(url);
-                img.src = url;
-            };
+                    if (fmt === 'jpeg' || fmt === 'jpeg-compressed') { mimeType = 'image/jpeg';
+                        encQuality = quality; } else if (fmt === 'webp') { mimeType = 'image/webp';
+                        encQuality = quality; }
+                    cvs.toBlob(b => { downloadBlob(b, filename);
+                        showToast('下载已开始', 'success'); }, mimeType, encQuality || 0.92);
+                }).catch(() => showToast('下载失败', 'error'));
+            }
 
-            // 批量ZIP下载
-            window.downloadAllZip = function() {
+            function downloadAllZip() {
                 const processedCount = state.processedBlobs.filter(b => b).length;
-                if (!processedCount) {
-                    showToast('没有已处理的图片', 'warning');
-                    return;
-                }
+                if (!processedCount) { showToast('没有已处理的图片', 'warning'); return; }
                 showToast('正在打包压缩...', 'info');
                 const zip = new JSZip();
                 const folder = zip.folder("影盾_处理结果");
                 const fmt = $('download-format').value;
                 const extMap = { png: 'png', jpeg: 'jpg', webp: 'webp', 'jpeg-compressed': 'jpg' };
                 const ext = extMap[fmt] || 'png';
-
-                // 添加文件
                 state.files.forEach((f, i) => {
                     if (state.processedBlobs[i]) {
                         const nameBase = f.name.replace(/\.[^.]+$/, '');
                         folder.file(`${nameBase}_processed.${ext}`, state.processedBlobs[i]);
                     }
                 });
+                zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } }).then(
+                    content => {
+                        downloadBlob(content, "影盾_批量处理结果.zip");
+                        showToast('ZIP下载已开始', 'success');
+                    }).catch(() => showToast('打包失败', 'error'));
+            }
 
-                // 生成并下载
-                zip.generateAsync({
-                    type: "blob",
-                    compression: "DEFLATE",
-                    compressionOptions: { level: 6 }
-                }).then(content => {
-                    downloadBlob(content, "影盾_批量处理结果.zip");
-                    showToast('ZIP下载已开始', 'success');
-                }).catch(() => {
-                    showToast('打包失败', 'error');
-                });
-            };
-
-            // 预览窗口混淆
-            window.previewEncrypt = function() {
-                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
-                if (state.isProcessing) return;
+            function compressLossless() {
+                if (!state.files.length) { showToast('请先上传图片', 'error'); return; }
+                if (state.isProcessing) { showToast('正在处理中，请稍候', 'warning'); return; }
                 state.isProcessing = true;
                 state.processedHistory.push([...state.processedBlobs]);
-                // 核心修复：使用当前处理后的blob
-                const sourceBlob = state.processedBlobs[state.selectedImageIndex] || state.files[state.selectedImageIndex];
-                processSingleImageBlob(sourceBlob, 'encrypt').then(blob => {
-                    state.processedBlobs[state.selectedImageIndex] = blob;
-                    updatePreviewGrid();
-                    const url = URL.createObjectURL(blob);
-                    state.objectUrls.push(url);
-                    $('preview-img').src = url;
+                state.processedBlobs = new Array(state.files.length).fill(null);
+                $('progress-wrap').style.display = 'block';
+                $('progress-bar').style.width = '0%';
+                const fmt = $('download-format').value;
+                const quality = parseFloat($('download-quality').value);
+                let mimeType = 'image/png';
+                let encQuality = undefined;
+                if (fmt === 'jpeg' || fmt === 'jpeg-compressed') { mimeType = 'image/jpeg';
+                    encQuality = quality; } else if (fmt === 'webp') { mimeType = 'image/webp';
+                    encQuality = quality; }
+                (async () => {
+                    const total = state.files.length;
+                    let completed = 0;
+                    for (let i = 0; i < state.files.length; i++) {
+                        try {
+                            const img = await loadImageFromBlob(state.files[i]);
+                            const cvs = document.createElement('canvas');
+                            cvs.width = img.width;
+                            cvs.height = img.height;
+                            const ctx = cvs.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+                            const blob = await new Promise(r => cvs.toBlob(r, mimeType, encQuality || 1));
+                            state.processedBlobs[i] = blob;
+                        } catch (e) { /* skip */ }
+                        completed++;
+                        $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
+                        if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
+                    }
                     state.isProcessing = false;
-                    showToast('混淆完成', 'success');
-                }).catch(() => {
-                    state.isProcessing = false;
-                    showToast('处理失败', 'error');
-                });
-            };
+                    showToast('压缩完成！', 'success');
+                    setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
+                })();
+            }
 
-            // 预览窗口解混淆
-            window.previewDecrypt = function() {
-                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
-                if (state.isProcessing) return;
-                state.isProcessing = true;
-                state.processedHistory.push([...state.processedBlobs]);
-                // 核心修复：使用当前处理后的blob
-                const sourceBlob = state.processedBlobs[state.selectedImageIndex] || state.files[state.selectedImageIndex];
-                processSingleImageBlob(sourceBlob, 'decrypt').then(blob => {
-                    state.processedBlobs[state.selectedImageIndex] = blob;
-                    updatePreviewGrid();
-                    const url = URL.createObjectURL(blob);
-                    state.objectUrls.push(url);
-                    $('preview-img').src = url;
-                    state.isProcessing = false;
-                    showToast('解混淆完成', 'success');
-                }).catch(() => {
-                    state.isProcessing = false;
-                    showToast('处理失败', 'error');
-                });
-            };
+            function clearAll() {
+                revokeAllUrls();
+                state.files = [];
+                state.processedBlobs = [];
+                state.processedHistory = [];
+                state.detectImg = null;
+                state.detectBatch = [];
+                state.originalBlobUrl = null;
+                state.currentImageStatus = 'none';
+                state.originalFileSizes = [];
+                state.img2qrResultBlob = null;
+                state.img2qrDataUrl = null;
+                state.selectedImageIndex = -1;
+                state.currentPreviewIndex = -1;
+                state.currentPreviewUrl = null;
+                $('file-input').value = '';
+                updateSelectedIndicator();
+                updateObfuscateButtonLabels();
+                updatePreviewGrid();
+                updateDetectBatchGrid();
+                $('download-all-btn').style.display = 'none';
+                $('file-count').innerText = '0';
+                $('detect-result').style.display = 'none';
+                const cvs = $('detect-canvas');
+                if (cvs) { const ctx = cvs.getContext('2d');
+                    ctx.clearRect(0, 0, cvs.width, cvs.height); }
+                const img2qrRes = $('img2qr-result');
+                if (img2qrRes) { img2qrRes.classList.add('hidden');
+                    img2qrRes.innerHTML = ''; }
+                const img2qrInfo = $('img2qr-size-info');
+                if (img2qrInfo) img2qrInfo.classList.add('hidden');
+                showToast('已清空全部', 'info');
+            }
 
-            // 预览窗口下载
-            window.previewDownload = function() {
-                if (state.selectedImageIndex < 0 || state.selectedImageIndex >= state.files.length) return;
-                downloadSingle(state.selectedImageIndex);
-            };
+            function undoLast() {
+                if (!state.processedHistory.length) { showToast('无操作可撤销', 'warning'); return; }
+                state.processedBlobs = state.processedHistory.pop();
+                updatePreviewGrid();
+                showToast('已撤销', 'success');
+            }
 
-            // 检测画布渲染
+            function restoreOriginal() {
+                if (!state.originalBlobUrl) { showToast('没有可还原的原始图片', 'warning'); return; }
+                loadImageFromBlob(state.files[0]).then(img => {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = img.width;
+                    cvs.height = img.height;
+                    const ctx = cvs.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    cvs.toBlob(blob => {
+                        if (blob && state.files.length > 0) {
+                            if (state.selectedImageIndex >= 0 && state.selectedImageIndex < state.files
+                                .length) {
+                                state.processedBlobs[state.selectedImageIndex] = blob;
+                            } else {
+                                for (let i = 0; i < state.files.length; i++) state.processedBlobs[
+                                    i] = blob;
+                            }
+                            state.currentImageStatus = 'original';
+                            updatePreviewGrid();
+                            showToast('已还原原始图片', 'success');
+                        }
+                    }, 'image/png', 1);
+                }).catch(() => showToast('还原失败', 'error'));
+            }
+
+            // ==================== 检测功能 ====================
             function renderDetectCanvas(img) {
                 const cvs = $('detect-canvas');
                 cvs.width = img.width;
@@ -2426,97 +2347,98 @@
                 const ctx = cvs.getContext('2d');
                 ctx.drawImage(img, 0, 0);
                 state.detectOriginData = ctx.getImageData(0, 0, img.width, img.height);
-                applyFilter('original');
             }
 
-            // 滤镜应用
-            window.applyFilter = function(type) {
-                if (!state.detectImg || !state.detectOriginData) {
-                    showToast('请先上传检测图片', 'warning');
-                    return;
-                }
+            function applyFilter(type) {
+                if (!state.detectImg || !state.detectOriginData) { showToast('请先上传检测图片', 'warning'); return; }
                 const cvs = $('detect-canvas');
                 const ctx = cvs.getContext('2d');
-                const w = cvs.width, h = cvs.height;
+                const w = cvs.width,
+                    h = cvs.height;
                 const src = state.detectOriginData.data;
                 const out = ctx.createImageData(w, h);
                 const dst = out.data;
-
-                // 更新按钮激活状态
-                document.querySelectorAll('.filter-btn').forEach(b => {
+                document.querySelectorAll('#filter-grid .filter-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.filter === type);
                 });
-
-                // 卷积核
                 const kSharpen = [0, -1, 0, -1, 5, -1, 0, -1, 0];
                 const kBlur = [1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9];
-                
-                // 卷积函数
-                function convolve(s, d, kernel) {
+                if (type === 'sharpen' || type === 'blur') {
+                    const kernel = type === 'sharpen' ? kSharpen : kBlur;
                     for (let y = 1; y < h - 1; y++) {
                         for (let x = 1; x < w - 1; x++) {
-                            let r = 0, g = 0, b = 0;
-                            for (let ky = -1; ky <= 1; ky++) {
+                            let r = 0,
+                                g = 0,
+                                b = 0;
+                            for (let ky = -1; ky <= 1; ky++)
                                 for (let kx = -1; kx <= 1; kx++) {
                                     const i2 = ((y + ky) * w + (x + kx)) * 4;
                                     const ki = (ky + 1) * 3 + (kx + 1);
-                                    r += s[i2] * kernel[ki];
-                                    g += s[i2 + 1] * kernel[ki];
-                                    b += s[i2 + 2] * kernel[ki];
+                                    r += src[i2] * kernel[ki];
+                                    g += src[i2 + 1] * kernel[ki];
+                                    b += src[i2 + 2] * kernel[ki];
                                 }
-                            }
                             const di = (y * w + x) * 4;
-                            d[di] = Math.clamp(r, 0, 255);
-                            d[di + 1] = Math.clamp(g, 0, 255);
-                            d[di + 2] = Math.clamp(b, 0, 255);
+                            dst[di] = Math.clamp(r, 0, 255);
+                            dst[di + 1] = Math.clamp(g, 0, 255);
+                            dst[di + 2] = Math.clamp(b, 0, 255);
+                            dst[di + 3] = 255;
                         }
                     }
+                    ctx.putImageData(out, 0, 0);
+                    return;
                 }
-
-                // 滤镜处理
                 for (let i = 0; i < src.length; i += 4) {
-                    const r = src[i], g = src[i + 1], b = src[i + 2];
+                    const r = src[i],
+                        g = src[i + 1],
+                        b = src[i + 2];
                     let gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                    let oR = r, oG = g, oB = b;
-
+                    let oR = r,
+                        oG = g,
+                        oB = b;
                     switch (type) {
                         case 'original':
-                            oR = r; oG = g; oB = b;
+                            oR = r;
+                            oG = g;
+                            oB = b;
                             break;
                         case 'invert':
-                            oR = 255 - r; oG = 255 - g; oB = 255 - b;
+                            oR = 255 - r;
+                            oG = 255 - g;
+                            oB = 255 - b;
                             break;
                         case 'high-contrast':
                             gray = gray > 128 ? 255 : 0;
                             oR = oG = oB = gray;
                             break;
                         case 'edge':
-                            let dH = 0, dV = 0;
-                            if (i % (w * 4) < (w - 1) * 4) {
-                                dH = Math.abs(gray - (0.299 * src[i + 4] + 0.587 * src[i + 5] + 0.114 * src[i + 6]));
-                            }
-                            if (i < (h - 1) * w * 4) {
-                                dV = Math.abs(gray - (0.299 * src[i + w * 4] + 0.587 * src[i + w * 4 + 1] + 0.114 * src[i + w * 4 + 2]));
-                            }
+                            let dH = 0,
+                                dV = 0;
+                            if (i % (w * 4) < (w - 1) * 4) dH = Math.abs(gray - (0.299 * src[i + 4] + 0.587 * src[i +
+                                5] + 0.114 * src[i + 6]));
+                            if (i < (h - 1) * w * 4) dV = Math.abs(gray - (0.299 * src[i + w * 4] + 0.587 * src[i + w *
+                                4 + 1] + 0.114 * src[i + w * 4 + 2]));
                             const edge = Math.sqrt(dH * dH + dV * dV) * 4;
                             oR = oG = oB = Math.clamp(edge, 0, 255);
                             break;
                         case 'red-channel':
-                            oR = r; oG = 0; oB = 0;
+                            oR = r;
+                            oG = 0;
+                            oB = 0;
                             break;
                         case 'green-channel':
-                            oR = 0; oG = g; oB = 0;
+                            oR = 0;
+                            oG = g;
+                            oB = 0;
                             break;
                         case 'blue-channel':
-                            oR = 0; oG = 0; oB = b;
+                            oR = 0;
+                            oG = 0;
+                            oB = b;
                             break;
                         case 'grayscale':
                             oR = oG = oB = gray;
                             break;
-                        case 'sharpen':
-                        case 'blur':
-                            convolve(src, dst, type === 'sharpen' ? kSharpen : kBlur);
-                            continue;
                     }
                     dst[i] = oR;
                     dst[i + 1] = oG;
@@ -2526,17 +2448,19 @@
                 ctx.putImageData(out, 0, 0);
             }
 
-            // 盲水印提取
-            window.detectBlindWatermark = function() {
-                if (!state.detectImg) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
+            function displayDetectResult(text) {
+                $('detect-text').innerText = text || '未提取到信息';
+                $('detect-result').style.display = 'block';
+            }
+
+            function detectBlindWatermark() {
+                if (!state.detectImg) { showToast('请先上传图片', 'error'); return; }
                 showToast('正在进行DCT频域分析...', 'info');
                 setTimeout(() => {
                     const cvs = $('detect-canvas');
                     const ctx = cvs.getContext('2d');
-                    const w = cvs.width, h = cvs.height;
+                    const w = cvs.width,
+                        h = cvs.height;
                     const thresh = parseInt($('detect-threshold').value);
                     const data = ctx.getImageData(0, 0, w, h).data;
                     const ch = new Float32Array(w * h);
@@ -2553,7 +2477,6 @@
                         out.data[i * 4 + 3] = 255;
                     }
                     ctx.putImageData(out, 0, 0);
-                    // 文本提取
                     let bin = '';
                     for (let i = 0; i < Math.min(1000, w * h); i++) bin += signal[i] > 128 ? '1' : '0';
                     let txt = '';
@@ -2567,14 +2490,10 @@
                     displayDetectResult(txt.trim() || '未提取到文本水印');
                     showToast('DCT分析完成', 'success');
                 }, 100);
-            };
+            }
 
-            // LSB提取
-            window.detectLsb = function() {
-                if (!state.detectImg) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
+            function detectLsb() {
+                if (!state.detectImg) { showToast('请先上传图片', 'error'); return; }
                 const cvs = $('detect-canvas');
                 const data = cvs.getContext('2d').getImageData(0, 0, cvs.width, cvs.height).data;
                 const depth = parseInt($('lsb-depth').value) || 1;
@@ -2592,20 +2511,17 @@
                 for (let j = 0; j < bin.length; j += 8) {
                     const bt = bin.slice(j, j + 8);
                     if (bt.length < 8) break;
-                    const ch = String.fromCharCode(parseInt(bt, 2));
-                    if (ch.charCodeAt(0) === 0) break;
-                    txt += ch;
+                    const charCode = parseInt(bt, 2);
+                    if (charCode === 0) break;
+                    if ((charCode >= 32 && charCode <= 126) || charCode >= 128) txt += String.fromCharCode(charCode);
                 }
-                displayDetectResult(txt || '未提取到隐藏信息');
+                const result = txt || '未提取到隐藏信息';
+                displayDetectResult(result);
                 showToast(txt ? 'LSB提取成功' : '未提取到信息', txt ? 'success' : 'warning');
-            };
+            }
 
-            // 二维码识别
-            window.scanQRCode = function() {
-                if (!state.detectImg) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
+            function scanQRCode() {
+                if (!state.detectImg) { showToast('请先上传图片', 'error'); return; }
                 const cvs = $('detect-canvas');
                 const idata = cvs.getContext('2d').getImageData(0, 0, cvs.width, cvs.height);
                 const code = jsQR(idata.data, idata.width, idata.height, { inversionAttempts: "attemptBoth" });
@@ -2615,59 +2531,49 @@
                 } else {
                     showToast('未识别到二维码', 'warning');
                 }
-            };
-
-            // 自动检测
-            window.autoDetectAll = function() {
-                detectBlindWatermark();
-                detectLsb();
-                scanQRCode();
-            };
-
-            // 显示检测结果
-            function displayDetectResult(text) {
-                $('detect-text').innerText = text;
-                $('detect-result').style.display = 'block';
             }
 
-            // 图片转二维码
-            window.convertImageToQR = async function() {
-                if (!state.files.length) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
+            function autoDetectAll() {
+                detectBlindWatermark();
+                setTimeout(() => { detectLsb();
+                    scanQRCode(); }, 200);
+            }
+
+            // ==================== 图片转二维码 ====================
+            async function convertImageToQR() {
+                if (!state.files.length) { showToast('请先上传图片', 'error'); return; }
                 const file = state.processedBlobs[0] || state.files[0];
-                const img = new Image();
-                img.onload = async () => {
+                try {
+                    const img = await loadImageFromBlob(file);
                     const targetSize = parseInt($('img2qr-size').value);
                     const quality = parseInt($('img2qr-quality').value) / 100;
                     const level = $('img2qr-level').value;
                     const fg = $('img2qr-foreground').value;
                     const bg = $('img2qr-background').value;
-                    // 缩放图片
                     const cvs = document.createElement('canvas');
                     cvs.width = targetSize;
                     cvs.height = targetSize;
                     const ctx = cvs.getContext('2d');
                     const ratio = Math.min(targetSize / img.width, targetSize / img.height);
-                    const dw = img.width * ratio, dh = img.height * ratio;
-                    const dx = (targetSize - dw) / 2, dy = (targetSize - dh) / 2;
+                    const dw = img.width * ratio,
+                        dh = img.height * ratio;
+                    const dx = (targetSize - dw) / 2,
+                        dy = (targetSize - dh) / 2;
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, targetSize, targetSize);
                     ctx.drawImage(img, dx, dy, dw, dh);
-                    // 转blob
                     const blob = await new Promise(r => cvs.toBlob(r, 'image/jpeg', quality));
                     const dataUrl = await new Promise(r => {
                         const reader = new FileReader();
                         reader.onload = () => r(reader.result);
                         reader.readAsDataURL(blob);
                     });
-                    // 保存状态
                     state.img2qrDataUrl = dataUrl;
                     state.img2qrResultBlob = blob;
-                    // 生成二维码
                     const container = $('qrcode-ghost');
                     container.innerHTML = '';
+                    const correctLevelMap = { L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode
+                            .CorrectLevel.Q, H: QRCode.CorrectLevel.H };
                     try {
                         new QRCode(container, {
                             text: dataUrl,
@@ -2675,27 +2581,23 @@
                             height: 1024,
                             colorDark: fg,
                             colorLight: bg,
-                            correctLevel: QRCode.CorrectLevel[level]
+                            correctLevel: correctLevelMap[level] || QRCode.CorrectLevel.M
                         });
                     } catch (e) {
                         showToast('数据量过大，请降低尺寸或质量', 'error');
                         return;
                     }
-                    await new Promise(r => setTimeout(r, 200));
+                    await new Promise(r => setTimeout(r, 300));
                     const qrCvs = container.querySelector('canvas');
-                    if (!qrCvs) {
-                        showToast('QR码生成失败，请减小图片尺寸', 'error');
-                        return;
-                    }
+                    if (!qrCvs) { showToast('QR码生成失败，请减小图片尺寸', 'error'); return; }
                     const qrDataUrl = qrCvs.toDataURL('image/png');
-                    // 更新UI
                     const resultDiv = $('img2qr-result');
                     resultDiv.classList.remove('hidden');
                     resultDiv.innerHTML = `
                         <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;">📱 扫码即可还原图片</p>
-                        <img src="${qrDataUrl}" alt="图片二维码" style="max-width:240px;border-radius:12px;cursor:pointer;" onclick="openPreview(-1, '${qrDataUrl}')">
+                        <img src="${qrDataUrl}" alt="图片二维码" style="max-width:240px;border-radius:12px;cursor:pointer;" id="img2qr-preview-img">
                         <br><small style="color:var(--text-muted);font-size:0.7rem;">扫码后复制文本，粘贴到浏览器地址栏查看</small>
-                        <br><button class="btn btn-outline btn-small" style="margin-top:6px;" onclick="downloadImg2QR()"><i class="fas fa-download"></i> 下载二维码PNG</button>
+                        <br><button class="btn btn-outline btn-small" style="margin-top:6px;" id="btn-download-img2qr"><i class="fas fa-download"></i> 下载二维码PNG</button>
                     `;
                     const infoDiv = $('img2qr-size-info');
                     infoDiv.classList.remove('hidden');
@@ -2704,161 +2606,222 @@
                         <span>💾 数据: ${(blob.size/1024).toFixed(1)}KB</span>
                         <span>🔗 Base64: ${(dataUrl.length/1024).toFixed(1)}KB</span>
                     `;
+                    $('img2qr-preview-img').addEventListener('click', () => {
+                        $('preview-img').src = qrDataUrl;
+                        $('preview-actions').classList.add('hidden');
+                        $('preview-modal').classList.add('active');
+                    });
+                    $('btn-download-img2qr').addEventListener('click', downloadImg2QR);
                     showToast('图片转二维码成功！扫码即可还原', 'success');
-                };
-                const url = URL.createObjectURL(file);
-                state.objectUrls.push(url);
-                img.src = url;
-            };
+                } catch (e) {
+                    showToast('图片处理失败', 'error');
+                }
+            }
 
-            // 下载图转码二维码
-            window.downloadImg2QR = function() {
+            function downloadImg2QR() {
                 const container = $('qrcode-ghost');
                 const qrCvs = container.querySelector('canvas');
-                if (!qrCvs) {
-                    showToast('请先生成二维码', 'warning');
-                    return;
-                }
+                if (!qrCvs) { showToast('请先生成二维码', 'warning'); return; }
                 qrCvs.toBlob(blob => {
                     downloadBlob(blob, '影盾_图转二维码.png');
                     showToast('二维码已下载', 'success');
                 }, 'image/png');
-            };
-
-            // 更新图转码预览
-            function updateImg2qrPreview() {
-                if (state.mode === 'img2qr' && state.files.length > 0 && (state.processedBlobs[0] || state.files[0])) {
-                    convertImageToQR();
-                }
             }
 
-            // 无损压缩
-            window.compressLossless = function() {
-                if (!state.files.length) {
-                    showToast('请先上传图片', 'error');
-                    return;
-                }
-                if (state.isProcessing) return;
-                state.isProcessing = true;
-                state.processedHistory.push([...state.processedBlobs]);
-                state.processedBlobs = new Array(state.files.length).fill(null);
-                // 进度条
-                $('progress-wrap').style.display = 'block';
-                $('progress-bar').style.width = '0%';
-                // 格式配置
-                const fmt = $('download-format').value;
-                const quality = parseFloat($('download-quality').value);
-                let mimeType = 'image/png';
-                let encQuality = undefined;
-                if (fmt === 'jpeg' || fmt === 'jpeg-compressed') {
-                    mimeType = 'image/jpeg';
-                    encQuality = quality;
-                } else if (fmt === 'webp') {
-                    mimeType = 'image/webp';
-                    encQuality = quality;
-                }
-                // 循环处理
-                (async () => {
-                    const total = state.files.length;
-                    let completed = 0;
-                    for (let i = 0; i < state.files.length; i++) {
-                        const file = state.processedBlobs[i] || state.files[i];
-                        const img = new Image();
-                        const blob = await new Promise((resolve, reject) => {
-                            img.onload = () => {
-                                const cvs = document.createElement('canvas');
-                                cvs.width = img.width;
-                                cvs.height = img.height;
-                                const ctx = cvs.getContext('2d');
-                                ctx.drawImage(img, 0, 0);
-                                cvs.toBlob(b => resolve(b), mimeType, encQuality || 1);
-                            };
-                            img.onerror = reject;
-                            const url = URL.createObjectURL(file);
-                            state.objectUrls.push(url);
-                            img.src = url;
-                        });
-                        state.processedBlobs[i] = blob;
-                        completed++;
-                        $('progress-bar').style.width = `${Math.round(completed/total*100)}%`;
-                        if (i % 3 === 0 || i === state.files.length - 1) updatePreviewGrid();
-                    }
-                    state.isProcessing = false;
-                    showToast('压缩完成！', 'success');
-                    setTimeout(() => { $('progress-wrap').style.display = 'none'; }, 2000);
-                })();
-            };
+            function updateImg2qrPreview() {
+                if (state.mode === 'img2qr' && state.files.length > 0) convertImageToQR();
+            }
 
-            // 水印图片上传区域初始化
-            function setupDropzone(dzId, inputId, previewId, stateKey) {
+            // ==================== 水印图片上传辅助 ====================
+            function setupAuxDropzone(dzId, inputId, previewId, stateKey) {
                 const dz = $(dzId);
                 const inp = $(inputId);
                 if (!dz || !inp) return;
-                // 处理函数
+                const previewEl = $(previewId);
                 const handler = function(file) {
-                    if (!file || !file.type.startsWith('image/')) return;
-                    const url = URL.createObjectURL(file);
-                    state.objectUrls.push(url);
+                    if (!file || !file.type.startsWith('image/')) { showToast('请选择有效的图片文件',
+                    'warning'); return; }
+                    const url = createTrackedUrl(file);
                     const img = new Image();
+                    const loadTimeout = setTimeout(() => { img.src = '';
+                        showToast('水印图片加载超时', 'error'); }, 10000);
                     img.onload = () => {
+                        clearTimeout(loadTimeout);
                         state[stateKey] = img;
-                        $(previewId).innerHTML = `<img src="${url}" style="max-width:100%;max-height:80px;border-radius:6px;">`;
+                        if (previewEl) previewEl.innerHTML =
+                            `<img src="${url}" style="max-width:100%;max-height:80px;border-radius:6px;">`;
                         showToast('图片加载成功', 'success');
                     };
-                    img.onerror = () => showToast('图片加载失败', 'error');
+                    img.onerror = () => { clearTimeout(loadTimeout);
+                        showToast('图片加载失败', 'error'); };
                     img.src = url;
                 };
-                // 事件绑定
-                dz.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    inp.click();
-                });
-                dz.addEventListener('dragover', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dz.classList.add('dragover');
-                });
-                dz.addEventListener('dragleave', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dz.classList.remove('dragover');
-                });
-                dz.addEventListener('drop', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dz.classList.remove('dragover');
-                    handler(e.dataTransfer.files[0]);
-                });
-                inp.addEventListener('change', e => {
-                    e.preventDefault();
+                inp.addEventListener('change', (e) => {
                     e.stopPropagation();
                     if (e.target.files.length) handler(e.target.files[0]);
                     e.target.value = '';
                 });
+                dz.addEventListener('dragover', (e) => { e.preventDefault();
+                    e.stopPropagation();
+                    dz.classList.add('dragover'); });
+                dz.addEventListener('dragleave', (e) => { e.preventDefault();
+                    e.stopPropagation(); if (!dz.contains(e.relatedTarget)) dz.classList.remove(
+                        'dragover'); });
+                dz.addEventListener('drop', (e) => { e.preventDefault();
+                    e.stopPropagation();
+                    dz.classList.remove('dragover');
+                    handler(e.dataTransfer.files[0]); });
             }
-            setupDropzone('image-watermark-dropzone', 'image-watermark-input', 'image-watermark-preview', 'imageWatermark');
-            setupDropzone('qr-logo-dropzone', 'qr-logo-input', 'qr-logo-preview', 'qrLogo');
 
-            // 点击空白关闭预览
-            $('preview-modal').addEventListener('click', (e) => {
-                if (e.target === $('preview-modal')) closePreview();
-            });
+            // ==================== 滑块数值更新 ====================
+            const sliderConfigs = [
+                { id: 'text-opacity', suffix: '%', transform: v => v },
+                { id: 'text-size', suffix: 'px', transform: v => v },
+                { id: 'text-rotate', suffix: '°', transform: v => v },
+                { id: 'text-spacing-x', suffix: '%', transform: v => v },
+                { id: 'qr-scale', suffix: '%', transform: v => v },
+                { id: 'qr-opacity', suffix: '%', transform: v => v },
+                { id: 'qr-margin', suffix: '%', transform: v => v },
+                { id: 'image-scale', suffix: '%', transform: v => v },
+                { id: 'image-opacity', suffix: '%', transform: v => v },
+                { id: 'image-rotate', suffix: '°', transform: v => v },
+                { id: 'dct-strength', suffix: '', transform: v => (v / 1000).toFixed(3) },
+                { id: 'lsb-depth', suffix: '', transform: v => v },
+                { id: 'detect-threshold', suffix: '', transform: v => v },
+                { id: 'img2qr-size', suffix: 'px', transform: v => v },
+                { id: 'img2qr-quality', suffix: '%', transform: v => v },
+                { id: 'adj-brightness', suffix: '', transform: v => v },
+                { id: 'adj-contrast', suffix: '', transform: v => (v / 100).toFixed(1) },
+                { id: 'adj-saturation', suffix: '', transform: v => (v / 100).toFixed(1) },
+                { id: 'adj-hue', suffix: '°', transform: v => v },
+                { id: 'adj-sharpen', suffix: '', transform: v => v },
+                { id: 'adj-blur', suffix: '', transform: v => v },
+            ];
 
-            // 键盘ESC关闭预览
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closePreview();
-            });
+            function initSliders() {
+                sliderConfigs.forEach(cfg => {
+                    const slider = $(cfg.id);
+                    const valSpan = $(`${cfg.id}-val`);
+                    if (!slider || !valSpan) return;
+                    const update = () => { valSpan.innerText = cfg.transform(slider.value) + cfg.suffix; };
+                    update();
+                    slider.addEventListener('input', update);
+                });
+            }
 
-            // 初始化Tab
-            switchTab('obfuscate');
+            // ==================== 初始化 ====================
+            function init() {
+                initSliders();
+                const pc = $('particlesContainer');
+                const colors = ['rgba(139,92,246,0.5)', 'rgba(167,139,250,0.4)', 'rgba(196,181,253,0.35)',
+                    'rgba(236,72,153,0.35)', 'rgba(6,182,212,0.3)', 'rgba(245,158,11,0.28)',
+                'rgba(16,185,129,0.25)'];
+                for (let i = 0; i < 24; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    const s = Math.random() * 5 + 2;
+                    const bgColor = colors[Math.floor(Math.random() * colors.length)];
+                    p.style.cssText =
+                        `width:${s}px;height:${s}px;left:${Math.random()*95}%;top:${Math.random()*100+100}%;background:${bgColor};box-shadow:0 0 ${s*2+5}px ${bgColor};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*14}s;${Math.random()>0.5?'animation-name:floatUpAlt;':''}`;
+                    pc.appendChild(p);
+                }
 
-            // 控制台输出
-            console.log('🔐 巳泷资源库 - 影盾 | 已就绪');
-            console.log('   📐 Gilbert空间填充曲线 · DCT频域盲水印 · LSB隐写 · 二维码');
-            console.log('   📸 图像转二维码 · 🎨 调色 · 📦 无损压缩 · 批量处理');
-            console.log('   🛡️ 紫罗兰主题 · 本地离线处理 · 数据安全');
-        });
+                // Tab切换
+                document.querySelectorAll('#nav-tabs .nav-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        switchTab(tab.dataset.tab);
+                    });
+                });
+
+                // 水印模式切换
+                document.querySelectorAll('#watermark-mode-switch .mode-option').forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleWatermarkMode(opt.dataset.mode);
+                    });
+                });
+
+                // 主上传区域 - 仅依赖隐藏的file input原生行为，不额外绑定click
+                const dropzone = $('dropzone');
+                const fileInput = $('file-input');
+                fileInput.addEventListener('change', (e) => {
+                    e.stopPropagation();
+                    handleFiles(e.target.files);
+                    e.target.value = '';
+                });
+                dropzone.addEventListener('dragover', (e) => { e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('dragover'); });
+                dropzone.addEventListener('dragleave', (e) => { e.preventDefault();
+                    e.stopPropagation(); if (!dropzone.contains(e.relatedTarget)) dropzone.classList.remove(
+                        'dragover'); });
+                dropzone.addEventListener('drop', (e) => { e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('dragover');
+                    handleFiles(e.dataTransfer.files); });
+
+                // 全局拖拽阻止
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+                    document.body.addEventListener(evt, (e) => { e.preventDefault();
+                        e.stopPropagation(); }, false);
+                });
+
+                // 辅助上传区域
+                setupAuxDropzone('image-watermark-dropzone', 'image-watermark-input', 'image-watermark-preview',
+                    'imageWatermark');
+                setupAuxDropzone('qr-logo-dropzone', 'qr-logo-input', 'qr-logo-preview', 'qrLogo');
+
+                // 按钮事件绑定
+                $('btn-obfuscate-encrypt').addEventListener('click', () => processObfuscate('encrypt'));
+                $('btn-obfuscate-decrypt').addEventListener('click', () => processObfuscate('decrypt'));
+                $('btn-restore-original').addEventListener('click', restoreOriginal);
+                $('btn-process-text').addEventListener('click', () => processBatch('text'));
+                $('btn-process-image').addEventListener('click', () => processBatch('image'));
+                $('btn-process-qr').addEventListener('click', () => processBatch('qr'));
+                $('btn-process-adjust').addEventListener('click', () => processBatch('adjust'));
+                $('btn-img2qr').addEventListener('click', convertImageToQR);
+                $('btn-undo').addEventListener('click', undoLast);
+                $('btn-clear').addEventListener('click', clearAll);
+                $('btn-compress-lossless').addEventListener('click', compressLossless);
+                $('download-all-btn').addEventListener('click', downloadAllZip);
+                $('btn-detect-blind').addEventListener('click', detectBlindWatermark);
+                $('btn-detect-lsb').addEventListener('click', detectLsb);
+                $('btn-detect-qr').addEventListener('click', scanQRCode);
+                $('btn-detect-all').addEventListener('click', autoDetectAll);
+                $('btn-preview-encrypt').addEventListener('click', previewEncrypt);
+                $('btn-preview-decrypt').addEventListener('click', previewDecrypt);
+                $('btn-preview-download').addEventListener('click', previewDownload);
+                $('btn-preview-close').addEventListener('click', closePreview);
+
+                // 滤镜按钮
+                document.querySelectorAll('#filter-grid .filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+                });
+
+                // 预览模态框关闭
+                $('preview-modal').addEventListener('click', (e) => {
+                    if (e.target === $('preview-modal')) closePreview();
+                });
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePreview(); });
+
+                // 初始化Tab
+                switchTab('obfuscate');
+                console.log('🔐 巳泷资源库 - 影盾 | 已就绪');
+                console.log('   📐 Gilbert空间填充曲线 · DCT频域盲水印 · LSB隐写 · 二维码');
+                console.log('   📸 图像转二维码 · 🎨 调色 · 📦 无损压缩 · 批量处理');
+                console.log('   🛡️ 紫罗兰主题 · 本地离线处理 · 数据安全');
+            }
+
+            // 启动
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
 </body>
 </html>
