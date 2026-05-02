@@ -1,10 +1,10 @@
 <update>
-    <version>7.0.6</version>
-    <log>🚀 动态更新机制：引入云端实时拉取技术，告别频繁安装，随时获取最新资源。
-🎵 音乐盒子更名为（媒体音乐）：原“音乐盒子”全面重构，搜索内核升级，支持全网免费音乐搜索与播放。
-🎮 游戏盒子更名为（游戏娱乐）：原“游戏盒子”正式更名为“游戏娱乐”，新增海量游戏资源，交互逻辑全面优化。
-🗑️ 极简架构：根据社区反馈，正式移除“资源管理”与“主题设置”模块，专注于核心导航体验。
-✨ 性能打磨：深度优化应用启动与页面加载速度，修复已知 Bug，体验更流畅。</log>
-    <url>https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.6.apk</url>
+    <version>7.0.7</version>
+    <log>✨ 设置页全面重构，功能整合升级
+🎧 新增朗读模块：支持自定义语音包、多参数调节与情绪规则
+🛡️ 广告屏蔽强化：新增防弹窗/防跳转/陀螺仪关闭等功能
+🔧 页面工具箱上线：查看源码/全屏模式/一键爬取资源
+⚠️ 半成品赶工版，后续细节持续优化~🌈</log>
+    <url>https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.7.apk</url>
     <url2>#</url2>
 </update>
