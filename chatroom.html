@@ -499,7 +499,26 @@
             color: #c4b5fd;
             padding: 40px;
         }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-indicator.online {
+            background-color: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+
+        .status-indicator.offline {
+            background-color: #6b7280;
+        }
     </style>
+    <!-- Socket.io CDN -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -555,24 +574,6 @@
     </div>
 
     <script>
-        const STORAGE_KEYS = {
-            MESSAGES: 'chat_messages',
-            FRIENDS: 'chat_friends',
-            GROUPS: 'chat_groups',
-            USERS: 'chat_users',
-            USER_ID: 'chat_user_id',
-            USER_NAME: 'chat_user_name',
-            USER_COLOR: 'chat_user_color'
-        };
-        const CHANNEL_NAME = 'chat_channel';
-        
-        let currentUser = null;
-        let selectedFiles = [];
-        let channel = null;
-        let currentTab = 'friends';
-        let currentChat = null;
-        let currentChatType = null;
-
         const colors = [
             'linear-gradient(135deg, #ba55d3 0%, #e91e63 100%)',
             'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
@@ -581,6 +582,17 @@
         ];
         const adjectives = ['梦幻的', '可爱的', '快乐的', '勇敢的', '智慧的', '温柔的'];
         const nouns = ['精灵', '仙子', '天使', '星星', '月亮', '花朵'];
+
+        let socket = null;
+        let currentUser = null;
+        let selectedFiles = [];
+        let currentTab = 'friends';
+        let currentChat = null;
+        let currentChatType = null;
+        let allUsers = [];
+        let allMessages = [];
+        let allFriends = [];
+        let allGroups = [];
 
         function randomId() {
             return Math.random().toString(36).substr(2, 9);
@@ -609,50 +621,26 @@
             return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
         }
 
-        function getData(key) {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : [];
-        }
-
-        function setData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-            if (channel) {
-                channel.postMessage({ type: 'update', key: key });
-            }
-        }
-
         function initUser() {
-            const storedId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-            const storedName = localStorage.getItem(STORAGE_KEYS.USER_NAME);
-            const storedColor = localStorage.getItem(STORAGE_KEYS.USER_COLOR);
+            // 尝试从本地存储加载用户信息
+            let userId = localStorage.getItem('chat_user_id');
+            let userName = localStorage.getItem('chat_user_name');
+            let userColor = localStorage.getItem('chat_user_color');
 
-            if (storedId && storedName && storedColor) {
-                currentUser = { id: storedId, name: storedName, color: storedColor };
-            } else {
-                currentUser = { id: randomId(), name: randomName(), color: randomColor() };
-                localStorage.setItem(STORAGE_KEYS.USER_ID, currentUser.id);
-                localStorage.setItem(STORAGE_KEYS.USER_NAME, currentUser.name);
-                localStorage.setItem(STORAGE_KEYS.USER_COLOR, currentUser.color);
+            if (!userId) {
+                userId = randomId();
+                userName = randomName();
+                userColor = randomColor();
+                localStorage.setItem('chat_user_id', userId);
+                localStorage.setItem('chat_user_name', userName);
+                localStorage.setItem('chat_user_color', userColor);
             }
 
-            const users = getData(STORAGE_KEYS.USERS);
-            const existingUser = users.find(u => u.id === currentUser.id);
-            if (!existingUser) {
-                users.push({
-                    id: currentUser.id,
-                    name: currentUser.name,
-                    color: currentUser.color,
-                    online: true,
-                    lastSeen: Date.now()
-                });
-                setData(STORAGE_KEYS.USERS, users);
-            } else {
-                existingUser.online = true;
-                existingUser.lastSeen = Date.now();
-                existingUser.name = currentUser.name;
-                existingUser.color = currentUser.color;
-                setData(STORAGE_KEYS.USERS, users);
-            }
+            currentUser = {
+                id: userId,
+                name: userName,
+                color: userColor
+            };
 
             document.getElementById('userAvatar').textContent = currentUser.name[0];
             document.getElementById('userAvatar').style.background = currentUser.color;
@@ -660,9 +648,77 @@
             document.getElementById('userId').textContent = 'ID: ' + currentUser.id;
         }
 
+        function initSocket() {
+            // 连接到服务器
+            socket = io();
+
+            socket.on('connect', () => {
+                console.log('已连接到服务器');
+                // 发送用户上线信息
+                socket.emit('user:online', currentUser);
+            });
+
+            // 初始化数据
+            socket.on('init:data', (data) => {
+                allUsers = data.users;
+                allMessages = data.messages;
+                allFriends = data.friends;
+                allGroups = data.groups;
+                renderContacts();
+                renderMessages();
+            });
+
+            // 用户列表更新
+            socket.on('users:update', (users) => {
+                allUsers = users;
+                renderContacts();
+            });
+
+            // 公共消息
+            socket.on('message:public', (msg) => {
+                allMessages.push(msg);
+                if (currentChatType === 'public') {
+                    renderMessages();
+                }
+            });
+
+            // 私聊消息
+            socket.on('message:private', (msg) => {
+                allMessages.push(msg);
+                if (currentChatType === 'private' && 
+                    ((msg.fromId === currentUser.id && msg.toId === currentChat.id) ||
+                     (msg.fromId === currentChat.id && msg.toId === currentUser.id))) {
+                    renderMessages();
+                }
+            });
+
+            // 群组消息
+            socket.on('message:group', (msg) => {
+                allMessages.push(msg);
+                if (currentChatType === 'group' && msg.groupId === currentChat.id) {
+                    renderMessages();
+                }
+            });
+
+            // 好友列表更新
+            socket.on('friends:update', (friends) => {
+                allFriends = friends;
+                renderContacts();
+            });
+
+            // 群组列表更新
+            socket.on('groups:update', (groups) => {
+                allGroups = groups;
+                renderContacts();
+            });
+
+            socket.on('disconnect', () => {
+                console.log('与服务器断开连接');
+            });
+        }
+
         function getMessages(chatType, chatId) {
-            const allMsgs = getData(STORAGE_KEYS.MESSAGES);
-            return allMsgs.filter(m => {
+            return allMessages.filter(m => {
                 if (chatType === 'public') {
                     return m.type === 'public';
                 } else if (chatType === 'private') {
@@ -674,12 +730,6 @@
                 }
                 return false;
             });
-        }
-
-        function saveMessage(msg) {
-            const msgs = getData(STORAGE_KEYS.MESSAGES);
-            msgs.push(msg);
-            setData(STORAGE_KEYS.MESSAGES, msgs);
         }
 
         function renderMessages() {
@@ -780,30 +830,29 @@
 
             if (text) {
                 const msg = {
-                    id: randomId(),
                     type: currentChatType,
                     contentType: 'text',
                     content: text,
-                    timestamp: Date.now(),
                     fromId: currentUser.id,
                     fromName: currentUser.name,
                     fromColor: currentUser.color
                 };
                 if (currentChatType === 'private') {
                     msg.toId = currentChat.id;
+                    socket.emit('message:private', msg);
                 } else if (currentChatType === 'group') {
                     msg.groupId = currentChat.id;
+                    socket.emit('message:group', msg);
+                } else if (currentChatType === 'public') {
+                    socket.emit('message:public', msg);
                 }
-                saveMessage(msg);
             }
 
             selectedFiles.forEach(file => {
                 const msg = {
-                    id: randomId(),
                     type: currentChatType,
                     contentType: 'file',
                     content: '',
-                    timestamp: Date.now(),
                     fromId: currentUser.id,
                     fromName: currentUser.name,
                     fromColor: currentUser.color,
@@ -811,16 +860,18 @@
                 };
                 if (currentChatType === 'private') {
                     msg.toId = currentChat.id;
+                    socket.emit('message:private', msg);
                 } else if (currentChatType === 'group') {
                     msg.groupId = currentChat.id;
+                    socket.emit('message:group', msg);
+                } else if (currentChatType === 'public') {
+                    socket.emit('message:public', msg);
                 }
-                saveMessage(msg);
             });
 
             input.value = '';
             selectedFiles = [];
             updateFileList();
-            renderMessages();
         }
 
         function handleFiles(files) {
@@ -854,7 +905,7 @@
         window.removeFile = function(index) {
             selectedFiles.splice(index, 1);
             updateFileList();
-        };
+        }
 
         function switchTab(tab) {
             currentTab = tab;
@@ -882,13 +933,14 @@
             list.innerHTML = '';
 
             if (currentTab === 'friends') {
-                const friends = getData(STORAGE_KEYS.FRIENDS).filter(f => f.userId === currentUser.id);
-                if (friends.length === 0) {
+                const myFriends = allFriends.filter(f => f.userId === currentUser.id);
+                if (myFriends.length === 0) {
                     list.innerHTML = '<div class="empty-state">还没有好友，点击"添加好友"找小伙伴吧！💫</div>';
                     return;
                 }
                 
-                friends.forEach(friend => {
+                myFriends.forEach(friend => {
+                    const user = allUsers.find(u => u.id === friend.friendId);
                     const div = document.createElement('div');
                     div.className = 'contact-item' + (currentChat && currentChat.id === friend.friendId ? ' active' : '');
                     div.onclick = function() { selectFriend(friend); };
@@ -900,16 +952,19 @@
                     
                     const info = document.createElement('div');
                     info.className = 'contact-info';
-                    info.innerHTML = '<div class="contact-name">' + friend.friendName + '</div>' +
-                                     '<div class="contact-status">点击聊天 ✨</div>';
+                    
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = 'status-indicator ' + (user && user.online ? 'online' : 'offline');
+                    
+                    info.innerHTML = '<div class="contact-name">' + (statusSpan.outerHTML) + friend.friendName + '</div>' +
+                                     '<div class="contact-status">' + (user && user.online ? '在线' : '离线') + '</div>';
                     
                     div.appendChild(avatar);
                     div.appendChild(info);
                     list.appendChild(div);
                 });
             } else if (currentTab === 'groups') {
-                const groups = getData(STORAGE_KEYS.GROUPS);
-                const myGroups = groups.filter(g => g.members.includes(currentUser.id));
+                const myGroups = allGroups.filter(g => g.members && g.members.includes(currentUser.id));
                 
                 if (myGroups.length === 0) {
                     list.innerHTML = '<div class="empty-state">还没有群组，创建一个吧！🌟</div>';
@@ -929,7 +984,7 @@
                     const info = document.createElement('div');
                     info.className = 'contact-info';
                     info.innerHTML = '<div class="contact-name">' + group.name + '</div>' +
-                                     '<div class="contact-status">' + group.members.length + ' 位成员</div>';
+                                     '<div class="contact-status">' + (group.members ? group.members.length : 0) + ' 位成员</div>';
                     
                     div.appendChild(avatar);
                     div.appendChild(info);
@@ -951,7 +1006,7 @@
             currentChat = group;
             currentChatType = 'group';
             document.getElementById('chatTitle').textContent = group.name;
-            document.getElementById('chatSubtitle').textContent = group.members.length + ' 位成员';
+            document.getElementById('chatSubtitle').textContent = (group.members ? group.members.length : 0) + ' 位成员';
             renderContacts();
             renderMessages();
         }
@@ -966,24 +1021,24 @@
         }
 
         function showAddFriendModal() {
-            const users = getData(STORAGE_KEYS.USERS).filter(u => u.id !== currentUser.id);
-            const friends = getData(STORAGE_KEYS.FRIENDS).filter(f => f.userId === currentUser.id);
-            const friendIds = friends.map(f => f.friendId);
-            const availableUsers = users.filter(u => !friendIds.includes(u.id));
+            const availableUsers = allUsers.filter(u => u.id !== currentUser.id);
 
             let bodyHTML = '<input type="text" class="modal-input" id="searchInput" placeholder="搜索用户...">';
             bodyHTML += '<div class="user-list" id="userList">';
             
             if (availableUsers.length === 0) {
-                bodyHTML += '<div class="empty-state">没有找到其他用户，打开另一个标签页创建测试用户吧！✨</div>';
+                bodyHTML += '<div class="empty-state">暂无其他在线用户，等待小伙伴加入吧！✨</div>';
             } else {
                 availableUsers.forEach(user => {
-                    bodyHTML += '<div class="user-list-item" data-id="' + user.id + '" onclick="toggleUser(this)">' +
-                                '<div class="contact-avatar" style="background: ' + user.color + '">' + user.name[0] + '</div>' +
-                                '<div class="contact-info">' +
-                                '<div class="contact-name">' + user.name + '</div>' +
-                                '<div class="contact-status">ID: ' + user.id + '</div>' +
-                                '</div></div>';
+                    const isAlreadyFriend = allFriends.some(f => f.userId === currentUser.id && f.friendId === user.id);
+                    if (!isAlreadyFriend) {
+                        bodyHTML += '<div class="user-list-item" data-id="' + user.id + '" data-name="' + user.name + '" data-color="' + user.color + '" onclick="toggleUser(this)">' +
+                                    '<div class="contact-avatar" style="background: ' + user.color + '">' + user.name[0] + '</div>' +
+                                    '<div class="contact-info">' +
+                                    '<div class="contact-name">' + user.name + '</div>' +
+                                    '<div class="contact-status">ID: ' + user.id + '</div>' +
+                                    '</div></div>';
+                    }
                 });
             }
             bodyHTML += '</div>';
@@ -996,7 +1051,7 @@
 
         window.toggleUser = function(el) {
             el.classList.toggle('selected');
-        };
+        }
 
         function addSelectedFriends() {
             const selected = document.querySelectorAll('.user-list-item.selected');
@@ -1005,44 +1060,35 @@
                 return;
             }
 
-            const friends = getData(STORAGE_KEYS.FRIENDS);
-            const users = getData(STORAGE_KEYS.USERS);
-
             selected.forEach(el => {
-                const userId = el.dataset.id;
-                const user = users.find(u => u.id === userId);
-                if (user) {
-                    friends.push({
-                        userId: currentUser.id,
-                        friendId: user.id,
-                        friendName: user.name,
-                        friendColor: user.color,
-                        addedAt: Date.now()
-                    });
-                }
+                const friendData = {
+                    userId: currentUser.id,
+                    friendId: el.dataset.id,
+                    friendName: el.dataset.name,
+                    friendColor: el.dataset.color,
+                    addedAt: Date.now()
+                };
+                socket.emit('friend:add', friendData);
             });
 
-            setData(STORAGE_KEYS.FRIENDS, friends);
             closeModal();
-            renderContacts();
         }
 
         let selectedGroupMembers = [];
 
         function showCreateGroupModal() {
             selectedGroupMembers = [currentUser.id];
-            const users = getData(STORAGE_KEYS.USERS).filter(u => u.id !== currentUser.id);
+            const availableUsers = allUsers.filter(u => u.id !== currentUser.id);
 
             let bodyHTML = '<input type="text" class="modal-input" id="groupNameInput" placeholder="群组名称...">';
             bodyHTML += '<div id="selectedMembers" style="margin-bottom: 10px;"></div>';
             bodyHTML += '<div class="user-list" id="userList">';
             
-            if (users.length === 0) {
-                bodyHTML += '<div class="empty-state">没有找到其他用户，打开另一个标签页吧！💫</div>';
+            if (availableUsers.length === 0) {
+                bodyHTML += '<div class="empty-state">暂无其他在线用户！💫</div>';
             } else {
-                users.forEach(user => {
-                    const isSelected = selectedGroupMembers.includes(user.id);
-                    bodyHTML += '<div class="user-list-item ' + (isSelected ? 'selected' : '') + '" data-id="' + user.id + '" onclick="toggleGroupMember(this)">' +
+                availableUsers.forEach(user => {
+                    bodyHTML += '<div class="user-list-item" data-id="' + user.id + '" data-name="' + user.name + '" onclick="toggleGroupMember(this)">' +
                                 '<div class="contact-avatar" style="background: ' + user.color + '">' + user.name[0] + '</div>' +
                                 '<div class="contact-info">' +
                                 '<div class="contact-name">' + user.name + '</div>' +
@@ -1067,16 +1113,15 @@
                 selectedGroupMembers.push(id);
             }
             updateSelectedMembersDisplay();
-        };
+        }
 
         function updateSelectedMembersDisplay() {
             const container = document.getElementById('selectedMembers');
             if (!container) return;
             
-            const users = getData(STORAGE_KEYS.USERS);
             let html = '';
             selectedGroupMembers.forEach(id => {
-                const user = users.find(u => u.id === id);
+                const user = allUsers.find(u => u.id === id);
                 if (user) {
                     html += '<span class="member-tag">' + user.name;
                     if (id !== currentUser.id) {
@@ -1093,7 +1138,7 @@
             const item = document.querySelector('.user-list-item[data-id="' + id + '"]');
             if (item) item.classList.remove('selected');
             updateSelectedMembersDisplay();
-        };
+        }
 
         function createGroup() {
             const nameInput = document.getElementById('groupNameInput');
@@ -1103,21 +1148,15 @@
                 return;
             }
 
-            const groups = getData(STORAGE_KEYS.GROUPS);
-            const newGroup = {
-                id: randomId(),
+            const groupData = {
                 name: name,
                 color: randomColor(),
                 members: selectedGroupMembers,
-                createdBy: currentUser.id,
-                createdAt: Date.now()
+                createdBy: currentUser.id
             };
-            groups.push(newGroup);
-            setData(STORAGE_KEYS.GROUPS, groups);
+            socket.emit('group:create', groupData);
 
             closeModal();
-            renderContacts();
-            selectGroup(newGroup);
         }
 
         function closeModal() {
@@ -1134,23 +1173,7 @@
 
         function init() {
             initUser();
-            
-            try {
-                channel = new BroadcastChannel(CHANNEL_NAME);
-                channel.onmessage = function(event) {
-                    if (event.data.type === 'update') {
-                        renderContacts();
-                        renderMessages();
-                    }
-                };
-            } catch (e) {
-                console.log('BroadcastChannel 不支持');
-            }
-
-            window.addEventListener('storage', function(e) {
-                renderContacts();
-                renderMessages();
-            });
+            initSocket();
 
             document.getElementById('sendBtn').addEventListener('click', sendMessage);
             
@@ -1186,10 +1209,9 @@
                 handleFiles(e.target.files);
                 e.target.value = '';
             });
-
-            renderContacts();
         }
 
+        // 启动应用
         init();
     </script>
 </body>
