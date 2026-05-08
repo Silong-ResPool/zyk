@@ -115,6 +115,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends Activity {
+	private static final String TAG = "MainActivity";
 	
 	// ==================== 核心颜色配置 (深紫罗兰) ====================
 	private int appBgColor;
@@ -260,6 +261,7 @@ public class MainActivity extends Activity {
 	
 	// ==================== 简易HTTP服务器 ====================
 	private static class LocalHttpServer implements Runnable {
+		private static final String TAG = "LocalHttpServer";
 		private final int port;
 		private final Context context;
 		private ServerSocket serverSocket;
