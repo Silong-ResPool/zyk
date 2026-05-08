@@ -1,718 +1,428 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang="zh-CN"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;匿名聊天室&lt;/title&gt;
-    &lt;style&gt;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Chat</title>
+    <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-            color: #e0e0e0;
-            overflow: hidden;
-        }
-
-        .container {
-            display: flex;
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
             height: 100vh;
-            max-width: 1600px;
-            margin: 0 auto;
+            display: flex;
         }
 
         .sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            width: 250px;
+            background: #16213e;
             padding: 20px;
+            border-right: 1px solid #0f3460;
+        }
+
+        .main {
+            flex: 1;
             display: flex;
             flex-direction: column;
-        }
-
-        .sidebar-header {
-            margin-bottom: 24px;
-        }
-
-        .sidebar-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            padding: 20px;
         }
 
         .user-info {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 16px;
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
 
         .user-avatar {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            background: #e94560;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .user-name {
-            font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .user-id {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 4px;
-            font-family: monospace;
+            font-size: 12px;
+            color: #888;
         }
 
-        .online-users-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .online-users-list {
+        .messages {
             flex: 1;
             overflow-y: auto;
-        }
-
-        .online-user {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
+            background: #16213e;
             border-radius: 8px;
-            margin-bottom: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            transition: all 0.2s;
-        }
-
-        .online-user:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .online-user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-right: 12px;
-        }
-
-        .online-user-name {
-            flex: 1;
-            font-size: 0.9rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             padding: 20px;
-        }
-
-        .chat-header {
-            margin-bottom: 20px;
-        }
-
-        .chat-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .chat-subtitle {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.95rem;
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
             margin-bottom: 20px;
         }
 
         .message {
-            margin-bottom: 20px;
-            animation: slideIn 0.3s ease-out;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message-header {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .message-avatar {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-right: 12px;
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .message-author {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-right: 8px;
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .message-time {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            color: #888;
         }
 
         .message-content {
-            margin-left: 48px;
+            margin-left: 40px;
         }
 
         .message-text {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px 16px;
-            border-radius: 12px;
-            line-height: 1.6;
+            background: #0f3460;
+            padding: 10px 15px;
+            border-radius: 8px;
             display: inline-block;
             max-width: 100%;
-            word-wrap: break-word;
         }
 
         .message-own .message-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #e94560;
         }
 
         .message-file {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 16px;
-            border-radius: 12px;
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.2s;
-            max-width: 100%;
         }
 
         .message-file:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .file-icon {
-            font-size: 2rem;
-        }
-
-        .file-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .file-name {
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .file-size {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
+            background: #1a4a7a;
         }
 
         .file-preview {
             max-width: 300px;
             max-height: 200px;
             border-radius: 8px;
-            margin-top: 12px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .file-preview:hover {
-            transform: scale(1.02);
+            margin-top: 10px;
         }
 
         .input-area {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #16213e;
+            border-radius: 8px;
+            padding: 15px;
         }
 
-        .file-drop-zone {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 16px;
+        .file-drop {
+            border: 2px dashed #0f3460;
+            border-radius: 8px;
+            padding: 15px;
             text-align: center;
-            margin-bottom: 16px;
-            transition: all 0.3s;
+            margin-bottom: 15px;
             cursor: pointer;
         }
 
-        .file-drop-zone.drag-over {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+        .file-drop:hover {
+            border-color: #e94560;
+            background: rgba(233, 69, 96, 0.1);
         }
 
-        .file-drop-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-        }
-
-        .file-drop-text span {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .file-preview-list {
+        .file-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .file-preview-item {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 12px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
             gap: 10px;
-            max-width: 200px;
+            margin-bottom: 15px;
         }
 
-        .file-preview-item .file-name {
-            font-size: 0.85rem;
-        }
-
-        .file-remove {
-            color: #ef4444;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 12px;
-        }
-
-        .message-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 14px 18px;
-            color: #e0e0e0;
-            font-size: 1rem;
-            font-family: inherit;
-            resize: none;
-            transition: all 0.2s;
-        }
-
-        .message-input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .message-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            padding: 14px 32px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+        .file-item {
+            background: #0f3460;
+            padding: 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .file-remove {
+            color: #e94560;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            background: #0f3460;
+            border: 1px solid #1a4a7a;
+            border-radius: 8px;
+            padding: 12px;
+            color: #eee;
+            font-size: 14px;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+
+        .send-btn {
+            background: #e94560;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            background: #ff6b6b;
         }
 
-        .send-btn:active {
-            transform: translateY(0);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .system-message {
+        .system-msg {
             text-align: center;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.85rem;
-            margin: 20px 0;
+            color: #888;
             font-style: italic;
+            margin: 20px 0;
         }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Chat Room</h2>
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-id" id="userId">ID: -</div>
+        </div>
+        <div style="color: #888; font-size: 12px;">
+            Open this page in multiple tabs to chat!
+        </div>
+    </div>
 
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
+    <div class="main">
+        <h1>Anonymous Chat</h1>
+        <p style="color: #888; margin-bottom: 20px;">No server needed - chat directly!</p>
 
-            .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                max-height: 200px;
-            }
+        <div class="messages" id="messages"></div>
 
-            .online-users-list {
-                display: flex;
-                overflow-x: auto;
-                gap: 10px;
-            }
+        <div class="input-area">
+            <div class="file-drop" id="fileDrop">
+                Drop files here or click to select (No size limit!)
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+            <div class="file-list" id="fileList"></div>
+            <div class="input-row">
+                <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+                <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
 
-            .online-user {
-                flex-shrink: 0;
-                flex-direction: column;
-                width: 80px;
-                text-align: center;
-            }
-
-            .online-user-avatar {
-                margin-right: 0;
-                margin-bottom: 8px;
-            }
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;aside class="sidebar"&gt;
-            &lt;div class="sidebar-header"&gt;
-                &lt;h1 class="sidebar-title"&gt;💬 聊天室&lt;/h1&gt;
-            &lt;/div&gt;
-            &lt;div class="user-info"&gt;
-                &lt;div class="user-avatar" id="currentUserAvatar"&gt;&lt;/div&gt;
-                &lt;div class="user-name" id="currentUserName"&gt;&lt;/div&gt;
-                &lt;div class="user-id" id="currentUserId"&gt;&lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="online-users-title"&gt;在线用户&lt;/div&gt;
-            &lt;div class="online-users-list scrollbar-thin" id="onlineUsers"&gt;&lt;/div&gt;
-        &lt;/aside&gt;
-
-        &lt;main class="chat-area"&gt;
-            &lt;div class="chat-header"&gt;
-                &lt;h2 class="chat-title"&gt;匿名聊天室&lt;/h2&gt;
-                &lt;p class="chat-subtitle"&gt;在多个浏览器标签页中打开此页面即可体验聊天功能&lt;/p&gt;
-            &lt;/div&gt;
-
-            &lt;div class="messages-container scrollbar-thin" id="messagesContainer"&gt;&lt;/div&gt;
-
-            &lt;div class="input-area"&gt;
-                &lt;div class="file-drop-zone" id="fileDropZone"&gt;
-                    &lt;div class="file-drop-text"&gt;拖拽文件到此处或 &lt;span&gt;点击选择文件&lt;/span&gt;（无大小限制）&lt;/div&gt;
-                    &lt;input type="file" id="fileInput" multiple style="display: none;"&gt;
-                &lt;/div&gt;
-                &lt;div class="file-preview-list" id="filePreviewList"&gt;&lt;/div&gt;
-                &lt;div class="input-row"&gt;
-                    &lt;textarea class="message-input" id="messageInput" placeholder="输入消息...（Shift+Enter换行）" rows="1"&gt;&lt;/textarea&gt;
-                    &lt;button class="send-btn" id="sendBtn"&gt;发送&lt;/button&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/main&gt;
-    &lt;/div&gt;
-
-    &lt;script&gt;
-        const COLORS = [
-            '#667eea', '#764ba2', '#f093fb', '#f5576c',
-            '#4facfe', '#00f2fe', '#43e97b', '#38f9d7',
-            '#fa709a', '#fee140', '#a18cd1', '#fbc2eb'
-        ];
-
-        const ADJECTIVES = ['神秘', '快乐', '勇敢', '智慧', '温柔', '敏捷', '幽默', '冷静', '热情', '好奇'];
-        const ANIMALS = ['猫咪', '熊猫', '狐狸', '兔子', '企鹅', '海豚', '考拉', '小鹿', '松鼠', '鲸鱼'];
-
-        const STORAGE_KEY = 'anonymous_chat_messages';
-        const CHANNEL_NAME = 'anonymous_chat_channel';
-
+    <script>
+        const STORAGE_KEY = 'chat_messages';
+        const CHANNEL_NAME = 'chat_channel';
+        
         let currentUser = null;
         let selectedFiles = [];
         let channel = null;
 
-        function generateId() {
+        const colors = ['#e94560', '#0f3460', '#533483', '#e94560', '#00d9ff', '#00ff88', '#ffaa00', '#ff00ff'];
+        const adjectives = ['Happy', 'Brave', 'Clever', 'Cute', 'Fast', 'Funny', 'Kind', 'Wise'];
+        const nouns = ['Cat', 'Dog', 'Bird', 'Fish', 'Fox', 'Panda', 'Tiger', 'Wolf'];
+
+        function randomId() {
             return Math.random().toString(36).substr(2, 9);
         }
 
-        function getRandomColor() {
-            return COLORS[Math.floor(Math.random() * COLORS.length)];
+        function randomColor() {
+            return colors[Math.floor(Math.random() * colors.length)];
         }
 
-        function generateRandomName() {
-            const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-            const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+        function randomName() {
+            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const noun = nouns[Math.floor(Math.random() * nouns.length)];
             const num = Math.floor(Math.random() * 100);
-            return `${adj}${animal}${num}`;
+            return adj + noun + num;
         }
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        function formatTime(ts) {
+            const d = new Date(ts);
+            return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         }
 
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-        }
-
-        function getFileIcon(type) {
-            if (type.startsWith('image/')) return '🖼️';
-            if (type.startsWith('video/')) return '🎬';
-            if (type.startsWith('audio/')) return '🎵';
-            if (type.includes('pdf')) return '📄';
-            if (type.includes('word') || type.includes('document')) return '📝';
-            if (type.includes('sheet') || type.includes('excel')) return '📊';
-            if (type.includes('zip') || type.includes('rar') || type.includes('7z')) return '📦';
-            return '📁';
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
         }
 
         function initUser() {
-            const storedUserId = localStorage.getItem('anonymous_chat_user_id');
-            const storedUserName = localStorage.getItem('anonymous_chat_user_name');
-            const storedUserColor = localStorage.getItem('anonymous_chat_user_color');
+            const storedId = localStorage.getItem('chat_user_id');
+            const storedName = localStorage.getItem('chat_user_name');
+            const storedColor = localStorage.getItem('chat_user_color');
 
-            if (storedUserId &amp;&amp; storedUserName &amp;&amp; storedUserColor) {
-                currentUser = {
-                    id: storedUserId,
-                    name: storedUserName,
-                    color: storedUserColor
-                };
+            if (storedId && storedName && storedColor) {
+                currentUser = { id: storedId, name: storedName, color: storedColor };
             } else {
-                currentUser = {
-                    id: generateId(),
-                    name: generateRandomName(),
-                    color: getRandomColor()
-                };
-                localStorage.setItem('anonymous_chat_user_id', currentUser.id);
-                localStorage.setItem('anonymous_chat_user_name', currentUser.name);
-                localStorage.setItem('anonymous_chat_user_color', currentUser.color);
+                currentUser = { id: randomId(), name: randomName(), color: randomColor() };
+                localStorage.setItem('chat_user_id', currentUser.id);
+                localStorage.setItem('chat_user_name', currentUser.name);
+                localStorage.setItem('chat_user_color', currentUser.color);
             }
 
-            updateUserDisplay();
-        }
-
-        function updateUserDisplay() {
-            document.getElementById('currentUserAvatar').textContent = currentUser.name.charAt(0);
-            document.getElementById('currentUserAvatar').style.background = currentUser.color;
-            document.getElementById('currentUserName').textContent = currentUser.name;
-            document.getElementById('currentUserId').textContent = `ID: ${currentUser.id}`;
+            document.getElementById('userAvatar').textContent = currentUser.name[0];
+            document.getElementById('userAvatar').style.background = currentUser.color;
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userId').textContent = 'ID: ' + currentUser.id;
         }
 
         function getMessages() {
-            const messages = localStorage.getItem(STORAGE_KEY);
-            return messages ? JSON.parse(messages) : [];
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
         }
 
-        function saveMessage(message) {
-            const messages = getMessages();
-            messages.push(message);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+        function saveMessage(msg) {
+            const msgs = getMessages();
+            msgs.push(msg);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
         }
 
         function renderMessages() {
-            const container = document.getElementById('messagesContainer');
-            const messages = getMessages();
+            const container = document.getElementById('messages');
+            const msgs = getMessages();
             
             container.innerHTML = '';
             
-            if (messages.length === 0) {
-                container.innerHTML = '&lt;div class="system-message"&gt;暂无消息，发送第一条消息开始聊天吧！&lt;/div&gt;';
+            if (msgs.length === 0) {
+                container.innerHTML = '<div class="system-msg">No messages yet. Send the first one!</div>';
                 return;
             }
 
-            messages.forEach(msg =&gt; {
-                container.appendChild(createMessageElement(msg));
+            msgs.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'message' + (msg.userId === currentUser.id ? ' message-own' : '');
+                
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                avatar.textContent = msg.userName[0];
+                avatar.style.background = msg.userColor || '#e94560';
+                
+                const author = document.createElement('span');
+                author.className = 'message-author';
+                author.textContent = msg.userName;
+                
+                const time = document.createElement('span');
+                time.className = 'message-time';
+                time.textContent = formatTime(msg.timestamp);
+                
+                header.appendChild(avatar);
+                header.appendChild(author);
+                header.appendChild(time);
+                
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                
+                if (msg.type === 'text') {
+                    const text = document.createElement('div');
+                    text.className = 'message-text';
+                    text.textContent = msg.content;
+                    content.appendChild(text);
+                } else if (msg.type === 'file' && msg.file) {
+                    const fileDiv = document.createElement('div');
+                    fileDiv.className = 'message-file';
+                    fileDiv.onclick = function() { downloadFile(msg.file); };
+                    fileDiv.textContent = msg.file.name + ' (' + formatSize(msg.file.size) + ')';
+                    content.appendChild(fileDiv);
+                    
+                    if (msg.file.type.indexOf('image/') === 0) {
+                        const img = document.createElement('img');
+                        img.className = 'file-preview';
+                        img.src = msg.file.data;
+                        content.appendChild(img);
+                    } else if (msg.file.type.indexOf('video/') === 0) {
+                        const video = document.createElement('video');
+                        video.className = 'file-preview';
+                        video.src = msg.file.data;
+                        video.controls = true;
+                        content.appendChild(video);
+                    }
+                }
+                
+                div.appendChild(header);
+                div.appendChild(content);
+                container.appendChild(div);
             });
 
             container.scrollTop = container.scrollHeight;
         }
 
-        function createMessageElement(message) {
-            const div = document.createElement('div');
-            div.className = `message ${message.userId === currentUser.id ? 'message-own' : ''}`;
-
-            const header = document.createElement('div');
-            header.className = 'message-header';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = message.userName.charAt(0);
-            avatar.style.background = message.userColor || '#667eea';
-
-            const author = document.createElement('span');
-            author.className = 'message-author';
-            author.textContent = message.userName;
-
-            const time = document.createElement('span');
-            time.className = 'message-time';
-            time.textContent = formatTime(message.timestamp);
-
-            header.appendChild(avatar);
-            header.appendChild(author);
-            header.appendChild(time);
-
-            const content = document.createElement('div');
-            content.className = 'message-content';
-
-            if (message.type === 'text') {
-                const text = document.createElement('div');
-                text.className = 'message-text';
-                text.textContent = message.content;
-                content.appendChild(text);
-            } else if (message.type === 'file' &amp;&amp; message.file) {
-                const fileDiv = document.createElement('div');
-                fileDiv.className = 'message-file';
-                fileDiv.onclick = () =&gt; downloadFile(message.file);
-
-                const icon = document.createElement('div');
-                icon.className = 'file-icon';
-                icon.textContent = getFileIcon(message.file.type);
-
-                const info = document.createElement('div');
-                info.className = 'file-info';
-
-                const name = document.createElement('div');
-                name.className = 'file-name';
-                name.textContent = message.file.name;
-
-                const size = document.createElement('div');
-                size.className = 'file-size';
-                size.textContent = formatFileSize(message.file.size);
-
-                info.appendChild(name);
-                info.appendChild(size);
-
-                fileDiv.appendChild(icon);
-                fileDiv.appendChild(info);
-                content.appendChild(fileDiv);
-
-                if (message.file.type.startsWith('image/')) {
-                    const preview = document.createElement('img');
-                    preview.className = 'file-preview';
-                    preview.src = message.file.data;
-                    preview.onclick = () =&gt; window.open(message.file.data, '_blank');
-                    content.appendChild(preview);
-                } else if (message.file.type.startsWith('video/')) {
-                    const video = document.createElement('video');
-                    video.className = 'file-preview';
-                    video.src = message.file.data;
-                    video.controls = true;
-                    content.appendChild(video);
-                }
-            }
-
-            div.appendChild(header);
-            div.appendChild(content);
-
-            return div;
-        }
-
-        function downloadFile(fileData) {
+        function downloadFile(file) {
             const link = document.createElement('a');
-            link.href = fileData.data;
-            link.download = fileData.name;
+            link.href = file.data;
+            link.download = file.name;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        function sendTextMessage() {
+        function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             
-            if (!text &amp;&amp; selectedFiles.length === 0) return;
+            if (!text && selectedFiles.length === 0) return;
 
             if (text) {
-                const message = {
-                    id: generateId(),
+                const msg = {
+                    id: randomId(),
                     type: 'text',
                     content: text,
                     timestamp: Date.now(),
@@ -720,13 +430,13 @@
                     userName: currentUser.name,
                     userColor: currentUser.color
                 };
-                saveMessage(message);
-                broadcastMessage(message);
+                saveMessage(msg);
+                if (channel) channel.postMessage({ type: 'new' });
             }
 
-            selectedFiles.forEach(file =&gt; {
-                const message = {
-                    id: generateId(),
+            selectedFiles.forEach(file => {
+                const msg = {
+                    id: randomId(),
                     type: 'file',
                     content: '',
                     timestamp: Date.now(),
@@ -735,146 +445,106 @@
                     userColor: currentUser.color,
                     file: file
                 };
-                saveMessage(message);
-                broadcastMessage(message);
+                saveMessage(msg);
+                if (channel) channel.postMessage({ type: 'new' });
             });
 
             input.value = '';
             selectedFiles = [];
-            updateFilePreviewList();
+            updateFileList();
             renderMessages();
         }
 
-        function broadcastMessage(message) {
-            if (channel) {
-                channel.postMessage({ type: 'new_message', message });
-            }
-        }
-
-        function initBroadcastChannel() {
-            channel = new BroadcastChannel(CHANNEL_NAME);
-            
-            channel.onmessage = (event) =&gt; {
-                if (event.data.type === 'new_message') {
-                    renderMessages();
-                }
-            };
-        }
-
         function handleFiles(files) {
-            Array.from(files).forEach(file =&gt; {
+            Array.from(files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = (e) =&gt; {
+                reader.onload = function(e) {
                     selectedFiles.push({
                         name: file.name,
                         type: file.type,
                         size: file.size,
                         data: e.target.result
                     });
-                    updateFilePreviewList();
+                    updateFileList();
                 };
                 reader.readAsDataURL(file);
             });
         }
 
-        function updateFilePreviewList() {
-            const list = document.getElementById('filePreviewList');
+        function updateFileList() {
+            const list = document.getElementById('fileList');
             list.innerHTML = '';
-
-            selectedFiles.forEach((file, index) =&gt; {
+            
+            selectedFiles.forEach((file, i) => {
                 const item = document.createElement('div');
-                item.className = 'file-preview-item';
-
-                const icon = document.createElement('span');
-                icon.textContent = getFileIcon(file.type);
-                icon.style.fontSize = '1.5rem';
-
-                const info = document.createElement('div');
-                info.className = 'file-info';
-
-                const name = document.createElement('div');
-                name.className = 'file-name';
-                name.textContent = file.name;
-
-                const size = document.createElement('div');
-                size.className = 'file-size';
-                size.textContent = formatFileSize(file.size);
-
-                info.appendChild(name);
-                info.appendChild(size);
-
-                const remove = document.createElement('span');
-                remove.className = 'file-remove';
-                remove.textContent = '×';
-                remove.onclick = () =&gt; {
-                    selectedFiles.splice(index, 1);
-                    updateFilePreviewList();
-                };
-
-                item.appendChild(icon);
-                item.appendChild(info);
-                item.appendChild(remove);
+                item.className = 'file-item';
+                item.innerHTML = '<span>' + file.name + '</span><span class="file-remove" onclick="removeFile(' + i + ')">X</span>';
                 list.appendChild(item);
             });
         }
 
-        function initEventListeners() {
-            const messageInput = document.getElementById('messageInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const fileDropZone = document.getElementById('fileDropZone');
-            const fileInput = document.getElementById('fileInput');
+        window.removeFile = function(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        };
 
-            sendBtn.addEventListener('click', sendTextMessage);
+        function init() {
+            initUser();
+            
+            try {
+                channel = new BroadcastChannel(CHANNEL_NAME);
+                channel.onmessage = function(event) {
+                    if (event.data.type === 'new') {
+                        renderMessages();
+                    }
+                };
+            } catch (e) {
+                console.log('BroadcastChannel not supported');
+            }
 
-            messageInput.addEventListener('keydown', (e) =&gt; {
-                if (e.key === 'Enter' &amp;&amp; !e.shiftKey) {
-                    e.preventDefault();
-                    sendTextMessage();
-                }
-            });
-
-            messageInput.addEventListener('input', () =&gt; {
-                messageInput.style.height = 'auto';
-                messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
-            });
-
-            fileDropZone.addEventListener('click', () =&gt; fileInput.click());
-
-            fileDropZone.addEventListener('dragover', (e) =&gt; {
-                e.preventDefault();
-                fileDropZone.classList.add('drag-over');
-            });
-
-            fileDropZone.addEventListener('dragleave', () =&gt; {
-                fileDropZone.classList.remove('drag-over');
-            });
-
-            fileDropZone.addEventListener('drop', (e) =&gt; {
-                e.preventDefault();
-                fileDropZone.classList.remove('drag-over');
-                handleFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) =&gt; {
-                handleFiles(e.target.files);
-                e.target.value = '';
-            });
-
-            window.addEventListener('storage', (e) =&gt; {
+            window.addEventListener('storage', function(e) {
                 if (e.key === STORAGE_KEY) {
                     renderMessages();
                 }
             });
-        }
 
-        function init() {
-            initUser();
-            initBroadcastChannel();
-            initEventListeners();
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            const fileDrop = document.getElementById('fileDrop');
+            const fileInput = document.getElementById('fileInput');
+            
+            fileDrop.addEventListener('click', function() { fileInput.click(); });
+            
+            fileDrop.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileDrop.style.borderColor = '#e94560';
+            });
+            
+            fileDrop.addEventListener('dragleave', function() {
+                fileDrop.style.borderColor = '#0f3460';
+            });
+            
+            fileDrop.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileDrop.style.borderColor = '#0f3460';
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileInput.addEventListener('change', function(e) {
+                handleFiles(e.target.files);
+                e.target.value = '';
+            });
+
             renderMessages();
         }
 
         init();
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    </script>
+</body>
+</html>
