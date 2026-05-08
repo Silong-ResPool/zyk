@@ -20,24 +20,23 @@
         }
 
         .sidebar {
-            width: 250px;
+            width: 300px;
             background: #16213e;
-            padding: 20px;
             border-right: 1px solid #0f3460;
-        }
-
-        .main {
-            flex: 1;
             display: flex;
             flex-direction: column;
+        }
+
+        .sidebar-header {
             padding: 20px;
+            border-bottom: 1px solid #0f3460;
         }
 
         .user-info {
             background: #0f3460;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .user-avatar {
@@ -60,6 +59,114 @@
 
         .user-id {
             font-size: 12px;
+            color: #888;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: #0f3460;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .tab.active {
+            background: #e94560;
+            color: white;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .contact-list {
+            padding: 10px;
+        }
+
+        .contact-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item:hover {
+            background: #0f3460;
+        }
+
+        .contact-item.active {
+            background: #e94560;
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: bold;
+        }
+
+        .contact-status {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px;
+            background: #0f3460;
+            border: 1px dashed #e94560;
+            color: #e94560;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .add-btn:hover {
+            background: rgba(233, 69, 96, 0.2);
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .chat-header {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        .chat-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .chat-subtitle {
             color: #888;
         }
 
@@ -229,28 +336,178 @@
             font-style: italic;
             margin: 20px 0;
         }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 12px;
+            min-width: 400px;
+            max-width: 90%;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: #0f3460;
+            border: 1px solid #1a4a7a;
+            border-radius: 8px;
+            color: #eee;
+            margin-bottom: 15px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-btn.cancel {
+            background: #0f3460;
+            color: #eee;
+        }
+
+        .modal-btn.confirm {
+            background: #e94560;
+            color: white;
+        }
+
+        .user-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .user-list-item {
+            padding: 10px;
+            background: #0f3460;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-list-item:hover {
+            background: #1a4a7a;
+        }
+
+        .user-list-item.selected {
+            border: 2px solid #e94560;
+        }
+
+        .group-members {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 5px;
+        }
+
+        .offline-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #888;
+            margin-right: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+        }
+
+        .member-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #0f3460;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 3px;
+        }
+
+        .member-tag-remove {
+            color: #e94560;
+            cursor: pointer;
+            margin-left: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Chat Room</h2>
-        <div class="user-info">
-            <div class="user-avatar" id="userAvatar">?</div>
-            <div class="user-name" id="userName">Loading...</div>
-            <div class="user-id" id="userId">ID: -</div>
+        <div class="sidebar-header">
+            <h2>Chat Room</h2>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-id" id="userId">ID: -</div>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('friends')">Friends</button>
+                <button class="tab" onclick="switchTab('groups')">Groups</button>
+                <button class="tab" onclick="switchTab('public')">Public</button>
+            </div>
         </div>
-        <div style="color: #888; font-size: 12px;">
-            Open this page in multiple tabs to chat!
+        <div class="tab-content" id="tabContent">
+            <button class="add-btn" id="addBtn">+ Add / Create</button>
+            <div class="contact-list" id="contactList"></div>
         </div>
     </div>
 
     <div class="main">
-        <h1>Anonymous Chat</h1>
-        <p style="color: #888; margin-bottom: 20px;">No server needed - chat directly!</p>
-
-        <div class="messages" id="messages"></div>
-
-        <div class="input-area">
+        <div class="chat-header">
+            <div class="chat-title" id="chatTitle">Select a chat</div>
+            <div class="chat-subtitle" id="chatSubtitle">Choose from friends, groups, or public chat</div>
+        </div>
+        <div class="messages" id="messages">
+            <div class="empty-state">Select a chat to start messaging</div>
+        </div>
+        <div class="input-area" id="inputArea">
             <div class="file-drop" id="fileDrop">
                 Drop files here or click to select (No size limit!)
                 <input type="file" id="fileInput" multiple style="display: none;">
@@ -263,15 +520,37 @@
         </div>
     </div>
 
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Modal</div>
+            <div id="modalBody"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const STORAGE_KEY = 'chat_messages';
+        const STORAGE_KEYS = {
+            MESSAGES: 'chat_messages',
+            FRIENDS: 'chat_friends',
+            GROUPS: 'chat_groups',
+            USERS: 'chat_users',
+            USER_ID: 'chat_user_id',
+            USER_NAME: 'chat_user_name',
+            USER_COLOR: 'chat_user_color'
+        };
         const CHANNEL_NAME = 'chat_channel';
         
         let currentUser = null;
         let selectedFiles = [];
         let channel = null;
+        let currentTab = 'friends';
+        let currentChat = null;
+        let currentChatType = null;
 
-        const colors = ['#e94560', '#0f3460', '#533483', '#e94560', '#00d9ff', '#00ff88', '#ffaa00', '#ff00ff'];
+        const colors = ['#e94560', '#0f3460', '#533483', '#00d9ff', '#00ff88', '#ffaa00', '#ff00ff', '#667eea'];
         const adjectives = ['Happy', 'Brave', 'Clever', 'Cute', 'Fast', 'Funny', 'Kind', 'Wise'];
         const nouns = ['Cat', 'Dog', 'Bird', 'Fish', 'Fox', 'Panda', 'Tiger', 'Wolf'];
 
@@ -302,18 +581,49 @@
             return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
         }
 
+        function getData(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function setData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+            if (channel) {
+                channel.postMessage({ type: 'update', key: key });
+            }
+        }
+
         function initUser() {
-            const storedId = localStorage.getItem('chat_user_id');
-            const storedName = localStorage.getItem('chat_user_name');
-            const storedColor = localStorage.getItem('chat_user_color');
+            const storedId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+            const storedName = localStorage.getItem(STORAGE_KEYS.USER_NAME);
+            const storedColor = localStorage.getItem(STORAGE_KEYS.USER_COLOR);
 
             if (storedId && storedName && storedColor) {
                 currentUser = { id: storedId, name: storedName, color: storedColor };
             } else {
                 currentUser = { id: randomId(), name: randomName(), color: randomColor() };
-                localStorage.setItem('chat_user_id', currentUser.id);
-                localStorage.setItem('chat_user_name', currentUser.name);
-                localStorage.setItem('chat_user_color', currentUser.color);
+                localStorage.setItem(STORAGE_KEYS.USER_ID, currentUser.id);
+                localStorage.setItem(STORAGE_KEYS.USER_NAME, currentUser.name);
+                localStorage.setItem(STORAGE_KEYS.USER_COLOR, currentUser.color);
+            }
+
+            const users = getData(STORAGE_KEYS.USERS);
+            const existingUser = users.find(u => u.id === currentUser.id);
+            if (!existingUser) {
+                users.push({
+                    id: currentUser.id,
+                    name: currentUser.name,
+                    color: currentUser.color,
+                    online: true,
+                    lastSeen: Date.now()
+                });
+                setData(STORAGE_KEYS.USERS, users);
+            } else {
+                existingUser.online = true;
+                existingUser.lastSeen = Date.now();
+                existingUser.name = currentUser.name;
+                existingUser.color = currentUser.color;
+                setData(STORAGE_KEYS.USERS, users);
             }
 
             document.getElementById('userAvatar').textContent = currentUser.name[0];
@@ -322,43 +632,60 @@
             document.getElementById('userId').textContent = 'ID: ' + currentUser.id;
         }
 
-        function getMessages() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+        function getMessages(chatType, chatId) {
+            const allMsgs = getData(STORAGE_KEYS.MESSAGES);
+            return allMsgs.filter(m => {
+                if (chatType === 'public') {
+                    return m.type === 'public';
+                } else if (chatType === 'private') {
+                    return m.type === 'private' && 
+                           ((m.fromId === currentUser.id && m.toId === chatId) || 
+                            (m.fromId === chatId && m.toId === currentUser.id));
+                } else if (chatType === 'group') {
+                    return m.type === 'group' && m.groupId === chatId;
+                }
+                return false;
+            });
         }
 
         function saveMessage(msg) {
-            const msgs = getMessages();
+            const msgs = getData(STORAGE_KEYS.MESSAGES);
             msgs.push(msg);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+            setData(STORAGE_KEYS.MESSAGES, msgs);
         }
 
         function renderMessages() {
             const container = document.getElementById('messages');
-            const msgs = getMessages();
+            
+            if (!currentChat || !currentChatType) {
+                container.innerHTML = '<div class="empty-state">Select a chat to start messaging</div>';
+                return;
+            }
+
+            const msgs = getMessages(currentChatType, currentChat.id);
             
             container.innerHTML = '';
             
             if (msgs.length === 0) {
-                container.innerHTML = '<div class="system-msg">No messages yet. Send the first one!</div>';
+                container.innerHTML = '<div class="empty-state">No messages yet. Send the first one!</div>';
                 return;
             }
 
             msgs.forEach(msg => {
                 const div = document.createElement('div');
-                div.className = 'message' + (msg.userId === currentUser.id ? ' message-own' : '');
+                div.className = 'message' + (msg.fromId === currentUser.id ? ' message-own' : '');
                 
                 const header = document.createElement('div');
                 header.className = 'message-header';
                 
                 const avatar = document.createElement('div');
                 avatar.className = 'message-avatar';
-                avatar.textContent = msg.userName[0];
-                avatar.style.background = msg.userColor || '#e94560';
+                avatar.textContent = msg.fromName[0];
+                avatar.style.background = msg.fromColor || '#e94560';
                 
                 const author = document.createElement('span');
                 author.className = 'message-author';
-                author.textContent = msg.userName;
+                author.textContent = msg.fromName;
                 
                 const time = document.createElement('span');
                 time.className = 'message-time';
@@ -371,12 +698,12 @@
                 const content = document.createElement('div');
                 content.className = 'message-content';
                 
-                if (msg.type === 'text') {
+                if (msg.contentType === 'text') {
                     const text = document.createElement('div');
                     text.className = 'message-text';
                     text.textContent = msg.content;
                     content.appendChild(text);
-                } else if (msg.type === 'file' && msg.file) {
+                } else if (msg.contentType === 'file' && msg.file) {
                     const fileDiv = document.createElement('div');
                     fileDiv.className = 'message-file';
                     fileDiv.onclick = function() { downloadFile(msg.file); };
@@ -415,6 +742,8 @@
         }
 
         function sendMessage() {
+            if (!currentChat || !currentChatType) return;
+
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             
@@ -423,30 +752,40 @@
             if (text) {
                 const msg = {
                     id: randomId(),
-                    type: 'text',
+                    type: currentChatType,
+                    contentType: 'text',
                     content: text,
                     timestamp: Date.now(),
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    userColor: currentUser.color
+                    fromId: currentUser.id,
+                    fromName: currentUser.name,
+                    fromColor: currentUser.color
                 };
+                if (currentChatType === 'private') {
+                    msg.toId = currentChat.id;
+                } else if (currentChatType === 'group') {
+                    msg.groupId = currentChat.id;
+                }
                 saveMessage(msg);
-                if (channel) channel.postMessage({ type: 'new' });
             }
 
             selectedFiles.forEach(file => {
                 const msg = {
                     id: randomId(),
-                    type: 'file',
+                    type: currentChatType,
+                    contentType: 'file',
                     content: '',
                     timestamp: Date.now(),
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    userColor: currentUser.color,
+                    fromId: currentUser.id,
+                    fromName: currentUser.name,
+                    fromColor: currentUser.color,
                     file: file
                 };
+                if (currentChatType === 'private') {
+                    msg.toId = currentChat.id;
+                } else if (currentChatType === 'group') {
+                    msg.groupId = currentChat.id;
+                }
                 saveMessage(msg);
-                if (channel) channel.postMessage({ type: 'new' });
             });
 
             input.value = '';
@@ -488,13 +827,290 @@
             updateFileList();
         };
 
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const addBtn = document.getElementById('addBtn');
+            if (tab === 'friends') {
+                addBtn.textContent = '+ Add Friend';
+            } else if (tab === 'groups') {
+                addBtn.textContent = '+ Create Group';
+            } else {
+                addBtn.textContent = '+ More Options';
+            }
+            
+            renderContacts();
+            
+            if (tab === 'public') {
+                selectPublicChat();
+            }
+        }
+
+        function renderContacts() {
+            const list = document.getElementById('contactList');
+            list.innerHTML = '';
+
+            if (currentTab === 'friends') {
+                const friends = getData(STORAGE_KEYS.FRIENDS).filter(f => f.userId === currentUser.id);
+                if (friends.length === 0) {
+                    list.innerHTML = '<div class="empty-state">No friends yet. Click "Add Friend" to find someone!</div>';
+                    return;
+                }
+                
+                friends.forEach(friend => {
+                    const div = document.createElement('div');
+                    div.className = 'contact-item' + (currentChat && currentChat.id === friend.friendId ? ' active' : '');
+                    div.onclick = () => selectFriend(friend);
+                    
+                    const avatar = document.createElement('div');
+                    avatar.className = 'contact-avatar';
+                    avatar.textContent = friend.friendName[0];
+                    avatar.style.background = friend.friendColor;
+                    
+                    const info = document.createElement('div');
+                    info.className = 'contact-info';
+                    info.innerHTML = '<div class="contact-name">' + friend.friendName + '</div>' +
+                                     '<div class="contact-status">Click to chat</div>';
+                    
+                    div.appendChild(avatar);
+                    div.appendChild(info);
+                    list.appendChild(div);
+                });
+            } else if (currentTab === 'groups') {
+                const groups = getData(STORAGE_KEYS.GROUPS);
+                const myGroups = groups.filter(g => g.members.includes(currentUser.id));
+                
+                if (myGroups.length === 0) {
+                    list.innerHTML = '<div class="empty-state">No groups yet. Create one!</div>';
+                    return;
+                }
+                
+                myGroups.forEach(group => {
+                    const div = document.createElement('div');
+                    div.className = 'contact-item' + (currentChat && currentChat.id === group.id ? ' active' : '');
+                    div.onclick = () => selectGroup(group);
+                    
+                    const avatar = document.createElement('div');
+                    avatar.className = 'contact-avatar';
+                    avatar.textContent = '👥';
+                    avatar.style.background = group.color || '#0f3460';
+                    
+                    const info = document.createElement('div');
+                    info.className = 'contact-info';
+                    info.innerHTML = '<div class="contact-name">' + group.name + '</div>' +
+                                     '<div class="contact-status">' + group.members.length + ' members</div>';
+                    
+                    div.appendChild(avatar);
+                    div.appendChild(info);
+                    list.appendChild(div);
+                });
+            }
+        }
+
+        function selectFriend(friend) {
+            currentChat = { id: friend.friendId, name: friend.friendName, color: friend.friendColor };
+            currentChatType = 'private';
+            document.getElementById('chatTitle').textContent = friend.friendName;
+            document.getElementById('chatSubtitle').textContent = 'Private Chat';
+            renderContacts();
+            renderMessages();
+        }
+
+        function selectGroup(group) {
+            currentChat = group;
+            currentChatType = 'group';
+            document.getElementById('chatTitle').textContent = group.name;
+            document.getElementById('chatSubtitle').textContent = group.members.length + ' members';
+            renderContacts();
+            renderMessages();
+        }
+
+        function selectPublicChat() {
+            currentChat = { id: 'public', name: 'Public Chat' };
+            currentChatType = 'public';
+            document.getElementById('chatTitle').textContent = 'Public Chat';
+            document.getElementById('chatSubtitle').textContent = 'Everyone can see these messages';
+            renderContacts();
+            renderMessages();
+        }
+
+        function showAddFriendModal() {
+            const users = getData(STORAGE_KEYS.USERS).filter(u => u.id !== currentUser.id);
+            const friends = getData(STORAGE_KEYS.FRIENDS).filter(f => f.userId === currentUser.id);
+            const friendIds = friends.map(f => f.friendId);
+            const availableUsers = users.filter(u => !friendIds.includes(u.id));
+
+            let bodyHTML = '<input type="text" class="modal-input" id="searchInput" placeholder="Search users...">';
+            bodyHTML += '<div class="user-list" id="userList">';
+            
+            if (availableUsers.length === 0) {
+                bodyHTML += '<div class="empty-state">No other users found. Open another tab to create a test user!</div>';
+            } else {
+                availableUsers.forEach(user => {
+                    bodyHTML += '<div class="user-list-item" data-id="' + user.id + '" onclick="toggleUser(this)">' +
+                                '<div class="contact-avatar" style="background: ' + user.color + '">' + user.name[0] + '</div>' +
+                                '<div class="contact-info">' +
+                                '<div class="contact-name">' + user.name + '</div>' +
+                                '<div class="contact-status">ID: ' + user.id + '</div>' +
+                                '</div></div>';
+                });
+            }
+            bodyHTML += '</div>';
+
+            document.getElementById('modalTitle').textContent = 'Add Friend';
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('modalConfirm').onclick = addSelectedFriends;
+            document.getElementById('modal').classList.add('show');
+        }
+
+        window.toggleUser = function(el) {
+            el.classList.toggle('selected');
+        };
+
+        function addSelectedFriends() {
+            const selected = document.querySelectorAll('.user-list-item.selected');
+            if (selected.length === 0) {
+                closeModal();
+                return;
+            }
+
+            const friends = getData(STORAGE_KEYS.FRIENDS);
+            const users = getData(STORAGE_KEYS.USERS);
+
+            selected.forEach(el => {
+                const userId = el.dataset.id;
+                const user = users.find(u => u.id === userId);
+                if (user) {
+                    friends.push({
+                        userId: currentUser.id,
+                        friendId: user.id,
+                        friendName: user.name,
+                        friendColor: user.color,
+                        addedAt: Date.now()
+                    });
+                }
+            });
+
+            setData(STORAGE_KEYS.FRIENDS, friends);
+            closeModal();
+            renderContacts();
+        }
+
+        let selectedGroupMembers = [];
+
+        function showCreateGroupModal() {
+            selectedGroupMembers = [currentUser.id];
+            const users = getData(STORAGE_KEYS.USERS).filter(u => u.id !== currentUser.id);
+
+            let bodyHTML = '<input type="text" class="modal-input" id="groupNameInput" placeholder="Group name...">';
+            bodyHTML += '<div id="selectedMembers" style="margin-bottom: 10px;"></div>';
+            bodyHTML += '<div class="user-list" id="userList">';
+            
+            if (users.length === 0) {
+                bodyHTML += '<div class="empty-state">No other users found. Open another tab!</div>';
+            } else {
+                users.forEach(user => {
+                    const isSelected = selectedGroupMembers.includes(user.id);
+                    bodyHTML += '<div class="user-list-item ' + (isSelected ? 'selected' : '') + '" data-id="' + user.id + '" onclick="toggleGroupMember(this)">' +
+                                '<div class="contact-avatar" style="background: ' + user.color + '">' + user.name[0] + '</div>' +
+                                '<div class="contact-info">' +
+                                '<div class="contact-name">' + user.name + '</div>' +
+                                '</div></div>';
+                });
+            }
+            bodyHTML += '</div>';
+
+            document.getElementById('modalTitle').textContent = 'Create Group';
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('modalConfirm').onclick = createGroup;
+            document.getElementById('modal').classList.add('show');
+            updateSelectedMembersDisplay();
+        }
+
+        window.toggleGroupMember = function(el) {
+            el.classList.toggle('selected');
+            const id = el.dataset.id;
+            if (selectedGroupMembers.includes(id)) {
+                selectedGroupMembers = selectedGroupMembers.filter(m => m !== id);
+            } else {
+                selectedGroupMembers.push(id);
+            }
+            updateSelectedMembersDisplay();
+        };
+
+        function updateSelectedMembersDisplay() {
+            const container = document.getElementById('selectedMembers');
+            if (!container) return;
+            
+            const users = getData(STORAGE_KEYS.USERS);
+            let html = '';
+            selectedGroupMembers.forEach(id => {
+                const user = users.find(u => u.id === id);
+                if (user) {
+                    html += '<span class="member-tag">' + user.name;
+                    if (id !== currentUser.id) {
+                        html += '<span class="member-tag-remove" onclick="removeMemberFromSelection(\'' + id + '\')">×</span>';
+                    }
+                    html += '</span>';
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        window.removeMemberFromSelection = function(id) {
+            selectedGroupMembers = selectedGroupMembers.filter(m => m !== id);
+            const item = document.querySelector('.user-list-item[data-id="' + id + '"]');
+            if (item) item.classList.remove('selected');
+            updateSelectedMembersDisplay();
+        };
+
+        function createGroup() {
+            const nameInput = document.getElementById('groupNameInput');
+            const name = nameInput.value.trim();
+            if (!name || selectedGroupMembers.length < 2) {
+                alert('Please enter a group name and select at least one other member');
+                return;
+            }
+
+            const groups = getData(STORAGE_KEYS.GROUPS);
+            const newGroup = {
+                id: randomId(),
+                name: name,
+                color: randomColor(),
+                members: selectedGroupMembers,
+                createdBy: currentUser.id,
+                createdAt: Date.now()
+            };
+            groups.push(newGroup);
+            setData(STORAGE_KEYS.GROUPS, groups);
+
+            closeModal();
+            renderContacts();
+            selectGroup(newGroup);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        function handleAddBtnClick() {
+            if (currentTab === 'friends') {
+                showAddFriendModal();
+            } else if (currentTab === 'groups') {
+                showCreateGroupModal();
+            }
+        }
+
         function init() {
             initUser();
             
             try {
                 channel = new BroadcastChannel(CHANNEL_NAME);
                 channel.onmessage = function(event) {
-                    if (event.data.type === 'new') {
+                    if (event.data.type === 'update') {
+                        renderContacts();
                         renderMessages();
                     }
                 };
@@ -503,9 +1119,8 @@
             }
 
             window.addEventListener('storage', function(e) {
-                if (e.key === STORAGE_KEY) {
-                    renderMessages();
-                }
+                renderContacts();
+                renderMessages();
             });
 
             document.getElementById('sendBtn').addEventListener('click', sendMessage);
@@ -515,6 +1130,8 @@
                     sendMessage();
                 }
             });
+
+            document.getElementById('addBtn').addEventListener('click', handleAddBtnClick);
 
             const fileDrop = document.getElementById('fileDrop');
             const fileInput = document.getElementById('fileInput');
@@ -541,7 +1158,7 @@
                 e.target.value = '';
             });
 
-            renderMessages();
+            renderContacts();
         }
 
         init();
