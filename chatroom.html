@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anonymous Chat</title>
+    <title>梦幻聊天室</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,74 +12,115 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
+            font-family: 'Microsoft YaHei, 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 25%, #4a2c6e 50%, #2d1b4e 75%, #1a0b2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #f0e6ff;
             height: 100vh;
             display: flex;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 梦幻背景效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(186, 85, 211, 0.15) 0%,
+                radial-gradient(circle at 80% 20%, rgba(233, 30, 99, 0.1) 50%,
+                radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.12) 100%;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .sidebar {
             width: 300px;
-            background: #16213e;
-            border-right: 1px solid #0f3460;
+            background: rgba(45, 27, 78, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(186, 85, 211, 0.3);
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
         }
 
         .sidebar-header {
             padding: 20px;
-            border-bottom: 1px solid #0f3460;
+            border-bottom: 1px solid rgba(233, 30, 99, 0.2);
         }
 
         .user-info {
-            background: #0f3460;
+            background: linear-gradient(135deg, rgba(186, 85, 211, 0.2) 0%, rgba(233, 30, 99, 0.15) 100%);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 16px;
             margin-bottom: 15px;
+            border: 1px solid rgba(186, 85, 211, 0.2);
+            box-shadow: 0 8px 32px rgba(186, 85, 211, 0.1);
         }
 
         .user-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(186, 85, 211, 0.4);
         }
 
         .user-name {
             font-weight: bold;
             margin-bottom: 5px;
+            color: #f0e6ff;
         }
 
         .user-id {
             font-size: 12px;
-            color: #888;
+            color: #d8b4fe;
         }
 
         .tabs {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
         .tab {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: none;
-            background: #0f3460;
-            color: #888;
+            background: rgba(139, 92, 246, 0.15);
+            color: #d8b4fe;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .tab:hover {
+            background: rgba(186, 85, 211, 0.25);
+            border-color: rgba(186, 85, 211, 0.3);
         }
 
         .tab.active {
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
         }
 
         .tab-content {
@@ -93,20 +134,28 @@
 
         .contact-item {
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(186, 85, 211, 0.08;
+            transition: all 0.3s;
         }
 
         .contact-item:hover {
-            background: #0f3460;
+            background: rgba(186, 85, 211, 0.18;
+            border-color: rgba(186, 85, 211, 0.2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
         }
 
         .contact-item.active {
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
+            border-color: rgba(255, 107, 157, 0.5;
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
         }
 
         .contact-avatar {
@@ -125,26 +174,32 @@
 
         .contact-name {
             font-weight: bold;
+            color: #f0e6ff;
         }
 
         .contact-status {
             font-size: 12px;
-            color: #888;
+            color: #d8b4fe;
         }
 
         .add-btn {
-            width: 100%;
-            padding: 10px;
+            width: calc(100% - 20px);
+            padding: 12px;
             margin: 10px;
-            background: #0f3460;
-            border: 1px dashed #e94560;
-            color: #e94560;
+            background: linear-gradient(135deg, rgba(186, 85, 211, 0.15);
+            border: 2px dashed rgba(186, 85, 211, 0.4);
+            color: #f0e6ff;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
         .add-btn:hover {
-            background: rgba(233, 69, 96, 0.2);
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
+            transform: translateY(-2px);
         }
 
         .main {
@@ -152,41 +207,56 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .chat-header {
             margin-bottom: 15px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #0f3460;
+            border-bottom: 1px solid rgba(186, 85, 211, 0.2);
         }
 
         .chat-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             margin-bottom: 5px;
+            background: linear-gradient(135deg, #f0e6ff 0%, #d8b4fe 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .chat-subtitle {
-            color: #888;
+            color: #d8b4fe;
         }
 
         .messages {
             flex: 1;
             overflow-y: auto;
-            background: #16213e;
-            border-radius: 8px;
+            background: rgba(45, 27, 78, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid rgba(186, 85, 211, 0.15;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
         }
 
         .message {
             margin-bottom: 15px;
-            animation: fadeIn 0.3s;
+            animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         .message-header {
@@ -209,11 +279,12 @@
         .message-author {
             font-weight: bold;
             margin-right: 10px;
+            color: #f0e6ff;
         }
 
         .message-time {
             font-size: 12px;
-            color: #888;
+            color: #c4b5fd;
         }
 
         .message-content {
@@ -221,56 +292,77 @@
         }
 
         .message-text {
-            background: #0f3460;
-            padding: 10px 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(186, 85, 211, 0.25) 100%);
+            padding: 12px 18px;
+            border-radius: 16px;
             display: inline-block;
             max-width: 100%;
+            word-wrap: break-word;
+            border: 1px solid rgba(186, 85, 211, 0.2);
         }
 
         .message-own .message-text {
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
+            border-color: rgba(255, 107, 157, 0.3;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.25);
         }
 
         .message-file {
-            background: #0f3460;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(186, 85, 211, 0.2) 100%);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(186, 85, 211, 0.2);
         }
 
         .message-file:hover {
-            background: #1a4a7a;
+            background: linear-gradient(135deg, rgba(186, 85, 211, 0.35) 0%, rgba(233, 30, 99, 0.28) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2);
         }
 
         .file-preview {
             max-width: 300px;
             max-height: 200px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 2px solid rgba(186, 85, 211, 0.3);
+        }
+
+        .file-preview:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.25);
         }
 
         .input-area {
-            background: #16213e;
-            border-radius: 8px;
+            background: rgba(45, 27, 78, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
             padding: 15px;
+            border: 1px solid rgba(186, 85, 211, 0.2);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
         }
 
         .file-drop {
-            border: 2px dashed #0f3460;
-            border-radius: 8px;
+            border: 2px dashed rgba(186, 85, 211, 0.4);
+            border-radius: 16px;
             padding: 15px;
             text-align: center;
             margin-bottom: 15px;
             cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(139, 92, 246, 0.1);
         }
 
-        .file-drop:hover {
-            border-color: #e94560;
-            background: rgba(233, 69, 96, 0.1);
+        .file-drop:hover, .file-drop.drag-over {
+            border-color: #e91e63;
+            background: rgba(233, 30, 99, 0.15);
         }
 
         .file-list {
@@ -281,16 +373,17 @@
         }
 
         .file-item {
-            background: #0f3460;
+            background: rgba(139, 92, 246, 0.2);
             padding: 10px;
-            border-radius: 6px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            border: 1px solid rgba(186, 85, 211, 0.2);
         }
 
         .file-remove {
-            color: #e94560;
+            color: #ff6b9d;
             cursor: pointer;
             font-weight: bold;
         }
@@ -302,37 +395,57 @@
 
         .message-input {
             flex: 1;
-            background: #0f3460;
-            border: 1px solid #1a4a7a;
-            border-radius: 8px;
-            padding: 12px;
-            color: #eee;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(186, 85, 211, 0.25);
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: #f0e6ff;
             font-size: 14px;
+            transition: all 0.3s;
         }
 
         .message-input:focus {
             outline: none;
-            border-color: #e94560;
+            border-color: #e91e63;
+            background: rgba(139, 92, 246, 0.25);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.15);
+        }
+
+        .message-input::placeholder {
+            color: rgba(216, 180, 254, 0.6);
         }
 
         .send-btn {
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
             border: none;
-            border-radius: 8px;
-            padding: 12px 30px;
+            border-radius: 16px;
+            padding: 14px 32px;
             color: white;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
         }
 
         .send-btn:hover {
-            background: #ff6b6b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .system-msg {
             text-align: center;
-            color: #888;
+            color: #c4b5fd;
             font-style: italic;
             margin: 20px 0;
         }
@@ -343,7 +456,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(26, 11, 46, 0.9);
+            backdrop-filter: blur(10px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -355,32 +469,42 @@
         }
 
         .modal-content {
-            background: #16213e;
+            background: linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(26, 11, 46, 0.98) 100%);
             padding: 30px;
-            border-radius: 12px;
+            border-radius: 24px;
             min-width: 400px;
             max-width: 90%;
+            border: 1px solid rgba(186, 85, 211, 0.3);
+            box-shadow: 0 20px 60px rgba(233, 30, 99, 0.3);
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             margin-bottom: 20px;
+            color: #f0e6ff;
+            background: linear-gradient(135deg, #f0e6ff 0%, #d8b4fe 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .modal-input {
             width: 100%;
-            padding: 12px;
-            background: #0f3460;
-            border: 1px solid #1a4a7a;
-            border-radius: 8px;
-            color: #eee;
+            padding: 14px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(186, 85, 211, 0.3);
+            border-radius: 12px;
+            color: #f0e6ff;
             margin-bottom: 15px;
+            transition: all 0.3s;
         }
 
         .modal-input:focus {
             outline: none;
-            border-color: #e94560;
+            border-color: #e91e63;
+            background: rgba(139, 92, 246, 0.25);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.15);
         }
 
         .modal-buttons {
@@ -392,19 +516,31 @@
         .modal-btn {
             padding: 10px 25px;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.3s;
         }
 
         .modal-btn.cancel {
-            background: #0f3460;
-            color: #eee;
+            background: rgba(139, 92, 246, 0.2);
+            color: #f0e6ff;
+            border: 1px solid rgba(186, 85, 211, 0.3);
+        }
+
+        .modal-btn.cancel:hover {
+            background: rgba(186, 85, 211, 0.3);
         }
 
         .modal-btn.confirm {
-            background: #e94560;
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .modal-btn.confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
         }
 
         .user-list {
@@ -414,27 +550,33 @@
         }
 
         .user-list-item {
-            padding: 10px;
-            background: #0f3460;
-            margin-bottom: 5px;
-            border-radius: 6px;
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.15);
+            margin-bottom: 8px;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 10px;
+            border: 1px solid rgba(186, 85, 211, 0.15;
+            transition: all 0.3s;
         }
 
         .user-list-item:hover {
-            background: #1a4a7a;
+            background: rgba(186, 85, 211, 0.25);
+            border-color: rgba(186, 85, 211, 0.3;
+            transform: translateY(-2px);
         }
 
         .user-list-item.selected {
-            border: 2px solid #e94560;
+            border-color: #e91e63;
+            background: rgba(233, 30, 99, 0.2);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2);
         }
 
         .group-members {
             font-size: 12px;
-            color: #888;
+            color: #c4b5fd;
             margin-top: 5px;
         }
 
@@ -442,91 +584,112 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #00ff88;
+            background: #10b981;
             margin-right: 5px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
 
         .offline-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #888;
+            background: #6b7280;
             margin-right: 5px;
         }
 
         .empty-state {
             text-align: center;
-            color: #888;
+            color: #c4b5fd;
             padding: 40px;
         }
 
         .member-tag {
             display: inline-flex;
             align-items: center;
-            background: #0f3460;
-            padding: 5px 10px;
-            border-radius: 15px;
+            background: rgba(139, 92, 246, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 12px;
             margin: 3px;
+            border: 1px solid rgba(186, 85, 211, 0.25);
         }
 
         .member-tag-remove {
-            color: #e94560;
+            color: #ff6b9d;
             cursor: pointer;
             margin-left: 8px;
             font-weight: bold;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(45, 27, 78, 0.3);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ba55d3 0%, #e91e63 100%);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #e91e63 0%, #ba55d3 100%);
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>Chat Room</h2>
+            <h2 style="background: linear-gradient(135deg, #f0e6ff 0%, #d8b4fe 100%);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;">✨ 梦幻聊天室</h2>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">?</div>
-                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-name" id="userName">加载中...</div>
                 <div class="user-id" id="userId">ID: -</div>
             </div>
             <div class="tabs">
-                <button class="tab active" onclick="switchTab('friends')">Friends</button>
-                <button class="tab" onclick="switchTab('groups')">Groups</button>
-                <button class="tab" onclick="switchTab('public')">Public</button>
+                <button class="tab active" onclick="switchTab('friends')">👫 好友</button>
+                <button class="tab" onclick="switchTab('groups')">👥 群组</button>
+                <button class="tab" onclick="switchTab('public')">🌐 公共</button>
             </div>
         </div>
         <div class="tab-content" id="tabContent">
-            <button class="add-btn" id="addBtn">+ Add / Create</button>
+            <button class="add-btn" id="addBtn">+ 添加/创建</button>
             <div class="contact-list" id="contactList"></div>
         </div>
     </div>
 
     <div class="main">
         <div class="chat-header">
-            <div class="chat-title" id="chatTitle">Select a chat</div>
-            <div class="chat-subtitle" id="chatSubtitle">Choose from friends, groups, or public chat</div>
+            <div class="chat-title" id="chatTitle">选择一个聊天</div>
+            <div class="chat-subtitle" id="chatSubtitle">从好友、群组或公共聊天中选择</div>
         </div>
         <div class="messages" id="messages">
-            <div class="empty-state">Select a chat to start messaging</div>
+            <div class="empty-state">选择一个聊天开始消息</div>
         </div>
         <div class="input-area" id="inputArea">
             <div class="file-drop" id="fileDrop">
-                Drop files here or click to select (No size limit!)
+                📁 拖拽文件到这里或点击选择（无大小限制！）
                 <input type="file" id="fileInput" multiple style="display: none;">
             </div>
             <div class="file-list" id="fileList"></div>
             <div class="input-row">
-                <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
-                <button class="send-btn" id="sendBtn">Send</button>
+                <input type="text" class="message-input" id="messageInput" placeholder="输入消息...">
+                <button class="send-btn" id="sendBtn">发送 ✨</button>
             </div>
         </div>
     </div>
 
     <div class="modal" id="modal">
         <div class="modal-content">
-            <div class="modal-title" id="modalTitle">Modal</div>
+            <div class="modal-title" id="modalTitle">弹窗</div>
             <div id="modalBody"></div>
             <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn confirm" id="modalConfirm">Confirm</button>
+                <button class="modal-btn cancel" onclick="closeModal()">取消</button>
+                <button class="modal-btn confirm" id="modalConfirm">确认</button>
             </div>
         </div>
     </div>
@@ -550,9 +713,15 @@
         let currentChat = null;
         let currentChatType = null;
 
-        const colors = ['#e94560', '#0f3460', '#533483', '#00d9ff', '#00ff88', '#ffaa00', '#ff00ff', '#667eea'];
-        const adjectives = ['Happy', 'Brave', 'Clever', 'Cute', 'Fast', 'Funny', 'Kind', 'Wise'];
-        const nouns = ['Cat', 'Dog', 'Bird', 'Fish', 'Fox', 'Panda', 'Tiger', 'Wolf'];
+        const colors = [
+            'linear-gradient(135deg, #ba55d3 0%, #e91e63 100%)',
+            'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+            'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
+            'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
+            'linear-gradient(135deg, #f472b6 0%, #fb7185 100%)'
+        ];
+        const adjectives = ['梦幻的', '可爱的', '快乐的', '勇敢的', '智慧的', '温柔的', '优雅的', '神秘的'];
+        const nouns = ['精灵', '仙子', '天使', '星星', '月亮', '花朵', '蝴蝶', '猫咪'];
 
         function randomId() {
             return Math.random().toString(36).substr(2, 9);
@@ -571,7 +740,7 @@
 
         function formatTime(ts) {
             const d = new Date(ts);
-            return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            return d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
         }
 
         function formatSize(bytes) {
@@ -658,7 +827,7 @@
             const container = document.getElementById('messages');
             
             if (!currentChat || !currentChatType) {
-                container.innerHTML = '<div class="empty-state">Select a chat to start messaging</div>';
+                container.innerHTML = '<div class="empty-state">选择一个聊天开始消息 ✨</div>';
                 return;
             }
 
@@ -667,7 +836,7 @@
             container.innerHTML = '';
             
             if (msgs.length === 0) {
-                container.innerHTML = '<div class="empty-state">No messages yet. Send the first one!</div>';
+                container.innerHTML = '<div class="empty-state">暂无消息，发送第一条吧！💫</div>';
                 return;
             }
 
@@ -681,7 +850,7 @@
                 const avatar = document.createElement('div');
                 avatar.className = 'message-avatar';
                 avatar.textContent = msg.fromName[0];
-                avatar.style.background = msg.fromColor || '#e94560';
+                avatar.style.background = msg.fromColor || colors[0];
                 
                 const author = document.createElement('span');
                 author.className = 'message-author';
@@ -714,6 +883,7 @@
                         const img = document.createElement('img');
                         img.className = 'file-preview';
                         img.src = msg.file.data;
+                        img.onclick = function() { window.open(msg.file.data, '_blank'); };
                         content.appendChild(img);
                     } else if (msg.file.type.indexOf('video/') === 0) {
                         const video = document.createElement('video');
@@ -817,7 +987,7 @@
             selectedFiles.forEach((file, i) => {
                 const item = document.createElement('div');
                 item.className = 'file-item';
-                item.innerHTML = '<span>' + file.name + '</span><span class="file-remove" onclick="removeFile(' + i + ')">X</span>';
+                item.innerHTML = '<span>' + file.name + '</span><span class="file-remove" onclick="removeFile(' + i + ')">✕</span>';
                 list.appendChild(item);
             });
         }
@@ -834,11 +1004,11 @@
             
             const addBtn = document.getElementById('addBtn');
             if (tab === 'friends') {
-                addBtn.textContent = '+ Add Friend';
+                addBtn.textContent = '+ 添加好友';
             } else if (tab === 'groups') {
-                addBtn.textContent = '+ Create Group';
+                addBtn.textContent = '+ 创建群组';
             } else {
-                addBtn.textContent = '+ More Options';
+                addBtn.textContent = '+ 更多选项';
             }
             
             renderContacts();
@@ -855,7 +1025,7 @@
             if (currentTab === 'friends') {
                 const friends = getData(STORAGE_KEYS.FRIENDS).filter(f => f.userId === currentUser.id);
                 if (friends.length === 0) {
-                    list.innerHTML = '<div class="empty-state">No friends yet. Click "Add Friend" to find someone!</div>';
+                    list.innerHTML = '<div class="empty-state">还没有好友，点击"添加好友"找小伙伴吧！💫</div>';
                     return;
                 }
                 
@@ -872,7 +1042,7 @@
                     const info = document.createElement('div');
                     info.className = 'contact-info';
                     info.innerHTML = '<div class="contact-name">' + friend.friendName + '</div>' +
-                                     '<div class="contact-status">Click to chat</div>';
+                                     '<div class="contact-status">点击聊天 ✨</div>';
                     
                     div.appendChild(avatar);
                     div.appendChild(info);
@@ -883,7 +1053,7 @@
                 const myGroups = groups.filter(g => g.members.includes(currentUser.id));
                 
                 if (myGroups.length === 0) {
-                    list.innerHTML = '<div class="empty-state">No groups yet. Create one!</div>';
+                    list.innerHTML = '<div class="empty-state">还没有群组，创建一个吧！🌟</div>';
                     return;
                 }
                 
@@ -895,12 +1065,12 @@
                     const avatar = document.createElement('div');
                     avatar.className = 'contact-avatar';
                     avatar.textContent = '👥';
-                    avatar.style.background = group.color || '#0f3460';
+                    avatar.style.background = group.color || colors[0];
                     
                     const info = document.createElement('div');
                     info.className = 'contact-info';
                     info.innerHTML = '<div class="contact-name">' + group.name + '</div>' +
-                                     '<div class="contact-status">' + group.members.length + ' members</div>';
+                                     '<div class="contact-status">' + group.members.length + ' 位成员</div>';
                     
                     div.appendChild(avatar);
                     div.appendChild(info);
@@ -913,7 +1083,7 @@
             currentChat = { id: friend.friendId, name: friend.friendName, color: friend.friendColor };
             currentChatType = 'private';
             document.getElementById('chatTitle').textContent = friend.friendName;
-            document.getElementById('chatSubtitle').textContent = 'Private Chat';
+            document.getElementById('chatSubtitle').textContent = '私密聊天 💕';
             renderContacts();
             renderMessages();
         }
@@ -922,16 +1092,16 @@
             currentChat = group;
             currentChatType = 'group';
             document.getElementById('chatTitle').textContent = group.name;
-            document.getElementById('chatSubtitle').textContent = group.members.length + ' members';
+            document.getElementById('chatSubtitle').textContent = group.members.length + ' 位成员';
             renderContacts();
             renderMessages();
         }
 
         function selectPublicChat() {
-            currentChat = { id: 'public', name: 'Public Chat' };
+            currentChat = { id: 'public', name: '公共聊天室' };
             currentChatType = 'public';
-            document.getElementById('chatTitle').textContent = 'Public Chat';
-            document.getElementById('chatSubtitle').textContent = 'Everyone can see these messages';
+            document.getElementById('chatTitle').textContent = '🌐 公共聊天室';
+            document.getElementById('chatSubtitle').textContent = '所有人都能看到这些消息';
             renderContacts();
             renderMessages();
         }
@@ -942,11 +1112,11 @@
             const friendIds = friends.map(f => f.friendId);
             const availableUsers = users.filter(u => !friendIds.includes(u.id));
 
-            let bodyHTML = '<input type="text" class="modal-input" id="searchInput" placeholder="Search users...">';
+            let bodyHTML = '<input type="text" class="modal-input" id="searchInput" placeholder="搜索用户...">';
             bodyHTML += '<div class="user-list" id="userList">';
             
             if (availableUsers.length === 0) {
-                bodyHTML += '<div class="empty-state">No other users found. Open another tab to create a test user!</div>';
+                bodyHTML += '<div class="empty-state">没有找到其他用户，打开另一个标签页创建测试用户吧！✨</div>';
             } else {
                 availableUsers.forEach(user => {
                     bodyHTML += '<div class="user-list-item" data-id="' + user.id + '" onclick="toggleUser(this)">' +
@@ -959,7 +1129,7 @@
             }
             bodyHTML += '</div>';
 
-            document.getElementById('modalTitle').textContent = 'Add Friend';
+            document.getElementById('modalTitle').textContent = '添加好友 ✨';
             document.getElementById('modalBody').innerHTML = bodyHTML;
             document.getElementById('modalConfirm').onclick = addSelectedFriends;
             document.getElementById('modal').classList.add('show');
@@ -1004,12 +1174,12 @@
             selectedGroupMembers = [currentUser.id];
             const users = getData(STORAGE_KEYS.USERS).filter(u => u.id !== currentUser.id);
 
-            let bodyHTML = '<input type="text" class="modal-input" id="groupNameInput" placeholder="Group name...">';
+            let bodyHTML = '<input type="text" class="modal-input" id="groupNameInput" placeholder="群组名称...">';
             bodyHTML += '<div id="selectedMembers" style="margin-bottom: 10px;"></div>';
             bodyHTML += '<div class="user-list" id="userList">';
             
             if (users.length === 0) {
-                bodyHTML += '<div class="empty-state">No other users found. Open another tab!</div>';
+                bodyHTML += '<div class="empty-state">没有找到其他用户，打开另一个标签页吧！💫</div>';
             } else {
                 users.forEach(user => {
                     const isSelected = selectedGroupMembers.includes(user.id);
@@ -1022,7 +1192,7 @@
             }
             bodyHTML += '</div>';
 
-            document.getElementById('modalTitle').textContent = 'Create Group';
+            document.getElementById('modalTitle').textContent = '创建群组 🌟';
             document.getElementById('modalBody').innerHTML = bodyHTML;
             document.getElementById('modalConfirm').onclick = createGroup;
             document.getElementById('modal').classList.add('show');
@@ -1070,7 +1240,7 @@
             const nameInput = document.getElementById('groupNameInput');
             const name = nameInput.value.trim();
             if (!name || selectedGroupMembers.length < 2) {
-                alert('Please enter a group name and select at least one other member');
+                alert('请输入群组名称并至少选择一位其他成员！');
                 return;
             }
 
@@ -1115,7 +1285,7 @@
                     }
                 };
             } catch (e) {
-                console.log('BroadcastChannel not supported');
+                console.log('BroadcastChannel 不支持');
             }
 
             window.addEventListener('storage', function(e) {
@@ -1140,16 +1310,16 @@
             
             fileDrop.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                fileDrop.style.borderColor = '#e94560';
+                fileDrop.classList.add('drag-over');
             });
             
             fileDrop.addEventListener('dragleave', function() {
-                fileDrop.style.borderColor = '#0f3460';
+                fileDrop.classList.remove('drag-over');
             });
             
             fileDrop.addEventListener('drop', function(e) {
                 e.preventDefault();
-                fileDrop.style.borderColor = '#0f3460';
+                fileDrop.classList.remove('drag-over');
                 handleFiles(e.dataTransfer.files);
             });
             
