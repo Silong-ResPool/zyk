@@ -1,10 +1,6 @@
 <update>
     <version>7.0.7</version>
-    <log>✨ 设置页全面重构，功能整合升级
-🎧 新增朗读模块：支持自定义语音包、多参数调节与情绪规则
-🛡️ 广告屏蔽强化：新增防弹窗/防跳转/陀螺仪关闭等功能
-🔧 页面工具箱上线：查看源码/全屏模式/一键爬取资源
-⚠️ 半成品赶工版，后续细节持续优化~🌈</log>
-    <url>https://github.com/Silong-ResPool/gay/releases/download/gay/Silong-ResPool_v7.0.7.apk</url>
+    <log>嗯，对，大概就是更新了吧，部分功能还在测试嗯对</log>
+    <url>https://zerostorage.net/api/files/download/57d187e0-8d22-4c32-9336-2d5c7d747321</url>
     <url2>#</url2>
 </update>
